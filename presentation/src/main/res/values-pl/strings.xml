@@ -55,11 +55,8 @@
   <string name="archived_empty_text">Twoje zarchiwizowane rozmowy będą wyświetlane tutaj</string>
   <string name="main_fab_cd">Rozpocznij nową rozmowę</string>
   <string name="main_default_sms_title">Pokochaj SMSowanie na nowo</string>
-  <string name="main_default_sms_message">Ustaw QKSMS jako domyślną aplikację do osbługi SMSów i MMSów</string>
   <string name="main_default_sms_change">Zmień</string>
   <string name="main_permission_required">Wymagane uprawnienie</string>
-  <string name="main_permission_sms">QKSMS wymaga uprawnień do wysyłania i przeglądania wiadomości</string>
-  <string name="main_permission_contacts">QKSMS wymaga uprawnień do przeglądania kontaktów</string>
   <string name="main_permission_allow">Zezwól</string>
   <string name="drawer_inbox">Odebrane</string>
   <string name="drawer_archived">Zarchiwizowane</string>
@@ -72,7 +69,6 @@
   <string name="drawer_invite">Poleć znajomym</string>
   <string name="drawer_plus_banner_title">QKSMS+</string>
   <string name="drawer_plus_banner_summary">Odblokuj nowe funkcje i wesprzyj rozwój aplikacji</string>
-  <string name="rate_title">Lubisz QKSMS?</string>
   <string name="rate_summary">Podziel się miłością i oceń nas w Sklepie Google Play!</string>
   <string name="rate_okay">W PORZĄDKU!</string>
   <string name="rate_dismiss">ODMAWIAM</string>

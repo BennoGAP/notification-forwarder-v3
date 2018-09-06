@@ -55,11 +55,8 @@
   <string name="archived_empty_text">Ваши архивированные беседы будут появляться здесь</string>
   <string name="main_fab_cd">Начать новую беседу</string>
   <string name="main_default_sms_title">Снова полюбите писать</string>
-  <string name="main_default_sms_message">Сделать QKSMS приложением SMS по умолчанию</string>
   <string name="main_default_sms_change">Изменить</string>
   <string name="main_permission_required">Требуется разрешение</string>
-  <string name="main_permission_sms">QKSMS необходимо разрешение для отправки и просмотра SMS сообщений</string>
-  <string name="main_permission_contacts">QKSMS необходимо разрешение для просмотра контактов</string>
   <string name="main_permission_allow">Разрешить</string>
   <string name="drawer_inbox">Входящие</string>
   <string name="drawer_archived">Архив</string>
@@ -72,7 +69,6 @@
   <string name="drawer_invite">Пригласить друзей</string>
   <string name="drawer_plus_banner_title">QKSMS+</string>
   <string name="drawer_plus_banner_summary">Разблокировать новые удивительные функции и поддержать разработку</string>
-  <string name="rate_title">Нравится QKSMS?</string>
   <string name="rate_summary">Поделитесь любовью и оцените нас в Google Play!</string>
   <string name="rate_okay">OK!</string>
   <string name="rate_dismiss">ОТКЛОНИТЬ</string>

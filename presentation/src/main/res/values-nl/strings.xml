@@ -55,11 +55,8 @@
   <string name="archived_empty_text">Je gearchiveerde conversaties verschijnen hier</string>
   <string name="main_fab_cd">Start nieuwe conversatie</string>
   <string name="main_default_sms_title">Love texting again</string>
-  <string name="main_default_sms_message">QKSMS uw standaard SMS app maken</string>
   <string name="main_default_sms_change">Wijzigen</string>
   <string name="main_permission_required">Toestemming vereist</string>
-  <string name="main_permission_sms">QKSMS machtigen voor het verzenden en bekijken van SMS-berichten</string>
-  <string name="main_permission_contacts">QKSMS machtigen om uw contactpersonen te bekijken</string>
   <string name="main_permission_allow">Toestaan</string>
   <string name="drawer_inbox">Inbox</string>
   <string name="drawer_archived">Archief</string>
@@ -72,7 +69,6 @@
   <string name="drawer_invite">Vrienden uitnodigen</string>
   <string name="drawer_plus_banner_title">QKSMS+</string>
   <string name="drawer_plus_banner_summary">Ontgrendel geweldig nieuwe functies en ondersteun verdere ontwikkeling</string>
-  <string name="rate_title">Aan het genieten van QKSMS?</string>
   <string name="rate_summary">Deel je liefde voor QKSMS door een beoordeling op Google Play te plaatsen!</string>
   <string name="rate_okay">Ok</string>
   <string name="rate_dismiss">Sluiten</string>

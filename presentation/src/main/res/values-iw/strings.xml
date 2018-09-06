@@ -55,11 +55,8 @@
   <string name="archived_empty_text">ההתכתבויות שהעברת לארכיון תופענה כאן</string>
   <string name="main_fab_cd">התחלת התכתבות חדשה</string>
   <string name="main_default_sms_title">להתאהב בהתכתבות</string>
-  <string name="main_default_sms_message">הגדרת QKSMS ליישומון המסרונים כבררת מחדל</string>
   <string name="main_default_sms_change">החלפה</string>
   <string name="main_permission_required">נדרשת הרשאה</string>
-  <string name="main_permission_sms">ל־QKSMS נדרשות הרשאות כדי לשלוח ולצפות במסרונים</string>
-  <string name="main_permission_contacts">ל־QKSMS נדרשות הרשאות כדי לצפות באנשי הקשר שלך</string>
   <string name="main_permission_allow">לאפשר</string>
   <string name="drawer_inbox">דואר נכנס</string>
   <string name="drawer_archived">בארכיון</string>
@@ -72,7 +69,6 @@
   <string name="drawer_invite">הזמנת חברים</string>
   <string name="drawer_plus_banner_title">QKSMS+‎</string>
   <string name="drawer_plus_banner_summary">לחשוף תכונות מדהימות ולתמוך בפיתוח</string>
-  <string name="rate_title">QKSMS נושא חן בעיניך?</string>
   <string name="rate_summary">נשמח לקבל ממך דירוג ב־Google Play!</string>
   <string name="rate_okay">כמובן!</string>
   <string name="rate_dismiss">התעלמות</string>

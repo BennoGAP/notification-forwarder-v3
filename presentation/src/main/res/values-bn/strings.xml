@@ -55,11 +55,8 @@
   <string name="archived_empty_text">আপনার আর্কাইভ করা আলাপ এখানে দেখা যাবে</string>
   <string name="main_fab_cd">নতুন আলাপ শুরু করুন</string>
   <string name="main_default_sms_title">আবার texting ভালবাসুন</string>
-  <string name="main_default_sms_message">QKSMS-কে আপনার ডিফল্ট এসএমএস অ্যাপ করুন</string>
   <string name="main_default_sms_change">পরিবর্তন করুন</string>
   <string name="main_permission_required">অনুমতি প্রয়োজন</string>
-  <string name="main_permission_sms">QKSMS-এর এসএমএস বার্তাগুলো পাঠানো এবং দেখানো অনুমতি প্রয়োজন</string>
-  <string name="main_permission_contacts">QKSMS-এর আপনার পরিচিতিগুলি দেখার জন্য অনুমতি প্রয়োজন</string>
   <string name="main_permission_allow">মঞ্জুর করুন</string>
   <string name="drawer_inbox">ইনবক্স</string>
   <string name="drawer_archived">আর্কাইভ করা</string>
@@ -72,7 +69,6 @@
   <string name="drawer_invite">বন্ধুদের আমন্ত্রণ জানান</string>
   <string name="drawer_plus_banner_title">QKSMS+</string>
   <string name="drawer_plus_banner_summary">দারুণ নতুন ফিচার আনলক করুন এবং উন্নয়ন সহায়তা করুন</string>
-  <string name="rate_title">QKSMS উপভোগ করছেন?</string>
   <string name="rate_summary">আমাদের প্রতি ভালবাসে দেখাতে Google Play-তে আমাদের মূল্যায়ন করুন!</string>
   <string name="rate_okay">ঠিক আছে!</string>
   <string name="rate_dismiss">বাতিল করুন</string>

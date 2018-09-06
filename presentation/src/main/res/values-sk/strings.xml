@@ -55,11 +55,8 @@
   <string name="archived_empty_text">Your archived conversations will appear here</string>
   <string name="main_fab_cd">Začať novú konverzáciu</string>
   <string name="main_default_sms_title">Love texting again</string>
-  <string name="main_default_sms_message">Make QKSMS your default SMS app</string>
   <string name="main_default_sms_change">Change</string>
   <string name="main_permission_required">Permission required</string>
-  <string name="main_permission_sms">QKSMS needs permission to send and view SMS messages</string>
-  <string name="main_permission_contacts">QKSMS needs permission to view your contacts</string>
   <string name="main_permission_allow">Povoliť</string>
   <string name="drawer_inbox">Inbox</string>
   <string name="drawer_archived">Archived</string>
@@ -72,7 +69,6 @@
   <string name="drawer_invite">Invite friends</string>
   <string name="drawer_plus_banner_title">QKSMS+</string>
   <string name="drawer_plus_banner_summary">Unlock amazing new features, and support development</string>
-  <string name="rate_title">Enjoying QKSMS?</string>
   <string name="rate_summary">Share some love and rate us on Google Play!</string>
   <string name="rate_okay">OKAY!</string>
   <string name="rate_dismiss">DISMISS</string>

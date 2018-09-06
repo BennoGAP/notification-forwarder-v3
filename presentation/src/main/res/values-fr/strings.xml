@@ -55,11 +55,8 @@
   <string name="archived_empty_text">Vos conversations archivées apparaîtront ici</string>
   <string name="main_fab_cd">Débuter une nouvelle conversation</string>
   <string name="main_default_sms_title">Réapprenez à aimer les textos</string>
-  <string name="main_default_sms_message">Faire de QKSMS votre application SMS par défaut</string>
   <string name="main_default_sms_change">Changer</string>
   <string name="main_permission_required">Autorisation requise</string>
-  <string name="main_permission_sms">QKSMS a besoin de l\'autorisation d’envoyer et de consulter des messages SMS</string>
-  <string name="main_permission_contacts">QKSMS a besoin de l\'autorisation d\'accéder aux contacts</string>
   <string name="main_permission_allow">Autoriser</string>
   <string name="drawer_inbox">Boite de réception</string>
   <string name="drawer_archived">Archivées</string>
@@ -72,7 +69,6 @@
   <string name="drawer_invite">Inviter des amis</string>
   <string name="drawer_plus_banner_title">QKSMS+</string>
   <string name="drawer_plus_banner_summary">Débloquer les nouvelles fonctions sensationnelles et soutenir le développement</string>
-  <string name="rate_title">Vous aimez QKSMS ?</string>
   <string name="rate_summary">Partagez un peu d’amour et évaluez-nous sur le Play Store !</string>
   <string name="rate_okay">OK !</string>
   <string name="rate_dismiss">ANNULER</string>

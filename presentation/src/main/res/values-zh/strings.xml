@@ -55,11 +55,8 @@
   <string name="archived_empty_text">您存檔的對話將出現在這裡</string>
   <string name="main_fab_cd">開始新對話</string>
   <string name="main_default_sms_title">愛上發訊息</string>
-  <string name="main_default_sms_message">將QKSMS設為預設信息應用程式</string>
   <string name="main_default_sms_change">更改</string>
   <string name="main_permission_required">需要授權</string>
-  <string name="main_permission_sms">需要允許QKSMS發送和查看SMS訊息</string>
-  <string name="main_permission_contacts">需要允許QKSMS查看您的連絡人</string>
   <string name="main_permission_allow">允許</string>
   <string name="drawer_inbox">收件箱</string>
   <string name="drawer_archived">已存檔</string>
@@ -72,7 +69,6 @@
   <string name="drawer_invite">Invite friends</string>
   <string name="drawer_plus_banner_title">QKSMS+</string>
   <string name="drawer_plus_banner_summary">Unlock amazing new features, and support development</string>
-  <string name="rate_title">喜歡QKSMS？</string>
   <string name="rate_summary">在Google Play分享你的感受，並給我們評分！</string>
   <string name="rate_okay">好！</string>
   <string name="rate_dismiss">放棄</string>

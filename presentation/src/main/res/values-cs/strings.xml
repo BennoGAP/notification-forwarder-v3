@@ -55,11 +55,8 @@
   <string name="archived_empty_text">Zde se objeví vaše archivované konverzace</string>
   <string name="main_fab_cd">Zahájit novou konverzaci</string>
   <string name="main_default_sms_title">Zamilujte si znovu psaní</string>
-  <string name="main_default_sms_message">Nastavte si QKSMS jako výchozí SMS aplikaci</string>
   <string name="main_default_sms_change">Nastavit</string>
   <string name="main_permission_required">Vyžadováno oprávnění</string>
-  <string name="main_permission_sms">QKSMS potřebuje oprávnění pro odesílání a zobrazení SMS zpráv</string>
-  <string name="main_permission_contacts">QKSMS potřebuje oprávnění pro zobrazení vašich kontaktů</string>
   <string name="main_permission_allow">Povolit</string>
   <string name="drawer_inbox">Příchozí zprávy</string>
   <string name="drawer_archived">Archivováno</string>
@@ -72,7 +69,6 @@
   <string name="drawer_invite">Pozvat přátele</string>
   <string name="drawer_plus_banner_title">QKSMS+</string>
   <string name="drawer_plus_banner_summary">Odemkněte úžasné nové funkce a podpořte vývoj</string>
-  <string name="rate_title">Líbí se Vám QKSMS?</string>
   <string name="rate_summary">Sdílejte trochu lásky a ohodnoťte nás na Google Play!</string>
   <string name="rate_okay">Tak určitě!</string>
   <string name="rate_dismiss">ZAVŘÍT</string>

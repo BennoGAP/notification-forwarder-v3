@@ -55,11 +55,8 @@
   <string name="archived_empty_text">Az archivált beszélgetéseid itt jelennek meg</string>
   <string name="main_fab_cd">Új beszélgetés kezdeményezése</string>
   <string name="main_default_sms_title">Szeresd újból az SMS-ezést</string>
-  <string name="main_default_sms_message">A QKSMS beállítása alapértelmezett SMS alkalmazásként</string>
   <string name="main_default_sms_change">Módosít</string>
   <string name="main_permission_required">Engedély szükséges</string>
-  <string name="main_permission_sms">A QKSMS-nek engedélyt kell kapnia az SMS üzenetek küldésére és megtekintésére</string>
-  <string name="main_permission_contacts">A QKSMS-nek engedélyt kell kapnia a kapcsolatok megtekintésére</string>
   <string name="main_permission_allow">Engedélyez</string>
   <string name="drawer_inbox">Bejövő üzenetek</string>
   <string name="drawer_archived">Archivált</string>
@@ -72,7 +69,6 @@
   <string name="drawer_invite">Invite friends</string>
   <string name="drawer_plus_banner_title">QKSMS+</string>
   <string name="drawer_plus_banner_summary">Unlock amazing new features, and support development</string>
-  <string name="rate_title">Tetszik a QKSMS?</string>
   <string name="rate_summary">Oszd meg a szeretetet és értékelj minket a Google Playen!</string>
   <string name="rate_okay">OKÉ!</string>
   <string name="rate_dismiss">MELLŐZÉS</string>

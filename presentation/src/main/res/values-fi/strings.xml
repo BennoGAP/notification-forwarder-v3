@@ -55,11 +55,8 @@
   <string name="archived_empty_text">Arkistoimasi keskustelut näkyvät tässä</string>
   <string name="main_fab_cd">Aloita uusi keskustelu</string>
   <string name="main_default_sms_title">Rakastu tekstaamiseen uudelleen</string>
-  <string name="main_default_sms_message">Käytä QKSMS:ää oletustekstiviestisovelluksena</string>
   <string name="main_default_sms_change">Muuta</string>
   <string name="main_permission_required">Käyttöoikeus tarvitaan</string>
-  <string name="main_permission_sms">QKSMS tarvitsee oikeuden tekstiviestien lähettämiseen ja tarkastelemiseen</string>
-  <string name="main_permission_contacts">QKSMS tarvitsee oikeuden yhteystietojesi tarkatelemiseen</string>
   <string name="main_permission_allow">Salli</string>
   <string name="drawer_inbox">Saapuneet</string>
   <string name="drawer_archived">Arkistoidut</string>
@@ -72,7 +69,6 @@
   <string name="drawer_invite">Invite friends</string>
   <string name="drawer_plus_banner_title">QKSMS+</string>
   <string name="drawer_plus_banner_summary">Unlock amazing new features, and support development</string>
-  <string name="rate_title">Nautitko QKSMS:tä?</string>
   <string name="rate_summary">Jaa rakkautta ja arvostele meidät Google Playssä!</string>
   <string name="rate_okay">Okei!</string>
   <string name="rate_dismiss">HYLKÄÄ</string>

@@ -55,11 +55,8 @@
   <string name="archived_empty_text">Dina arkiverade konversationer kommer att dyka upp här</string>
   <string name="main_fab_cd">Starta en ny konversation</string>
   <string name="main_default_sms_title">Älska att skicka SMS igen</string>
-  <string name="main_default_sms_message">Gör QKSMS till din standard-app för SMS</string>
   <string name="main_default_sms_change">Ändra</string>
   <string name="main_permission_required">Tillstånd krävs</string>
-  <string name="main_permission_sms">QKSMS behöver tillåtelse att skicka och visa SMS-meddelanden</string>
-  <string name="main_permission_contacts">QKSMS behöver tillåtelse för att kunna se dina kontakter</string>
   <string name="main_permission_allow">Tillåt</string>
   <string name="drawer_inbox">Inkorg</string>
   <string name="drawer_archived">Arkiverat</string>
@@ -72,7 +69,6 @@
   <string name="drawer_invite">Bjud in vänner</string>
   <string name="drawer_plus_banner_title">QKSMS+</string>
   <string name="drawer_plus_banner_summary">Lås upp nya spännande funktioner och stötta utvecklingen</string>
-  <string name="rate_title">Tycker du om QKSMS?</string>
   <string name="rate_summary">Dela lite kärlek och betygsätt oss på Google Play!</string>
   <string name="rate_okay">OKEJ!</string>
   <string name="rate_dismiss">AVFÄRDA</string>

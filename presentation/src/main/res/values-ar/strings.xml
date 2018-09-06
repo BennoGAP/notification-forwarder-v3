@@ -55,11 +55,8 @@
   <string name="archived_empty_text">ستظهر المحادثات المؤرشفة الخاصة بك هنا</string>
   <string name="main_fab_cd">بدء محادثة جديدة</string>
   <string name="main_default_sms_title">ستحب المراسلة ثانية</string>
-  <string name="main_default_sms_message">جعل QKSMS تطبيق الرسائل النصية الافتراضي لديك</string>
   <string name="main_default_sms_change">تغيير</string>
   <string name="main_permission_required">الإذن مطلوب</string>
-  <string name="main_permission_sms">QKSMS يحتاج إلى إذن لإرسال وعرض الرسائل النصية</string>
-  <string name="main_permission_contacts">QKSMS يحتاج إلى إذن لعرض جهات الاتصال لديك</string>
   <string name="main_permission_allow">سماح</string>
   <string name="drawer_inbox">صندوق الوارد</string>
   <string name="drawer_archived">المؤرشفة</string>
@@ -72,7 +69,6 @@
   <string name="drawer_invite">دعوة الأصدقاء</string>
   <string name="drawer_plus_banner_title">QKSMS+</string>
   <string name="drawer_plus_banner_summary">فتح ميزات رائعة جديدة ، و دعم التطوير</string>
-  <string name="rate_title">هل QKSMS ممتع ؟</string>
   <string name="rate_summary">أظهر محبتك وقيّمنا على متجر Google Play!</string>
   <string name="rate_okay">حسناً</string>
   <string name="rate_dismiss">استبعاد</string>

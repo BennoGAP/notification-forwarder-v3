@@ -55,11 +55,8 @@
   <string name="archived_empty_text">Arkiverte samtaler vises her</string>
   <string name="main_fab_cd">Start ny samtale</string>
   <string name="main_default_sms_title">Elsk teksting igjen</string>
-  <string name="main_default_sms_message">Gjør QKSMS til standard SMS-app</string>
   <string name="main_default_sms_change">Endre</string>
   <string name="main_permission_required">Tillatelse kreves</string>
-  <string name="main_permission_sms">QKSMS trenger tillatelse til å sende og vise tekstmeldinger</string>
-  <string name="main_permission_contacts">QKSMS trenger tillatelse til å lese kontaktene dine</string>
   <string name="main_permission_allow">Tillat</string>
   <string name="drawer_inbox">Innboks</string>
   <string name="drawer_archived">Arkivert</string>
@@ -72,7 +69,6 @@
   <string name="drawer_invite">Invite friends</string>
   <string name="drawer_plus_banner_title">QKSMS+</string>
   <string name="drawer_plus_banner_summary">Lås opp fantastiske nye funksjoner, og støtt utvikling</string>
-  <string name="rate_title">Liker du QKSMS?</string>
   <string name="rate_summary">Del litt kjærlighet og vurder oss på Google Play!</string>
   <string name="rate_okay">OK!</string>
   <string name="rate_dismiss">AVVIS</string>

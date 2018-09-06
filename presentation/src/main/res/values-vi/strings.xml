@@ -55,11 +55,8 @@
   <string name="archived_empty_text">Các cuộc hội thoại đã lưu trữ của bạn sẽ xuất hiện ở đây</string>
   <string name="main_fab_cd">Bắt đầu cuộc hội thoại</string>
   <string name="main_default_sms_title">Love texting again</string>
-  <string name="main_default_sms_message">Đặt QKSMS là ứng dụng SMS mặc định</string>
   <string name="main_default_sms_change">Thay đổi</string>
   <string name="main_permission_required">Yêu cầu quyền truy cập</string>
-  <string name="main_permission_sms">QKSMS cần cấp quyền để gửi và xem tin nhắn SMS</string>
-  <string name="main_permission_contacts">QKSMS cần cấp quyền để xem danh bạ</string>
   <string name="main_permission_allow">Cho phép</string>
   <string name="drawer_inbox">Hộp thư đến</string>
   <string name="drawer_archived">Lưu trữ</string>
@@ -72,7 +69,6 @@
   <string name="drawer_invite">Invite friends</string>
   <string name="drawer_plus_banner_title">QKSMS+</string>
   <string name="drawer_plus_banner_summary">Unlock amazing new features, and support development</string>
-  <string name="rate_title">Bạn có thích QKSMS không?</string>
   <string name="rate_summary">Chia sẻ và vote chúng tôi trên Google Play!</string>
   <string name="rate_okay">Đồng ý!</string>
   <string name="rate_dismiss">Bỏ qua</string>

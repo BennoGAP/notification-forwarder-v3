@@ -55,11 +55,8 @@
   <string name="archived_empty_text">Arşivlenmiş konuşmalarınızı burada görünür</string>
   <string name="main_fab_cd">Yeni konuşma başlat</string>
   <string name="main_default_sms_title">Yine mesajlaşmayı seviyorum</string>
-  <string name="main_default_sms_message">QKSMS varsayılan SMS uygulaması yap</string>
   <string name="main_default_sms_change">Değiştir</string>
   <string name="main_permission_required">İzin gerekli</string>
-  <string name="main_permission_sms">QKSMS göndermek ve SMS mesajları görüntülemek için izni olması gerekir.</string>
-  <string name="main_permission_contacts">QKSMS kişilerinizi görüntülemek için izni olması gerekir.</string>
   <string name="main_permission_allow">İzin ver</string>
   <string name="drawer_inbox">Gelen Kutusu</string>
   <string name="drawer_archived">Arşivle</string>
@@ -72,7 +69,6 @@
   <string name="drawer_invite">Arkadaşlarınızı davet edin</string>
   <string name="drawer_plus_banner_title">QKSMS+</string>
   <string name="drawer_plus_banner_summary">İnanılmaz yeni özelliklerin kilidini aç ve geliştirmeye destek ol</string>
-  <string name="rate_title">QKSMS tadını çıkarıyor musun?</string>
   <string name="rate_summary">Biraz sevgi paylaş ve Google Playden bizi oyla!</string>
   <string name="rate_okay">TAMAM!</string>
   <string name="rate_dismiss">GÖREVDEN</string>

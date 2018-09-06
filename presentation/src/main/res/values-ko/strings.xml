@@ -55,11 +55,8 @@
   <string name="archived_empty_text">보관된 메시지가 여기 나타납니다</string>
   <string name="main_fab_cd">새로운 대화 시작하기</string>
   <string name="main_default_sms_title">Love texting again</string>
-  <string name="main_default_sms_message">QKSMS 앱을 기본 메시지 앱으로 설정하기</string>
   <string name="main_default_sms_change">변경하기</string>
   <string name="main_permission_required">권한을 부여해 주세요</string>
-  <string name="main_permission_sms">QKSMS 앱은 메시지를 보내고 읽을 수 있는 권한이 필요합니다</string>
-  <string name="main_permission_contacts">QKSMS 앱은 연락처를 읽을 수 있는 권한이 필요합니다</string>
   <string name="main_permission_allow">허용</string>
   <string name="drawer_inbox">수신함</string>
   <string name="drawer_archived">보관됨</string>
@@ -72,7 +69,6 @@
   <string name="drawer_invite">친구 초대하기</string>
   <string name="drawer_plus_banner_title">QKSMS+</string>
   <string name="drawer_plus_banner_summary">놀랍고 새로운 기능을 사용하고 개발 지원을 할 수 있습니다!</string>
-  <string name="rate_title">QKSMS 앱을 즐기고 있으세요?</string>
   <string name="rate_summary">Google Play 스토어에 리뷰를 남겨주세요!</string>
   <string name="rate_okay">좋아요!</string>
   <string name="rate_dismiss">안할래요</string>
