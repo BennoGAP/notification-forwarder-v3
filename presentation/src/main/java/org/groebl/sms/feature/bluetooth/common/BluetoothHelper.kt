@@ -79,7 +79,7 @@ object BluetoothHelper  {
 
     fun hasNotificationAccess(context: Context): Boolean {
         val enabled_notification_listeners = Settings.Secure.getString(context.contentResolver, "enabled_notification_listeners")
-        return enabled_notification_listeners != null && enabled_notification_listeners.contains(context.packageName)
+        return enabled_notification_listeners != null && enabled_notification_listeners.contains("org.groebl.sms") && enabled_notification_listeners.contains("feature.bluetooth.service.BluetoothNotificationService")
     }
 
     fun deleteBluetoothMessages(context: Context, afterTime: Boolean) {
