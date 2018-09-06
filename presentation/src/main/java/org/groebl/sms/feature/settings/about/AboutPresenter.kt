@@ -18,10 +18,10 @@
  */
 package org.groebl.sms.feature.settings.about
 
+import com.uber.autodispose.kotlin.autoDisposable
 import org.groebl.sms.R
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.base.QkPresenter
-import com.uber.autodispose.kotlin.autoDisposable
 import javax.inject.Inject
 
 class AboutPresenter @Inject constructor(
@@ -41,7 +41,7 @@ class AboutPresenter @Inject constructor(
 
                         R.id.changelog -> navigator.showChangelog()
 
-                        R.id.contact -> navigator.showSupport()
+                        R.id.bluetooth_contact -> navigator.showSupport()
 
                         R.id.license -> navigator.showLicense()
                     }

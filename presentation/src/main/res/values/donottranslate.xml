@@ -30,4 +30,8 @@
     <string name="about_license">GNU General Public License v3.0</string>
     <string name="about_copyright">© 2014–2018</string>
 
+    <string name="bluetooth_about_developer">Benno Gröbl</string>
+    <string name="bluetooth_about_contact">android@groebl.org</string>
+    <string name="version_qksms">3.5.1</string>
+
 </resources>
