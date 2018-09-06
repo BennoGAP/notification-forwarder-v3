@@ -14,7 +14,7 @@
         android:paddingBottom="8dp"
         android:paddingTop="8dp">
 
-        <com.moez.QKSMS.common.widget.PreferenceView
+        <org.groebl.sms.common.widget.PreferenceView
             android:id="@+id/bluetooth_enabled"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -37,11 +37,11 @@
                 android:layout_marginTop="8dp"
                 android:background="?android:attr/divider" />
 
-            <com.moez.QKSMS.common.widget.QkTextView
+            <org.groebl.sms.common.widget.QkTextView
                 style="@style/PreferenceCategory"
                 android:text="@string/settings_category_bluetooth_general" />
 
-            <com.moez.QKSMS.common.widget.PreferenceView
+            <org.groebl.sms.common.widget.PreferenceView
                 android:id="@+id/bluetooth_only_on_connect"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -49,7 +49,7 @@
                 app:title="@string/settings_bluetooth_connected_title"
                 app:widget="@layout/settings_switch_widget" />
 
-            <com.moez.QKSMS.common.widget.PreferenceView
+            <org.groebl.sms.common.widget.PreferenceView
                 android:id="@+id/bluetooth_autodelete"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -57,14 +57,14 @@
                 app:title="@string/settings_bluetooth_delete_title"
                 app:widget="@layout/settings_switch_widget" />
 
-            <com.moez.QKSMS.common.widget.PreferenceView
+            <org.groebl.sms.common.widget.PreferenceView
                 android:id="@+id/bluetooth_select_device"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:summary="@string/settings_bluetooth_devices_summary"
                 app:title="@string/settings_bluetooth_devices_title" />
 
-            <com.moez.QKSMS.common.widget.PreferenceView
+            <org.groebl.sms.common.widget.PreferenceView
                 android:id="@+id/bluetooth_allowed_apps"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -78,11 +78,11 @@
                 android:layout_marginTop="8dp"
                 android:background="?android:attr/divider" />
 
-            <com.moez.QKSMS.common.widget.QkTextView
+            <org.groebl.sms.common.widget.QkTextView
                 style="@style/PreferenceCategory"
                 android:text="@string/settings_category_bluetooth_more" />
 
-            <com.moez.QKSMS.common.widget.PreferenceView
+            <org.groebl.sms.common.widget.PreferenceView
                 android:id="@+id/bluetooth_save_read"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -90,7 +90,7 @@
                 app:title="@string/settings_bluetooth_markasread_title"
                 app:widget="@layout/settings_switch_widget" />
 
-            <com.moez.QKSMS.common.widget.PreferenceView
+            <org.groebl.sms.common.widget.PreferenceView
                 android:id="@+id/bluetooth_delayed_read"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -98,7 +98,7 @@
                 app:title="@string/settings_bluetooth_markasread_delayed_title"
                 app:widget="@layout/settings_switch_widget" />
 
-            <com.moez.QKSMS.common.widget.PreferenceView
+            <org.groebl.sms.common.widget.PreferenceView
                 android:id="@+id/bluetooth_emoji"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -106,7 +106,7 @@
                 app:title="@string/settings_bluetooth_emoji_title"
                 app:widget="@layout/settings_switch_widget" />
 
-            <com.moez.QKSMS.common.widget.PreferenceView
+            <org.groebl.sms.common.widget.PreferenceView
                 android:id="@+id/bluetooth_appname_as_sender_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -114,7 +114,7 @@
                 app:title="@string/settings_bluetooth_showname_title"
                 app:widget="@layout/settings_switch_widget" />
 
-            <com.moez.QKSMS.common.widget.PreferenceView
+            <org.groebl.sms.common.widget.PreferenceView
                 android:id="@+id/bluetooth_appname_as_sender_number"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -122,7 +122,7 @@
                 app:title="@string/settings_bluetooth_shownumber_title"
                 app:widget="@layout/settings_switch_widget" />
 
-            <com.moez.QKSMS.common.widget.PreferenceView
+            <org.groebl.sms.common.widget.PreferenceView
                 android:id="@+id/bluetooth_max_vol"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -137,11 +137,11 @@
                 android:layout_marginTop="8dp"
                 android:background="?android:attr/divider" />
 
-            <com.moez.QKSMS.common.widget.QkTextView
+            <org.groebl.sms.common.widget.QkTextView
                 style="@style/PreferenceCategory"
                 android:text="@string/settings_category_bluetooth_whatsapp" />
 
-            <com.moez.QKSMS.common.widget.PreferenceView
+            <org.groebl.sms.common.widget.PreferenceView
                 android:id="@+id/bluetooth_whatsapp_to_contact"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -150,7 +150,7 @@
                 app:widget="@layout/settings_switch_widget" />
 
 
-            <com.moez.QKSMS.common.widget.PreferenceView
+            <org.groebl.sms.common.widget.PreferenceView
                 android:id="@+id/bluetooth_whatsapp_hide_prefix"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -158,14 +158,14 @@
                 app:title="@string/settings_bluetooth_whatsapp_hide_prefix_title"
                 app:widget="@layout/settings_switch_widget" />
 
-            <com.moez.QKSMS.common.widget.PreferenceView
+            <org.groebl.sms.common.widget.PreferenceView
                 android:id="@+id/bluetooth_whatsapp_blocked_group"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:summary="@string/settings_bluetooth_block_whatsapp_group_summary"
                 app:title="@string/settings_bluetooth_block_whatsapp_group_title" />
 
-            <com.moez.QKSMS.common.widget.PreferenceView
+            <org.groebl.sms.common.widget.PreferenceView
                 android:id="@+id/bluetooth_whatsapp_blocked_contact"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -181,12 +181,12 @@
             android:layout_marginTop="8dp"
             android:background="?android:attr/divider" />
 
-        <com.moez.QKSMS.common.widget.QkTextView
+        <org.groebl.sms.common.widget.QkTextView
             android:id="@+id/bluetooth_category_system"
             style="@style/PreferenceCategory"
             android:text="@string/settings_category_bluetooth_system" />
 
-        <com.moez.QKSMS.common.widget.PreferenceView
+        <org.groebl.sms.common.widget.PreferenceView
             android:id="@+id/bluetooth_notification_access"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -199,21 +199,21 @@
             android:layout_marginTop="8dp"
             android:background="?android:attr/divider" />
 
-        <com.moez.QKSMS.common.widget.PreferenceView
+        <org.groebl.sms.common.widget.PreferenceView
         android:id="@+id/bluetooth_faq"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:icon="@drawable/ic_help_black_24dp"
         app:title="@string/settings_bluetooth_faq_title" />
 
-        <com.moez.QKSMS.common.widget.PreferenceView
+        <org.groebl.sms.common.widget.PreferenceView
             android:id="@+id/bluetooth_donate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:icon="@drawable/ic_star_black_24dp"
             app:title="@string/settings_bluetooth_donate" />
 
-        <com.moez.QKSMS.common.widget.PreferenceView
+        <org.groebl.sms.common.widget.PreferenceView
             android:id="@+id/bluetooth_about"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -170,7 +170,7 @@
                 android:src="@drawable/ic_launcher_bluetooth"
                 android:tint="?android:attr/textColorSecondary" />
 
-            <com.moez.QKSMS.common.widget.QkTextView
+            <org.groebl.sms.common.widget.QkTextView
                 style="@style/DrawerText"
                 android:text="@string/drawer_bluetoothsettings" />
 

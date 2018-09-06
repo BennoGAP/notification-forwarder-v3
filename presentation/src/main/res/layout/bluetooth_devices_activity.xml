@@ -12,7 +12,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.moez.QKSMS.common.widget.QkTextView
+    <org.groebl.sms.common.widget.QkTextView
         android:id="@+id/empty"
         style="@style/TextSecondary"
         android:layout_width="0dp"
