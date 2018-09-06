@@ -1,0 +1,119 @@
+/*
+ * Copyright (C) 2017 Moez Bhatti <moez.bhatti@gmail.com>
+ *
+ * This file is part of QKSMS.
+ *
+ * QKSMS is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * QKSMS is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package org.groebl.sms.feature.backup
+
+import android.content.Context
+import androidx.core.widget.toast
+import org.groebl.sms.R
+import org.groebl.sms.common.Navigator
+import org.groebl.sms.common.base.QkPresenter
+import org.groebl.sms.common.util.BillingManager
+import org.groebl.sms.common.util.DateFormatter
+import org.groebl.sms.interactor.PerformBackup
+import org.groebl.sms.repository.BackupRepository
+import com.uber.autodispose.kotlin.autoDisposable
+import io.reactivex.rxkotlin.plusAssign
+import io.reactivex.rxkotlin.withLatestFrom
+import java.util.concurrent.TimeUnit
+import javax.inject.Inject
+
+class BackupPresenter @Inject constructor(
+        private val backupRepo: BackupRepository,
+        private val billingManager: BillingManager,
+        private val context: Context,
+        private val dateFormatter: DateFormatter,
+        private val navigator: Navigator,
+        private val performBackup: PerformBackup
+) : QkPresenter<BackupView, BackupState>(BackupState()) {
+
+    init {
+        disposables += backupRepo.getBackupProgress()
+                .sample(16, TimeUnit.MILLISECONDS)
+                .distinctUntilChanged()
+                .subscribe { progress -> newState { copy(backupProgress = progress) } }
+
+        disposables += backupRepo.getRestoreProgress()
+                .sample(16, TimeUnit.MILLISECONDS)
+                .distinctUntilChanged()
+                .subscribe { progress -> newState { copy(restoreProgress = progress) } }
+
+        disposables += backupRepo.getBackups()
+                .doOnNext { backups -> newState { copy(backups = backups) } }
+                .map { backups -> backups.map { it.date }.max() ?: 0L }
+                .map { lastBackup ->
+                    when (lastBackup) {
+                        0L -> context.getString(R.string.backup_never)
+                        else -> dateFormatter.getDetailedTimestamp(lastBackup)
+                    }
+                }
+                .startWith(context.getString(R.string.backup_loading))
+                .subscribe { lastBackup -> newState { copy(lastBackup = lastBackup) } }
+
+        disposables += billingManager.upgradeStatus
+                .subscribe { upgraded -> newState { copy(upgraded = upgraded) } }
+    }
+
+    override fun bindIntents(view: BackupView) {
+        super.bindIntents(view)
+
+        view.restoreClicks()
+                .withLatestFrom(
+                        backupRepo.getBackupProgress(),
+                        backupRepo.getRestoreProgress(),
+                        billingManager.upgradeStatus)
+                { _, backupProgress, restoreProgress, upgraded ->
+                    when {
+                        !upgraded -> context.toast(R.string.backup_restore_error_plus)
+                        backupProgress.running -> context.toast(R.string.backup_restore_error_backup)
+                        restoreProgress.running -> context.toast(R.string.backup_restore_error_restore)
+                        else -> view.selectFile()
+                    }
+                }
+                .autoDisposable(view.scope())
+                .subscribe()
+
+        view.restoreFileSelected()
+                .autoDisposable(view.scope())
+                .subscribe { view.confirmRestore() }
+
+        view.restoreConfirmed()
+                .withLatestFrom(view.restoreFileSelected()) { _, backup -> backup }
+                .autoDisposable(view.scope())
+                .subscribe { backup -> RestoreBackupService.start(context, backup.path) }
+
+        view.stopRestoreClicks()
+                .autoDisposable(view.scope())
+                .subscribe { view.stopRestore() }
+
+        view.stopRestoreConfirmed()
+                .autoDisposable(view.scope())
+                .subscribe { backupRepo.stopRestore() }
+
+        view.fabClicks()
+                .withLatestFrom(billingManager.upgradeStatus) { _, upgraded -> upgraded }
+                .autoDisposable(view.scope())
+                .subscribe { upgraded ->
+                    when (upgraded) {
+                        true -> performBackup.execute(Unit)
+                        false -> navigator.showQksmsPlusActivity("backup_fab")
+                    }
+                }
+    }
+
+}

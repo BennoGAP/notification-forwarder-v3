@@ -1,0 +1,194 @@
+/*
+ * Copyright (C) 2017 Moez Bhatti <moez.bhatti@gmail.com>
+ *
+ * This file is part of QKSMS.
+ *
+ * QKSMS is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * QKSMS is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
+ */
+apply plugin: 'com.android.application'
+apply plugin: 'realm-android' // Realm needs to be before Kotlin or the build will fail
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion 28
+    buildToolsVersion "28.0.0"
+    flavorDimensions "analytics"
+
+    defaultConfig {
+        applicationId "org.groebl.sms"
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode 186
+        versionName "3.5.1"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "String", "BUGSNAG_API_KEY", "\"${System.getenv("BUGSNAG_API_KEY")}\""
+    }
+
+    signingConfigs {
+        release
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    productFlavors {
+        withAnalytics { dimension "analytics" }
+        noAnalytics { dimension "analytics" }
+    }
+
+    splits {
+        abi {
+            enable true
+            reset()
+            include 'armeabi-v7a', 'arm64-v8a'
+            universalApk true
+        }
+    }
+
+    if (System.getenv("CI") == "true") {
+        signingConfigs.release.storeFile = file("../keystore")
+        signingConfigs.release.storePassword = System.getenv("keystore_password")
+        signingConfigs.release.keyAlias = System.getenv("key_alias")
+        signingConfigs.release.keyPassword = System.getenv("key_password")
+    }
+}
+
+androidExtensions {
+    experimental = true
+}
+
+import com.android.build.OutputFile
+
+// For each APK output variant, override versionCode with one that is unique
+// https://developer.android.com/studio/build/gradle-tips.html#configure-dynamic-version-codes
+android.applicationVariants.all { variant ->
+    variant.outputs.each { output ->
+        def baseAbiVersionCode = abiCodes.get(output.getFilter(OutputFile.ABI), 0)
+        output.versionCodeOverride = baseAbiVersionCode * 1000 + variant.versionCode
+    }
+}
+
+configurations {
+    noAnalyticsDebug
+    noAnalyticsRelease
+    withAnalyticsDebug
+    withAnalyticsRelease
+}
+
+dependencies {
+    // lifecycle
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
+
+    // androidx
+    implementation "androidx.appcompat:appcompat:$androidx_version"
+    implementation "androidx.constraintlayout:constraintlayout:$constraintlayout_version"
+    implementation "com.google.android.material:material:$androidx_version"
+    implementation "androidx.emoji:emoji-appcompat:$androidx_version"
+
+    // conductor
+    implementation "com.bluelinelabs:conductor:$conductor_version"
+    implementation "com.bluelinelabs:conductor-autodispose:$conductor_version"
+
+    // glide
+    implementation "com.github.bumptech.glide:glide:$glide_version"
+    kapt "com.github.bumptech.glide:compiler:$glide_compiler_version"
+
+    // exoplayer
+    implementation "com.google.android.exoplayer:exoplayer-core:$exoplayer_version"
+    implementation("com.google.android.exoplayer:exoplayer-ui:$exoplayer_version", {
+        exclude group: "com.android.support", module: "support-media-compat"
+    })
+
+    // rxbinding
+    implementation "com.jakewharton.rxbinding2:rxbinding-kotlin:$rxbinding_version"
+    implementation "com.jakewharton.rxbinding2:rxbinding-support-v4-kotlin:$rxbinding_version"
+
+    // autodispose
+    implementation "com.uber.autodispose:autodispose-android-archcomponents-kotlin:$autodispose_version"
+    implementation "com.uber.autodispose:autodispose-android-archcomponents-test-kotlin:$autodispose_version"
+    implementation "com.uber.autodispose:autodispose-android-kotlin:$autodispose_version"
+    implementation "com.uber.autodispose:autodispose-kotlin:$autodispose_version"
+
+    // dagger
+    implementation "com.google.dagger:dagger:$dagger_version"
+    implementation "com.google.dagger:dagger-android-support:$dagger_version"
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
+    kapt "com.google.dagger:dagger-android-processor:$dagger_version"
+    compileOnly "javax.annotation:jsr250-api:1.0"
+
+    // ezvcard
+    implementation('com.googlecode.ez-vcard:ez-vcard:0.10.4', {
+        exclude group: "org.jsoup", module: "jsoup"
+        exclude group: "org.freemarker", module: "freemarker"
+        exclude group: "com.fasterxml.jackson.core", module: "jackson-core"
+    })
+
+    // realm
+    implementation("io.realm:android-adapters:$realm_adapters_version") { transitive = false }
+    kapt "io.realm:realm-annotations:$realm_version"
+    kapt "io.realm:realm-annotations-processor:$realm_version"
+
+    // rxjava
+    implementation 'com.akaita.java:rxjava2-debug:1.2.2'
+    implementation "io.reactivex.rxjava2:rxandroid:$rxandroid_version"
+    implementation "io.reactivex.rxjava2:rxjava:$rxjava_version"
+    implementation "io.reactivex.rxjava2:rxkotlin:$rxkotlin_version"
+
+    // testing
+    androidTestImplementation("androidx.test.espresso:espresso-core:$espresso_version", {
+        exclude group: "com.android.support", module: "support-annotations"
+    })
+    androidTestImplementation "org.mockito:mockito-android:$mockito_version"
+    testImplementation "androidx.test:runner:$androidx_testrunner_version"
+    testImplementation "junit:junit:$junit_version"
+    testImplementation "org.mockito:mockito-core:$mockito_version"
+
+    implementation "androidx.core:core-ktx:$ktx_version"
+    implementation "com.android.billingclient:billing:1.0"
+    implementation "com.bugsnag:bugsnag-android:4.1.1"
+    implementation "com.github.chrisbanes:PhotoView:2.0.0"
+    implementation "com.f2prateek.rx.preferences2:rx-preferences:$rx_preferences_version"
+    implementation "com.google.android:flexbox:0.3.1"
+    implementation "com.jakewharton.timber:timber:$timber_version"
+    implementation "com.squareup.moshi:moshi:$moshi_version"
+    implementation "me.leolin:ShortcutBadger:1.1.21"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation project(":android-smsmms")
+    implementation project(":common")
+    implementation project(':data')
+    implementation project(':domain')
+    noAnalyticsDebug project(path: ':data', configuration: 'noAnalyticsDebug')
+    noAnalyticsRelease project(path: ':data', configuration: 'noAnalyticsRelease')
+    withAnalyticsDebug project(path: ':data', configuration: 'withAnalyticsDebug')
+    withAnalyticsRelease project(path: ':data', configuration: 'withAnalyticsRelease')
+}

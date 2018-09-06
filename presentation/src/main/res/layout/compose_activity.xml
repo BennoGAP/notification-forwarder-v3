@@ -1,0 +1,531 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2017 Moez Bhatti <moez.bhatti@gmail.com>
+  ~
+  ~ This file is part of QKSMS.
+  ~
+  ~ QKSMS is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ QKSMS is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<androidx.constraintlayout.widget.ConstraintLayout android:id="@+id/contentView"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:background="?attr/composeBackground"
+    android:orientation="vertical"
+    tools:context="org.groebl.sms.feature.compose.ComposeActivity">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/messageList"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:paddingBottom="16dp"
+        android:paddingTop="8dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="@id/composeBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:stackFromEnd="true"
+        tools:listitem="@layout/message_list_item_in" />
+
+    <org.groebl.sms.common.widget.QkTextView
+        android:id="@+id/messagesEmpty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="56dp"
+        android:layout_marginStart="56dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="@string/compose_messages_empty"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:textColor="tertiary"
+        app:textSize="secondary" />
+
+    <ProgressBar
+        android:id="@+id/loading"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="16dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        tools:progress="45"
+        tools:progressTint="@color/tools_theme" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/sendAsGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="sendAsGroupBackground, sendAsGroupTitle, sendAsGroupSummary, sendAsGroupSwitch, sendAsGroupShadow"
+        tools:visibility="visible" />
+
+    <View
+        android:id="@+id/sendAsGroupBackground"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="?attr/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="@id/sendAsGroupSummary"
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+    <org.groebl.sms.common.widget.QkTextView
+        android:id="@+id/sendAsGroupTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/compose_send_group_title"
+        android:textColor="?android:attr/textColorPrimary"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/sendAsGroupSwitch"
+        app:layout_constraintStart_toStartOf="@id/sendAsGroupBackground"
+        app:layout_constraintTop_toTopOf="@id/sendAsGroupBackground"
+        app:textSize="primary" />
+
+    <org.groebl.sms.common.widget.QkTextView
+        android:id="@+id/sendAsGroupSummary"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingBottom="16dp"
+        android:text="@string/compose_send_group_summary"
+        android:textColor="?android:attr/textColorTertiary"
+        app:layout_constraintEnd_toEndOf="@id/sendAsGroupTitle"
+        app:layout_constraintStart_toStartOf="@id/sendAsGroupTitle"
+        app:layout_constraintTop_toBottomOf="@id/sendAsGroupTitle"
+        app:textSize="secondary" />
+
+    <org.groebl.sms.common.widget.QkSwitch
+        android:id="@+id/sendAsGroupSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:checked="true"
+        android:clickable="false"
+        app:layout_constraintBottom_toBottomOf="@id/sendAsGroupBackground"
+        app:layout_constraintEnd_toEndOf="@id/sendAsGroupBackground"
+        app:layout_constraintTop_toTopOf="@id/sendAsGroupBackground" />
+
+    <View
+        android:id="@+id/sendAsGroupShadow"
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:background="@drawable/ab_shadow"
+        app:layout_constraintTop_toBottomOf="@id/sendAsGroupBackground" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/contacts"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="?android:attr/windowBackground"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        tools:listitem="@layout/contact_list_item"
+        tools:visibility="gone" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/composeBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="composeBackground, messageBackground, attachments, attach, message, counter, send" />
+
+    <View
+        android:id="@+id/composeBackground"
+        android:layout_width="0dp"
+        android:layout_height="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/compose_bar_background"
+        android:backgroundTint="?attr/composeBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/messageBackground" />
+
+    <View
+        android:id="@+id/messageBackground"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/rounded_rectangle_22dp"
+        android:backgroundTint="?attr/bubbleColor"
+        android:elevation="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/attach"
+        app:layout_constraintTop_toTopOf="@id/scheduledCancel" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/scheduledGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="scheduledTitle, scheduledTime, scheduledCancel, scheduledSeparator" />
+
+    <org.groebl.sms.common.widget.QkTextView
+        android:id="@+id/scheduledTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:elevation="4dp"
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp"
+        android:text="@string/compose_scheduled_for"
+        android:textColor="?android:attr/textColorPrimary"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/scheduledTime"
+        app:layout_constraintEnd_toStartOf="@id/scheduledCancel"
+        app:layout_constraintStart_toStartOf="@id/messageBackground"
+        app:layout_constraintTop_toTopOf="@id/scheduledCancel"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:textSize="secondary" />
+
+    <org.groebl.sms.common.widget.QkTextView
+        android:id="@+id/scheduledTime"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:elevation="4dp"
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp"
+        android:textColor="?android:attr/textColorTertiary"
+        app:layout_constraintBottom_toBottomOf="@id/scheduledCancel"
+        app:layout_constraintEnd_toStartOf="@id/scheduledCancel"
+        app:layout_constraintStart_toStartOf="@id/messageBackground"
+        app:layout_constraintTop_toBottomOf="@id/scheduledTitle"
+        app:textSize="secondary"
+        tools:text="Decemeber 23rd at 12:00AM" />
+
+    <ImageView
+        android:id="@+id/scheduledCancel"
+        android:layout_width="44dp"
+        android:layout_height="56dp"
+        android:elevation="4dp"
+        android:padding="10dp"
+        android:src="@drawable/ic_cancel_black_24dp"
+        android:tint="?android:attr/textColorSecondary"
+        app:layout_constraintBottom_toTopOf="@id/scheduledSeparator"
+        app:layout_constraintEnd_toEndOf="@id/messageBackground" />
+
+    <View
+        android:id="@+id/scheduledSeparator"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="?android:attr/divider"
+        android:elevation="4dp"
+        app:layout_constraintBottom_toTopOf="@id/attachments"
+        app:layout_constraintEnd_toEndOf="@id/messageBackground"
+        app:layout_constraintStart_toStartOf="@id/messageBackground" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/attachments"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:elevation="4dp"
+        android:orientation="horizontal"
+        android:paddingEnd="8dp"
+        android:paddingStart="8dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@id/message"
+        app:layout_constraintEnd_toEndOf="@id/messageBackground"
+        app:layout_constraintStart_toStartOf="@id/messageBackground"
+        tools:listitem="@layout/attachment_list_item" />
+
+    <org.groebl.sms.common.widget.QkEditText
+        android:id="@+id/message"
+        style="@style/TextPrimary"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@null"
+        android:elevation="4dp"
+        android:gravity="center_vertical"
+        android:hint="@string/compose_hint"
+        android:inputType="textLongMessage|textCapSentences|textMultiLine"
+        android:maxLines="6"
+        android:minHeight="44dp"
+        android:paddingBottom="12dp"
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp"
+        android:paddingTop="12dp"
+        android:textColorHint="?android:attr/textColorTertiary"
+        app:layout_constraintBottom_toBottomOf="@id/messageBackground"
+        app:layout_constraintEnd_toStartOf="@id/sim"
+        app:layout_constraintStart_toStartOf="@id/messageBackground" />
+
+    <ImageView
+        android:id="@+id/sim"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:background="?attr/selectableItemBackground"
+        android:contentDescription="@string/compose_sim_cd"
+        android:elevation="4dp"
+        android:padding="10dp"
+        android:src="@drawable/ic_sim_card_black_24dp"
+        android:tint="?android:attr/textColorSecondary"
+        app:layout_constraintBottom_toBottomOf="@id/messageBackground"
+        app:layout_constraintEnd_toStartOf="@id/send" />
+
+    <org.groebl.sms.common.widget.QkTextView
+        android:id="@+id/simIndex"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:elevation="4dp"
+        android:gravity="center"
+        android:textColor="?android:attr/textColorPrimaryInverse"
+        android:textSize="14dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/sim"
+        app:layout_constraintEnd_toEndOf="@id/sim"
+        app:layout_constraintStart_toStartOf="@id/sim"
+        app:layout_constraintTop_toTopOf="@id/sim"
+        tools:ignore="SpUsage"
+        tools:text="1" />
+
+    <org.groebl.sms.common.widget.QkTextView
+        android:id="@+id/counter"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:elevation="4dp"
+        android:gravity="center"
+        app:layout_constraintBottom_toTopOf="@id/send"
+        app:layout_constraintEnd_toEndOf="@id/send"
+        app:layout_constraintStart_toStartOf="@id/send"
+        app:textColor="secondary"
+        app:textSize="tertiary"
+        tools:text="108 / 2" />
+
+    <ImageView
+        android:id="@+id/send"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:contentDescription="@string/compose_send_cd"
+        android:elevation="4dp"
+        android:padding="10dp"
+        android:src="@drawable/ic_send_black_24dp"
+        android:tint="?android:textColorSecondary"
+        app:layout_constraintBottom_toBottomOf="@id/messageBackground"
+        app:layout_constraintEnd_toEndOf="@id/messageBackground"
+        tools:backgroundTint="@color/tools_theme" />
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        style="@style/Toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_max="140dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <org.groebl.sms.common.widget.QkTextView
+                android:id="@+id/toolbarTitle"
+                style="@style/ToolbarText"
+                android:layout_height="wrap_content"
+                tools:text="Moez Bhatti" />
+
+            <org.groebl.sms.common.widget.QkTextView
+                android:id="@+id/toolbarSubtitle"
+                style="@style/ToolbarText"
+                android:visibility="gone"
+                app:textColor="tertiary"
+                app:textSize="secondary"
+                tools:text="3 of 9 results" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/chips"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:layout_marginTop="4dp"
+                android:scrollbars="vertical"
+                tools:visibility="gone" />
+
+        </LinearLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:background="@drawable/ab_shadow"
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/divider"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/attaching"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="schedule, scheduleLabel, gallery, galleryLabel, camera, cameraLabel, attachingBackground" />
+
+    <View
+        android:id="@+id/attachingBackground"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#44000000"
+        android:elevation="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/schedule"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/circle"
+        android:backgroundTint="?attr/bubbleColor"
+        android:contentDescription="@string/compose_schedule_cd"
+        android:elevation="4dp"
+        android:padding="10dp"
+        android:src="@drawable/ic_event_black_24dp"
+        android:tint="?android:attr/textColorSecondary"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@id/gallery"
+        app:layout_constraintEnd_toEndOf="@id/attach"
+        app:layout_constraintStart_toStartOf="@id/attach" />
+
+    <org.groebl.sms.common.widget.QkTextView
+        android:id="@+id/scheduleLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/rounded_rectangle_4dp"
+        android:backgroundTint="?attr/bubbleColor"
+        android:elevation="4dp"
+        android:gravity="center_vertical"
+        android:paddingEnd="8dp"
+        android:paddingStart="8dp"
+        android:text="@string/compose_schedule_cd"
+        android:textColor="?android:attr/textColorPrimary"
+        app:layout_constraintBottom_toBottomOf="@id/schedule"
+        app:layout_constraintStart_toEndOf="@id/schedule"
+        app:layout_constraintTop_toTopOf="@id/schedule" />
+
+    <ImageView
+        android:id="@+id/gallery"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/circle"
+        android:backgroundTint="?attr/bubbleColor"
+        android:contentDescription="@string/compose_gallery_cd"
+        android:elevation="4dp"
+        android:padding="10dp"
+        android:src="@drawable/ic_insert_photo_black_24dp"
+        android:tint="?android:attr/textColorSecondary"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@id/camera"
+        app:layout_constraintEnd_toEndOf="@id/attach"
+        app:layout_constraintStart_toStartOf="@id/attach" />
+
+    <org.groebl.sms.common.widget.QkTextView
+        android:id="@+id/galleryLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/rounded_rectangle_4dp"
+        android:backgroundTint="?attr/bubbleColor"
+        android:elevation="4dp"
+        android:gravity="center_vertical"
+        android:paddingEnd="8dp"
+        android:paddingStart="8dp"
+        android:text="@string/compose_gallery_cd"
+        android:textColor="?android:attr/textColorPrimary"
+        app:layout_constraintBottom_toBottomOf="@id/gallery"
+        app:layout_constraintStart_toEndOf="@id/gallery"
+        app:layout_constraintTop_toTopOf="@id/gallery" />
+
+    <ImageView
+        android:id="@+id/camera"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/circle"
+        android:backgroundTint="?attr/bubbleColor"
+        android:contentDescription="@string/compose_camera_cd"
+        android:elevation="4dp"
+        android:padding="10dp"
+        android:src="@drawable/ic_camera_alt_black_24dp"
+        android:tint="?android:attr/textColorSecondary"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@id/attach"
+        app:layout_constraintEnd_toEndOf="@id/attach"
+        app:layout_constraintStart_toStartOf="@id/attach" />
+
+    <org.groebl.sms.common.widget.QkTextView
+        android:id="@+id/cameraLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/rounded_rectangle_4dp"
+        android:backgroundTint="?attr/bubbleColor"
+        android:elevation="4dp"
+        android:gravity="center_vertical"
+        android:paddingEnd="8dp"
+        android:paddingStart="8dp"
+        android:text="@string/compose_camera_cd"
+        android:textColor="?android:attr/textColorPrimary"
+        app:layout_constraintBottom_toBottomOf="@id/camera"
+        app:layout_constraintStart_toEndOf="@id/gallery"
+        app:layout_constraintTop_toTopOf="@id/camera" />
+
+    <ImageView
+        android:id="@+id/attach"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/circle"
+        android:contentDescription="@string/compose_attach_cd"
+        android:elevation="4dp"
+        android:padding="10dp"
+        android:src="@drawable/ic_add_black_24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:backgroundTint="@color/tools_theme"
+        tools:tint="@color/textPrimaryDark" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
