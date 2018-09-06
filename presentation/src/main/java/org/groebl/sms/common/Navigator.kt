@@ -29,9 +29,12 @@ import android.provider.ContactsContract
 import android.provider.Settings
 import android.provider.Telephony
 import android.view.View
+import com.klinker.android.send_message.Utils
 import org.groebl.sms.BuildConfig
 import org.groebl.sms.feature.backup.BackupActivity
 import org.groebl.sms.feature.blocked.BlockedActivity
+import org.groebl.sms.feature.bluetooth.BluetoothSettingsActivity
+import org.groebl.sms.feature.bluetooth.common.BluetoothHelper
 import org.groebl.sms.feature.compose.ComposeActivity
 import org.groebl.sms.feature.conversationinfo.ConversationInfoActivity
 import org.groebl.sms.feature.gallery.GalleryActivity
@@ -74,6 +77,16 @@ class Navigator @Inject constructor(
     fun showQksmsPlusActivity(source: String) {
         analyticsManager.track("Viewed QKSMS+", Pair("source", source))
         val intent = Intent(context, PlusActivity::class.java)
+        startActivity(intent)
+    }
+
+    fun showBluetoothAccess() {
+        if(!Utils.isDefaultSmsApp(context)) { showDefaultSmsDialog() }
+        if(!BluetoothHelper.hasNotificationAccess(context)) { showNotificationAccess() }
+    }
+
+    fun showNotificationAccess() {
+        val intent = Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS")
         startActivity(intent)
     }
 
@@ -143,6 +156,21 @@ class Navigator @Inject constructor(
         startActivity(intent)
     }
 
+    fun showBluetoothSettings() {
+        val intent = Intent(context, BluetoothSettingsActivity::class.java)
+        startActivity(intent)
+    }
+
+    fun showDonationBluetooth() {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("http://android.groebl.org/sms/donate"))
+        startActivity(intent)
+    }
+
+    fun showFAQ() {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://android.groebl.org/sms/faq/"))
+        startActivity(intent)
+    }
+
     fun showDeveloper() {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/moezbhatti"))
         startActivity(intent)
@@ -205,8 +233,8 @@ class Navigator @Inject constructor(
     fun showSupport() {
         val intent = Intent(Intent.ACTION_SENDTO)
         intent.data = Uri.parse("mailto:")
-        intent.putExtra(Intent.EXTRA_EMAIL, arrayOf("moez@qklabs.com"))
-        intent.putExtra(Intent.EXTRA_SUBJECT, "QKSMS Support")
+        intent.putExtra(Intent.EXTRA_EMAIL, arrayOf("android@groebl.org"))
+        intent.putExtra(Intent.EXTRA_SUBJECT, "[Notification Forwarder Pro]")
         intent.putExtra(Intent.EXTRA_TEXT, StringBuilder("\n\n")
                 .append("--- Please write your message above this line ---\n\n")
                 .append("Version: ${BuildConfig.VERSION_NAME}\n")
@@ -220,7 +248,7 @@ class Navigator @Inject constructor(
         analyticsManager.track("Clicked Invite")
         Intent(Intent.ACTION_SEND)
                 .setType("text/plain")
-                .putExtra(Intent.EXTRA_TEXT, "http://qklabs.com/download")
+                .putExtra(Intent.EXTRA_TEXT, "https://android.groebl.org")
                 .let { Intent.createChooser(it, null) }
                 .let(this::startActivityExternal)
     }

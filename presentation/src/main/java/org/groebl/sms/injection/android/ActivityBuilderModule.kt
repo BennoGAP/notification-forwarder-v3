@@ -18,9 +18,16 @@
  */
 package org.groebl.sms.injection.android
 
+import dagger.Module
+import dagger.android.ContributesAndroidInjector
 import org.groebl.sms.feature.backup.BackupActivity
 import org.groebl.sms.feature.blocked.BlockedActivity
 import org.groebl.sms.feature.blocked.BlockedActivityModule
+import org.groebl.sms.feature.bluetooth.BluetoothSettingsActivity
+import org.groebl.sms.feature.bluetooth.app.BluetoothAppActivity
+import org.groebl.sms.feature.bluetooth.app.BluetoothAppActivityModule
+import org.groebl.sms.feature.bluetooth.device.BluetoothDeviceActivity
+import org.groebl.sms.feature.bluetooth.device.BluetoothDeviceActivityModule
 import org.groebl.sms.feature.compose.ComposeActivity
 import org.groebl.sms.feature.compose.ComposeActivityModule
 import org.groebl.sms.feature.conversationinfo.ConversationInfoActivity
@@ -38,8 +45,6 @@ import org.groebl.sms.feature.scheduled.ScheduledActivity
 import org.groebl.sms.feature.scheduled.ScheduledActivityModule
 import org.groebl.sms.feature.settings.SettingsActivity
 import org.groebl.sms.injection.scope.ActivityScope
-import dagger.Module
-import dagger.android.ContributesAndroidInjector
 
 @Module
 abstract class ActivityBuilderModule {
@@ -83,6 +88,18 @@ abstract class ActivityBuilderModule {
     @ActivityScope
     @ContributesAndroidInjector(modules = [])
     abstract fun bindSettingsActivity(): SettingsActivity
+
+    @ActivityScope
+    @ContributesAndroidInjector(modules = [])
+    abstract fun bindBluetoothSettingsActivity(): BluetoothSettingsActivity
+
+    @ActivityScope
+    @ContributesAndroidInjector(modules = [BluetoothAppActivityModule::class])
+    abstract fun bindBluetoothAppActivity(): BluetoothAppActivity
+
+    @ActivityScope
+    @ContributesAndroidInjector(modules = [BluetoothDeviceActivityModule::class])
+    abstract fun bindBluetoothDeviceActivity(): BluetoothDeviceActivity
 
     @ActivityScope
     @ContributesAndroidInjector(modules = [BlockedActivityModule::class])

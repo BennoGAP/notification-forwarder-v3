@@ -162,17 +162,17 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/plus"
+            android:id="@+id/settings_bluetooth"
             style="@style/DrawerRow">
 
             <ImageView
                 style="@style/DrawerIcon"
-                android:src="@drawable/ic_star_black_24dp"
+                android:src="@drawable/ic_launcher_bluetooth"
                 android:tint="?android:attr/textColorSecondary" />
 
-            <org.groebl.sms.common.widget.QkTextView
+            <com.moez.QKSMS.common.widget.QkTextView
                 style="@style/DrawerText"
-                android:text="@string/drawer_plus" />
+                android:text="@string/drawer_bluetoothsettings" />
 
         </LinearLayout>
 

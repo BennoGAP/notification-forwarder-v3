@@ -19,9 +19,9 @@
 package org.groebl.sms.interactor
 
 import com.f2prateek.rx.preferences2.RxSharedPreferences
+import io.reactivex.Flowable
 import org.groebl.sms.util.NightModeManager
 import org.groebl.sms.util.Preferences
-import io.reactivex.Flowable
 import javax.inject.Inject
 
 /**
@@ -69,6 +69,22 @@ class MigratePreferences @Inject constructor(
 
                     // Unicode
                     prefs.unicode.set(rxPrefs.getBoolean("pref_key_strip_unicode", prefs.unicode.get()).get())
+
+                    // Bluetooth Settings
+                    prefs.bluetooth_enabled.set(rxPrefs.getBoolean("pref_key_bluetooth_enabled", prefs.bluetooth_enabled.get()).get())
+                    prefs.bluetooth_only_on_connect.set(rxPrefs.getBoolean("pref_key_bluetooth_connected", prefs.bluetooth_only_on_connect.get()).get())
+                    prefs.bluetooth_autodelete.set(rxPrefs.getBoolean("pref_key_bluetooth_delete", prefs.bluetooth_autodelete.get()).get())
+                    prefs.bluetooth_save_read.set(rxPrefs.getBoolean("pref_key_bluetooth_markasread", prefs.bluetooth_save_read.get()).get())
+                    prefs.bluetooth_delayed_read.set(rxPrefs.getBoolean("pref_key_bluetooth_markasread_delayed", prefs.bluetooth_delayed_read.get()).get())
+                    prefs.bluetooth_emoji.set(rxPrefs.getBoolean("pref_key_bluetooth_emoji", prefs.bluetooth_emoji.get()).get())
+                    prefs.bluetooth_appname_as_sender_text.set(rxPrefs.getBoolean("pref_key_bluetooth_showname", prefs.bluetooth_appname_as_sender_text.get()).get())
+                    prefs.bluetooth_appname_as_sender_number.set(rxPrefs.getBoolean("pref_key_bluetooth_nametonumber", prefs.bluetooth_appname_as_sender_number.get()).get())
+                    prefs.bluetooth_whatsapp_to_contact.set(rxPrefs.getBoolean("pref_key_bluetooth_whatsapp_magic", prefs.bluetooth_whatsapp_to_contact.get()).get())
+                    prefs.bluetooth_whatsapp_hide_prefix.set(rxPrefs.getBoolean("pref_key_bluetooth_whatsapp_noprefix", prefs.bluetooth_whatsapp_hide_prefix.get()).get())
+                    prefs.bluetooth_max_vol.set(rxPrefs.getBoolean("pref_key_bluetooth_maxvol", prefs.bluetooth_max_vol.get()).get())
+                    prefs.bluetooth_apps.set(rxPrefs.getStringSet("pref_key_bluetooth_apps").get())
+                    prefs.bluetooth_devices.set(rxPrefs.getStringSet("pref_key_bluetooth_devices").get())
+                    prefs.bluetooth_whatsapp_blocked_group.set(rxPrefs.getStringSet("pref_key_block_whatsapp").get())
                 }
                 .doOnNext { seen -> seen.delete() } // Clear this value so that we don't need to migrate again
     }

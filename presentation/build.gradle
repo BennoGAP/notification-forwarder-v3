@@ -191,4 +191,7 @@ dependencies {
     noAnalyticsRelease project(path: ':data', configuration: 'noAnalyticsRelease')
     withAnalyticsDebug project(path: ':data', configuration: 'withAnalyticsDebug')
     withAnalyticsRelease project(path: ':data', configuration: 'withAnalyticsRelease')
+
+    //bluetooth
+    implementation "com.vdurmont:emoji-java:4.0.0"
 }

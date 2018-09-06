@@ -1,0 +1,89 @@
+package org.groebl.sms.feature.bluetooth.service;
+
+import android.content.ContentValues;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Handler;
+import android.os.Looper;
+import android.preference.PreferenceManager;
+import android.provider.Telephony;
+import android.service.notification.NotificationListenerService;
+import android.service.notification.StatusBarNotification;
+import android.util.Log;
+
+import org.groebl.sms.feature.bluetooth.common.BluetoothDatabase;
+import org.groebl.sms.feature.bluetooth.common.BluetoothHelper;
+import org.groebl.sms.feature.bluetooth.common.BluetoothNotificationFilter;
+import com.vdurmont.emoji.EmojiParser;
+
+import java.util.HashSet;
+import java.util.Set;
+
+
+public class BluetoothNotificationService extends NotificationListenerService {
+
+    @Override
+    public void onNotificationPosted(StatusBarNotification sbn) {
+        Log.d("SMSMsg", "onNotificationPosted");
+
+        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+        //Check if Notification is -clearable-
+        if (!sbn.isClearable()) { return; }
+
+        //Check if Bluetooth-Fordward is enabled
+        if (!mPrefs.getBoolean("bluetoothEnabled", false)) { return; }
+
+        //Check if Connected to bluetooth is enabled
+        if(mPrefs.getBoolean("bluetoothOnlyOnConnect", true) && !mPrefs.getBoolean("bluetoothCurrentStatus", false)) { return; }
+
+        //Check if App is on App-Whitelist
+        String pack = sbn.getPackageName();
+        Set<String> appwhitelist = mPrefs.getStringSet("bluetoothApps", new HashSet<>());
+        if (!appwhitelist.contains(pack)) { return; }
+
+        //Everything is fine - here we go..
+        try {
+            BluetoothNotificationFilter.BT_Filter BtData = new BluetoothNotificationFilter.BT_Filter();
+            BtData.BluetoothFilter(sbn, getApplicationContext());
+
+            //Ok, now save the Msg
+            if (BtData.allData()) {
+
+                //Check if this msg already exist
+               if (BluetoothDatabase.searchHash(getApplicationContext(), pack, BluetoothHelper.INSTANCE.notificationHash(BtData.getSender(), BtData.getContent()))) { return; }
+
+                //Enter the Data in the SMS-DB
+                //Toast.makeText(getApplicationContext(), EmojiParser.removeAllEmojis(BtData.getSender()) + ": " + emojiToNiceEmoji(set_content, mPrefs.getBoolean("bluetoothEmoji", true)), Toast.LENGTH_LONG).show(); // TODO
+                BluetoothHelper.INSTANCE.addMessageToInboxAsRead(getApplicationContext(), EmojiParser.removeAllEmojis(BtData.getSender()), BluetoothHelper.INSTANCE.emojiToNiceEmoji(BtData.getContent(), mPrefs.getBoolean("bluetoothEmoji", true)), BtData.getSendTime(), (mPrefs.getBoolean("bluetoothSaveRead", true) && !mPrefs.getBoolean("bluetoothDelayedRead", false)), BtData.getErrorCode());
+
+                //Delayed Mark-as-Read
+                if (mPrefs.getBoolean("bluetoothSaveRead", true) && mPrefs.getBoolean("bluetoothDelayedRead", false)) {
+                    ContentValues cv = new ContentValues();
+                    cv.put("read", true);
+
+                    Handler handler = new Handler(Looper.getMainLooper());
+                    handler.postDelayed(() -> getApplicationContext().getContentResolver().update(Telephony.Sms.Inbox.CONTENT_URI, cv, Telephony.Sms.DATE_SENT + " = ? AND (" + Telephony.Sms.ERROR_CODE + " = ? OR " + Telephony.Sms.ERROR_CODE + " = ?)", new String[]{BtData.getSendTime().toString(), "777", "778"}), 500);
+                }
+
+            }
+
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+
+        //BluetoothHelper.INSTANCE.deleteBluetoothMessages(getApplicationContext(), true);
+    }
+
+    @Override
+    public void onNotificationRemoved(StatusBarNotification sbn) {
+        Log.d("SMS", "onNotificationRemoved");
+    }
+
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        return START_STICKY;
+    }
+
+
+}

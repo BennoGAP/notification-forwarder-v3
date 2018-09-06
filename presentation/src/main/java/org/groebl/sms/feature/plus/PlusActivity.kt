@@ -24,7 +24,10 @@ import androidx.core.view.children
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.jakewharton.rxbinding2.view.clicks
-import org.groebl.sms.BuildConfig
+import dagger.android.AndroidInjection
+import kotlinx.android.synthetic.main.collapsing_toolbar.*
+import kotlinx.android.synthetic.main.preference_view.view.*
+import kotlinx.android.synthetic.main.qksms_plus_activity.*
 import org.groebl.sms.R
 import org.groebl.sms.common.base.QkThemedActivity
 import org.groebl.sms.common.util.BillingManager
@@ -35,10 +38,6 @@ import org.groebl.sms.common.util.extensions.setTint
 import org.groebl.sms.common.util.extensions.setVisible
 import org.groebl.sms.common.widget.PreferenceView
 import org.groebl.sms.feature.plus.experiment.UpgradeButtonExperiment
-import dagger.android.AndroidInjection
-import kotlinx.android.synthetic.main.collapsing_toolbar.*
-import kotlinx.android.synthetic.main.preference_view.view.*
-import kotlinx.android.synthetic.main.qksms_plus_activity.*
 import javax.inject.Inject
 
 class PlusActivity : QkThemedActivity(), PlusView {
@@ -92,7 +91,7 @@ class PlusActivity : QkThemedActivity(), PlusView {
         upgrade.text = getString(upgradeButtonExperiment.variant, state.upgradePrice, state.currency)
         upgradeDonate.text = getString(R.string.qksms_plus_upgrade_donate, state.upgradeDonatePrice, state.currency)
 
-        val fdroid = BuildConfig.FLAVOR == "noAnalytics"
+        val fdroid = true
 
         free.setVisible(fdroid)
         toUpgrade.setVisible(!fdroid && !state.upgraded)

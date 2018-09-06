@@ -46,22 +46,19 @@ import androidx.emoji.text.FontRequestEmojiCompatConfig
 import com.akaita.java.rxjava2debug.RxJava2Debug
 import com.bugsnag.android.Bugsnag
 import com.bugsnag.android.Configuration
+import dagger.android.*
+import io.realm.Realm
+import io.realm.RealmConfiguration
 import org.groebl.sms.BuildConfig
 import org.groebl.sms.R
 import org.groebl.sms.common.util.BugsnagTree
 import org.groebl.sms.common.util.FileLoggingTree
+import org.groebl.sms.feature.bluetooth.common.BluetoothDatabase
 import org.groebl.sms.injection.AppComponentManager
 import org.groebl.sms.injection.appComponent
 import org.groebl.sms.manager.AnalyticsManager
 import org.groebl.sms.migration.QkRealmMigration
 import org.groebl.sms.util.NightModeManager
-import dagger.android.AndroidInjector
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasActivityInjector
-import dagger.android.HasBroadcastReceiverInjector
-import dagger.android.HasServiceInjector
-import io.realm.Realm
-import io.realm.RealmConfiguration
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -112,6 +109,10 @@ class QKApplication : Application(), HasActivityInjector, HasBroadcastReceiverIn
         EmojiCompat.init(FontRequestEmojiCompatConfig(this, fontRequest))
 
         Timber.plant(Timber.DebugTree(), BugsnagTree(), fileLoggingTree)
+
+        BluetoothDatabase.init(this)
+
+        //TODO Cleanup Bluetooth-DB
     }
 
     override fun activityInjector(): AndroidInjector<Activity> {

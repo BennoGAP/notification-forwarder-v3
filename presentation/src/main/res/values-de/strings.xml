@@ -19,6 +19,66 @@
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <resources>
+  <string name="button_add">Hinzufügen</string>
+  <string name="button_yes">Ja</string>
+  <string name="button_no">Nein</string>
+  <string name="settings_category_about_lower">Basierend auf QKSMS</string>
+  <string name="theme_color">Farbe</string>
+
+  <string name="title_settings_bluetooth">Bluetooth Einstellungen</string>
+  <string name="drawer_feedback">Feedback</string>
+
+  <string name="settings_category_bluetooth_general">Allgemein</string>
+  <string name="settings_category_bluetooth_more">Mehr Einstellungen</string>
+  <string name="settings_category_bluetooth_whatsapp">WhatsApp Einstellungen</string>
+  <string name="settings_category_bluetooth_system">System Einstellungen</string>
+
+  <string name="drawer_bluetoothsettings">Bluetooth Einstellungen</string>
+  <string name="settings_bluetooth_enabled_title">Aktivieren</string>
+  <string name="settings_bluetooth_enabled_summary">Aktiviert die Weiterleitung der Benachrichtigungen</string>
+  <string name="settings_bluetooth_connected_title">Nur bei Bluetooth-Verbindung</string>
+  <string name="settings_bluetooth_connected_summary">Nachrichten werden nur bei Verbindung mit einem ausgewähltem Bluetooth-Gerät weitergeleitet</string>
+  <string name="settings_bluetooth_apps_title">Erlaubte Anwendungen</string>
+  <string name="settings_bluetooth_apps_summary">Benachrichtungen der hier ausgewählten Anwendungen werden weitergeleitet</string>
+  <string name="settings_bluetooth_delete_title">Nachrichten automatisch löschen</string>
+  <string name="settings_bluetooth_delete_summary">Temporär angelegte Nachrichten beim trennen der Bluetooth-Verbindung löschen</string>
+  <string name="settings_bluetooth_devices_title">Bluetooth-Geräte auswählen</string>
+  <string name="settings_bluetooth_devices_summary">Bluetooth-Geräte festlegen, bei denen die oben genannten Aktionen durchgeführt werden (z.B. Auto)</string>
+  <string name="settings_bluetooth_markasread_title">Nachrichten als gelesen speichern</string>
+  <string name="settings_bluetooth_markasread_summary">Nachrichten werden direkt als gelesen abgespeichert</string>
+  <string name="settings_bluetooth_markasread_delayed_title">Verzögerte Gelesen-Markierung</string>
+  <string name="settings_bluetooth_markasread_delayed_summary">Bei Problemen mit aktivierter \"als gelesen speichern\"-Option, dies zusätzlich aktivieren (häufig bei Samsung-Geräten)</string>
+  <string name="settings_bluetooth_emoji_title">Emojis umwandeln</string>
+  <string name="settings_bluetooth_emoji_summary">Ersetzt die durch □ dargestellten Emojis durch ihre Textbeschreibung</string>
+  <string name="settings_bluetooth_showname_title">App-Name als Absender</string>
+  <string name="settings_bluetooth_showname_summary">Setzt den App-Name als Absender. Führt bei den meisten Geräten zur Anzeige von \"(Unbekannter Kontakt)\" o.ä.</string>
+  <string name="settings_bluetooth_shownumber_title">App-Name als eindeutige Nummer</string>
+  <string name="settings_bluetooth_shownumber_summary">Setzt für jede App eine eigene Dummy-Absendernummer statt der generischen Dummy-Nummer</string>
+  <string name="settings_bluetooth_max_vol_title">Bluetooth-Lautstärke erhöhen</string>
+  <string name="settings_bluetooth_max_vol_summary">Setzt die Bluetooth-Lautstärke auf 100% bei Verbindung mit den ausgewählten Bluetooth-Geräten</string>
+  <string name="settings_bluetooth_tethering_title">Bluetooth-Tethering</string>
+  <string name="settings_bluetooth_tethering_summary">Aktiviert das Bluetooth-Tethering bei Verbindung mit den ausgewählten Bluetooth-Geräten</string>
+  <string name="settings_bluetooth_whatsapp_to_contact_title">WhatsApp-Nachrichten zuweisen</string>
+  <string name="settings_bluetooth_whatsapp_to_contact_summary">WhatsApp-Nachrichten werden mit Absendernamen bzw. -nummer dargestellt</string>
+  <string name="settings_bluetooth_whatsapp_hide_prefix_title">WhatsApp-Prefix verstecken</string>
+  <string name="settings_bluetooth_whatsapp_hide_prefix_summary">Zeigt das vorangestellte \'WhatsApp\' bei den Nachrichten nicht an</string>
+  <string name="settings_bluetooth_block_whatsapp_group_title">WhatsApp-Gruppen blockieren</string>
+  <string name="settings_bluetooth_block_whatsapp_group_summary">Nachrichten von den ausgewählten Gruppen werden nicht weitergeleitet</string>
+  <string name="settings_bluetooth_block_whatsapp_contact_title">WhatsApp-Kontakte blockieren</string>
+  <string name="settings_bluetooth_block_whatsapp_contact_summary">Nachrichten von den ausgewählten Kontakten werden nicht weitergeleitet</string>
+  <string name="settings_bluetooth_notification_access_title">Benachrichtigungszugriff</string>
+  <string name="settings_bluetooth_donate">Spenden</string>
+  <string name="settings_bluetooth_faq_title">FAQ</string>
+
+  <string name="settings_bluetooth_block_whatsapp_group_add_title">WhatsApp-Gruppe blockieren</string>
+  <string name="settings_bluetooth_block_whatsapp_contact_add_title">WhatsApp-Kontakt blockieren</string>
+  <string name="settings_bluetooth_block_whatsapp_group_add_summary">Gruppenname zum blockieren eintragen</string>
+  <string name="settings_bluetooth_block_whatsapp_contact_add_summary">Nummer des Kontaktes zum blockieren eintragen</string>
+  <string name="settings_bluetooth_block_whatsapp_unblock_summary">%s von der Liste entfernen?</string>
+  <string name="settings_bluetooth_block_whatsapp_unblock_confirm">Entfernen bestätigen</string>
+
+  <string name="settings_bluetooth_no_devices">Keine gekoppelten Bluetooth-Geräte gefunden</string>
+
   <string name="shortcut_compose_long_label">New conversation</string>
   <string name="shortcut_compose_short_label">Compose</string>
   <string name="shortcut_compose_disabled_message">Shortcut disabled</string>
@@ -55,11 +115,11 @@
   <string name="archived_empty_text">Archivierte Unterhaltungen werden hier angezeigt</string>
   <string name="main_fab_cd">Neue Unterhaltung starten</string>
   <string name="main_default_sms_title">Liebe es wieder, SMS zu schreiben</string>
-  <string name="main_default_sms_message">QKSMS als Standard-SMS-App festlegen</string>
+  <string name="main_default_sms_message">Diese App als Standard-SMS-App festlegen</string>
   <string name="main_default_sms_change">Ändern</string>
   <string name="main_permission_required">Berechtigung erforderlich</string>
-  <string name="main_permission_sms">QKSMS benötigt die Berechtigung zum Senden und Anzeigen von SMS-Nachrichten</string>
-  <string name="main_permission_contacts">QKSMS benötigt die Berechtigung zum Zugreifen auf die Kontakte</string>
+  <string name="main_permission_sms">Die App benötigt die Berechtigung zum Senden und Anzeigen von SMS-Nachrichten</string>
+  <string name="main_permission_contacts">Die App benötigt die Berechtigung zum Zugreifen auf die Kontakte</string>
   <string name="main_permission_allow">Zulassen</string>
   <string name="drawer_inbox">Posteingang</string>
   <string name="drawer_archived">Archiviert</string>
@@ -72,8 +132,8 @@
   <string name="drawer_invite">Freunde einladen</string>
   <string name="drawer_plus_banner_title">QKSMS+</string>
   <string name="drawer_plus_banner_summary">Schalte erstaunliche Neue Funktionen frei und unterstütze die Entwicklung</string>
-  <string name="rate_title">Gefällt dir QKSMS?</string>
-  <string name="rate_summary">Teile etwas von deiner Liebe und Bewerte uns auf Google Play!</string>
+  <string name="rate_title">Gefällt dir die App?</string>
+  <string name="rate_summary">Teile etwas von deiner Liebe und bewerte uns auf Google Play!</string>
   <string name="rate_okay">OKAY!</string>
   <string name="rate_dismiss">VERWERFEN</string>
   <string name="dialog_delete_title">Löschen</string>
@@ -96,7 +156,7 @@
   <string name="compose_scheduled_future">Gewählte Zeit muss in der Zukunft liegen!</string>
   <string name="compose_scheduled_plus">Für diese Funktion muss QKSMS+ freigeschalten werden</string>
   <string name="compose_scheduled_toast">Zu geplanten Nachrichten hinzugefügt</string>
-  <string name="compose_hint">Schreibe eine Nachricht&#8230;</string>
+  <string name="compose_hint">Nachricht schreiben&#8230;</string>
   <string name="compose_menu_copy">Text kopieren</string>
   <string name="compose_menu_forward">Weiterleiten</string>
   <string name="compose_menu_delete">Löschen</string>

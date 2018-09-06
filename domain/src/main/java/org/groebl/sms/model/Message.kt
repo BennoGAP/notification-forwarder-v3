@@ -159,4 +159,8 @@ open class Message : RealmObject() {
         !isMe() && !other.isMe() -> subId == other.subId && address == other.address
         else -> false
     }
+
+    fun isNotBluetoothMessage(): Boolean {
+        return !(errorCode == 777 || errorCode == 778)
+    }
 }

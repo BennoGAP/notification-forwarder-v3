@@ -34,22 +34,6 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding2.view.clicks
-import org.groebl.sms.R
-import org.groebl.sms.common.Navigator
-import org.groebl.sms.common.androidxcompat.drawerOpen
-import org.groebl.sms.common.androidxcompat.scope
-import org.groebl.sms.common.base.QkThemedActivity
-import org.groebl.sms.common.util.extensions.autoScrollToStart
-import org.groebl.sms.common.util.extensions.dismissKeyboard
-import org.groebl.sms.common.util.extensions.resolveThemeColor
-import org.groebl.sms.common.util.extensions.scrapViews
-import org.groebl.sms.common.util.extensions.setBackgroundTint
-import org.groebl.sms.common.util.extensions.setTint
-import org.groebl.sms.common.util.extensions.setVisible
-import org.groebl.sms.common.widget.SearchView
-import org.groebl.sms.feature.conversations.ConversationItemTouchCallback
-import org.groebl.sms.feature.conversations.ConversationsAdapter
-import org.groebl.sms.repository.SyncRepository
 import com.uber.autodispose.kotlin.autoDisposable
 import dagger.android.AndroidInjection
 import io.reactivex.Observable
@@ -57,6 +41,16 @@ import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import kotlinx.android.synthetic.main.drawer_view.*
 import kotlinx.android.synthetic.main.main_activity.*
+import org.groebl.sms.R
+import org.groebl.sms.common.Navigator
+import org.groebl.sms.common.androidxcompat.drawerOpen
+import org.groebl.sms.common.androidxcompat.scope
+import org.groebl.sms.common.base.QkThemedActivity
+import org.groebl.sms.common.util.extensions.*
+import org.groebl.sms.common.widget.SearchView
+import org.groebl.sms.feature.conversations.ConversationItemTouchCallback
+import org.groebl.sms.feature.conversations.ConversationsAdapter
+import org.groebl.sms.repository.SyncRepository
 import javax.inject.Inject
 
 class MainActivity : QkThemedActivity(), MainView {
@@ -85,7 +79,7 @@ class MainActivity : QkThemedActivity(), MainView {
                 scheduled.clicks().map { DrawerItem.SCHEDULED },
                 blocking.clicks().map { DrawerItem.BLOCKING },
                 settings.clicks().map { DrawerItem.SETTINGS },
-                plus.clicks().map { DrawerItem.PLUS },
+                settings_bluetooth.clicks().map { DrawerItem.SETTINGS_BLUETOOTH },
                 help.clicks().map { DrawerItem.HELP },
                 invite.clicks().map { DrawerItem.INVITE }))
     }
@@ -199,7 +193,7 @@ class MainActivity : QkThemedActivity(), MainView {
         listOf(plusBadge1, plusBadge2).forEach { badge ->
             badge.isVisible = drawerBadgesExperiment.variant && !state.upgraded
         }
-        plus.isVisible = state.upgraded
+        //plus.isVisible = state.upgraded
         plusBanner.isVisible = !state.upgraded
         rateLayout.setVisible(state.showRating)
 

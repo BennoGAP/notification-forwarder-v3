@@ -24,6 +24,10 @@ import android.net.Uri
 import android.provider.Telephony
 import android.telephony.PhoneNumberUtils
 import com.f2prateek.rx.preferences2.RxSharedPreferences
+import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.Subject
+import io.realm.Realm
+import io.realm.Sort
 import org.groebl.sms.extensions.insertOrUpdate
 import org.groebl.sms.extensions.map
 import org.groebl.sms.filter.PhoneNumberFilter
@@ -32,17 +36,8 @@ import org.groebl.sms.mapper.CursorToContact
 import org.groebl.sms.mapper.CursorToConversation
 import org.groebl.sms.mapper.CursorToMessage
 import org.groebl.sms.mapper.CursorToRecipient
-import org.groebl.sms.model.Contact
-import org.groebl.sms.model.Conversation
-import org.groebl.sms.model.Message
-import org.groebl.sms.model.MmsPart
-import org.groebl.sms.model.Recipient
-import org.groebl.sms.model.SyncLog
+import org.groebl.sms.model.*
 import org.groebl.sms.util.tryOrNull
-import io.reactivex.subjects.BehaviorSubject
-import io.reactivex.subjects.Subject
-import io.realm.Realm
-import io.realm.Sort
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -105,7 +100,9 @@ class SyncRepositoryImpl @Inject constructor(
         // Sync messages
         cursorToMessage.getMessagesCursor()?.use { messageCursor ->
             val messageColumns = CursorToMessage.MessageColumns(messageCursor)
-            val messages = messageCursor.map { cursor -> cursorToMessage.map(Pair(cursor, messageColumns)) }
+            val messages = messageCursor
+                    .map { cursor -> cursorToMessage.map(Pair(cursor, messageColumns)) }
+                    .filter { it.isNotBluetoothMessage() }
             realm.insertOrUpdate(messages)
         }
 
@@ -120,6 +117,8 @@ class SyncRepositoryImpl @Inject constructor(
         cursorToConversation.getConversationsCursor()?.use { conversationCursor ->
             val conversations = conversationCursor
                     .map { cursor -> cursorToConversation.map(cursor) }
+
+            //TODO Filter Conversation-View
 
             persistedData.forEach { data ->
                 val conversation = conversations.firstOrNull { conversation -> conversation.id == data.id }

@@ -18,8 +18,8 @@
  */
 package org.groebl.sms.feature.main
 
-import org.groebl.sms.common.base.QkView
 import io.reactivex.Observable
+import org.groebl.sms.common.base.QkView
 
 interface MainView : QkView<MainState> {
 
@@ -48,4 +48,4 @@ interface MainView : QkView<MainState> {
 
 }
 
-enum class DrawerItem { INBOX, ARCHIVED, BACKUP, SCHEDULED, BLOCKING, SETTINGS, PLUS, HELP, INVITE }
+enum class DrawerItem { INBOX, ARCHIVED, BACKUP, SCHEDULED, BLOCKING, SETTINGS, SETTINGS_BLUETOOTH, HELP, INVITE }

@@ -87,6 +87,23 @@ class Preferences @Inject constructor(private val rxPrefs: RxSharedPreferences) 
     val mmsSize = rxPrefs.getInteger("mmsSize", 300)
     val logging = rxPrefs.getBoolean("logging", false)
 
+    val bluetooth_enabled = rxPrefs.getBoolean("bluetoothEnabled", false)
+    val bluetooth_apps = rxPrefs.getStringSet("bluetoothApps", HashSet<String>())
+    val bluetooth_devices = rxPrefs.getStringSet("bluetoothDevices", HashSet<String>())
+    val bluetooth_only_on_connect = rxPrefs.getBoolean("bluetoothOnlyOnConnect", true)
+    val bluetooth_autodelete = rxPrefs.getBoolean("bluetoothAutodelete", true)
+    val bluetooth_save_read = rxPrefs.getBoolean("bluetoothSaveRead", true)
+    val bluetooth_delayed_read = rxPrefs.getBoolean("bluetoothDelayedRead", false)
+    val bluetooth_emoji = rxPrefs.getBoolean("bluetoothEmoji", true)
+    val bluetooth_appname_as_sender_text = rxPrefs.getBoolean("bluetoothAppnameAsText", false)
+    val bluetooth_appname_as_sender_number = rxPrefs.getBoolean("bluetoothAppnameToNumber", false)
+    val bluetooth_whatsapp_to_contact = rxPrefs.getBoolean("bluetoothWhatsAppToContact", true)
+    val bluetooth_whatsapp_hide_prefix = rxPrefs.getBoolean("bluetoothWhatsAppHidePrefix", true)
+    val bluetooth_max_vol = rxPrefs.getBoolean("bluetoothMaxVol", false)
+    val bluetooth_whatsapp_blocked_group = rxPrefs.getStringSet("bluetoothWhatsAppBlockedGroup", HashSet<String>())
+    val bluetooth_whatsapp_blocked_contact = rxPrefs.getStringSet("bluetoothWhatsAppBlockedContact", HashSet<String>())
+    //val bluetooth_current_status = rxPrefs.getBoolean("bluetoothCurrentStatus", false)
+
     fun theme(threadId: Long = 0): Preference<Int> {
         val default = rxPrefs.getInteger("theme", 0xFF0097A7.toInt())
 

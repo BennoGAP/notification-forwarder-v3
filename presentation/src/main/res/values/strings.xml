@@ -17,8 +17,66 @@
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <resources>
+    <string name="app_name" translatable="false">SMS &amp; Notifications</string>
+    <string name="button_add">Add</string>
+    <string name="button_yes">Yes</string>
+    <string name="button_no">No</string>
+    <string name="settings_category_about_lower">Based on QKSMS</string>
+    <string name="theme_color">Color</string>
 
-    <string name="app_name" translatable="false">QKSMS</string>
+    <string name="title_settings_bluetooth">Bluetooth Settings</string>
+    <string name="drawer_feedback">Feedback</string>
+
+    <string name="settings_category_bluetooth_general">General</string>
+    <string name="settings_category_bluetooth_more">More Settings</string>
+    <string name="settings_category_bluetooth_whatsapp">WhatsApp settings</string>
+    <string name="settings_category_bluetooth_system">System settings</string>
+
+    <string name="drawer_bluetoothsettings">Bluetooth Settings</string>
+    <string name="settings_bluetooth_enabled_title">Enable</string>
+    <string name="settings_bluetooth_enabled_summary">Enable the Notification forwarding</string>
+    <string name="settings_bluetooth_connected_title">Only with Bluetooth Connection</string>
+    <string name="settings_bluetooth_connected_summary">Only forward messages when connected over Bluetooth</string>
+    <string name="settings_bluetooth_apps_title">Application White List</string>
+    <string name="settings_bluetooth_apps_summary">Select the apps, from which notifications get forwarded</string>
+    <string name="settings_bluetooth_delete_title">Delete Messages</string>
+    <string name="settings_bluetooth_delete_summary">Delete the temporary Notification-Messages on a Bluetooth disconnect</string>
+    <string name="settings_bluetooth_devices_title">Select Bluetooth-Device</string>
+    <string name="settings_bluetooth_devices_summary">Choose the devices, where the above mentioned actions should happen (e.g. the Car-Bluetooth)</string>
+    <string name="settings_bluetooth_markasread_title">Save messages as read</string>
+    <string name="settings_bluetooth_markasread_summary">Deactivate if encounter problems (mostly on Samsung-Devices)</string>
+    <string name="settings_bluetooth_markasread_delayed_title">Delayed Mark-as-Read</string>
+    <string name="settings_bluetooth_markasread_delayed_summary">Enable if you don\'t get messages (mostly on Samsung-Devices)</string>
+    <string name="settings_bluetooth_emoji_title">Replace Emojis</string>
+    <string name="settings_bluetooth_emoji_summary">Replace the □ Emojis with their description-text</string>
+    <string name="settings_bluetooth_showname_title">Show App-Name as Sender</string>
+    <string name="settings_bluetooth_showname_summary">Not supported for most of the devices</string>
+    <string name="settings_bluetooth_shownumber_title">Show App-Name as unique number</string>
+    <string name="settings_bluetooth_shownumber_summary">Assign a unique dummy number for every App</string>
+    <string name="settings_bluetooth_max_vol_title">Increase Bluetooth-Volume</string>
+    <string name="settings_bluetooth_max_vol_summary">Set the Bluetooth-Volume to 100% when connected to the selected Bluetooth-Device</string>
+    <string name="settings_bluetooth_tethering_title">Bluetooth-Tethering</string>
+    <string name="settings_bluetooth_tethering_summary">Enable Bluetooth-Tethering when connected to the selected Bluetooth-Device</string>
+    <string name="settings_bluetooth_whatsapp_to_contact_title">Assign WhatsApp-Messages</string>
+    <string name="settings_bluetooth_whatsapp_to_contact_summary">Show the name and number from the sender of the WhatsApp-Message</string>
+    <string name="settings_bluetooth_whatsapp_hide_prefix_title">Hide WhatsApp-Prefix</string>
+    <string name="settings_bluetooth_whatsapp_hide_prefix_summary">Hide the \'WhatsApp\'-Prefix in front of the messages</string>
+    <string name="settings_bluetooth_block_whatsapp_group_title">Exclude WhatsApp groups</string>
+    <string name="settings_bluetooth_block_whatsapp_group_summary">WhatsApp-Messages from the following groups will not be forwarded</string>
+    <string name="settings_bluetooth_block_whatsapp_contact_title">Exclude WhatsApp contacts</string>
+    <string name="settings_bluetooth_block_whatsapp_contact_summary">WhatsApp-Messages from the following contacts will not be forwarded</string>
+    <string name="settings_bluetooth_notification_access_title">Notification Access</string>
+    <string name="settings_bluetooth_donate">Donate</string>
+    <string name="settings_bluetooth_faq_title">FAQ</string>
+
+    <string name="settings_bluetooth_block_whatsapp_group_add_title">Block WhatsApp-Group</string>
+    <string name="settings_bluetooth_block_whatsapp_contact_add_title">Block WhatsApp-Contact</string>
+    <string name="settings_bluetooth_block_whatsapp_group_add_summary">Enter Group-Name to block</string>
+    <string name="settings_bluetooth_block_whatsapp_contact_add_summary">Enter Contact-Number to block</string>
+    <string name="settings_bluetooth_block_whatsapp_unblock_summary">Remove %s from block-list?</string>
+    <string name="settings_bluetooth_block_whatsapp_unblock_confirm">Confirm Unblock</string>
+
+    <string name="settings_bluetooth_no_devices">No paired Bluetooth devices found</string>
 
     <string name="shortcut_compose_long_label">New conversation</string>
     <string name="shortcut_compose_short_label">Compose</string>
@@ -61,11 +119,11 @@
     <string name="archived_empty_text">Your archived conversations will appear here</string>
     <string name="main_fab_cd">Start new conversation</string>
     <string name="main_default_sms_title">Love texting again</string>
-    <string name="main_default_sms_message">Make QKSMS your default SMS app</string>
+    <string name="main_default_sms_message">Make this your default SMS app</string>
     <string name="main_default_sms_change">Change</string>
     <string name="main_permission_required">Permission required</string>
-    <string name="main_permission_sms">QKSMS needs permission to send and view SMS messages</string>
-    <string name="main_permission_contacts">QKSMS needs permission to view your contacts</string>
+    <string name="main_permission_sms">This App needs permission to send and view SMS messages</string>
+    <string name="main_permission_contacts">This App needs permission to view your contacts</string>
     <string name="main_permission_allow">Allow</string>
 
     <string name="drawer_inbox">Inbox</string>
@@ -80,8 +138,8 @@
     <string name="drawer_plus_banner_title">QKSMS+</string>
     <string name="drawer_plus_banner_summary">Unlock amazing new features, and support development</string>
 
-    <string name="rate_title">Enjoying QKSMS?</string>
-    <string name="rate_summary">Share some love and rate us on Google Play!</string>
+    <string name="rate_title">Enjoying this App?</string>
+    <string name="rate_summary">Share some love and rate on Google Play!</string>
     <string name="rate_okay">OKAY!</string>
     <string name="rate_dismiss">DISMISS</string>
 

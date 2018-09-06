@@ -18,16 +18,14 @@
  */
 package org.groebl.sms.injection
 
+import dagger.Component
+import dagger.android.support.AndroidSupportInjectionModule
 import org.groebl.sms.common.QKApplication
 import org.groebl.sms.common.QkDialog
 import org.groebl.sms.common.util.QkChooserTargetService
-import org.groebl.sms.common.widget.AvatarView
-import org.groebl.sms.common.widget.PagerTitleView
-import org.groebl.sms.common.widget.PreferenceView
-import org.groebl.sms.common.widget.QkEditText
-import org.groebl.sms.common.widget.QkSwitch
-import org.groebl.sms.common.widget.QkTextView
+import org.groebl.sms.common.widget.*
 import org.groebl.sms.feature.backup.BackupController
+import org.groebl.sms.feature.bluetooth.BluetoothSettingsController
 import org.groebl.sms.feature.compose.DetailedChipView
 import org.groebl.sms.feature.conversationinfo.injection.ConversationInfoComponent
 import org.groebl.sms.feature.settings.SettingsController
@@ -39,8 +37,6 @@ import org.groebl.sms.injection.android.ActivityBuilderModule
 import org.groebl.sms.injection.android.BroadcastReceiverBuilderModule
 import org.groebl.sms.injection.android.ServiceBuilderModule
 import org.groebl.sms.util.ContactImageLoader
-import dagger.Component
-import dagger.android.support.AndroidSupportInjectionModule
 import javax.inject.Singleton
 
 @Singleton
@@ -60,6 +56,7 @@ interface AppComponent {
     fun inject(controller: AboutController)
     fun inject(controller: BackupController)
     fun inject(controller: SettingsController)
+    fun inject(controller: BluetoothSettingsController)
     fun inject(controller: SwipeActionsController)
 
     fun inject(dialog: QkDialog)

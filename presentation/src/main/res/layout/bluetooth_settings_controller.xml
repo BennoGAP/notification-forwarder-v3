@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:id="@+id/contentView"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:attr/windowBackground">
+
+    <LinearLayout
+        android:id="@+id/bluetooth_menu_full"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp">
+
+        <com.moez.QKSMS.common.widget.PreferenceView
+            android:id="@+id/bluetooth_enabled"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:summary="@string/settings_bluetooth_enabled_summary"
+            app:title="@string/settings_bluetooth_enabled_title"
+            app:icon="@drawable/ic_launcher_bluetooth"
+            app:widget="@layout/settings_switch_widget" />
+
+        <LinearLayout
+            android:id="@+id/bluetooth_menu_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:background="?android:attr/divider" />
+
+            <com.moez.QKSMS.common.widget.QkTextView
+                style="@style/PreferenceCategory"
+                android:text="@string/settings_category_bluetooth_general" />
+
+            <com.moez.QKSMS.common.widget.PreferenceView
+                android:id="@+id/bluetooth_only_on_connect"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:summary="@string/settings_bluetooth_connected_summary"
+                app:title="@string/settings_bluetooth_connected_title"
+                app:widget="@layout/settings_switch_widget" />
+
+            <com.moez.QKSMS.common.widget.PreferenceView
+                android:id="@+id/bluetooth_autodelete"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:summary="@string/settings_bluetooth_delete_summary"
+                app:title="@string/settings_bluetooth_delete_title"
+                app:widget="@layout/settings_switch_widget" />
+
+            <com.moez.QKSMS.common.widget.PreferenceView
+                android:id="@+id/bluetooth_select_device"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:summary="@string/settings_bluetooth_devices_summary"
+                app:title="@string/settings_bluetooth_devices_title" />
+
+            <com.moez.QKSMS.common.widget.PreferenceView
+                android:id="@+id/bluetooth_allowed_apps"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:summary="@string/settings_bluetooth_apps_summary"
+                app:title="@string/settings_bluetooth_apps_title" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:background="?android:attr/divider" />
+
+            <com.moez.QKSMS.common.widget.QkTextView
+                style="@style/PreferenceCategory"
+                android:text="@string/settings_category_bluetooth_more" />
+
+            <com.moez.QKSMS.common.widget.PreferenceView
+                android:id="@+id/bluetooth_save_read"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:summary="@string/settings_bluetooth_markasread_summary"
+                app:title="@string/settings_bluetooth_markasread_title"
+                app:widget="@layout/settings_switch_widget" />
+
+            <com.moez.QKSMS.common.widget.PreferenceView
+                android:id="@+id/bluetooth_delayed_read"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:summary="@string/settings_bluetooth_markasread_delayed_summary"
+                app:title="@string/settings_bluetooth_markasread_delayed_title"
+                app:widget="@layout/settings_switch_widget" />
+
+            <com.moez.QKSMS.common.widget.PreferenceView
+                android:id="@+id/bluetooth_emoji"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:summary="@string/settings_bluetooth_emoji_summary"
+                app:title="@string/settings_bluetooth_emoji_title"
+                app:widget="@layout/settings_switch_widget" />
+
+            <com.moez.QKSMS.common.widget.PreferenceView
+                android:id="@+id/bluetooth_appname_as_sender_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:summary="@string/settings_bluetooth_showname_summary"
+                app:title="@string/settings_bluetooth_showname_title"
+                app:widget="@layout/settings_switch_widget" />
+
+            <com.moez.QKSMS.common.widget.PreferenceView
+                android:id="@+id/bluetooth_appname_as_sender_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:summary="@string/settings_bluetooth_shownumber_summary"
+                app:title="@string/settings_bluetooth_shownumber_title"
+                app:widget="@layout/settings_switch_widget" />
+
+            <com.moez.QKSMS.common.widget.PreferenceView
+                android:id="@+id/bluetooth_max_vol"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:summary="@string/settings_bluetooth_max_vol_summary"
+                app:title="@string/settings_bluetooth_max_vol_title"
+                app:widget="@layout/settings_switch_widget" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:background="?android:attr/divider" />
+
+            <com.moez.QKSMS.common.widget.QkTextView
+                style="@style/PreferenceCategory"
+                android:text="@string/settings_category_bluetooth_whatsapp" />
+
+            <com.moez.QKSMS.common.widget.PreferenceView
+                android:id="@+id/bluetooth_whatsapp_to_contact"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:summary="@string/settings_bluetooth_whatsapp_to_contact_summary"
+                app:title="@string/settings_bluetooth_whatsapp_to_contact_title"
+                app:widget="@layout/settings_switch_widget" />
+
+
+            <com.moez.QKSMS.common.widget.PreferenceView
+                android:id="@+id/bluetooth_whatsapp_hide_prefix"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:summary="@string/settings_bluetooth_whatsapp_hide_prefix_summary"
+                app:title="@string/settings_bluetooth_whatsapp_hide_prefix_title"
+                app:widget="@layout/settings_switch_widget" />
+
+            <com.moez.QKSMS.common.widget.PreferenceView
+                android:id="@+id/bluetooth_whatsapp_blocked_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:summary="@string/settings_bluetooth_block_whatsapp_group_summary"
+                app:title="@string/settings_bluetooth_block_whatsapp_group_title" />
+
+            <com.moez.QKSMS.common.widget.PreferenceView
+                android:id="@+id/bluetooth_whatsapp_blocked_contact"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:summary="@string/settings_bluetooth_block_whatsapp_contact_summary"
+                app:title="@string/settings_bluetooth_block_whatsapp_contact_title" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:background="?android:attr/divider" />
+
+        <com.moez.QKSMS.common.widget.QkTextView
+            android:id="@+id/bluetooth_category_system"
+            style="@style/PreferenceCategory"
+            android:text="@string/settings_category_bluetooth_system" />
+
+        <com.moez.QKSMS.common.widget.PreferenceView
+            android:id="@+id/bluetooth_notification_access"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:title="@string/settings_bluetooth_notification_access_title" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:background="?android:attr/divider" />
+
+        <com.moez.QKSMS.common.widget.PreferenceView
+        android:id="@+id/bluetooth_faq"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:icon="@drawable/ic_help_black_24dp"
+        app:title="@string/settings_bluetooth_faq_title" />
+
+        <com.moez.QKSMS.common.widget.PreferenceView
+            android:id="@+id/bluetooth_donate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/ic_star_black_24dp"
+            app:title="@string/settings_bluetooth_donate" />
+
+        <com.moez.QKSMS.common.widget.PreferenceView
+            android:id="@+id/bluetooth_about"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/ic_info_black_24dp"
+            app:title="@string/about_title" />
+
+    </LinearLayout>
+
+</ScrollView>
