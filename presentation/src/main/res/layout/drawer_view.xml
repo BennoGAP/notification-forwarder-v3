@@ -187,7 +187,7 @@
 
             <org.groebl.sms.common.widget.QkTextView
                 style="@style/DrawerText"
-                android:text="@string/drawer_help" />
+                android:text="@string/drawer_feedback" />
 
         </LinearLayout>
 
