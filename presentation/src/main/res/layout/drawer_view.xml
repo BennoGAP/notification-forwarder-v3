@@ -167,7 +167,7 @@
 
             <ImageView
                 style="@style/DrawerIcon"
-                android:src="@drawable/ic_launcher_bluetooth"
+                android:src="@drawable/ic_bluetooth_black_24dp"
                 android:tint="?android:attr/textColorSecondary" />
 
             <org.groebl.sms.common.widget.QkTextView
