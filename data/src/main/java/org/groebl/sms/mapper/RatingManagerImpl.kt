@@ -19,9 +19,9 @@
 package org.groebl.sms.mapper
 
 import com.f2prateek.rx.preferences2.RxSharedPreferences
+import io.reactivex.rxkotlin.Observables
 import org.groebl.sms.manager.AnalyticsManager
 import org.groebl.sms.manager.RatingManager
-import io.reactivex.rxkotlin.Observables
 import javax.inject.Inject
 
 class RatingManagerImpl @Inject constructor(
@@ -30,7 +30,7 @@ class RatingManagerImpl @Inject constructor(
 ) : RatingManager {
 
     companion object {
-        private const val SESSION_THRESHOLD = 100
+        private const val SESSION_THRESHOLD = 30
     }
 
     private val sessions = rxPrefs.getInteger("sessions", 0)
