@@ -100,9 +100,7 @@ class SyncRepositoryImpl @Inject constructor(
         // Sync messages
         cursorToMessage.getMessagesCursor()?.use { messageCursor ->
             val messageColumns = CursorToMessage.MessageColumns(messageCursor)
-            val messages = messageCursor
-                    .map { cursor -> cursorToMessage.map(Pair(cursor, messageColumns)) }
-                    .filter { it.isNotBluetoothMessage() }
+            val messages = messageCursor.map { cursor -> cursorToMessage.map(Pair(cursor, messageColumns)) }
             realm.insertOrUpdate(messages)
         }
 
@@ -117,8 +115,6 @@ class SyncRepositoryImpl @Inject constructor(
         cursorToConversation.getConversationsCursor()?.use { conversationCursor ->
             val conversations = conversationCursor
                     .map { cursor -> cursorToConversation.map(cursor) }
-
-            //TODO Filter Conversation-View
 
             persistedData.forEach { data ->
                 val conversation = conversations.firstOrNull { conversation -> conversation.id == data.id }
