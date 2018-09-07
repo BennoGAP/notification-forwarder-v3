@@ -92,35 +92,35 @@ object BluetoothHelper  {
     }
 
     fun findWhatsAppNumberFromName(context: Context, displayname: String): String {
-        var set_number = ""
-        val c = context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+        var setNumber = ""
+        val c = context.contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
                 arrayOf(ContactsContract.CommonDataKinds.Phone.DATA1),
                 ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " = ? AND account_type = ?",
                 arrayOf(displayname, "com.whatsapp"), null)
 
         if (c != null && c!!.moveToFirst()) {
-            set_number = c!!.getString(0)
+            setNumber = c.getString(0)
         }
         if (c != null && !c!!.isClosed()) {
-            c!!.close()
+            c.close()
         }
-        return set_number
+        return setNumber
     }
 
     fun findWhatsAppNameFromNumber(context: Context, number: String): String {
-        var set_name = ""
-        val c = context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+        var setName = ""
+        val c = context.contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
                 arrayOf(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME),
                 ContactsContract.CommonDataKinds.Phone.NUMBER + " = ? AND account_type = ?",
                 arrayOf(PhoneNumberUtils.stripSeparators(number), "com.whatsapp"), null)
 
         if (c != null && c!!.moveToFirst()) {
-            set_name = c!!.getString(0)
+            setName = c.getString(0)
         }
         if (c != null && !c!!.isClosed()) {
-            c!!.close()
+            c.close()
         }
-        return set_name
+        return setName
     }
 
 }
