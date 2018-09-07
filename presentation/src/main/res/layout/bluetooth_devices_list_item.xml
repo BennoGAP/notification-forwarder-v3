@@ -15,7 +15,7 @@
         style="@style/DrawerIcon"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:src="@drawable/ic_bluetooth_black_24dp"
+        android:src="@drawable/bluetooth_device_icon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
