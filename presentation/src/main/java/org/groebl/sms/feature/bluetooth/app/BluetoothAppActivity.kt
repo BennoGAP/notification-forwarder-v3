@@ -1,14 +1,19 @@
 package org.groebl.sms.feature.bluetooth.app
 
+import android.app.ProgressDialog
+import android.content.Context
 import android.content.pm.PackageInfo
+import android.os.AsyncTask
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import dagger.android.AndroidInjection
+import kotlinx.android.synthetic.main.bluetooth_apps_activity.*
 import org.groebl.sms.BuildConfig
 import org.groebl.sms.R
 import org.groebl.sms.common.base.QkThemedActivity
-import dagger.android.AndroidInjection
-import kotlinx.android.synthetic.main.bluetooth_apps_activity.*
 import java.util.*
 import javax.inject.Inject
 
@@ -18,6 +23,34 @@ class BluetoothAppActivity : QkThemedActivity(), BluetoothAppView {
 
     private val viewModel by lazy { ViewModelProviders.of(this, viewModelFactory)[BluetoothAppViewModel::class.java] }
 
+
+    private inner class LoadApplications(context: Context) : AsyncTask<Void, Int, Boolean>() {
+
+        private val pDialog = ProgressDialog(context).apply {
+            setMessage(getString(R.string.settings_bluetooth_apps_loading))
+            setCancelable(false)
+            setCanceledOnTouchOutside(false)
+            //setOnCancelListener { dialog -> this.cancel(true) }
+        }
+        private var scan = ArrayList<BluetoothAppModel>()
+
+        override fun onPreExecute() {
+            pDialog.show()
+        }
+
+        override fun onPostExecute(result: Boolean?) {
+            listapps.adapter = BluetoothAppAdapter(scan, prefs.bluetooth_apps.get().toHashSet(), prefs)
+            //TODO - Get rid of this .. "Temporary" Workaround
+            Handler(Looper.getMainLooper()).postDelayed({ when {pDialog.isShowing -> pDialog.dismiss() } }, 500)
+        }
+
+        override fun doInBackground(vararg params: Void): Boolean? {
+            scan = scanningInstalled()
+            return null
+        }
+
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
@@ -26,7 +59,7 @@ class BluetoothAppActivity : QkThemedActivity(), BluetoothAppView {
         showBackButton(true)
         viewModel.bindView(this)
 
-        listapps.adapter = BluetoothAppAdapter(scanningInstalled(), prefs.bluetooth_apps.get().toHashSet(), prefs)
+        LoadApplications(this).execute()
     }
 
     override fun render(state: BluetoothAppState) {
