@@ -25,8 +25,8 @@ class BluetoothDeviceAdapter(val data: ArrayList<BluetoothDeviceModel>, val allo
 
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
         var dataModel = data[position]
-        holder.deviceName.text = dataModel.deviceName
-        holder.itemView.tag = dataModel.deviceMac
+        holder.deviceName.text = dataModel.deviceName + "\n(" + dataModel.deviceMac + ")"
+        holder.itemView.tag = dataModel.deviceName
         holder.deviceCheckBox.isChecked = allowedDevices.contains(dataModel.deviceName)
 
         when (allowedDevices.contains(dataModel.deviceName)) {
@@ -38,9 +38,9 @@ class BluetoothDeviceAdapter(val data: ArrayList<BluetoothDeviceModel>, val allo
     }
 
     fun toggleSelection(holder: BluetoothDeviceAdapter.CustomViewHolder) {
-        when (allowedDevices.contains(holder.deviceName.text.toString())) {
-            true -> { allowedDevices.remove(holder.deviceName.text.toString()); holder.deviceBluetoothIcon.colorFilter = ColorMatrixColorFilter(ColorMatrix().apply { setSaturation(0f) }); }
-            false -> { allowedDevices.add(holder.deviceName.text.toString()); holder.deviceBluetoothIcon.clearColorFilter(); }
+        when (allowedDevices.contains(holder.itemView.tag.toString())) {
+            true -> { allowedDevices.remove(holder.itemView.tag.toString()); holder.deviceBluetoothIcon.colorFilter = ColorMatrixColorFilter(ColorMatrix().apply { setSaturation(0f) }); }
+            false -> { allowedDevices.add(holder.itemView.tag.toString()); holder.deviceBluetoothIcon.clearColorFilter(); }
         }
 
         //println(holder.itemView.tag.toString() + " - new val: " + holder.appCheckBox.isChecked.toString())
