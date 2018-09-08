@@ -24,13 +24,14 @@ class BluetoothReceiver : BroadcastReceiver() {
                 BluetoothDevice.ACTION_ACL_CONNECTED -> {
                     //Set Temp-Status to -Connected-
                     mPrefs.edit().putBoolean("bluetoothCurrentStatus", true).apply()
+                    mPrefs.edit().putLong("bluetoothLastConnect", System.currentTimeMillis()).apply()
 
                     //Set Bluetooth-Volume
                     if (mPrefs.getBoolean("bluetoothEnabled", false) && mPrefs.getBoolean("bluetoothMaxVol", false)) {
                         val handler = Handler(Looper.getMainLooper())
                         handler.postDelayed({
                             //Still connected?
-                            if(mPrefs.getBoolean("bluetoothCurrentStatus", false)) {
+                            if (mPrefs.getBoolean("bluetoothCurrentStatus", false)) {
                                 val mAudioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
                                 mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0)
                             }
@@ -41,11 +42,13 @@ class BluetoothReceiver : BroadcastReceiver() {
                 BluetoothDevice.ACTION_ACL_DISCONNECTED -> {
                     //Set Temp-Status to -Disonnected-
                     mPrefs.edit().putBoolean("bluetoothCurrentStatus", false).apply()
+                    mPrefs.edit().putLong("bluetoothLastConnect", 0L).apply()
 
                     //Delete Temporary Messages
-                    if (mPrefs.getBoolean("bluetoothEnabled", false) && mPrefs.getBoolean("bluetoothOnlyOnConnect", true) && mPrefs.getBoolean("bluetoothAutodelete", true)) {
+                    if (mPrefs.getBoolean("bluetoothEnabled", false)) {
+                        val afterTimeDelete = !(mPrefs.getBoolean("bluetoothOnlyOnConnect", true) && mPrefs.getBoolean("bluetoothAutodelete", true))
                         Thread {
-                            BluetoothHelper.deleteBluetoothMessages(context, false)
+                            BluetoothHelper.deleteBluetoothMessages(context, afterTimeDelete)
                         }.start()
                     }
                 }
