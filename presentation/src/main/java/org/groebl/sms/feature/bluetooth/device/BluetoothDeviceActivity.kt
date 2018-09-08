@@ -4,10 +4,10 @@ import android.bluetooth.BluetoothAdapter
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import org.groebl.sms.R
-import org.groebl.sms.common.base.QkThemedActivity
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.bluetooth_devices_activity.*
+import org.groebl.sms.R
+import org.groebl.sms.common.base.QkThemedActivity
 import java.util.*
 import javax.inject.Inject
 
@@ -34,16 +34,19 @@ class BluetoothDeviceActivity  : QkThemedActivity(), BluetoothDeviceView {
 
     fun getBondedDevices(): ArrayList<BluetoothDeviceModel> {
         empty.text = ""
-        //BMW 5xxx7 - 9C:DF:03:xx:xx:xx
         var packageModel = ArrayList<BluetoothDeviceModel>()
-        val blAdapter: BluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
-        val pairedDevices = blAdapter.bondedDevices
-        if (pairedDevices.size > 0) {
-            for (device in pairedDevices) {
-                packageModel.add(BluetoothDeviceModel(device.name, device.address))
+        try {
+            val blAdapter: BluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
+            val pairedDevices = blAdapter.bondedDevices
+            if (pairedDevices.size > 0) {
+                for (device in pairedDevices) {
+                    packageModel.add(BluetoothDeviceModel(device.name, device.address))
+                }
+                packageModel.sortBy { it.deviceName.toLowerCase() }
+            } else {
+                empty.text = getString(R.string.settings_bluetooth_no_devices)
             }
-            packageModel.sortBy { it.deviceName.toLowerCase() }
-        } else {
+        } catch (e: Exception) {
             empty.text = getString(R.string.settings_bluetooth_no_devices)
         }
 
