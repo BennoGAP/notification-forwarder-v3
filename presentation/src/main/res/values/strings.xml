@@ -39,6 +39,7 @@
     <string name="settings_bluetooth_connected_summary">Only forward messages when connected over Bluetooth</string>
     <string name="settings_bluetooth_apps_title">Application White List</string>
     <string name="settings_bluetooth_apps_summary">Select the apps, from which notifications get forwarded</string>
+    <string name="settings_bluetooth_apps_loading">Loading your apps...</string>
     <string name="settings_bluetooth_delete_title">Delete Messages</string>
     <string name="settings_bluetooth_delete_summary">Delete the temporary Notification-Messages on a Bluetooth disconnect</string>
     <string name="settings_bluetooth_devices_title">Select Bluetooth-Device</string>

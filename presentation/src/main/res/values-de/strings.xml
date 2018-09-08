@@ -40,6 +40,7 @@
   <string name="settings_bluetooth_connected_summary">Nachrichten werden nur bei Verbindung mit einem ausgewähltem Bluetooth-Gerät weitergeleitet</string>
   <string name="settings_bluetooth_apps_title">Erlaubte Anwendungen</string>
   <string name="settings_bluetooth_apps_summary">Benachrichtungen der hier ausgewählten Anwendungen werden weitergeleitet</string>
+  <string name="settings_bluetooth_apps_loading">Apps werden geladen ...</string>
   <string name="settings_bluetooth_delete_title">Nachrichten automatisch löschen</string>
   <string name="settings_bluetooth_delete_summary">Temporär angelegte Nachrichten beim trennen der Bluetooth-Verbindung löschen</string>
   <string name="settings_bluetooth_devices_title">Bluetooth-Geräte auswählen</string>
