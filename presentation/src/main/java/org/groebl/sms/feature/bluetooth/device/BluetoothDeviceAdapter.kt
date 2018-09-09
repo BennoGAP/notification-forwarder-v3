@@ -27,9 +27,9 @@ class BluetoothDeviceAdapter(val data: ArrayList<BluetoothDeviceModel>, val allo
         var dataModel = data[position]
         holder.deviceName.text = dataModel.deviceName + "\n(" + dataModel.deviceMac + ")"
         holder.itemView.tag = dataModel.deviceMac
-        holder.deviceCheckBox.isChecked = allowedDevices.contains(dataModel.deviceMac)
+        holder.deviceCheckBox.isChecked = dataModel.checked
 
-        when (allowedDevices.contains(dataModel.deviceMac)) {
+        when (dataModel.checked) {
             false -> { holder.deviceBluetoothIcon.colorFilter = ColorMatrixColorFilter(ColorMatrix().apply { setSaturation(0f) }); }
         }
 

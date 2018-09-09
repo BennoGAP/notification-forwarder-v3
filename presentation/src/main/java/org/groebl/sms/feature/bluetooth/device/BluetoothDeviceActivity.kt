@@ -35,17 +35,26 @@ class BluetoothDeviceActivity  : QkThemedActivity(), BluetoothDeviceView {
     fun getBondedDevices(): ArrayList<BluetoothDeviceModel> {
         empty.text = ""
         var packageModel = ArrayList<BluetoothDeviceModel>()
+        var checkedDevices =  prefs.bluetooth_devices.get()
+        var newCheckedDevices: MutableSet<String> = mutableSetOf()
         try {
             val blAdapter: BluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
             val pairedDevices = blAdapter.bondedDevices
             if (pairedDevices.size > 0) {
                 for (device in pairedDevices) {
-                    packageModel.add(BluetoothDeviceModel(device.name, device.address))
+                    packageModel.add(BluetoothDeviceModel(device.name, device.address, checkedDevices.contains(device.address)))
+
+                    if(checkedDevices.contains(device.address)) { newCheckedDevices.add(device.address) }
                 }
+
                 packageModel.sortBy { it.deviceName.toLowerCase() }
             } else {
                 empty.text = getString(R.string.settings_bluetooth_no_devices)
             }
+
+            //Only paired Devices should be saved in the prefs
+            prefs.bluetooth_devices.set(newCheckedDevices)
+
         } catch (e: Exception) {
             empty.text = getString(R.string.settings_bluetooth_no_devices)
         }
