@@ -26,10 +26,10 @@ class BluetoothDeviceAdapter(val data: ArrayList<BluetoothDeviceModel>, val allo
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
         var dataModel = data[position]
         holder.deviceName.text = dataModel.deviceName + "\n(" + dataModel.deviceMac + ")"
-        holder.itemView.tag = dataModel.deviceName
-        holder.deviceCheckBox.isChecked = allowedDevices.contains(dataModel.deviceName)
+        holder.itemView.tag = dataModel.deviceMac
+        holder.deviceCheckBox.isChecked = allowedDevices.contains(dataModel.deviceMac)
 
-        when (allowedDevices.contains(dataModel.deviceName)) {
+        when (allowedDevices.contains(dataModel.deviceMac)) {
             false -> { holder.deviceBluetoothIcon.colorFilter = ColorMatrixColorFilter(ColorMatrix().apply { setSaturation(0f) }); }
         }
 

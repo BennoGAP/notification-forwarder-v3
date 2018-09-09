@@ -19,7 +19,7 @@ class BluetoothReceiver : BroadcastReceiver() {
         val bt_device_whitelist = mPrefs.getStringSet("bluetoothDevices", HashSet())
         val bt_device = intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
 
-        if (bt_device_whitelist!!.contains(bt_device.name)) {
+        if (bt_device_whitelist!!.contains(bt_device.address)) {
             when (intent.action) {
                 BluetoothDevice.ACTION_ACL_CONNECTED -> {
                     //Set Temp-Status to -Connected-

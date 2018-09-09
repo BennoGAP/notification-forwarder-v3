@@ -18,6 +18,7 @@
  */
 package org.groebl.sms.interactor
 
+import android.bluetooth.BluetoothAdapter
 import com.f2prateek.rx.preferences2.RxSharedPreferences
 import io.reactivex.Flowable
 import org.groebl.sms.util.NightModeManager
@@ -83,8 +84,16 @@ class MigratePreferences @Inject constructor(
                     prefs.bluetooth_whatsapp_hide_prefix.set(rxPrefs.getBoolean("pref_key_bluetooth_whatsapp_noprefix", prefs.bluetooth_whatsapp_hide_prefix.get()).get())
                     prefs.bluetooth_max_vol.set(rxPrefs.getBoolean("pref_key_bluetooth_maxvol", prefs.bluetooth_max_vol.get()).get())
                     prefs.bluetooth_apps.set(rxPrefs.getStringSet("pref_key_bluetooth_apps").get())
-                    prefs.bluetooth_devices.set(rxPrefs.getStringSet("pref_key_bluetooth_devices").get())
                     prefs.bluetooth_whatsapp_blocked_group.set(rxPrefs.getStringSet("pref_key_block_whatsapp").get())
+
+                    val oldBluetoothDevices = rxPrefs.getStringSet("pref_key_bluetooth_devices").get()
+                    var macAddress: MutableSet<String> = mutableSetOf()
+                    val pairedDevices = BluetoothAdapter.getDefaultAdapter().bondedDevices
+                    for (bt in pairedDevices) {
+                        when { oldBluetoothDevices.contains(bt.name) -> macAddress.add(bt.address) }
+                    }
+                    prefs.bluetooth_devices.set(macAddress)
+
                 }
                 .doOnNext { seen -> seen.delete() } // Clear this value so that we don't need to migrate again
     }
