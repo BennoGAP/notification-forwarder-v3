@@ -1,12 +1,12 @@
 package org.groebl.sms.feature.bluetooth
 
 import android.content.Context
+import com.uber.autodispose.kotlin.autoDisposable
+import io.reactivex.rxkotlin.plusAssign
 import org.groebl.sms.R
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.base.QkPresenter
 import org.groebl.sms.util.Preferences
-import com.uber.autodispose.kotlin.autoDisposable
-import io.reactivex.rxkotlin.plusAssign
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -50,6 +50,9 @@ class BluetoothSettingsPresenter @Inject constructor(
 
         disposables += prefs.bluetooth_max_vol.asObservable()
                 .subscribe { enabled -> newState { copy(bluetooth_max_vol = enabled) } }
+
+        disposables += prefs.bluetooth_tethering.asObservable()
+                .subscribe { enabled -> newState { copy(bluetooth_tethering = enabled) } }
 
     }
 
@@ -107,6 +110,7 @@ class BluetoothSettingsPresenter @Inject constructor(
                         R.id.bluetooth_whatsapp_blocked_group -> view.showBluetoothWhatsAppBlockedGroup()
                         R.id.bluetooth_whatsapp_blocked_contact -> view.showBluetoothWhatsAppBlockedContact()
                         R.id.bluetooth_max_vol -> prefs.bluetooth_max_vol.set(!prefs.bluetooth_max_vol.get())
+                        R.id.bluetooth_tethering -> prefs.bluetooth_tethering.set(!prefs.bluetooth_tethering.get())
 
                     }
                 }

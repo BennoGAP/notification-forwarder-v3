@@ -9,6 +9,10 @@ import android.widget.EditText
 import com.bluelinelabs.conductor.RouterTransaction
 import com.jakewharton.rxbinding2.view.clicks
 import com.klinker.android.send_message.Utils
+import com.uber.autodispose.kotlin.autoDisposable
+import io.reactivex.Observable
+import kotlinx.android.synthetic.main.bluetooth_settings_controller.*
+import kotlinx.android.synthetic.main.settings_switch_widget.view.*
 import org.groebl.sms.R
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.QkChangeHandler
@@ -25,10 +29,6 @@ import org.groebl.sms.feature.bluetooth.device.BluetoothDeviceActivity
 import org.groebl.sms.feature.settings.about.AboutController
 import org.groebl.sms.injection.appComponent
 import org.groebl.sms.util.Preferences
-import com.uber.autodispose.kotlin.autoDisposable
-import io.reactivex.Observable
-import kotlinx.android.synthetic.main.bluetooth_settings_controller.*
-import kotlinx.android.synthetic.main.settings_switch_widget.view.*
 import javax.inject.Inject
 
 
@@ -104,6 +104,7 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
         bluetooth_whatsapp_blocked_contact.setVisible(state.bluetooth_whatsapp_to_contact)
         bluetooth_whatsapp_hide_prefix.setVisible(state.bluetooth_whatsapp_to_contact)
         bluetooth_max_vol.setVisible(state.bluetooth_only_on_connect)
+        //bluetooth_tethering.setVisible(state.bluetooth_only_on_connect)
 
         bluetooth_enabled.checkbox.isChecked = local_bluetooth_enabled
         bluetooth_only_on_connect.checkbox.isChecked = state.bluetooth_only_on_connect
@@ -116,6 +117,7 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
         bluetooth_whatsapp_to_contact.checkbox.isChecked = state.bluetooth_whatsapp_to_contact
         bluetooth_whatsapp_hide_prefix.checkbox.isChecked = state.bluetooth_whatsapp_hide_prefix
         bluetooth_max_vol.checkbox.isChecked = state.bluetooth_max_vol
+        bluetooth_tethering.checkbox.isChecked = state.bluetooth_tethering
     }
 
     override fun showBluetoothAbout() {

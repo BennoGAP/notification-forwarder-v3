@@ -129,6 +129,15 @@
                 app:title="@string/settings_bluetooth_max_vol_title"
                 app:widget="@layout/settings_switch_widget" />
 
+            <org.groebl.sms.common.widget.PreferenceView
+                android:id="@+id/bluetooth_tethering"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:summary="@string/settings_bluetooth_tethering_summary"
+                app:title="@string/settings_bluetooth_tethering_title"
+                app:widget="@layout/settings_switch_widget" />
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"

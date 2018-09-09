@@ -26,10 +26,17 @@ class BluetoothReceiver : BroadcastReceiver() {
                     mPrefs.edit().putBoolean("bluetoothCurrentStatus", true).apply()
                     mPrefs.edit().putLong("bluetoothLastConnect", System.currentTimeMillis()).apply()
 
+
+                    //Set Bluetooth Tethering
+                    if (mPrefs.getBoolean("bluetoothTethering", false)) {
+                        //Handler(Looper.getMainLooper()).postDelayed({
+                        //TODO Tethering
+                        //}, 5000)
+                    }
+
                     //Set Bluetooth-Volume
                     if (mPrefs.getBoolean("bluetoothEnabled", false) && mPrefs.getBoolean("bluetoothMaxVol", false)) {
-                        val handler = Handler(Looper.getMainLooper())
-                        handler.postDelayed({
+                        Handler(Looper.getMainLooper()).postDelayed({
                             //Still connected?
                             if (mPrefs.getBoolean("bluetoothCurrentStatus", false)) {
                                 val mAudioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
@@ -43,6 +50,13 @@ class BluetoothReceiver : BroadcastReceiver() {
                     //Set Temp-Status to -Disonnected-
                     mPrefs.edit().putBoolean("bluetoothCurrentStatus", false).apply()
                     mPrefs.edit().putLong("bluetoothLastConnect", 0L).apply()
+
+                    //Disable BluetoothTethering
+                    if (mPrefs.getBoolean("bluetoothTethering", false)) {
+                        //Handler(Looper.getMainLooper()).postDelayed({
+                        //TODO Tethering
+                        //}, 5000)
+                    }
 
                     //Delete Temporary Messages
                     if (mPrefs.getBoolean("bluetoothEnabled", false)) {
