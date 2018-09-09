@@ -195,7 +195,7 @@ public class BluetoothNotificationFilter {
                     }
 
                     set_sender = "E-Mail";
-                    if (!title.equals("") && !text.equals("")) {
+                    if (!title.equals("") && !text.equals("") && !(title.equals(null) && text.equals(null))) {
                         set_content = title + ": " + text;
                     }
                     break;
