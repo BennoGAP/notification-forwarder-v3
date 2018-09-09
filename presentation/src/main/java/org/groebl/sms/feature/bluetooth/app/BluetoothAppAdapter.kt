@@ -28,9 +28,9 @@ class BluetoothAppAdapter(val data: ArrayList<BluetoothAppModel>, val allowedApp
         holder.appName.text = dataModel.appName
         holder.appIcon.setImageDrawable(dataModel.appIcon)
         holder.itemView.tag = dataModel.appApkName
-        holder.appCheckBox.isChecked = allowedApps.contains(dataModel.appApkName)
+        holder.appCheckBox.isChecked = dataModel.checked
 
-        when (allowedApps.contains(dataModel.appApkName)) {
+        when (dataModel.checked) {
             false -> {  holder.appIcon.colorFilter = ColorMatrixColorFilter(ColorMatrix().apply { setSaturation(0f) }); }
         }
 

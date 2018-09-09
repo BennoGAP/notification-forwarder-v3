@@ -41,7 +41,7 @@ class BluetoothAppActivity : QkThemedActivity(), BluetoothAppView {
         override fun onPostExecute(result: Boolean?) {
             listapps.adapter = BluetoothAppAdapter(scan, prefs.bluetooth_apps.get().toHashSet(), prefs)
             //TODO - Get rid of this .. "Temporary" Workaround
-            Handler(Looper.getMainLooper()).postDelayed({ when {pDialog.isShowing -> pDialog.dismiss() } }, 500)
+            Handler(Looper.getMainLooper()).postDelayed({ when {pDialog.isShowing -> pDialog.dismiss() } }, 250)
         }
 
         override fun doInBackground(vararg params: Void): Boolean? {
@@ -69,15 +69,23 @@ class BluetoothAppActivity : QkThemedActivity(), BluetoothAppView {
 
     fun scanningInstalled(): ArrayList<BluetoothAppModel>{
         var packageModel = ArrayList<BluetoothAppModel>()
+        var checkedApps =  prefs.bluetooth_apps.get()
+        var newCheckedApps: MutableSet<String> = mutableSetOf()
 
         var installedApps = packageManager.getInstalledPackages(0)
         for (apps in installedApps) {
             if(!packageManager(apps)) {
-                packageModel.add(BluetoothAppModel(apps.applicationInfo.loadLabel(packageManager).toString(), apps.packageName, apps.applicationInfo.loadIcon(packageManager)))
+                packageModel.add(BluetoothAppModel(apps.applicationInfo.loadLabel(packageManager).toString(), apps.packageName, apps.applicationInfo.loadIcon(packageManager), checkedApps.contains(apps.packageName)))
+
+                if(checkedApps.contains(apps.packageName)) { newCheckedApps.add(apps.packageName) }
             }
         }
 
+        //Only installed Apps should be saved in the prefs
+        prefs.bluetooth_apps.set(newCheckedApps)
+
         packageModel.sortBy { it.appName.toLowerCase() }
+
 
         return packageModel
     }
