@@ -103,6 +103,7 @@ class Preferences @Inject constructor(private val rxPrefs: RxSharedPreferences) 
     val bluetooth_whatsapp_blocked_group = rxPrefs.getStringSet("bluetoothWhatsAppBlockedGroup", HashSet<String>())
     val bluetooth_whatsapp_blocked_contact = rxPrefs.getStringSet("bluetoothWhatsAppBlockedContact", HashSet<String>())
     //val bluetooth_current_status = rxPrefs.getBoolean("bluetoothCurrentStatus", false)
+    //val bluetooth_last_connected = rxPrefs.getLong("bluetoothLastConnect", 0L)
 
     fun theme(threadId: Long = 0): Preference<Int> {
         val default = rxPrefs.getInteger("theme", 0xFF0097A7.toInt())
