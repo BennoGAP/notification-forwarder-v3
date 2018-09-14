@@ -20,11 +20,7 @@ package org.groebl.sms.repository
 
 import android.app.AlarmManager
 import android.app.PendingIntent
-import android.content.ContentUris
-import android.content.ContentValues
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
+import android.content.*
 import android.os.Build
 import android.provider.Telephony
 import android.telephony.PhoneNumberUtils
@@ -34,6 +30,10 @@ import com.google.android.mms.MMSPart
 import com.klinker.android.send_message.SmsManagerFactory
 import com.klinker.android.send_message.StripAccents
 import com.klinker.android.send_message.Transaction
+import io.realm.Case
+import io.realm.Realm
+import io.realm.RealmResults
+import io.realm.Sort
 import org.groebl.sms.compat.TelephonyCompat
 import org.groebl.sms.extensions.anyOf
 import org.groebl.sms.manager.KeyManager
@@ -47,10 +47,6 @@ import org.groebl.sms.service.SendSmsService
 import org.groebl.sms.util.ImageUtils
 import org.groebl.sms.util.Preferences
 import org.groebl.sms.util.tryOrNull
-import io.realm.Case
-import io.realm.Realm
-import io.realm.RealmResults
-import io.realm.Sort
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton

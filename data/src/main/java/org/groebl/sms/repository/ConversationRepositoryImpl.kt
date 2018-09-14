@@ -22,6 +22,10 @@ import android.content.ContentUris
 import android.content.Context
 import android.provider.Telephony
 import android.telephony.PhoneNumberUtils
+import io.realm.Case
+import io.realm.Realm
+import io.realm.RealmResults
+import io.realm.Sort
 import org.groebl.sms.compat.TelephonyCompat
 import org.groebl.sms.extensions.anyOf
 import org.groebl.sms.extensions.map
@@ -33,10 +37,6 @@ import org.groebl.sms.model.Conversation
 import org.groebl.sms.model.Message
 import org.groebl.sms.model.SearchResult
 import org.groebl.sms.util.tryOrNull
-import io.realm.Case
-import io.realm.Realm
-import io.realm.RealmResults
-import io.realm.Sort
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 

@@ -261,13 +261,23 @@ public class BluetoothNotificationFilter {
                     break;
 
                 case "com.tippingcanoe.mydealz":
-                    CharSequence[] textline_mydealz = extras.getCharSequenceArray(Notification.EXTRA_TEXT_LINES);
-                    if (textline_mydealz != null) {
-                        text = textline_mydealz[0].toString();
+                    CharSequence[] textline_oldest = extras.getCharSequenceArray(Notification.EXTRA_TEXT_LINES);
+                    if (textline_oldest != null) {
+                        text = textline_oldest[0].toString();
                     }
 
                     set_sender = "mydealz";
                     set_content = text;
+                    break;
+
+                case "com.once.android":
+                    CharSequence[] textline_newest = extras.getCharSequenceArray(Notification.EXTRA_TEXT_LINES);
+                    if (textline_newest != null) {
+                        ticker = textline_newest[textline_newest.length - 1].toString();
+                    }
+
+                    set_sender = "Once";
+                    set_content = ticker;
                     break;
 
                 case "com.whatsapp":
@@ -330,20 +340,6 @@ public class BluetoothNotificationFilter {
                         } else {
                             try {
                                 phoneNumber = BluetoothHelper.INSTANCE.findWhatsAppNumberFromName(mContext, WA_name);
-                                /*
-                                Cursor c = mContext.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                                        new String[]{"data1"},
-                                        "display_name = ? AND account_type = ?",
-                                        new String[]{WA_name, "com.whatsapp"},
-                                        null);
-
-                                if (c != null && c.moveToFirst()) {
-                                    phoneNumber = c.getString(0);
-                                }
-                                if (c != null && !c.isClosed()) {
-                                    c.close();
-                                }
-                                */
 
                                 //Check if everything went fine, otherwise back to the roots (╯°□°）╯︵ ┻━┻
                                 if (phoneNumber.equals("")) {

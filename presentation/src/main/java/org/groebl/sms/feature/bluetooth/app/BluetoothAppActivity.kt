@@ -89,8 +89,13 @@ class BluetoothAppActivity : QkThemedActivity(), BluetoothAppView {
 
         return packageModel
     }
+
     private fun packageManager(appinfo: PackageInfo):Boolean{
         return appinfo.applicationInfo.icon.equals(0) || appinfo.packageName.equals(BuildConfig.APPLICATION_ID, true)
+    }
+
+    private fun hasLaunchIntent(pkgInfo: PackageInfo): Boolean {
+        return packageManager.getLaunchIntentForPackage(pkgInfo.applicationInfo.packageName) != null
     }
 
 }

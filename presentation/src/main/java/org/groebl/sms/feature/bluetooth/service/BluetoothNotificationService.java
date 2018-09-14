@@ -11,10 +11,11 @@ import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.util.Log;
 
+import com.vdurmont.emoji.EmojiParser;
+
 import org.groebl.sms.feature.bluetooth.common.BluetoothDatabase;
 import org.groebl.sms.feature.bluetooth.common.BluetoothHelper;
 import org.groebl.sms.feature.bluetooth.common.BluetoothNotificationFilter;
-import com.vdurmont.emoji.EmojiParser;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -72,8 +73,6 @@ public class BluetoothNotificationService extends NotificationListenerService {
         catch(Exception e) {
             e.printStackTrace();
         }
-
-        //BluetoothHelper.INSTANCE.deleteBluetoothMessages(getApplicationContext(), true);
     }
 
     @Override
