@@ -23,6 +23,7 @@ import com.f2prateek.rx.preferences2.RxSharedPreferences
 import io.reactivex.Flowable
 import org.groebl.sms.util.NightModeManager
 import org.groebl.sms.util.Preferences
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -86,13 +87,34 @@ class MigratePreferences @Inject constructor(
                     prefs.bluetooth_apps.set(rxPrefs.getStringSet("pref_key_bluetooth_apps").get())
                     prefs.bluetooth_whatsapp_blocked_group.set(rxPrefs.getStringSet("pref_key_block_whatsapp").get())
 
-                    val oldBluetoothDevices = rxPrefs.getStringSet("pref_key_bluetooth_devices").get()
-                    var macAddress: MutableSet<String> = mutableSetOf()
-                    val pairedDevices = BluetoothAdapter.getDefaultAdapter().bondedDevices
-                    for (bt in pairedDevices) {
-                        when { oldBluetoothDevices.contains(bt.name) -> macAddress.add(bt.address) }
+                    try {
+                        val oldBluetoothDevices = rxPrefs.getStringSet("pref_key_bluetooth_devices").get()
+                        var macAddress: MutableSet<String> = mutableSetOf()
+                        val pairedDevices = BluetoothAdapter.getDefaultAdapter().bondedDevices
+                        for (bt in pairedDevices) {
+                            when { oldBluetoothDevices.contains(bt.name) -> macAddress.add(bt.address)
+                            }
+                        }
+                        prefs.bluetooth_devices.set(macAddress)
+                    } catch (e: Exception) {
+                        Timber.e(e)
                     }
-                    prefs.bluetooth_devices.set(macAddress)
+
+                    rxPrefs.getBoolean("pref_key_bluetooth_enabled").delete()
+                    rxPrefs.getBoolean("pref_key_bluetooth_connected").delete()
+                    rxPrefs.getBoolean("pref_key_bluetooth_delete").delete()
+                    rxPrefs.getBoolean("pref_key_bluetooth_markasread").delete()
+                    rxPrefs.getBoolean("pref_key_bluetooth_markasread_delayed").delete()
+                    rxPrefs.getBoolean("pref_key_bluetooth_emoji").delete()
+                    rxPrefs.getBoolean("pref_key_bluetooth_showname").delete()
+                    rxPrefs.getBoolean("pref_key_bluetooth_nametonumber").delete()
+                    rxPrefs.getBoolean("pref_key_bluetooth_whatsapp_magic").delete()
+                    rxPrefs.getBoolean("pref_key_bluetooth_whatsapp_noprefix").delete()
+                    rxPrefs.getBoolean("pref_key_bluetooth_maxvol").delete()
+                    rxPrefs.getBoolean("pref_key_bluetooth_current_status").delete()
+                    rxPrefs.getStringSet("pref_key_bluetooth_apps").delete()
+                    rxPrefs.getStringSet("pref_key_bluetooth_devices").delete()
+                    rxPrefs.getStringSet("pref_key_block_whatsapp").delete()
 
                 }
                 .doOnNext { seen -> seen.delete() } // Clear this value so that we don't need to migrate again
