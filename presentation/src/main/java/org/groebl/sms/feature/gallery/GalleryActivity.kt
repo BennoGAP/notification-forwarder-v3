@@ -36,15 +36,15 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import com.google.android.mms.ContentType
 import com.jakewharton.rxbinding2.view.clicks
+import dagger.android.AndroidInjection
+import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.Subject
+import kotlinx.android.synthetic.main.gallery_activity.*
 import org.groebl.sms.R
 import org.groebl.sms.common.GlideCompletionListener
 import org.groebl.sms.common.base.QkActivity
 import org.groebl.sms.common.util.extensions.setVisible
 import org.groebl.sms.util.GlideApp
-import dagger.android.AndroidInjection
-import io.reactivex.subjects.PublishSubject
-import io.reactivex.subjects.Subject
-import kotlinx.android.synthetic.main.gallery_activity.*
 import javax.inject.Inject
 
 
@@ -77,7 +77,8 @@ class GalleryActivity : QkActivity(), GalleryView {
         window.sharedElementReturnTransition = transition
         window.sharedElementEnterTransition = transition
 
-        image.transitionName = intent.getLongExtra("partId", 0L).toString()
+        // FIXME: Setting a transitionName breaks GIF playback
+        // image.transitionName = intent.getLongExtra("partId", 0L).toString()
 
         // When calling the public setter, it doesn't allow the midscale to be the same as the
         // maxscale or the minscale. We don't want 3 levels and we don't want to modify the library
@@ -114,13 +115,24 @@ class GalleryActivity : QkActivity(), GalleryView {
         image.setVisible(true)
         video.setVisible(false)
         if (image.drawable == null) {
-            GlideApp.with(this)
-                    .load(uri)
-                    .dontAnimate()
-                    .listener(GlideCompletionListener {
-                        startPostponedEnterTransition()
-                    })
-                    .into(image)
+
+            // We need to explicitly request a gif from glide for animations to work
+            when (uri?.let(contentResolver::getType)) {
+                ContentType.IMAGE_GIF -> GlideApp.with(this)
+                        .asGif()
+                        .load(uri)
+                        .listener(GlideCompletionListener {
+                            startPostponedEnterTransition()
+                        })
+                        .into(image)
+                else -> GlideApp.with(this)
+                        .asBitmap()
+                        .load(uri)
+                        .listener(GlideCompletionListener {
+                            startPostponedEnterTransition()
+                        })
+                        .into(image)
+            }
         }
     }
 

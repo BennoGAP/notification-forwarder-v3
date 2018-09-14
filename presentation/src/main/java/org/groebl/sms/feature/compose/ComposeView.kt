@@ -21,12 +21,12 @@ package org.groebl.sms.feature.compose
 import android.net.Uri
 import androidx.annotation.StringRes
 import androidx.core.view.inputmethod.InputContentInfoCompat
+import io.reactivex.Observable
+import io.reactivex.subjects.Subject
 import org.groebl.sms.common.base.QkView
 import org.groebl.sms.model.Attachment
 import org.groebl.sms.model.Contact
 import org.groebl.sms.model.Message
-import io.reactivex.Observable
-import io.reactivex.subjects.Subject
 
 interface ComposeView : QkView<ComposeState> {
 
@@ -60,6 +60,7 @@ interface ComposeView : QkView<ComposeState> {
     fun clearSelection()
     fun showDetails(details: String)
     fun requestStoragePermission()
+    fun requestSmsPermission()
     fun requestCamera()
     fun requestGallery()
     fun requestDatePicker()

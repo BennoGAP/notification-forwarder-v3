@@ -19,14 +19,13 @@
 package org.groebl.sms.interactor
 
 import android.telephony.SmsMessage
+import io.reactivex.Flowable
 import org.groebl.sms.extensions.mapNotNull
 import org.groebl.sms.manager.ExternalBlockingManager
 import org.groebl.sms.manager.NotificationManager
 import org.groebl.sms.manager.ShortcutManager
 import org.groebl.sms.repository.ConversationRepository
 import org.groebl.sms.repository.MessageRepository
-import io.reactivex.Flowable
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class ReceiveSms @Inject constructor(
@@ -53,8 +52,8 @@ class ReceiveSms @Inject constructor(
                     val address = messages[0].displayOriginatingAddress
                     val time = messages[0].timestampMillis
                     val body: String = messages
-                            .map { message -> message.displayMessageBody }
-                            .reduce { body, new -> body + new }
+                            .mapNotNull { message -> message.displayMessageBody }
+                            .reduce { body, new -> body + new } ?: ""
 
                     messageRepo.insertReceivedSms(it.subId, address, body, time) // Add the message to the db
                 }
@@ -63,7 +62,6 @@ class ReceiveSms @Inject constructor(
                 .filter { conversation -> !conversation.blocked } // Don't notify for blocked conversations
                 .doOnNext { conversation -> if (conversation.archived) conversationRepo.markUnarchived(conversation.id) } // Unarchive conversation if necessary
                 .map { conversation -> conversation.id } // Map to the id because [delay] will put us on the wrong thread
-                .delay(1, TimeUnit.SECONDS) // Wait one second before trying to notify, in case the foreground app marks it as read first
                 .doOnNext { threadId -> notificationManager.update(threadId) } // Update the notification
                 .doOnNext { shortcutManager.updateShortcuts() } // Update shortcuts
                 .flatMap { updateBadge.buildObservable(Unit) } // Update the badge

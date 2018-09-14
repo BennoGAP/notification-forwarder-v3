@@ -246,7 +246,7 @@ class SyncRepositoryImpl @Inject constructor(
             val recipients = realm.where(Recipient::class.java).findAll()
 
             realm.executeTransaction {
-                contact = realm.copyToRealm(contact)
+                contact = realm.copyToRealmOrUpdate(contact)
 
                 // Update all the matching recipients with the new contact
                 val updatedRecipients = recipients

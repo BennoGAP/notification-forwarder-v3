@@ -23,6 +23,17 @@ import android.telephony.PhoneNumberUtils
 import android.telephony.SmsMessage
 import android.view.inputmethod.EditorInfo
 import androidx.core.widget.toast
+import com.uber.autodispose.kotlin.autoDisposable
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.rxkotlin.Observables
+import io.reactivex.rxkotlin.plusAssign
+import io.reactivex.rxkotlin.withLatestFrom
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.Subject
+import io.realm.RealmList
 import org.groebl.sms.R
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.androidxcompat.scope
@@ -38,38 +49,17 @@ import org.groebl.sms.extensions.isImage
 import org.groebl.sms.extensions.mapNotNull
 import org.groebl.sms.extensions.removeAccents
 import org.groebl.sms.filter.ContactFilter
-import org.groebl.sms.interactor.AddScheduledMessage
-import org.groebl.sms.interactor.CancelDelayedMessage
-import org.groebl.sms.interactor.ContactSync
-import org.groebl.sms.interactor.DeleteMessages
-import org.groebl.sms.interactor.MarkRead
-import org.groebl.sms.interactor.RetrySending
-import org.groebl.sms.interactor.SendMessage
+import org.groebl.sms.interactor.*
+import org.groebl.sms.manager.ActiveConversationManager
 import org.groebl.sms.manager.PermissionManager
-import org.groebl.sms.model.Attachment
-import org.groebl.sms.model.Contact
-import org.groebl.sms.model.Conversation
-import org.groebl.sms.model.Message
-import org.groebl.sms.model.PhoneNumber
+import org.groebl.sms.model.*
 import org.groebl.sms.repository.ContactRepository
 import org.groebl.sms.repository.ConversationRepository
 import org.groebl.sms.repository.MessageRepository
 import org.groebl.sms.util.ActiveSubscriptionObservable
 import org.groebl.sms.util.Preferences
 import org.groebl.sms.util.tryOrNull
-import com.uber.autodispose.kotlin.autoDisposable
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.rxkotlin.Observables
-import io.reactivex.rxkotlin.plusAssign
-import io.reactivex.rxkotlin.withLatestFrom
-import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.BehaviorSubject
-import io.reactivex.subjects.PublishSubject
-import io.reactivex.subjects.Subject
-import io.realm.RealmList
 import java.util.*
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -80,6 +70,7 @@ class ComposeViewModel @Inject constructor(
         @Named("text") private val sharedText: String,
         @Named("attachments") private val sharedAttachments: List<Attachment>,
         private val context: Context,
+        private val activeConversationManager: ActiveConversationManager,
         private val addScheduledMessage: AddScheduledMessage,
         private val billingManager: BillingManager,
         private val cancelMessage: CancelDelayedMessage,
@@ -162,7 +153,7 @@ class ComposeViewModel @Inject constructor(
                 .takeUntil(state.filter { state -> !state.editingMode })
                 .subscribe(selectedContacts::onNext)
 
-        // When the conversation changes, update the threadId and the messages for the adapter
+        // When the conversation changes, mark read, and update the threadId and the messages for the adapter
         disposables += conversation
                 .distinctUntilChanged { conversation -> conversation.id }
                 .observeOn(AndroidSchedulers.mainThread())
@@ -172,7 +163,7 @@ class ComposeViewModel @Inject constructor(
                     messages
                 }
                 .switchMap { messages -> messages.asObservable() }
-                .subscribe { messages.onNext(it) }
+                .subscribe(messages::onNext)
 
         disposables += conversation
                 .map { conversation -> conversation.getTitle() }
@@ -426,6 +417,24 @@ class ComposeViewModel @Inject constructor(
                 .autoDisposable(view.scope())
                 .subscribe { message -> cancelMessage.execute(message.id) }
 
+        // Set the current conversation
+        Observables
+                .combineLatest(
+                        view.activityVisibleIntent.distinctUntilChanged(),
+                        conversation.mapNotNull { conversation -> conversation.takeIf { it.isValid }?.id }.distinctUntilChanged())
+                { visible, threadId ->
+                    when (visible) {
+                        true -> {
+                            activeConversationManager.setActiveConversation(threadId)
+                            markRead.execute(listOf(threadId))
+                        }
+
+                        false -> activeConversationManager.setActiveConversation(null)
+                    }
+                }
+                .autoDisposable(view.scope())
+                .subscribe()
+
         // Save draft when the activity goes into the background
         view.activityVisibleIntent
                 .filter { visible -> !visible }
@@ -437,15 +446,6 @@ class ComposeViewModel @Inject constructor(
                 }
                 .autoDisposable(view.scope())
                 .subscribe()
-
-        // Mark the conversation read, if in foreground
-        Observables.combineLatest(messages, view.activityVisibleIntent) { _, visible -> visible }
-                .filter { visible -> visible }
-                .withLatestFrom(conversation) { _, conversation -> conversation }
-                .mapNotNull { conversation -> conversation.takeIf { it.isValid }?.id }
-                .debounce(200, TimeUnit.MILLISECONDS)
-                .autoDisposable(view.scope())
-                .subscribe { threadId -> markRead.execute(listOf(threadId)) }
 
         // Open the attachment options
         view.attachIntent
@@ -571,6 +571,11 @@ class ComposeViewModel @Inject constructor(
 
         // Send a message when the send button is clicked, and disable editing mode if it's enabled
         view.sendIntent
+                .filter {
+                    val hasPermission = permissionManager.hasSendSms()
+                    if (!hasPermission) view.requestSmsPermission()
+                    hasPermission
+                }
                 .withLatestFrom(view.textChangedIntent) { _, body -> body }
                 .map { body -> body.toString() }
                 .withLatestFrom(state, attachments, conversation, selectedContacts) { body, state, attachments, conversation, contacts ->
