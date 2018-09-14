@@ -36,6 +36,7 @@ import io.realm.RealmResults
 import io.realm.Sort
 import org.groebl.sms.compat.TelephonyCompat
 import org.groebl.sms.extensions.anyOf
+import org.groebl.sms.manager.ActiveConversationManager
 import org.groebl.sms.manager.KeyManager
 import org.groebl.sms.model.Attachment
 import org.groebl.sms.model.Conversation
@@ -53,6 +54,7 @@ import javax.inject.Singleton
 
 @Singleton
 class MessageRepositoryImpl @Inject constructor(
+        private val activeConversationManager: ActiveConversationManager,
         private val context: Context,
         private val messageIds: KeyManager,
         private val imageRepository: ImageRepository,
@@ -347,6 +349,7 @@ class MessageRepositoryImpl @Inject constructor(
             threadId = TelephonyCompat.getOrCreateThreadId(context, address)
             boxId = Telephony.Sms.MESSAGE_TYPE_INBOX
             type = "sms"
+            read = activeConversationManager.getActiveConversation() == threadId
         }
         val realm = Realm.getDefaultInstance()
         var managedMessage: Message? = null
