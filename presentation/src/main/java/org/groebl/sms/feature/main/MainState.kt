@@ -18,10 +18,10 @@
  */
 package org.groebl.sms.feature.main
 
+import io.realm.RealmResults
 import org.groebl.sms.model.Conversation
 import org.groebl.sms.model.SearchResult
 import org.groebl.sms.repository.SyncRepository
-import io.realm.RealmResults
 
 data class MainState(
         val hasError: Boolean = false,
@@ -38,7 +38,6 @@ data class MainState(
 sealed class MainPage
 
 data class Inbox(
-        val showClearButton: Boolean = false,
         val markPinned: Boolean = true,
         val markRead: Boolean = false,
         val data: RealmResults<Conversation>? = null,
@@ -50,7 +49,6 @@ data class Searching(
 ) : MainPage()
 
 data class Archived(
-        val showClearButton: Boolean = false,
         val markPinned: Boolean = true,
         val markRead: Boolean = false,
         val data: RealmResults<Conversation>? = null,

@@ -19,14 +19,17 @@
 package org.groebl.sms.feature.main
 
 import android.Manifest
+import android.animation.ObjectAnimator
 import android.app.AlertDialog
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.app.ActivityCompat
+import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -34,6 +37,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding2.view.clicks
+import com.jakewharton.rxbinding2.widget.textChanges
 import com.uber.autodispose.kotlin.autoDisposable
 import dagger.android.AndroidInjection
 import io.reactivex.Observable
@@ -47,7 +51,6 @@ import org.groebl.sms.common.androidxcompat.drawerOpen
 import org.groebl.sms.common.androidxcompat.scope
 import org.groebl.sms.common.base.QkThemedActivity
 import org.groebl.sms.common.util.extensions.*
-import org.groebl.sms.common.widget.SearchView
 import org.groebl.sms.feature.bluetooth.common.BluetoothHelper
 import org.groebl.sms.feature.conversations.ConversationItemTouchCallback
 import org.groebl.sms.feature.conversations.ConversationsAdapter
@@ -64,7 +67,7 @@ class MainActivity : QkThemedActivity(), MainView {
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
     override val activityResumedIntent: Subject<Unit> = PublishSubject.create()
-    override val queryChangedIntent: Subject<CharSequence> = PublishSubject.create()
+    override val queryChangedIntent by lazy { toolbarSearch.textChanges() }
     override val composeIntent by lazy { compose.clicks() }
     override val drawerOpenIntent: Observable<Boolean> by lazy {
         drawerLayout
@@ -98,6 +101,7 @@ class MainActivity : QkThemedActivity(), MainView {
     private val viewModel by lazy { ViewModelProviders.of(this, viewModelFactory)[MainViewModel::class.java] }
     private val toggle by lazy { ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.main_drawer_open_cd, 0) }
     private val itemTouchHelper by lazy { ItemTouchHelper(itemTouchCallback) }
+    private val progressAnimator by lazy { ObjectAnimator.ofInt(syncingProgress, "progress", 0, 0) }
     private val archiveSnackbar by lazy {
         Snackbar.make(drawerLayout, R.string.toast_archived, Snackbar.LENGTH_LONG).apply {
             setAction(R.string.button_undo) { undoArchiveIntent.onNext(Unit) }
@@ -186,7 +190,9 @@ class MainActivity : QkThemedActivity(), MainView {
             else -> 0
         }
 
-        toolbar.menu.findItem(R.id.search)?.isVisible = state.page is Inbox && state.page.selected == 0 || state.page is Searching
+        toolbarSearch.setVisible(state.page is Inbox && state.page.selected == 0 || state.page is Searching)
+        toolbarTitle.setVisible(toolbarSearch.visibility != View.VISIBLE)
+
         toolbar.menu.findItem(R.id.archive)?.isVisible = state.page is Inbox && selectedConversations != 0
         toolbar.menu.findItem(R.id.unarchive)?.isVisible = state.page is Archived && selectedConversations != 0
         toolbar.menu.findItem(R.id.delete)?.isVisible = selectedConversations != 0
@@ -208,11 +214,8 @@ class MainActivity : QkThemedActivity(), MainView {
 
         when (state.page) {
             is Inbox -> {
-                showBackButton(state.page.showClearButton)
-                title = when (state.page.selected != 0) {
-                    true -> getString(R.string.main_title_selected, state.page.selected)
-                    false -> getString(R.string.main_title)
-                }
+                showBackButton(state.page.selected > 0)
+                title = getString(R.string.main_title_selected, state.page.selected)
                 if (recyclerView.adapter !== conversationsAdapter) recyclerView.adapter = conversationsAdapter
                 conversationsAdapter.updateData(state.page.data)
                 itemTouchHelper.attachToRecyclerView(recyclerView)
@@ -228,7 +231,7 @@ class MainActivity : QkThemedActivity(), MainView {
             }
 
             is Archived -> {
-                showBackButton(state.page.showClearButton)
+                showBackButton(state.page.selected > 0)
                 title = when (state.page.selected != 0) {
                     true -> getString(R.string.main_title_selected, state.page.selected)
                     false -> getString(R.string.title_archived)
@@ -243,12 +246,22 @@ class MainActivity : QkThemedActivity(), MainView {
         inbox.isActivated = state.page is Inbox
         archived.isActivated = state.page is Archived
 
-        if (drawerLayout.isDrawerOpen(Gravity.START) && !state.drawerOpen) drawerLayout.closeDrawer(Gravity.START)
-        else if (!drawerLayout.isDrawerVisible(Gravity.START) && state.drawerOpen) drawerLayout.openDrawer(Gravity.START)
+        if (drawerLayout.isDrawerOpen(GravityCompat.START) && !state.drawerOpen) drawerLayout.closeDrawer(GravityCompat.START)
+        else if (!drawerLayout.isDrawerVisible(GravityCompat.START) && state.drawerOpen) drawerLayout.openDrawer(GravityCompat.START)
 
-        syncing.setVisible(state.syncing is SyncRepository.SyncProgress.Running)
-        snackbar.setVisible(state.syncing is SyncRepository.SyncProgress.Idle
-                && !state.defaultSms || !state.smsPermission || !state.contactPermission)
+        when (state.syncing) {
+            is SyncRepository.SyncProgress.Idle -> {
+                syncing.isVisible = false
+                snackbar.isVisible = !state.defaultSms || !state.smsPermission || !state.contactPermission
+            }
+            is SyncRepository.SyncProgress.Running -> {
+                syncing.isVisible = true
+                syncingProgress.max = state.syncing.max
+                progressAnimator.apply { setIntValues(syncingProgress.progress, state.syncing.progress) }.start()
+                syncingProgress.isIndeterminate = state.syncing.indeterminate
+                snackbar.isVisible = false
+            }
+        }
 
         when {
             !state.smsPermission -> {
@@ -288,7 +301,8 @@ class MainActivity : QkThemedActivity(), MainView {
     }
 
     override fun clearSearch() {
-        toolbar.menu.findItem(R.id.search)?.collapseActionView()
+        dismissKeyboard()
+        toolbarSearch.text = null
     }
 
     override fun clearSelection() {
@@ -311,12 +325,6 @@ class MainActivity : QkThemedActivity(), MainView {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main, menu)
-
-        // Query changes
-        menu?.findItem(R.id.search)
-                ?.let { search -> search.actionView as? SearchView }
-                ?.queryChanged
-                ?.subscribe(queryChangedIntent)
 
         return super.onCreateOptionsMenu(menu)
     }

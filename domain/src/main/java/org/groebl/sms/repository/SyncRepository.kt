@@ -19,14 +19,14 @@
 package org.groebl.sms.repository
 
 import android.net.Uri
-import org.groebl.sms.model.Message
 import io.reactivex.Observable
+import org.groebl.sms.model.Message
 
 interface SyncRepository {
 
     sealed class SyncProgress {
         class Idle : SyncProgress()
-        class Running(progress: Float) : SyncProgress()
+        data class Running(val max: Int, val progress: Int, val indeterminate: Boolean) : SyncProgress()
     }
 
     val syncProgress: Observable<SyncProgress>

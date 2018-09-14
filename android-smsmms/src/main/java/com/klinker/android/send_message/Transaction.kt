@@ -30,14 +30,7 @@ import com.android.mms.util.RateController
 import com.google.android.mms.ContentType
 import com.google.android.mms.InvalidHeaderValueException
 import com.google.android.mms.MMSPart
-import com.google.android.mms.pdu_alt.CharacterSets
-import com.google.android.mms.pdu_alt.EncodedStringValue
-import com.google.android.mms.pdu_alt.PduBody
-import com.google.android.mms.pdu_alt.PduComposer
-import com.google.android.mms.pdu_alt.PduHeaders
-import com.google.android.mms.pdu_alt.PduPart
-import com.google.android.mms.pdu_alt.PduPersister
-import com.google.android.mms.pdu_alt.SendReq
+import com.google.android.mms.pdu_alt.*
 import com.google.android.mms.smil.SmilHelper
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
@@ -157,8 +150,11 @@ class Transaction @JvmOverloads constructor(private val context: Context, settin
         req.date = System.currentTimeMillis() / 1000
         req.body = PduBody()
 
+        // Parts
+        parts.map(this::partToPduPart).forEach { req.body.addPart(it) }
+
         // SMIL document for compatibility
-        req.body.addPart(PduPart().apply {
+        req.body.addPart(0, PduPart().apply {
             contentId = "smil".toByteArray()
             contentLocation = "smil.xml".toByteArray()
             contentType = ContentType.APP_SMIL.toByteArray()
@@ -166,9 +162,6 @@ class Transaction @JvmOverloads constructor(private val context: Context, settin
                     .apply { SmilXmlSerializer.serialize(SmilHelper.createSmilDocument(req.body), this) }
                     .toByteArray()
         })
-
-        // Parts
-        parts.map(this::partToPduPart).forEach { req.body.addPart(it) }
 
         req.messageSize = parts.mapNotNull { it.data?.size }.sum().toLong()
         req.messageClass = PduHeaders.MESSAGE_CLASS_PERSONAL_STR.toByteArray()
