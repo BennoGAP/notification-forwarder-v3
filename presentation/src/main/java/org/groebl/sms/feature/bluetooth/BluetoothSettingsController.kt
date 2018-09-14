@@ -3,6 +3,7 @@ package org.groebl.sms.feature.bluetooth
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import android.telephony.PhoneNumberUtils
@@ -34,8 +35,6 @@ import org.groebl.sms.util.Preferences
 import javax.inject.Inject
 
 
-
-
 class BluetoothSettingsController : QkController<BluetoothSettingsView, BluetoothSettingsState, BluetoothSettingsPresenter>(), BluetoothSettingsView {
 
     @Inject lateinit var context: Context
@@ -58,8 +57,8 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
     }
 
     override fun onViewCreated() {
-        bluetooth_menu_main.postDelayed({ bluetooth_menu_main.animateLayoutChanges = true }, 100)
-        bluetooth_menu_full.postDelayed({ bluetooth_menu_full.animateLayoutChanges = true }, 100)
+        bluetooth_menu_main.postDelayed({ bluetooth_menu_main?.animateLayoutChanges = true }, 100)
+        bluetooth_menu_full.postDelayed({ bluetooth_menu_full?.animateLayoutChanges = true }, 100)
     }
 
     override fun onAttach(view: View) {
@@ -101,10 +100,14 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
                 prefs.bluetooth_tethering.set(false)
                 local_bluetooth_tethering = false
 
+                val intent_write_settings = Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS)
+                intent_write_settings.data = Uri.parse("package:" + context.packageName)
+                intent_write_settings.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+
                 AlertDialog.Builder(activity!!)
                         .setTitle(R.string.main_permission_required)
                         .setMessage(String.format(context.getString(R.string.settings_bluetooth_tethering_dialog), context.getString(R.string.app_name)))
-                        .setPositiveButton(R.string.title_settings) { _, _ -> startActivity(Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS)) }
+                        .setPositiveButton(R.string.title_settings) { _, _ -> startActivity(Intent(intent_write_settings)) }
                         .setNegativeButton(R.string.button_cancel, null)
                         .show()
             }
