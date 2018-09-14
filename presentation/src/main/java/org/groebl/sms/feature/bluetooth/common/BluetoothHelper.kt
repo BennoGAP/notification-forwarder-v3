@@ -1,11 +1,16 @@
 package org.groebl.sms.feature.bluetooth.common
 
+import android.Manifest
+import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
+import android.content.pm.PackageManager
 import android.provider.ContactsContract
 import android.provider.Settings
 import android.provider.Telephony
 import android.telephony.PhoneNumberUtils
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.vdurmont.emoji.EmojiParser
 import java.math.BigInteger
 import java.security.MessageDigest
@@ -80,6 +85,14 @@ object BluetoothHelper  {
     fun hasNotificationAccess(context: Context): Boolean {
         val enabledNotificationListeners = Settings.Secure.getString(context.contentResolver, "enabled_notification_listeners")
         return enabledNotificationListeners != null && enabledNotificationListeners.contains("org.groebl.sms") && enabledNotificationListeners.contains("feature.bluetooth.service.BluetoothNotificationService")
+    }
+
+    fun hasContactPermission(context: Context): Boolean {
+        return ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED
+    }
+
+    fun requestContactPermission(activity: Activity) {
+        ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.READ_CONTACTS), 0)
     }
 
     fun deleteBluetoothMessages(context: Context, afterTime: Boolean) {

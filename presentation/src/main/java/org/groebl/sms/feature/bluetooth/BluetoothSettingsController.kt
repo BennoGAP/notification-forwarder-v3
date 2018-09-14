@@ -84,17 +84,27 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
 
         var local_bluetooth_enabled = state.bluetooth_enabled
         var local_bluetooth_tethering = state.bluetooth_tethering
+        var local_bluetooth_whatsapp_to_contact = state.bluetooth_whatsapp_to_contact
 
         if(!state.bluetooth_enabled) {
             BluetoothHelper.deleteBluetoothMessages(context, false)
         }
 
+        //Forwarding enabled but not default SMS-App or has no Notification-Access
         if(state.bluetooth_enabled and (!Utils.isDefaultSmsApp(context) or !BluetoothHelper.hasNotificationAccess(context))) {
             prefs.bluetooth_enabled.set(false)
             local_bluetooth_enabled = false
             navigator.showBluetoothAccess()
         }
 
+        //WhatsApp-to-Contact enabled but no Contact-Permission
+        if(state.bluetooth_whatsapp_to_contact && !BluetoothHelper.hasContactPermission(context)) {
+            prefs.bluetooth_whatsapp_to_contact.set(false)
+            local_bluetooth_whatsapp_to_contact = false
+            BluetoothHelper.requestContactPermission(activity!!)
+        }
+
+        //Tethering enabled but no system-write permission
         if(state.bluetooth_tethering && Build.VERSION.SDK_INT >= 23) {
             if(!Settings.System.canWrite(context)) {
                 prefs.bluetooth_tethering.set(false)
@@ -119,9 +129,9 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
 
         bluetooth_delayed_read.setVisible(state.bluetooth_save_read)
 
-        bluetooth_whatsapp_blocked_group.setVisible(state.bluetooth_whatsapp_to_contact)
-        bluetooth_whatsapp_blocked_contact.setVisible(state.bluetooth_whatsapp_to_contact)
-        bluetooth_whatsapp_hide_prefix.setVisible(state.bluetooth_whatsapp_to_contact)
+        bluetooth_whatsapp_blocked_group.setVisible(local_bluetooth_whatsapp_to_contact)
+        bluetooth_whatsapp_blocked_contact.setVisible(local_bluetooth_whatsapp_to_contact)
+        bluetooth_whatsapp_hide_prefix.setVisible(local_bluetooth_whatsapp_to_contact)
 
         bluetooth_more_divider.setVisible(state.bluetooth_only_on_connect)
         bluetooth_more_cat.setVisible(state.bluetooth_only_on_connect)
@@ -138,7 +148,7 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
         bluetooth_emoji.checkbox.isChecked = state.bluetooth_emoji
         bluetooth_appname_as_sender_text.checkbox.isChecked = state.bluetooth_appname_as_sender_text
         bluetooth_appname_as_sender_number.checkbox.isChecked = state.bluetooth_appname_as_sender_number
-        bluetooth_whatsapp_to_contact.checkbox.isChecked = state.bluetooth_whatsapp_to_contact
+        bluetooth_whatsapp_to_contact.checkbox.isChecked = local_bluetooth_whatsapp_to_contact
         bluetooth_whatsapp_hide_prefix.checkbox.isChecked = state.bluetooth_whatsapp_hide_prefix
         bluetooth_max_vol.checkbox.isChecked = state.bluetooth_max_vol
         bluetooth_tethering.checkbox.isChecked = local_bluetooth_tethering
