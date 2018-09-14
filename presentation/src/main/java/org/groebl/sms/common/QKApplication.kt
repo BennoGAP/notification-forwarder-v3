@@ -111,8 +111,6 @@ class QKApplication : Application(), HasActivityInjector, HasBroadcastReceiverIn
         Timber.plant(Timber.DebugTree(), BugsnagTree(), fileLoggingTree)
 
         BluetoothDatabase.init(this)
-
-        //TODO Cleanup Bluetooth-DB
     }
 
     override fun activityInjector(): AndroidInjector<Activity> {

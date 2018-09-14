@@ -48,6 +48,7 @@ import org.groebl.sms.common.androidxcompat.scope
 import org.groebl.sms.common.base.QkThemedActivity
 import org.groebl.sms.common.util.extensions.*
 import org.groebl.sms.common.widget.SearchView
+import org.groebl.sms.feature.bluetooth.common.BluetoothHelper
 import org.groebl.sms.feature.conversations.ConversationItemTouchCallback
 import org.groebl.sms.feature.conversations.ConversationsAdapter
 import org.groebl.sms.repository.SyncRepository
@@ -154,6 +155,11 @@ class MainActivity : QkThemedActivity(), MainView {
 
         itemTouchCallback.adapter = conversationsAdapter
         conversationsAdapter.autoScrollToStart(recyclerView)
+
+        //Delete BT-Messages
+        Thread {
+            BluetoothHelper.deleteBluetoothMessages(this, false)
+        }.start()
     }
 
     override fun render(state: MainState) {
