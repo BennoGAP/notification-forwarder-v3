@@ -3,6 +3,8 @@ package org.groebl.sms.feature.bluetooth
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.os.Build
+import android.provider.Settings
 import android.telephony.PhoneNumberUtils
 import android.view.View
 import android.widget.EditText
@@ -22,17 +24,14 @@ import org.groebl.sms.common.util.extensions.animateLayoutChanges
 import org.groebl.sms.common.util.extensions.setVisible
 import org.groebl.sms.common.widget.PreferenceView
 import org.groebl.sms.feature.bluetooth.app.BluetoothAppActivity
+import org.groebl.sms.feature.bluetooth.common.BluetoothBatteryUtils
 import org.groebl.sms.feature.bluetooth.common.BluetoothHelper
-import org.groebl.sms.feature.bluetooth.common.BluetoothHelper.deleteBluetoothMessages
 import org.groebl.sms.feature.bluetooth.common.BluetoothWABlocked
 import org.groebl.sms.feature.bluetooth.device.BluetoothDeviceActivity
 import org.groebl.sms.feature.settings.about.AboutController
 import org.groebl.sms.injection.appComponent
 import org.groebl.sms.util.Preferences
 import javax.inject.Inject
-
-
-
 
 
 
@@ -85,9 +84,10 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
     override fun render(state: BluetoothSettingsState) {
 
         var local_bluetooth_enabled = state.bluetooth_enabled
+        var local_bluetooth_tethering = state.bluetooth_tethering
 
         if(!state.bluetooth_enabled) {
-            deleteBluetoothMessages(context, false)
+            BluetoothHelper.deleteBluetoothMessages(context, false)
         }
 
         if(state.bluetooth_enabled and (!Utils.isDefaultSmsApp(context) or !BluetoothHelper.hasNotificationAccess(context))) {
@@ -96,15 +96,36 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
             navigator.showBluetoothAccess()
         }
 
+        if(state.bluetooth_tethering && Build.VERSION.SDK_INT >= 23) {
+            if(!Settings.System.canWrite(context)) {
+                prefs.bluetooth_tethering.set(false)
+                local_bluetooth_tethering = false
+
+                AlertDialog.Builder(activity!!)
+                        .setTitle(R.string.main_permission_required)
+                        .setMessage(String.format(context.getString(R.string.settings_bluetooth_tethering_dialog), context.getString(R.string.app_name)))
+                        .setPositiveButton(R.string.title_settings) { _, _ -> startActivity(Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS)) }
+                        .setNegativeButton(R.string.button_cancel, null)
+                        .show()
+            }
+        }
+
         bluetooth_menu_main.setVisible(state.bluetooth_enabled)
         bluetooth_select_device.setVisible(state.bluetooth_only_on_connect)
         bluetooth_autodelete.setVisible(state.bluetooth_only_on_connect)
+
         bluetooth_delayed_read.setVisible(state.bluetooth_save_read)
+
         bluetooth_whatsapp_blocked_group.setVisible(state.bluetooth_whatsapp_to_contact)
         bluetooth_whatsapp_blocked_contact.setVisible(state.bluetooth_whatsapp_to_contact)
         bluetooth_whatsapp_hide_prefix.setVisible(state.bluetooth_whatsapp_to_contact)
+
+        bluetooth_more_divider.setVisible(state.bluetooth_only_on_connect)
+        bluetooth_more_cat.setVisible(state.bluetooth_only_on_connect)
         bluetooth_max_vol.setVisible(state.bluetooth_only_on_connect)
-        //bluetooth_tethering.setVisible(state.bluetooth_only_on_connect)
+        bluetooth_tethering.setVisible(state.bluetooth_only_on_connect)
+
+        bluetooth_battery.setVisible(state.bluetooth_enabled)
 
         bluetooth_enabled.checkbox.isChecked = local_bluetooth_enabled
         bluetooth_only_on_connect.checkbox.isChecked = state.bluetooth_only_on_connect
@@ -117,13 +138,22 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
         bluetooth_whatsapp_to_contact.checkbox.isChecked = state.bluetooth_whatsapp_to_contact
         bluetooth_whatsapp_hide_prefix.checkbox.isChecked = state.bluetooth_whatsapp_hide_prefix
         bluetooth_max_vol.checkbox.isChecked = state.bluetooth_max_vol
-        bluetooth_tethering.checkbox.isChecked = state.bluetooth_tethering
+        bluetooth_tethering.checkbox.isChecked = local_bluetooth_tethering
     }
 
     override fun showBluetoothAbout() {
         router.pushController(RouterTransaction.with(AboutController())
                 .pushChangeHandler(QkChangeHandler())
                 .popChangeHandler(QkChangeHandler()))
+    }
+
+    override fun showBluetoothBatteryOptimize() {
+        AlertDialog.Builder(activity!!)
+                .setTitle(R.string.settings_bluetooth_battery_title)
+                .setMessage(String.format(context.getString(R.string.settings_bluetooth_battery_dialog), context.getString(R.string.app_name)))
+                .setPositiveButton(R.string.title_settings) { _, _ -> BluetoothBatteryUtils.startPowerSaverIntent(activity!!) }
+                .setNegativeButton(R.string.button_cancel, null)
+                .show()
     }
 
     override fun showBluetoothApps() {

@@ -121,23 +121,6 @@
                 app:title="@string/settings_bluetooth_shownumber_title"
                 app:widget="@layout/settings_switch_widget" />
 
-            <org.groebl.sms.common.widget.PreferenceView
-                android:id="@+id/bluetooth_max_vol"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:summary="@string/settings_bluetooth_max_vol_summary"
-                app:title="@string/settings_bluetooth_max_vol_title"
-                app:widget="@layout/settings_switch_widget" />
-
-            <org.groebl.sms.common.widget.PreferenceView
-                android:id="@+id/bluetooth_tethering"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                app:summary="@string/settings_bluetooth_tethering_summary"
-                app:title="@string/settings_bluetooth_tethering_title"
-                app:widget="@layout/settings_switch_widget" />
-
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -180,6 +163,36 @@
                 app:summary="@string/settings_bluetooth_block_whatsapp_contact_summary"
                 app:title="@string/settings_bluetooth_block_whatsapp_contact_title" />
 
+            <View
+                android:id="@+id/bluetooth_more_divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:background="?android:attr/divider" />
+
+            <org.groebl.sms.common.widget.QkTextView
+                style="@style/PreferenceCategory"
+                android:id="@+id/bluetooth_more_cat"
+                android:text="@string/settings_category_bluetooth_other" />
+
+            <org.groebl.sms.common.widget.PreferenceView
+                android:id="@+id/bluetooth_max_vol"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:summary="@string/settings_bluetooth_max_vol_summary"
+                app:title="@string/settings_bluetooth_max_vol_title"
+                app:widget="@layout/settings_switch_widget" />
+
+            <org.groebl.sms.common.widget.PreferenceView
+                android:id="@+id/bluetooth_tethering"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:summary="@string/settings_bluetooth_tethering_summary"
+                app:title="@string/settings_bluetooth_tethering_title"
+                app:widget="@layout/settings_switch_widget" />
+
         </LinearLayout>
 
         <View
@@ -199,6 +212,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:title="@string/settings_bluetooth_notification_access_title" />
+
+        <org.groebl.sms.common.widget.PreferenceView
+            android:id="@+id/bluetooth_battery"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:title="@string/settings_bluetooth_battery_title"
+            app:summary="@string/settings_bluetooth_battery_summary" />
 
         <View
             android:layout_width="match_parent"

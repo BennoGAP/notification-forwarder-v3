@@ -28,8 +28,9 @@
     <string name="drawer_feedback">Feedback</string>
 
     <string name="settings_category_bluetooth_general">General</string>
-    <string name="settings_category_bluetooth_more">More Settings</string>
+    <string name="settings_category_bluetooth_more">More settings</string>
     <string name="settings_category_bluetooth_whatsapp">WhatsApp settings</string>
+    <string name="settings_category_bluetooth_other">Other settings</string>
     <string name="settings_category_bluetooth_system">System settings</string>
 
     <string name="drawer_bluetoothsettings">Bluetooth Settings</string>
@@ -58,6 +59,7 @@
     <string name="settings_bluetooth_max_vol_summary">Set the Bluetooth-Volume to 100% when connected to the selected Bluetooth-Device</string>
     <string name="settings_bluetooth_tethering_title">Bluetooth-Tethering</string>
     <string name="settings_bluetooth_tethering_summary">Enable Bluetooth-Tethering when connected to the selected Bluetooth-Device</string>
+    <string name="settings_bluetooth_tethering_dialog">To enable this option you need to permit %s to modify system settings</string>
     <string name="settings_bluetooth_whatsapp_to_contact_title">Assign WhatsApp-Messages</string>
     <string name="settings_bluetooth_whatsapp_to_contact_summary">Show the name and number from the sender of the WhatsApp-Message</string>
     <string name="settings_bluetooth_whatsapp_hide_prefix_title">Hide WhatsApp-Prefix</string>
@@ -67,6 +69,9 @@
     <string name="settings_bluetooth_block_whatsapp_contact_title">Exclude WhatsApp contacts</string>
     <string name="settings_bluetooth_block_whatsapp_contact_summary">WhatsApp-Messages from the following contacts will not be forwarded</string>
     <string name="settings_bluetooth_notification_access_title">Notification Access</string>
+    <string name="settings_bluetooth_battery_title">Battery Optimization</string>
+    <string name="settings_bluetooth_battery_summary">If the forwarding stopped working after a time, check your battery/power-saving options</string>
+    <string name="settings_bluetooth_battery_dialog">Whitelist %s in the options, otherwise the app could be stopped from working in the background</string>
     <string name="settings_bluetooth_donate">Donate</string>
     <string name="settings_bluetooth_faq_title">FAQ</string>
 

@@ -1,8 +1,8 @@
 package org.groebl.sms.feature.bluetooth
 
+import io.reactivex.Observable
 import org.groebl.sms.common.base.QkViewContract
 import org.groebl.sms.common.widget.PreferenceView
-import io.reactivex.Observable
 
 interface BluetoothSettingsView : QkViewContract<BluetoothSettingsState> {
     fun preferenceMainClicks(): Observable<PreferenceView>
@@ -11,6 +11,7 @@ interface BluetoothSettingsView : QkViewContract<BluetoothSettingsState> {
     fun showBluetoothApps()
     fun showBluetoothDevices()
     fun showBluetoothAbout()
+    fun showBluetoothBatteryOptimize()
 
     fun showBluetoothWhatsAppBlockedContact()
     fun showBluetoothWhatsAppBlockedGroup()
