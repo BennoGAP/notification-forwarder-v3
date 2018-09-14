@@ -158,7 +158,7 @@ class MainActivity : QkThemedActivity(), MainView {
 
         //Delete BT-Messages
         Thread {
-            BluetoothHelper.deleteBluetoothMessages(this, false)
+            BluetoothHelper.deleteBluetoothMessages(this, true)
         }.start()
     }
 
