@@ -78,14 +78,14 @@ object BluetoothHelper  {
     }
 
     fun hasNotificationAccess(context: Context): Boolean {
-        val enabled_notification_listeners = Settings.Secure.getString(context.contentResolver, "enabled_notification_listeners")
-        return enabled_notification_listeners != null && enabled_notification_listeners.contains("org.groebl.sms") && enabled_notification_listeners.contains("feature.bluetooth.service.BluetoothNotificationService")
+        val enabledNotificationListeners = Settings.Secure.getString(context.contentResolver, "enabled_notification_listeners")
+        return enabledNotificationListeners != null && enabledNotificationListeners.contains("org.groebl.sms") && enabledNotificationListeners.contains("feature.bluetooth.service.BluetoothNotificationService")
     }
 
     fun deleteBluetoothMessages(context: Context, afterTime: Boolean) {
         val selection: String = when {
-            afterTime -> " AND date_sent < " + (System.currentTimeMillis() - 21600000)
-            else -> ""
+            afterTime ->    " AND date_sent < " + (System.currentTimeMillis() - 21600000)
+            else ->         ""
         }
 
         context.contentResolver.delete(Telephony.Sms.CONTENT_URI, "(" + Telephony.Sms.ERROR_CODE + " = ? or " + Telephony.Sms.ERROR_CODE + " = ?)" + selection, arrayOf("777", "778"))
@@ -98,12 +98,11 @@ object BluetoothHelper  {
                 ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " = ? AND account_type = ?",
                 arrayOf(displayname, "com.whatsapp"), null)
 
-        if (c != null && c!!.moveToFirst()) {
-            setNumber = c.getString(0)
+        if (c != null) {
+            if (c.moveToFirst())  { setNumber = c.getString(0) }
+            if (!c.isClosed)      { c.close() }
         }
-        if (c != null && !c!!.isClosed()) {
-            c.close()
-        }
+
         return setNumber
     }
 
@@ -114,12 +113,11 @@ object BluetoothHelper  {
                 ContactsContract.CommonDataKinds.Phone.NUMBER + " = ? AND account_type = ?",
                 arrayOf(PhoneNumberUtils.stripSeparators(number), "com.whatsapp"), null)
 
-        if (c != null && c!!.moveToFirst()) {
-            setName = c.getString(0)
+        if (c != null) {
+            if (c.moveToFirst())  { setName = c.getString(0) }
+            if (!c.isClosed)      { c.close() }
         }
-        if (c != null && !c!!.isClosed()) {
-            c.close()
-        }
+
         return setName
     }
 
