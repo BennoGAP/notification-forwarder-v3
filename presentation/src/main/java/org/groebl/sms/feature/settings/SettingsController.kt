@@ -6,7 +6,6 @@ import android.content.Context
 import android.text.format.DateFormat
 import android.view.View
 import com.bluelinelabs.conductor.RouterTransaction
-import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.view.longClicks
 import com.uber.autodispose.kotlin.autoDisposable
@@ -14,7 +13,6 @@ import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import kotlinx.android.synthetic.main.settings_controller.*
-import kotlinx.android.synthetic.main.settings_controller.view.*
 import kotlinx.android.synthetic.main.settings_switch_widget.view.*
 import kotlinx.android.synthetic.main.settings_theme_widget.*
 import org.groebl.sms.R
@@ -44,7 +42,6 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
 
     @Inject override lateinit var presenter: SettingsPresenter
 
-    private val viewQksmsPlusSubject: Subject<Unit> = PublishSubject.create()
     private val startTimeSelectedSubject: Subject<Pair<Int, Int>> = PublishSubject.create()
     private val endTimeSelectedSubject: Subject<Pair<Int, Int>> = PublishSubject.create()
 
@@ -93,8 +90,6 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
 
     override fun aboutLongClicks(): Observable<*> = about.longClicks()
 
-    override fun viewQksmsPlusClicks(): Observable<*> = viewQksmsPlusSubject
-
     override fun nightModeSelected(): Observable<Int> = nightModeDialog.adapter.menuItemClicks
 
     override fun nightStartSelected(): Observable<Pair<Int, Int>> = startTimeSelectedSubject
@@ -138,15 +133,6 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
 
         mmsSize.summary = state.maxMmsSizeSummary
         mmsSizeDialog.adapter.selectedItem = state.maxMmsSizeId
-    }
-
-    override fun showQksmsPlusSnackbar() {
-        view?.run {
-            Snackbar.make(contentView, R.string.toast_qksms_plus, Snackbar.LENGTH_LONG).run {
-                setAction(R.string.button_more) { viewQksmsPlusSubject.onNext(Unit) }
-                show()
-            }
-        }
     }
 
     // TODO change this to a PopupWindow

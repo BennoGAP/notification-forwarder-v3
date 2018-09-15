@@ -38,7 +38,6 @@ import org.groebl.sms.R
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.androidxcompat.scope
 import org.groebl.sms.common.base.QkViewModel
-import org.groebl.sms.common.util.BillingManager
 import org.groebl.sms.common.util.ClipboardUtils
 import org.groebl.sms.common.util.MessageDetailsFormatter
 import org.groebl.sms.common.util.extensions.makeToast
@@ -72,7 +71,6 @@ class ComposeViewModel @Inject constructor(
         private val context: Context,
         private val activeConversationManager: ActiveConversationManager,
         private val addScheduledMessage: AddScheduledMessage,
-        private val billingManager: BillingManager,
         private val cancelMessage: CancelDelayedMessage,
         private val contactFilter: ContactFilter,
         private val contactsRepo: ContactRepository,
@@ -473,10 +471,6 @@ class ComposeViewModel @Inject constructor(
         // Choose a time to schedule the message
         view.scheduleIntent
                 .doOnNext { newState { copy(attaching = false) } }
-                .withLatestFrom(billingManager.upgradeStatus) { _, upgraded -> upgraded }
-                .filter { upgraded ->
-                    upgraded.also { if (!upgraded) view.showQksmsPlusSnackbar(R.string.compose_scheduled_plus) }
-                }
                 .autoDisposable(view.scope())
                 .subscribe { view.requestDatePicker() }
 
@@ -625,11 +619,6 @@ class ComposeViewModel @Inject constructor(
                 }
                 .autoDisposable(view.scope())
                 .subscribe()
-
-        // View QKSMS+
-        view.viewQksmsPlusIntent
-                .autoDisposable(view.scope())
-                .subscribe { navigator.showQksmsPlusActivity("compose_schedule") }
 
         // Navigate back
         view.optionsItemIntent

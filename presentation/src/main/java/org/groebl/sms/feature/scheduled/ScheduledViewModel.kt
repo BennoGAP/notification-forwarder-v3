@@ -18,19 +18,16 @@
  */
 package org.groebl.sms.feature.scheduled
 
+import com.uber.autodispose.kotlin.autoDisposable
+import io.reactivex.rxkotlin.withLatestFrom
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.androidxcompat.scope
 import org.groebl.sms.common.base.QkViewModel
-import org.groebl.sms.common.util.BillingManager
 import org.groebl.sms.interactor.SendScheduledMessage
 import org.groebl.sms.repository.ScheduledMessageRepository
-import com.uber.autodispose.kotlin.autoDisposable
-import io.reactivex.rxkotlin.plusAssign
-import io.reactivex.rxkotlin.withLatestFrom
 import javax.inject.Inject
 
 class ScheduledViewModel @Inject constructor(
-        billingManager: BillingManager,
         private val navigator: Navigator,
         private val scheduledMessageRepo: ScheduledMessageRepository,
         private val sendScheduledMessage: SendScheduledMessage
@@ -39,8 +36,7 @@ class ScheduledViewModel @Inject constructor(
 )) {
 
     init {
-        disposables += billingManager.upgradeStatus
-                .subscribe { upgraded -> newState { copy(upgraded = upgraded) } }
+
     }
 
     override fun bindView(view: ScheduledView) {
@@ -64,9 +60,6 @@ class ScheduledViewModel @Inject constructor(
                 .autoDisposable(view.scope())
                 .subscribe { navigator.showCompose() }
 
-        view.upgradeIntent
-                .autoDisposable(view.scope())
-                .subscribe { navigator.showQksmsPlusActivity("schedule_fab") }
     }
 
 }

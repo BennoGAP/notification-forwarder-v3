@@ -2,25 +2,22 @@ package org.groebl.sms.feature.settings
 
 import android.content.Context
 import androidx.core.widget.toast
+import com.uber.autodispose.kotlin.autoDisposable
+import io.reactivex.rxkotlin.plusAssign
 import org.groebl.sms.R
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.base.QkPresenter
-import org.groebl.sms.common.util.BillingManager
 import org.groebl.sms.common.util.Colors
 import org.groebl.sms.common.util.DateFormatter
 import org.groebl.sms.interactor.SyncMessages
 import org.groebl.sms.util.NightModeManager
 import org.groebl.sms.util.Preferences
-import com.uber.autodispose.kotlin.autoDisposable
-import io.reactivex.rxkotlin.plusAssign
-import io.reactivex.rxkotlin.withLatestFrom
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
 class SettingsPresenter @Inject constructor(
         private val context: Context,
-        private val billingManager: BillingManager,
         private val colors: Colors,
         private val dateFormatter: DateFormatter,
         private val navigator: Navigator,
@@ -160,19 +157,8 @@ class SettingsPresenter @Inject constructor(
                 }
 
         view.nightModeSelected()
-                .withLatestFrom(billingManager.upgradeStatus) { mode, upgraded ->
-                    if (!upgraded && mode == Preferences.NIGHT_MODE_AUTO) {
-                        view.showQksmsPlusSnackbar()
-                    } else {
-                        nightModeManager.updateNightMode(mode)
-                    }
-                }
                 .autoDisposable(view.scope())
-                .subscribe()
-
-        view.viewQksmsPlusClicks()
-                .autoDisposable(view.scope())
-                .subscribe { navigator.showQksmsPlusActivity("settings_night") }
+                .subscribe{ nightModeManager.updateNightMode(it) }
 
         view.nightStartSelected()
                 .autoDisposable(view.scope())
@@ -187,15 +173,8 @@ class SettingsPresenter @Inject constructor(
                 .subscribe { prefs.textSize.set(it) }
 
         view.sendDelaySelected()
-                .withLatestFrom(billingManager.upgradeStatus) { duration, upgraded ->
-                    if (!upgraded && duration != 0) {
-                        view.showQksmsPlusSnackbar()
-                    } else {
-                        prefs.sendDelay.set(duration)
-                    }
-                }
                 .autoDisposable(view.scope())
-                .subscribe()
+                .subscribe{ prefs.sendDelay.set(it) }
 
         view.mmsSizeSelected()
                 .autoDisposable(view.scope())

@@ -22,6 +22,5 @@ import org.groebl.sms.model.ScheduledMessage
 import io.realm.RealmResults
 
 data class ScheduledState(
-        val scheduledMessages: RealmResults<ScheduledMessage>? = null,
-        val upgraded: Boolean = true
+        val scheduledMessages: RealmResults<ScheduledMessage>? = null
 )

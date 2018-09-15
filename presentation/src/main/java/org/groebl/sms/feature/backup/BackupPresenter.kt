@@ -26,9 +26,7 @@ import io.reactivex.rxkotlin.withLatestFrom
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
 import org.groebl.sms.R
-import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.base.QkPresenter
-import org.groebl.sms.common.util.BillingManager
 import org.groebl.sms.common.util.DateFormatter
 import org.groebl.sms.interactor.PerformBackup
 import org.groebl.sms.manager.PermissionManager
@@ -38,10 +36,8 @@ import javax.inject.Inject
 
 class BackupPresenter @Inject constructor(
         private val backupRepo: BackupRepository,
-        private val billingManager: BillingManager,
         private val context: Context,
         private val dateFormatter: DateFormatter,
-        private val navigator: Navigator,
         private val performBackup: PerformBackup,
         private val permissionManager: PermissionManager
 ) : QkPresenter<BackupView, BackupState>(BackupState()) {
@@ -72,9 +68,6 @@ class BackupPresenter @Inject constructor(
                 }
                 .startWith(context.getString(R.string.backup_loading))
                 .subscribe { lastBackup -> newState { copy(lastBackup = lastBackup) } }
-
-        disposables += billingManager.upgradeStatus
-                .subscribe { upgraded -> newState { copy(upgraded = upgraded) } }
     }
 
     override fun bindIntents(view: BackupView) {
@@ -88,11 +81,9 @@ class BackupPresenter @Inject constructor(
         view.restoreClicks()
                 .withLatestFrom(
                         backupRepo.getBackupProgress(),
-                        backupRepo.getRestoreProgress(),
-                        billingManager.upgradeStatus)
-                { _, backupProgress, restoreProgress, upgraded ->
+                        backupRepo.getRestoreProgress())
+                { _, backupProgress, restoreProgress ->
                     when {
-                        !upgraded -> context.toast(R.string.backup_restore_error_plus)
                         backupProgress.running -> context.toast(R.string.backup_restore_error_backup)
                         restoreProgress.running -> context.toast(R.string.backup_restore_error_restore)
                         !permissionManager.hasStorage() -> view.requestStoragePermission()
@@ -120,13 +111,11 @@ class BackupPresenter @Inject constructor(
                 .subscribe { backupRepo.stopRestore() }
 
         view.fabClicks()
-                .withLatestFrom(billingManager.upgradeStatus) { _, upgraded -> upgraded }
                 .autoDisposable(view.scope())
-                .subscribe { upgraded ->
+                .subscribe {
                     when {
-                        !upgraded -> navigator.showQksmsPlusActivity("backup_fab")
                         !permissionManager.hasStorage() -> view.requestStoragePermission()
-                        upgraded -> performBackup.execute(Unit)
+                        else -> performBackup.execute(Unit)
                     }
                 }
     }

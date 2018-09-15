@@ -19,21 +19,19 @@
 package org.groebl.sms.feature.themepicker
 
 import com.f2prateek.rx.preferences2.Preference
-import org.groebl.sms.common.Navigator
-import org.groebl.sms.common.base.QkPresenter
-import org.groebl.sms.common.util.BillingManager
-import org.groebl.sms.common.util.Colors
-import org.groebl.sms.util.Preferences
 import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.rxkotlin.withLatestFrom
+import org.groebl.sms.common.Navigator
+import org.groebl.sms.common.base.QkPresenter
+import org.groebl.sms.common.util.Colors
+import org.groebl.sms.util.Preferences
 import javax.inject.Inject
 import javax.inject.Named
 
 class ThemePickerPresenter @Inject constructor(
         @Named("threadId") threadId: Long,
         prefs: Preferences,
-        private val billingManager: BillingManager,
         private val colors: Colors,
         private val navigator: Navigator
 ) : QkPresenter<ThemePickerView, ThemePickerState>(ThemePickerState(threadId = threadId)) {
@@ -68,20 +66,8 @@ class ThemePickerPresenter @Inject constructor(
         // Update the theme, when apply is clicked
         view.applyHsvThemeClicks()
                 .withLatestFrom(view.hsvThemeSelected()) { _, color -> color }
-                .withLatestFrom(billingManager.upgradeStatus) { color, upgraded ->
-                    if (!upgraded) {
-                        view.showQksmsPlusSnackbar()
-                    } else {
-                        theme.set(color)
-                    }
-                }
                 .autoDisposable(view.scope())
-                .subscribe()
-
-        // Show QKSMS+ activity
-        view.viewQksmsPlusClicks()
-                .autoDisposable(view.scope())
-                .subscribe { navigator.showQksmsPlusActivity("settings_theme") }
+                .subscribe { color -> theme.set(color) }
 
         // Reset the theme
         view.clearHsvThemeClicks()
