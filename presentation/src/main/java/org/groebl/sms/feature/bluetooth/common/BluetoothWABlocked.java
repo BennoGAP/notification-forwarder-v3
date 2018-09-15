@@ -10,11 +10,7 @@ import java.util.Set;
 public class BluetoothWABlocked {
 
     public static String getWABlockPref(Boolean isGroup) {
-        if(isGroup) {
-            return "bluetoothWhatsAppBlockedGroup";
-        } else {
-            return "bluetoothWhatsAppBlockedContact";
-        }
+        return isGroup ? "bluetoothWhatsAppBlockedGroup" : "bluetoothWhatsAppBlockedContact";
     }
 
     public static Set<String> getWABlockedConversations(SharedPreferences prefs, Boolean isGroup) {

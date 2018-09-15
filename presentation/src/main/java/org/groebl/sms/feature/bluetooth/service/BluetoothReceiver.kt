@@ -66,7 +66,7 @@ class BluetoothReceiver : BroadcastReceiver() {
                                 val mAudioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
                                 mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0)
                             }
-                        }, 7500)
+                        }, 5000)
                     }
                 }
 

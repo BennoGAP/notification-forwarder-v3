@@ -84,7 +84,7 @@ object BluetoothHelper  {
 
     fun hasNotificationAccess(context: Context): Boolean {
         val enabledNotificationListeners = Settings.Secure.getString(context.contentResolver, "enabled_notification_listeners")
-        return enabledNotificationListeners != null && enabledNotificationListeners.contains("org.groebl.sms") && enabledNotificationListeners.contains("feature.bluetooth.service.BluetoothNotificationService")
+        return enabledNotificationListeners != null && enabledNotificationListeners.contains(context.packageName) && enabledNotificationListeners.contains(".service.BluetoothNotificationService")
     }
 
     fun hasContactPermission(context: Context): Boolean {
