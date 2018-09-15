@@ -1,4 +1,4 @@
--dontobfuscate
+#-dontobfuscate
 
 # android-smsmms
 # -keep class android.net.** { *; }
