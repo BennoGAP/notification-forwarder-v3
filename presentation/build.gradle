@@ -24,15 +24,15 @@ apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 28
-    buildToolsVersion "28.0.0"
+    buildToolsVersion '28.0.2'
     flavorDimensions "analytics"
 
     defaultConfig {
         applicationId "org.groebl.sms"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 186
-        versionName "3.5.1"
+        versionCode 300
+        versionName "3.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField "String", "BUGSNAG_API_KEY", "\"${System.getenv("BUGSNAG_API_KEY")}\""
