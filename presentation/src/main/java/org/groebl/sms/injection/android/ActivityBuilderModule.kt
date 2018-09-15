@@ -37,8 +37,6 @@ import org.groebl.sms.feature.main.MainActivity
 import org.groebl.sms.feature.main.MainActivityModule
 import org.groebl.sms.feature.notificationprefs.NotificationPrefsActivity
 import org.groebl.sms.feature.notificationprefs.NotificationPrefsActivityModule
-import org.groebl.sms.feature.plus.PlusActivity
-import org.groebl.sms.feature.plus.PlusActivityModule
 import org.groebl.sms.feature.qkreply.QkReplyActivity
 import org.groebl.sms.feature.qkreply.QkReplyActivityModule
 import org.groebl.sms.feature.scheduled.ScheduledActivity
@@ -52,10 +50,6 @@ abstract class ActivityBuilderModule {
     @ActivityScope
     @ContributesAndroidInjector(modules = [MainActivityModule::class])
     abstract fun bindMainActivity(): MainActivity
-
-    @ActivityScope
-    @ContributesAndroidInjector(modules = [PlusActivityModule::class])
-    abstract fun bindPlusActivity(): PlusActivity
 
     @ActivityScope
     @ContributesAndroidInjector(modules = [])

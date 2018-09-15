@@ -39,7 +39,6 @@ import org.groebl.sms.feature.compose.ComposeActivity
 import org.groebl.sms.feature.conversationinfo.ConversationInfoActivity
 import org.groebl.sms.feature.gallery.GalleryActivity
 import org.groebl.sms.feature.notificationprefs.NotificationPrefsActivity
-import org.groebl.sms.feature.plus.PlusActivity
 import org.groebl.sms.feature.scheduled.ScheduledActivity
 import org.groebl.sms.feature.settings.SettingsActivity
 import org.groebl.sms.manager.AnalyticsManager
@@ -68,16 +67,6 @@ class Navigator @Inject constructor(
         } else {
             startActivity(Intent.createChooser(intent, null))
         }
-    }
-
-    /**
-     * @param source String to indicate where this QKSMS+ screen was launched from. This should be
-     * one of [main_menu, compose_schedule, settings_night, settings_theme]
-     */
-    fun showQksmsPlusActivity(source: String) {
-        analyticsManager.track("Viewed QKSMS+", Pair("source", source))
-        val intent = Intent(context, PlusActivity::class.java)
-        startActivity(intent)
     }
 
     fun showBluetoothAccess() {
