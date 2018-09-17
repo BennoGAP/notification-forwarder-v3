@@ -46,6 +46,8 @@
   <string name="settings_bluetooth_delete_summary">Temporär angelegte Nachrichten beim trennen der Bluetooth-Verbindung löschen</string>
   <string name="settings_bluetooth_devices_title">Bluetooth-Geräte auswählen</string>
   <string name="settings_bluetooth_devices_summary">Bluetooth-Geräte festlegen, bei denen die oben genannten Aktionen durchgeführt werden (z.B. Auto)</string>
+  <string name="settings_bluetooth_device_status_connected">Verbunden mit %s seit %s</string>
+  <string name="settings_bluetooth_device_status_disconnected">Verbindung mit %s getrennt seit %s</string>
   <string name="settings_bluetooth_markasread_title">Nachrichten als gelesen speichern</string>
   <string name="settings_bluetooth_markasread_summary">Nachrichten werden direkt als gelesen abgespeichert</string>
   <string name="settings_bluetooth_markasread_delayed_title">Verzögerte Gelesen-Markierung</string>
@@ -84,6 +86,13 @@
   <string name="settings_bluetooth_block_whatsapp_unblock_confirm">Entfernen bestätigen</string>
 
   <string name="settings_bluetooth_no_devices">Keine gekoppelten Bluetooth-Geräte gefunden</string>
+
+  <string name="bluetooth_alert_info_title">Information</string>
+  <string name="bluetooth_alert_info_defaultsms">Die App muss als Standard-SMS-App eingestellt werden</string>
+  <string name="bluetooth_alert_info_notifications">Die App benötigt zum lesen der Benachrichtigungen den \"Benachrichtigungszugriff\"</string>
+  <string name="bluetooth_alert_info_device">Es muss noch mindestens ein Bluetooth-Gerät ausgewählt oder die Option \"Nur bei Bluetooth-Verbindung\" deaktiviert werden</string>
+  <string name="bluetooth_alert_info_apps">Es muss noch mindestens eine App unter \"Erlaubte Anwendungen\" ausgewählt werden</string>
+  <string name="bluetooth_alert_info_markasread">Die Option \"Verzögerte Gelesen-Markierung\" wird für dieses Gerät empfohlen</string>
 
   <string name="shortcut_compose_long_label">Neue Unterhaltung</string>
   <string name="shortcut_compose_short_label">Verfassen</string>

@@ -83,7 +83,13 @@ class BluetoothSettingsPresenter @Inject constructor(
                     Timber.v("Preference-Main click: ${context.resources.getResourceName(it.id)}")
 
                     when (it.id) {
-                        R.id.bluetooth_only_on_connect -> prefs.bluetooth_only_on_connect.set(!prefs.bluetooth_only_on_connect.get())
+                        R.id.bluetooth_only_on_connect -> {
+                            prefs.bluetooth_only_on_connect.set(!prefs.bluetooth_only_on_connect.get())
+
+                            prefs.bluetooth_last_connect.set(0L)
+                            prefs.bluetooth_last_disconnect.set(0L)
+                            prefs.bluetooth_last_connect_device.set("")
+                        }
                         R.id.bluetooth_autodelete -> prefs.bluetooth_autodelete.set(!prefs.bluetooth_autodelete.get())
                         R.id.bluetooth_select_device -> view.showBluetoothDevices()
                         R.id.bluetooth_allowed_apps -> view.showBluetoothApps()

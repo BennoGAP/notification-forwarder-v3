@@ -32,6 +32,8 @@ import org.groebl.sms.feature.bluetooth.device.BluetoothDeviceActivity
 import org.groebl.sms.feature.settings.about.AboutController
 import org.groebl.sms.injection.appComponent
 import org.groebl.sms.util.Preferences
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 
@@ -59,6 +61,33 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
     override fun onViewCreated() {
         bluetooth_menu_main.postDelayed({ bluetooth_menu_main?.animateLayoutChanges = true }, 100)
         bluetooth_menu_full.postDelayed({ bluetooth_menu_full?.animateLayoutChanges = true }, 100)
+
+        if (prefs.bluetooth_enabled.get()) {
+            var info_msg = ""
+            if (prefs.bluetooth_enabled.get() && !Utils.isDefaultSmsApp(context)) {
+                info_msg += "- " + context.getString(R.string.bluetooth_alert_info_defaultsms) + "\n"
+            }
+            if (prefs.bluetooth_enabled.get() && !BluetoothHelper.hasNotificationAccess(context)) {
+                info_msg += "- " + context.getString(R.string.bluetooth_alert_info_notifications) + "\n"
+            }
+            if (prefs.bluetooth_only_on_connect.get() && prefs.bluetooth_devices.get().isEmpty()) {
+                info_msg += "- " + context.getString(R.string.bluetooth_alert_info_device) + "\n"
+            }
+            if (prefs.bluetooth_apps.get().isEmpty()) {
+                info_msg += "- " + context.getString(R.string.bluetooth_alert_info_apps) + "\n"
+            }
+            if (prefs.bluetooth_save_read.get() && !prefs.bluetooth_delayed_read.get() && Build.MANUFACTURER.equals("samsung", ignoreCase = true) && Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                info_msg += "- " + context.getString(R.string.bluetooth_alert_info_markasread) + "\n"
+            }
+
+            if (info_msg != "") {
+                AlertDialog.Builder(activity!!)
+                        .setTitle("Information")
+                        .setMessage(info_msg.trim())
+                        .setPositiveButton("Okay", null)
+                        .show()
+            }
+        }
     }
 
     override fun onAttach(view: View) {
@@ -81,7 +110,6 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
             .let { bluetooth_menu_main -> Observable.merge(bluetooth_menu_main) }
 
     override fun render(state: BluetoothSettingsState) {
-
         var local_bluetooth_enabled = state.bluetooth_enabled
         var local_bluetooth_tethering = state.bluetooth_tethering
         var local_bluetooth_whatsapp_to_contact = state.bluetooth_whatsapp_to_contact
@@ -152,6 +180,30 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
         bluetooth_whatsapp_hide_prefix.checkbox.isChecked = state.bluetooth_whatsapp_hide_prefix
         bluetooth_max_vol.checkbox.isChecked = state.bluetooth_max_vol
         bluetooth_tethering.checkbox.isChecked = local_bluetooth_tethering
+
+        //Connected and Last-Connected-Device and Time available
+        if (prefs.bluetooth_current_status.get() &&
+            prefs.bluetooth_last_connect.get() > 0L &&
+            prefs.bluetooth_last_connect_device.get() != "" &&
+            state.bluetooth_only_on_connect)
+        {
+            bluetooth_device_status.setVisible(true)
+            bluetooth_device_status.title = String.format(context.getString(R.string.settings_bluetooth_device_status_connected), prefs.bluetooth_last_connect_device.get(), SimpleDateFormat("dd.MM.yyyy HH:mm:ss", Locale.getDefault()).format(prefs.bluetooth_last_connect.get()))
+        }
+        //Not Connected and Last-Connected-Device and Time available
+        else if (!prefs.bluetooth_current_status.get() &&
+                    prefs.bluetooth_last_disconnect.get() > 0L &&
+                    prefs.bluetooth_last_connect_device.get() != "" &&
+                    state.bluetooth_only_on_connect)
+        {
+            bluetooth_device_status.setVisible(true)
+            bluetooth_device_status.title = String.format(context.getString(R.string.settings_bluetooth_device_status_disconnected), prefs.bluetooth_last_connect_device.get(), SimpleDateFormat("dd.MM.yyyy HH:mm:ss", Locale.getDefault()).format(prefs.bluetooth_last_disconnect.get()))
+
+        }
+        else
+        //Hide the Menu-Entry
+        { bluetooth_device_status.setVisible(false) }
+
     }
 
     override fun showBluetoothAbout() {

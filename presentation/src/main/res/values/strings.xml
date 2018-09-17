@@ -45,6 +45,8 @@
     <string name="settings_bluetooth_delete_summary">Delete the temporary Notification-Messages on a Bluetooth disconnect</string>
     <string name="settings_bluetooth_devices_title">Select Bluetooth-Device</string>
     <string name="settings_bluetooth_devices_summary">Choose the devices, where the above mentioned actions should happen (e.g. the Car-Bluetooth)</string>
+    <string name="settings_bluetooth_device_status_connected">Connected with %s since %s</string>
+    <string name="settings_bluetooth_device_status_disconnected">Disconnected from %s since %s</string>
     <string name="settings_bluetooth_markasread_title">Save messages as read</string>
     <string name="settings_bluetooth_markasread_summary">Deactivate if encounter problems (mostly on Samsung-Devices)</string>
     <string name="settings_bluetooth_markasread_delayed_title">Delayed Mark-as-Read</string>
@@ -83,6 +85,13 @@
     <string name="settings_bluetooth_block_whatsapp_unblock_confirm">Confirm Unblock</string>
 
     <string name="settings_bluetooth_no_devices">No paired Bluetooth devices found</string>
+
+    <string name="bluetooth_alert_info_title">Information</string>
+    <string name="bluetooth_alert_info_defaultsms">You need to set this as your default SMS-App</string>
+    <string name="bluetooth_alert_info_notifications">You need to enable Notification-Access</string>
+    <string name="bluetooth_alert_info_device">You need to select at least one Bluetooth-Device or disable \"Only on Bluetooth connection\"</string>
+    <string name="bluetooth_alert_info_apps">You need to select at least one app on the \"Application White List\"</string>
+    <string name="bluetooth_alert_info_markasread">Enable \"Delayed Mark-as-Read\" is advised for this device</string>
 
     <string name="shortcut_compose_long_label">New conversation</string>
     <string name="shortcut_compose_short_label">Compose</string>

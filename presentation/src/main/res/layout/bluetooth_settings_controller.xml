@@ -49,6 +49,11 @@
                 app:widget="@layout/settings_switch_widget" />
 
             <org.groebl.sms.common.widget.PreferenceView
+                android:id="@+id/bluetooth_device_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <org.groebl.sms.common.widget.PreferenceView
                 android:id="@+id/bluetooth_autodelete"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

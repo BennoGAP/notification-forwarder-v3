@@ -32,6 +32,7 @@ class BluetoothReceiver : BroadcastReceiver() {
                     //Set Temp-Status to -Connected-
                     mPrefs.edit().putBoolean("bluetoothCurrentStatus", true).apply()
                     mPrefs.edit().putLong("bluetoothLastConnect", System.currentTimeMillis()).apply()
+                    mPrefs.edit().putString("bluetoothLastDevice", bt_device.name.toString()).apply()
 
 
                     //Set Bluetooth Tethering
@@ -60,8 +61,8 @@ class BluetoothReceiver : BroadcastReceiver() {
                     //Set Bluetooth-Volume
                     if (mPrefs.getBoolean("bluetoothEnabled", false) && mPrefs.getBoolean("bluetoothMaxVol", false)) {
                         Handler(Looper.getMainLooper()).postDelayed({
-                            //Still connected?
                             //TODO - Check if connected to a BT-Audio device
+                            //Still connected?
                             if (mPrefs.getBoolean("bluetoothCurrentStatus", false)) {
                                 val mAudioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
                                 mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0)
@@ -73,7 +74,7 @@ class BluetoothReceiver : BroadcastReceiver() {
                 BluetoothDevice.ACTION_ACL_DISCONNECTED -> {
                     //Set Temp-Status to -Disonnected-
                     mPrefs.edit().putBoolean("bluetoothCurrentStatus", false).apply()
-                    mPrefs.edit().putLong("bluetoothLastConnect", 0L).apply()
+                    mPrefs.edit().putLong("bluetoothLastDisconnect", System.currentTimeMillis()).apply()
 
                     //Delete Temporary Messages
                     if (mPrefs.getBoolean("bluetoothEnabled", false)) {
