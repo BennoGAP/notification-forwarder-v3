@@ -146,16 +146,19 @@ class Navigator @Inject constructor(
     }
 
     fun showBluetoothSettings() {
+        analyticsManager.track("Viewed BluetoothSettings")
         val intent = Intent(context, BluetoothSettingsActivity::class.java)
         startActivity(intent)
     }
 
     fun showDonationBluetooth() {
+        analyticsManager.track("Clicked Donate")
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse("http://android.groebl.org/sms/donate"))
         startActivity(intent)
     }
 
     fun showFAQ() {
+        analyticsManager.track("Clicked FAQ")
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://android.groebl.org/sms/faq/"))
         startActivity(intent)
     }
@@ -190,12 +193,6 @@ class Navigator @Inject constructor(
         val intent = Intent(action, Uri.parse("tel:$address"))
         startActivityExternal(intent)
     }
-
-    fun showDonation() {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://bit.ly/QKSMSDonation"))
-        startActivity(intent)
-    }
-
 
     fun showRating() {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=org.groebl.sms"))

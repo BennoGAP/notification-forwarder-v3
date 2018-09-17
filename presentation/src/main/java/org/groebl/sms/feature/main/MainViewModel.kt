@@ -31,7 +31,6 @@ import org.groebl.sms.R
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.androidxcompat.scope
 import org.groebl.sms.common.base.QkViewModel
-import org.groebl.sms.common.util.BillingManager
 import org.groebl.sms.extensions.removeAccents
 import org.groebl.sms.interactor.*
 import org.groebl.sms.manager.PermissionManager
@@ -44,7 +43,6 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class MainViewModel @Inject constructor(
-        billingManager: BillingManager,
         markAllSeen: MarkAllSeen,
         migratePreferences: MigratePreferences,
         syncRepository: SyncRepository,
@@ -76,10 +74,6 @@ class MainViewModel @Inject constructor(
         disposables += syncRepository.syncProgress
                 .distinctUntilChanged()
                 .subscribe { syncing -> newState { copy(syncing = syncing) } }
-
-        // Update the upgraded status
-        disposables += billingManager.upgradeStatus
-                .subscribe { upgraded -> newState { copy(upgraded = upgraded) } }
 
         // Show the rating UI
         disposables += ratingManager.shouldShowRating

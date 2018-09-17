@@ -11,6 +11,7 @@ import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
 import com.vdurmont.emoji.EmojiParser;
 
 import org.groebl.sms.feature.bluetooth.common.BluetoothDatabase;
@@ -71,6 +72,7 @@ public class BluetoothNotificationService extends NotificationListenerService {
 
         }
         catch(Exception e) {
+            Crashlytics.setString("AppName", pack);
             e.printStackTrace();
         }
     }

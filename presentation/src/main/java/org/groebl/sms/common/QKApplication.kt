@@ -44,14 +44,10 @@ import androidx.core.provider.FontRequest
 import androidx.emoji.text.EmojiCompat
 import androidx.emoji.text.FontRequestEmojiCompatConfig
 import com.akaita.java.rxjava2debug.RxJava2Debug
-import com.bugsnag.android.Bugsnag
-import com.bugsnag.android.Configuration
 import dagger.android.*
 import io.realm.Realm
 import io.realm.RealmConfiguration
-import org.groebl.sms.BuildConfig
 import org.groebl.sms.R
-import org.groebl.sms.common.util.BugsnagTree
 import org.groebl.sms.common.util.FileLoggingTree
 import org.groebl.sms.feature.bluetooth.common.BluetoothDatabase
 import org.groebl.sms.injection.AppComponentManager
@@ -76,15 +72,8 @@ class QKApplication : Application(), HasActivityInjector, HasBroadcastReceiverIn
     @Inject lateinit var fileLoggingTree: FileLoggingTree
     @Inject lateinit var nightModeManager: NightModeManager
 
-    private val packages = arrayOf("org.groebl.sms")
-
     override fun onCreate() {
         super.onCreate()
-
-        Bugsnag.init(this, Configuration(BuildConfig.BUGSNAG_API_KEY).apply {
-            appVersion = BuildConfig.VERSION_NAME
-            projectPackages = packages
-        })
 
         RxJava2Debug.enableRxJava2AssemblyTracking()
 
@@ -108,7 +97,7 @@ class QKApplication : Application(), HasActivityInjector, HasBroadcastReceiverIn
 
         EmojiCompat.init(FontRequestEmojiCompatConfig(this, fontRequest))
 
-        Timber.plant(Timber.DebugTree(), BugsnagTree(), fileLoggingTree)
+        Timber.plant(Timber.DebugTree(), fileLoggingTree)
 
         BluetoothDatabase.init(this)
     }

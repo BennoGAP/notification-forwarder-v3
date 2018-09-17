@@ -19,10 +19,6 @@
 package org.groebl.sms.manager
 
 import android.content.Context
-import com.amplitude.api.Amplitude
-import com.amplitude.api.AmplitudeClient
-import com.amplitude.api.Identify
-import com.mixpanel.android.mpmetrics.MixpanelAPI
 import org.groebl.sms.data.BuildConfig
 import org.json.JSONArray
 import org.json.JSONObject
@@ -33,14 +29,15 @@ import javax.inject.Singleton
 @Singleton
 class AnalyticsManagerImpl @Inject constructor(context: Context) : AnalyticsManager {
 
-    private val amplitude: AmplitudeClient = Amplitude.getInstance().initialize(context, BuildConfig.AMPLITUDE_API_KEY)
-    private val mixpanel: MixpanelAPI = MixpanelAPI.getInstance(context, BuildConfig.MIXPANEL_API_KEY)
+    //private val amplitude: AmplitudeClient = Amplitude.getInstance().initialize(context, BuildConfig.AMPLITUDE_API_KEY)
+    //private val mixpanel: MixpanelAPI = MixpanelAPI.getInstance(context, BuildConfig.MIXPANEL_API_KEY)
 
     init {
-        amplitude.trackSessionEvents(true)
+        //amplitude.trackSessionEvents(true)
     }
 
     override fun track(event: String, vararg properties: Pair<String, Any>) {
+        /*
         val propertiesJson = JSONObject(properties
                 .associateBy { pair -> pair.first }
                 .mapValues { pair -> pair.value.second })
@@ -51,11 +48,15 @@ class AnalyticsManagerImpl @Inject constructor(context: Context) : AnalyticsMana
         synchronized(mixpanel) {
             mixpanel.track(event, propertiesJson)
         }
+        */
+        println("Track: ${event}")
     }
 
     override fun setUserProperty(key: String, value: Any) {
-        Timber.v("$key: $value")
+        println("setUserProperty ${key} - ${value}")
+        //Timber.v("$key: $value")
 
+        /*
         // Set the value in Mixpanel
         val properties = JSONObject()
         properties.put(key, value)
@@ -80,6 +81,7 @@ class AnalyticsManagerImpl @Inject constructor(context: Context) : AnalyticsMana
             else -> Timber.e("Value of type ${value::class.java} not supported")
         }
         amplitude.identify(identify)
+        */
     }
 
 }
