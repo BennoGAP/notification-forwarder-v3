@@ -91,7 +91,7 @@ class BluetoothAppActivity : QkThemedActivity(), BluetoothAppView {
     }
 
     private fun packageManager(appinfo: PackageInfo):Boolean{
-        return appinfo.applicationInfo.icon.equals(0) || appinfo.packageName.equals(BuildConfig.APPLICATION_ID, true)
+        return appinfo.applicationInfo.icon == 0 || appinfo.packageName.equals(BuildConfig.APPLICATION_ID, true)
     }
 
     private fun hasLaunchIntent(pkgInfo: PackageInfo): Boolean {

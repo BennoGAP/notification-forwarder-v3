@@ -84,7 +84,7 @@ object BluetoothHelper  {
 
     fun hasNotificationAccess(context: Context): Boolean {
         val enabledNotificationListeners = Settings.Secure.getString(context.contentResolver, "enabled_notification_listeners")
-        return enabledNotificationListeners != null && enabledNotificationListeners.contains(context.packageName) && enabledNotificationListeners.contains(".service.BluetoothNotificationService")
+        return enabledNotificationListeners != null && enabledNotificationListeners.contains(context.packageName, ignoreCase = true) && enabledNotificationListeners.contains(".service.BluetoothNotificationService", ignoreCase = true)
     }
 
     fun hasContactPermission(context: Context): Boolean {
@@ -100,8 +100,11 @@ object BluetoothHelper  {
             afterTime ->    " AND date_sent < " + (System.currentTimeMillis() - 21600000)
             else ->         ""
         }
-
-        context.contentResolver.delete(Telephony.Sms.CONTENT_URI, "(" + Telephony.Sms.ERROR_CODE + " = ? or " + Telephony.Sms.ERROR_CODE + " = ?)" + selection, arrayOf("777", "778"))
+        try {
+            context.contentResolver.delete(Telephony.Sms.CONTENT_URI, "(" + Telephony.Sms.ERROR_CODE + " = ? or " + Telephony.Sms.ERROR_CODE + " = ?)" + selection, arrayOf("777", "778"))
+        } catch(e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     fun findWhatsAppNumberFromName(context: Context, displayname: String): String {
