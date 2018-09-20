@@ -38,22 +38,26 @@ class BluetoothReceiver : BroadcastReceiver() {
                     //Set Bluetooth Tethering
                     if (mPrefs.getBoolean("bluetoothEnabled", false) && mPrefs.getBoolean("bluetoothTethering", false)) {
                         Handler(Looper.getMainLooper()).postDelayed({
-                            val adapter = BluetoothAdapter.getDefaultAdapter()
-                            if (adapter != null) {
-                                mProfileListener = object : BluetoothProfile.ServiceListener {
-                                    var myproxy: BluetoothProfile? = null
-                                    override fun onServiceConnected(profile: Int, proxy: BluetoothProfile) {
-                                        myproxy = proxy
-                                        mBluetoothPanHelper = BluetoothPanHelper(proxy)
-                                        mBluetoothPanHelper?.setBluetoothTethering(true)
+                            try {
+                                val adapter = BluetoothAdapter.getDefaultAdapter()
+                                if (adapter != null) {
+                                    mProfileListener = object : BluetoothProfile.ServiceListener {
+                                        var myproxy: BluetoothProfile? = null
+                                        override fun onServiceConnected(profile: Int, proxy: BluetoothProfile) {
+                                            myproxy = proxy
+                                            mBluetoothPanHelper = BluetoothPanHelper(proxy)
+                                            mBluetoothPanHelper?.setBluetoothTethering(true)
+                                        }
+
+                                        override fun onServiceDisconnected(profile: Int) {
+                                            BluetoothAdapter.getDefaultAdapter().closeProfileProxy(profile, myproxy)
+                                        }
                                     }
 
-                                    override fun onServiceDisconnected(profile: Int) {
-                                        BluetoothAdapter.getDefaultAdapter().closeProfileProxy(profile, myproxy)
-                                    }
+                                    adapter!!.getProfileProxy(context, mProfileListener, 5)
                                 }
-
-                                adapter!!.getProfileProxy(context, mProfileListener, 5)
+                            } catch(e: Exception) {
+                                e.printStackTrace()
                             }
                         }, 1000)
                     }
@@ -64,8 +68,12 @@ class BluetoothReceiver : BroadcastReceiver() {
                             //TODO - Check if connected to a BT-Audio device
                             //Still connected?
                             if (mPrefs.getBoolean("bluetoothCurrentStatus", false)) {
-                                val mAudioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-                                mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0)
+                                try {
+                                    val mAudioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+                                    mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0)
+                                } catch (e: Exception) {
+                                    e.printStackTrace()
+                                }
                             }
                         }, 5000)
                     }
