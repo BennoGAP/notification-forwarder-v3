@@ -38,6 +38,13 @@ class AnalyticsManagerImpl @Inject constructor(context: Context) : AnalyticsMana
 
     override fun track(event: String, vararg properties: Pair<String, Any>) {
         /*
+        -------
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, id);
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, name);
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "image");
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+        -------
         val propertiesJson = JSONObject(properties
                 .associateBy { pair -> pair.first }
                 .mapValues { pair -> pair.value.second })

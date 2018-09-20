@@ -58,6 +58,8 @@ import org.groebl.sms.util.NightModeManager
 import timber.log.Timber
 import javax.inject.Inject
 
+
+
 class QKApplication : Application(), HasActivityInjector, HasBroadcastReceiverInjector, HasServiceInjector {
 
     /**
@@ -65,6 +67,8 @@ class QKApplication : Application(), HasActivityInjector, HasBroadcastReceiverIn
      */
     @Suppress("unused")
     @Inject lateinit var analyticsManager: AnalyticsManager
+//    @Inject lateinit var mFirebaseAnalytics: FirebaseAnalytics
+
 
     @Inject lateinit var dispatchingActivityInjector: DispatchingAndroidInjector<Activity>
     @Inject lateinit var dispatchingBroadcastReceiverInjector: DispatchingAndroidInjector<BroadcastReceiver>
@@ -76,6 +80,8 @@ class QKApplication : Application(), HasActivityInjector, HasBroadcastReceiverIn
         super.onCreate()
 
         RxJava2Debug.enableRxJava2AssemblyTracking()
+
+//        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
 
         Realm.init(this)
         Realm.setDefaultConfiguration(RealmConfiguration.Builder()
