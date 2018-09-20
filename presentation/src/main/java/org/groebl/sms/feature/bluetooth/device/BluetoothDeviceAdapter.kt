@@ -37,10 +37,23 @@ class BluetoothDeviceAdapter(val data: ArrayList<BluetoothDeviceModel>, val allo
         holder.itemView.setOnClickListener { holder.deviceCheckBox.isChecked = !holder.deviceCheckBox.isChecked; toggleSelection(holder)  }
     }
 
-    fun toggleSelection(holder: BluetoothDeviceAdapter.CustomViewHolder) {
+    private fun toggleSelection(holder: BluetoothDeviceAdapter.CustomViewHolder) {
         when (allowedDevices.contains(holder.itemView.tag.toString())) {
-            true -> { allowedDevices.remove(holder.itemView.tag.toString()); holder.deviceBluetoothIcon.colorFilter = ColorMatrixColorFilter(ColorMatrix().apply { setSaturation(0f) }); }
-            false -> { allowedDevices.add(holder.itemView.tag.toString()); holder.deviceBluetoothIcon.clearColorFilter(); }
+            true -> {
+                allowedDevices.remove(holder.itemView.tag.toString())
+                holder.deviceBluetoothIcon.colorFilter = ColorMatrixColorFilter(ColorMatrix().apply { setSaturation(0f) })
+
+                //Set connection status to disconnected when device get unselected
+                val parts = holder.deviceName.text.split("\n")
+                if (prefs.bluetooth_current_status.get() && parts[0] == prefs.bluetooth_last_connect_device.get()) {
+                    prefs.bluetooth_current_status.set(false)
+                    prefs.bluetooth_last_disconnect.set(System.currentTimeMillis())
+                }
+            }
+            false -> {
+                allowedDevices.add(holder.itemView.tag.toString())
+                holder.deviceBluetoothIcon.clearColorFilter()
+            }
         }
 
         //println(holder.itemView.tag.toString() + " - new val: " + holder.appCheckBox.isChecked.toString())
