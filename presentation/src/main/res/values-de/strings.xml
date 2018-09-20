@@ -130,11 +130,11 @@
   <string name="archived_empty_text">Archivierte Unterhaltungen werden hier angezeigt</string>
   <string name="main_fab_cd">Neue Unterhaltung starten</string>
   <string name="main_default_sms_title">Liebe es wieder, SMS zu schreiben</string>
-  <string name="main_default_sms_message">Diese App als Standard-SMS-App festlegen</string>
+  <string name="main_default_sms_message_new">Diese App als Standard-SMS-App festlegen</string>
   <string name="main_default_sms_change">Ändern</string>
   <string name="main_permission_required">Berechtigung erforderlich</string>
-  <string name="main_permission_sms">Die App benötigt die Berechtigung zum Senden und Anzeigen von SMS-Nachrichten</string>
-  <string name="main_permission_contacts">Die App benötigt die Berechtigung zum Zugreifen auf die Kontakte</string>
+  <string name="main_permission_sms_new">Die App benötigt die Berechtigung zum Senden und Anzeigen von SMS-Nachrichten</string>
+  <string name="main_permission_contacts_new">Die App benötigt die Berechtigung zum Zugreifen auf die Kontakte</string>
   <string name="main_permission_allow">Zulassen</string>
   <string name="drawer_inbox">Posteingang</string>
   <string name="drawer_archived">Archiviert</string>
@@ -147,7 +147,7 @@
   <string name="drawer_invite">Freunde einladen</string>
   <string name="drawer_plus_banner_title">QKSMS+</string>
   <string name="drawer_plus_banner_summary">Schalte erstaunliche Neue Funktionen frei und unterstütze die Entwicklung</string>
-  <string name="rate_title">Gefällt dir die App?</string>
+  <string name="rate_title_new">Gefällt dir die App?</string>
   <string name="rate_summary">Teile etwas von deiner Liebe und bewerte uns auf Google Play!</string>
   <string name="rate_okay">OKAY!</string>
   <string name="rate_dismiss">VERWERFEN</string>

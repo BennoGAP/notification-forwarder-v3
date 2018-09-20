@@ -254,19 +254,19 @@ class MainActivity : QkThemedActivity(), MainView {
         when {
             !state.smsPermission -> {
                 snackbarTitle.setText(R.string.main_permission_required)
-                snackbarMessage.setText(R.string.main_permission_sms)
+                snackbarMessage.setText(R.string.main_permission_sms_new)
                 snackbarButton.setText(R.string.main_permission_allow)
             }
 
             !state.defaultSms -> {
                 snackbarTitle.setText(R.string.main_default_sms_title)
-                snackbarMessage.setText(R.string.main_default_sms_message)
+                snackbarMessage.setText(R.string.main_default_sms_message_new)
                 snackbarButton.setText(R.string.main_default_sms_change)
             }
 
             !state.contactPermission -> {
                 snackbarTitle.setText(R.string.main_permission_required)
-                snackbarMessage.setText(R.string.main_permission_contacts)
+                snackbarMessage.setText(R.string.main_permission_contacts_new)
                 snackbarButton.setText(R.string.main_permission_allow)
             }
         }
