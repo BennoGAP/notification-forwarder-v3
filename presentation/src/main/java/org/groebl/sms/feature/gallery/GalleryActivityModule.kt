@@ -20,16 +20,21 @@ package org.groebl.sms.feature.gallery
 
 import android.content.Intent
 import androidx.lifecycle.ViewModel
-import org.groebl.sms.injection.ViewModelKey
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoMap
+import org.groebl.sms.injection.ViewModelKey
+import javax.inject.Named
 
 @Module
 class GalleryActivityModule {
 
     @Provides
     fun provideIntent(activity: GalleryActivity): Intent = activity.intent
+
+    @Provides
+    @Named("partId")
+    fun providePartId(activity: GalleryActivity): Long = activity.intent.getLongExtra("partId", 0L)
 
     @Provides
     @IntoMap

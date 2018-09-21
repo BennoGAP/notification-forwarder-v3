@@ -33,10 +33,8 @@
   <string name="menu_call">Зателефонувати</string>
   <string name="menu_info">Деталі</string>
   <string name="menu_save">Зберегти в галерії</string>
-  <string name="main_title">Вхідні</string>
   <string name="main_drawer_open_cd">Відкрити панель навігації</string>
   <string name="main_title_selected">Обрано: %d</string>
-  <string name="main_menu_search">Пошук</string>
   <string name="main_menu_clear">Очистити</string>
   <string name="main_menu_archive">Архівувати</string>
   <string name="main_menu_unarchive">Розархівувати</string>
@@ -55,8 +53,11 @@
   <string name="archived_empty_text">Ваші архівовані бесіди з\'являтимуться тут</string>
   <string name="main_fab_cd">Почати нову бесіду</string>
   <string name="main_default_sms_title">Ви знову полюбите писати</string>
+  <string name="main_default_sms_message">Зробити QKSMS початковою програмою для SMS</string>
   <string name="main_default_sms_change">Встановити</string>
   <string name="main_permission_required">Вимагається дозвіл</string>
+  <string name="main_permission_sms">Для надсилання та перегляду SMS-повідомлень QKSMS потрібен дозвіл</string>
+  <string name="main_permission_contacts">Для перегляду ваших контактів QKSMS потрібен дозвіл</string>
   <string name="main_permission_allow">Дозволити</string>
   <string name="drawer_inbox">Вхідні</string>
   <string name="drawer_archived">Архівні</string>
@@ -69,6 +70,7 @@
   <string name="drawer_invite">Запросити друзів</string>
   <string name="drawer_plus_banner_title">QKSMS+</string>
   <string name="drawer_plus_banner_summary">Розблокувати нові дивовижні можливості та підтримати розробку</string>
+  <string name="rate_title">Подобається QKSMS?</string>
   <string name="rate_summary">Поділись любов\'ю та оціни нас на Google Play!</string>
   <string name="rate_okay">Добре!</string>
   <string name="rate_dismiss">ВІДХИЛИТИ</string>
@@ -131,6 +133,7 @@
   <string name="info_block">Заблокувати</string>
   <string name="info_unblock">Розблокувати</string>
   <string name="info_delete">Видалити бесіду</string>
+  <string name="gallery_error">Couldn\'t load media</string>
   <string name="gallery_toast_saved">Зберегти до галереї</string>
   <string name="backup_title">Резервне копіювання та відновлення</string>
   <string name="backup_backing_up">Резервне копіювання повідомлень</string>
@@ -276,6 +279,7 @@
   <string name="widget_more">Переглянути більше бесід</string>
   <string name="qkreply_menu_read">Позначити як прочитане</string>
   <string name="qkreply_menu_call">Зателефонувати</string>
+  <string name="qkreply_menu_delete">Delete</string>
   <string name="qkreply_menu_expand">Показати більше</string>
   <string name="qkreply_menu_collapse">Показати меньше</string>
   <string name="qkreply_menu_view">Відкрити бесіду</string>

@@ -20,19 +20,16 @@ package org.groebl.sms.feature.conversationinfo
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import kotlinx.android.synthetic.main.conversation_media_list_item.view.*
 import org.groebl.sms.R
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.base.QkRealmAdapter
 import org.groebl.sms.common.base.QkViewHolder
 import org.groebl.sms.common.util.extensions.setVisible
-import org.groebl.sms.extensions.isImage
 import org.groebl.sms.extensions.isVideo
 import org.groebl.sms.model.MmsPart
 import org.groebl.sms.util.GlideApp
-import io.reactivex.subjects.PublishSubject
-import kotlinx.android.synthetic.main.conversation_media_list_item.view.*
 import javax.inject.Inject
 
 class ConversationMediaAdapter @Inject constructor(
@@ -40,15 +37,13 @@ class ConversationMediaAdapter @Inject constructor(
         private val navigator: Navigator
 ) : QkRealmAdapter<MmsPart>() {
 
-    val thumbnailClicks: PublishSubject<View> = PublishSubject.create()
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QkViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val view = inflater.inflate(R.layout.conversation_media_list_item, parent, false)
         return QkViewHolder(view).apply {
             view.thumbnail.setOnClickListener {
                 val part = getItem(adapterPosition)!!
-                if (part.isImage()) thumbnailClicks.onNext(it) else navigator.showMedia(part.id)
+                navigator.showMedia(part.id)
             }
         }
     }
@@ -63,7 +58,6 @@ class ConversationMediaAdapter @Inject constructor(
                 .into(view.thumbnail)
 
         view.video.setVisible(part.isVideo())
-        view.thumbnail.transitionName = part.id.toString()
     }
 
 }

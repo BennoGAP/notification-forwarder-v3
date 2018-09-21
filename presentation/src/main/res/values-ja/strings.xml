@@ -33,10 +33,8 @@
   <string name="menu_call">通話</string>
   <string name="menu_info">詳細</string>
   <string name="menu_save">Save to gallery</string>
-  <string name="main_title">Inbox</string>
   <string name="main_drawer_open_cd">Open navigation drawer</string>
   <string name="main_title_selected">%d selected</string>
-  <string name="main_menu_search">Search</string>
   <string name="main_menu_clear">Clear</string>
   <string name="main_menu_archive">Archive</string>
   <string name="main_menu_unarchive">Unarchive</string>
@@ -55,8 +53,11 @@
   <string name="archived_empty_text">保存した会話がここに表示されます</string>
   <string name="main_fab_cd">Start new conversation</string>
   <string name="main_default_sms_title">Love texting again</string>
+  <string name="main_default_sms_message">Make QKSMS your default SMS app</string>
   <string name="main_default_sms_change">Change</string>
   <string name="main_permission_required">Permission required</string>
+  <string name="main_permission_sms">QKSMS needs permission to send and view SMS messages</string>
+  <string name="main_permission_contacts">QKSMS needs permission to view your contacts</string>
   <string name="main_permission_allow">Allow</string>
   <string name="drawer_inbox">受信トレイ</string>
   <string name="drawer_archived">アーカイブ済</string>
@@ -69,6 +70,7 @@
   <string name="drawer_invite">Invite friends</string>
   <string name="drawer_plus_banner_title">QKSMS+</string>
   <string name="drawer_plus_banner_summary">Unlock amazing new features, and support development</string>
+  <string name="rate_title">QKSMS をお楽みいただいていますか?</string>
   <string name="rate_summary">Google Play で愛を共有して私たちを評価してください!</string>
   <string name="rate_okay">OK!</string>
   <string name="rate_dismiss">消去</string>
@@ -128,6 +130,7 @@
   <string name="info_block">ブロック</string>
   <string name="info_unblock">ブロックを解除</string>
   <string name="info_delete">会話を削除</string>
+  <string name="gallery_error">Couldn\'t load media</string>
   <string name="gallery_toast_saved">Saved to gallery</string>
   <string name="backup_title">Backup and restore</string>
   <string name="backup_backing_up">Backing up messages</string>
@@ -270,6 +273,7 @@
   <string name="widget_more">さらに会話を表示</string>
   <string name="qkreply_menu_read">既読にする</string>
   <string name="qkreply_menu_call">通話</string>
+  <string name="qkreply_menu_delete">Delete</string>
   <string name="qkreply_menu_expand">表示を増やす</string>
   <string name="qkreply_menu_collapse">表示を減らす</string>
   <string name="qkreply_menu_view">会話を開く</string>

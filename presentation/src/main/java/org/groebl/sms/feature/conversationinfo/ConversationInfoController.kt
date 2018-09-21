@@ -23,24 +23,20 @@ import android.view.View
 import androidx.appcompat.app.AlertDialog
 import com.bluelinelabs.conductor.RouterTransaction
 import com.jakewharton.rxbinding2.view.clicks
-import org.groebl.sms.R
-import org.groebl.sms.common.Navigator
-import org.groebl.sms.common.QkChangeHandler
-import org.groebl.sms.common.base.QkController
-import org.groebl.sms.common.util.extensions.animateLayoutChanges
-import org.groebl.sms.common.util.extensions.dpToPx
-import org.groebl.sms.common.util.extensions.resolveThemeColor
-import org.groebl.sms.common.util.extensions.scrapViews
-import org.groebl.sms.common.util.extensions.setVisible
-import org.groebl.sms.common.widget.QkEditText
-import org.groebl.sms.feature.conversationinfo.injection.ConversationInfoModule
-import org.groebl.sms.feature.themepicker.ThemePickerController
-import org.groebl.sms.injection.appComponent
 import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import kotlinx.android.synthetic.main.conversation_info_controller.*
+import org.groebl.sms.R
+import org.groebl.sms.common.Navigator
+import org.groebl.sms.common.QkChangeHandler
+import org.groebl.sms.common.base.QkController
+import org.groebl.sms.common.util.extensions.*
+import org.groebl.sms.common.widget.QkEditText
+import org.groebl.sms.feature.conversationinfo.injection.ConversationInfoModule
+import org.groebl.sms.feature.themepicker.ThemePickerController
+import org.groebl.sms.injection.appComponent
 import javax.inject.Inject
 
 class ConversationInfoController(val threadId: Long = 0) : QkController<ConversationInfoView, ConversationInfoState, ConversationInfoPresenter>(), ConversationInfoView {
@@ -66,10 +62,6 @@ class ConversationInfoController(val threadId: Long = 0) : QkController<Conversa
 
     override fun onViewCreated() {
         items.postDelayed({ items?.animateLayoutChanges = true }, 100)
-
-        mediaAdapter.thumbnailClicks
-                .autoDisposable(scope())
-                .subscribe { view -> navigator.showImageAnimated(activity!!, view) }
 
         recipients.adapter = recipientAdapter
 

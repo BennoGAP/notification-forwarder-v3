@@ -25,11 +25,9 @@ class ContactAddedListenerImpl @Inject constructor(
         private val URI = ContactsContract.CommonDataKinds.Phone.CONTENT_URI
     }
 
-    override fun listen(address: String): Single<*> {
-        val observable = ContactContentObserver(context).observable
+    override fun listen(address: String): Observable<*> {
+        return ContactContentObserver(context).observable
                 .filter { syncRepo.syncContact(address) }
-
-        return Single.fromObservable(observable)
     }
 
     private class ContactContentObserver(context: Context) : ContentObserver(Handler()) {

@@ -33,10 +33,8 @@
   <string name="menu_call">致电</string>
   <string name="menu_info">详情</string>
   <string name="menu_save">保存到图库</string>
-  <string name="main_title">收件箱</string>
   <string name="main_drawer_open_cd">打开导航栏</string>
   <string name="main_title_selected">已选择 %d 项</string>
-  <string name="main_menu_search">搜索</string>
   <string name="main_menu_clear">清除</string>
   <string name="main_menu_archive">存档</string>
   <string name="main_menu_unarchive">取消存档</string>
@@ -55,8 +53,11 @@
   <string name="archived_empty_text">存档的对话会出现在这里</string>
   <string name="main_fab_cd">开始新对话</string>
   <string name="main_default_sms_title">再次爱上发短信</string>
+  <string name="main_default_sms_message">将QKSMS设为默认短信应用</string>
   <string name="main_default_sms_change">更改</string>
   <string name="main_permission_required">需要权限</string>
+  <string name="main_permission_sms">QKSMS需要权限来发送和查看短信</string>
+  <string name="main_permission_contacts">QKSMS需要权限来查看联系人</string>
   <string name="main_permission_allow">允许</string>
   <string name="drawer_inbox">收件箱</string>
   <string name="drawer_archived">已存档</string>
@@ -69,6 +70,7 @@
   <string name="drawer_invite">邀请朋友</string>
   <string name="drawer_plus_banner_title">QKSMS+</string>
   <string name="drawer_plus_banner_summary">解锁炫酷特性并支持开发者</string>
+  <string name="rate_title">喜欢QKSMS？</string>
   <string name="rate_summary">在Google Play分享你的感受，并给我们评分！</string>
   <string name="rate_okay">好的！</string>
   <string name="rate_dismiss">放弃</string>
@@ -128,6 +130,7 @@
   <string name="info_block">拦截</string>
   <string name="info_unblock">取消拦截</string>
   <string name="info_delete">删除对话</string>
+  <string name="gallery_error">Couldn\'t load media</string>
   <string name="gallery_toast_saved">保存到图库</string>
   <string name="backup_title">备份和还原</string>
   <string name="backup_backing_up">正在备份消息</string>
@@ -270,6 +273,7 @@
   <string name="widget_more">查看更多对话</string>
   <string name="qkreply_menu_read">标记为已读</string>
   <string name="qkreply_menu_call">致电</string>
+  <string name="qkreply_menu_delete">Delete</string>
   <string name="qkreply_menu_expand">显示更多</string>
   <string name="qkreply_menu_collapse">收起</string>
   <string name="qkreply_menu_view">打开会话</string>

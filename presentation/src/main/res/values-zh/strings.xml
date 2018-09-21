@@ -33,10 +33,8 @@
   <string name="menu_call">致電</string>
   <string name="menu_info">詳細資訊</string>
   <string name="menu_save">保存到圖庫</string>
-  <string name="main_title">Inbox</string>
   <string name="main_drawer_open_cd">Open navigation drawer</string>
   <string name="main_title_selected">已選擇%d項</string>
-  <string name="main_menu_search">Search</string>
   <string name="main_menu_clear">清除</string>
   <string name="main_menu_archive">封存</string>
   <string name="main_menu_unarchive">取消封存</string>
@@ -55,8 +53,11 @@
   <string name="archived_empty_text">您存檔的對話將出現在這裡</string>
   <string name="main_fab_cd">開始新對話</string>
   <string name="main_default_sms_title">愛上發訊息</string>
+  <string name="main_default_sms_message">將QKSMS設為預設信息應用程式</string>
   <string name="main_default_sms_change">更改</string>
   <string name="main_permission_required">需要授權</string>
+  <string name="main_permission_sms">需要允許QKSMS發送和查看SMS訊息</string>
+  <string name="main_permission_contacts">需要允許QKSMS查看您的連絡人</string>
   <string name="main_permission_allow">允許</string>
   <string name="drawer_inbox">收件箱</string>
   <string name="drawer_archived">已存檔</string>
@@ -69,6 +70,7 @@
   <string name="drawer_invite">Invite friends</string>
   <string name="drawer_plus_banner_title">QKSMS+</string>
   <string name="drawer_plus_banner_summary">Unlock amazing new features, and support development</string>
+  <string name="rate_title">喜歡QKSMS？</string>
   <string name="rate_summary">在Google Play分享你的感受，並給我們評分！</string>
   <string name="rate_okay">好！</string>
   <string name="rate_dismiss">放棄</string>
@@ -128,6 +130,7 @@
   <string name="info_block">攔截</string>
   <string name="info_unblock">取消攔截</string>
   <string name="info_delete">刪除對話</string>
+  <string name="gallery_error">Couldn\'t load media</string>
   <string name="gallery_toast_saved">保存到圖庫</string>
   <string name="backup_title">Backup and restore</string>
   <string name="backup_backing_up">Backing up messages</string>
@@ -270,6 +273,7 @@
   <string name="widget_more">查看更多對話</string>
   <string name="qkreply_menu_read">標記為已讀</string>
   <string name="qkreply_menu_call">致電</string>
+  <string name="qkreply_menu_delete">Delete</string>
   <string name="qkreply_menu_expand">顯示更多</string>
   <string name="qkreply_menu_collapse">顯示較少</string>
   <string name="qkreply_menu_view">打開對話</string>

@@ -18,12 +18,13 @@
  */
 package org.groebl.sms.feature.gallery
 
-import org.groebl.sms.common.base.QkView
 import io.reactivex.Observable
+import org.groebl.sms.common.base.QkView
+import org.groebl.sms.model.MmsPart
 
 interface GalleryView : QkView<GalleryState> {
 
-    val screenTouchedIntent: Observable<Unit>
-    val optionsItemSelectedIntent: Observable<Int>
-
+    fun optionsItemSelected(): Observable<Int>
+    fun screenTouched(): Observable<*>
+    fun pageChanged(): Observable<MmsPart>
 }

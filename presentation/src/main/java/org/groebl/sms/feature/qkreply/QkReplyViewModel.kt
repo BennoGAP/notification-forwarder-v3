@@ -19,19 +19,6 @@
 package org.groebl.sms.feature.qkreply
 
 import android.telephony.SmsMessage
-import org.groebl.sms.R
-import org.groebl.sms.common.Navigator
-import org.groebl.sms.common.androidxcompat.scope
-import org.groebl.sms.common.base.QkViewModel
-import org.groebl.sms.compat.SubscriptionManagerCompat
-import org.groebl.sms.extensions.asObservable
-import org.groebl.sms.extensions.mapNotNull
-import org.groebl.sms.interactor.MarkRead
-import org.groebl.sms.interactor.SendMessage
-import org.groebl.sms.model.Message
-import org.groebl.sms.repository.ConversationRepository
-import org.groebl.sms.repository.MessageRepository
-import org.groebl.sms.util.ActiveSubscriptionObservable
 import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.rxkotlin.plusAssign
@@ -40,13 +27,28 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
 import io.realm.RealmResults
+import org.groebl.sms.R
+import org.groebl.sms.common.Navigator
+import org.groebl.sms.common.androidxcompat.scope
+import org.groebl.sms.common.base.QkViewModel
+import org.groebl.sms.compat.SubscriptionManagerCompat
+import org.groebl.sms.extensions.asObservable
+import org.groebl.sms.extensions.mapNotNull
+import org.groebl.sms.interactor.DeleteMessages
+import org.groebl.sms.interactor.MarkRead
+import org.groebl.sms.interactor.SendMessage
+import org.groebl.sms.model.Message
+import org.groebl.sms.repository.ConversationRepository
+import org.groebl.sms.repository.MessageRepository
+import org.groebl.sms.util.ActiveSubscriptionObservable
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Named
 
 class QkReplyViewModel @Inject constructor(
-        @Named("threadId") threadId: Long,
+        @Named("threadId") private val threadId: Long,
         private val conversationRepo: ConversationRepository,
+        private val deleteMessages: DeleteMessages,
         private val markRead: MarkRead,
         private val messageRepo: MessageRepository,
         private val navigator: Navigator,
@@ -110,10 +112,8 @@ class QkReplyViewModel @Inject constructor(
         // Mark read
         view.menuItemIntent
                 .filter { id -> id == R.id.read }
-                .withLatestFrom(conversation) { _, conversation -> conversation }
-                .map { conversation -> conversation.id }
                 .autoDisposable(view.scope())
-                .subscribe { threadId ->
+                .subscribe {
                     markRead.execute(listOf(threadId)) { newState { copy(hasError = true) } }
                 }
 
@@ -129,8 +129,7 @@ class QkReplyViewModel @Inject constructor(
         // Show all messages
         view.menuItemIntent
                 .filter { id -> id == R.id.expand }
-                .withLatestFrom(conversation) { _, conversation -> conversation }
-                .map { conversation -> messageRepo.getMessages(conversation.id) }
+                .map { messageRepo.getMessages(threadId) }
                 .doOnNext(messages::onNext)
                 .autoDisposable(view.scope())
                 .subscribe { newState { copy(expanded = true) } }
@@ -138,18 +137,24 @@ class QkReplyViewModel @Inject constructor(
         // Show unread messages only
         view.menuItemIntent
                 .filter { id -> id == R.id.collapse }
-                .withLatestFrom(conversation) { _, conversation -> conversation }
-                .map { conversation -> messageRepo.getUnreadMessages(conversation.id) }
+                .map { messageRepo.getUnreadMessages(threadId) }
                 .doOnNext(messages::onNext)
                 .autoDisposable(view.scope())
                 .subscribe { newState { copy(expanded = false) } }
 
+        // Delete new messages
+        view.menuItemIntent
+                .filter { id -> id == R.id.delete }
+                .observeOn(Schedulers.io())
+                .map { messageRepo.getUnreadMessages(threadId).map { it.id } }
+                .map { messages -> DeleteMessages.Params(messages, threadId) }
+                .autoDisposable(view.scope())
+                .subscribe { deleteMessages.execute(it) { newState { copy(hasError = true) } } }
+
         // View conversation
         view.menuItemIntent
                 .filter { id -> id == R.id.view }
-                .withLatestFrom(conversation) { _, conversation -> conversation }
-                .map { conversation -> conversation.id }
-                .doOnNext { threadId -> navigator.showConversation(threadId) }
+                .doOnNext { navigator.showConversation(threadId) }
                 .autoDisposable(view.scope())
                 .subscribe { newState { copy(hasError = true) } }
 
@@ -178,18 +183,13 @@ class QkReplyViewModel @Inject constructor(
                 .autoDisposable(view.scope())
                 .subscribe { remaining -> newState { copy(remaining = remaining) } }
 
-        // This allows the conversation to be mapped to a threadId in the correct thread
-        val safeThreadId = conversation.map { it.takeIf { it.isValid }?.id ?: -1 }
-
         // Update the draft whenever the text is changed
         view.textChangedIntent
                 .debounce(100, TimeUnit.MILLISECONDS)
                 .map { draft -> draft.toString() }
                 .observeOn(Schedulers.io())
-                .withLatestFrom(safeThreadId) { draft, threadId -> Pair(draft, threadId) }
-                .filter { (_, threadId) -> threadId != -1L }
                 .autoDisposable(view.scope())
-                .subscribe { (draft, threadId) -> conversationRepo.saveDraft(threadId, draft) }
+                .subscribe { draft -> conversationRepo.saveDraft(threadId, draft) }
 
         // Toggle to the next sim slot
         view.changeSimIntent
@@ -212,16 +212,12 @@ class QkReplyViewModel @Inject constructor(
                 .map { body -> body.toString() }
                 .withLatestFrom(state, conversation) { body, state, conversation ->
                     val subId = state.subscription?.subscriptionId ?: -1
-                    val threadId = conversation.id
                     val addresses = conversation.recipients.map { it.address }
                     sendMessage.execute(SendMessage.Params(subId, threadId, addresses, body))
                     view.setDraft("")
-                    threadId
                 }
-                .doOnNext { threadId ->
-                    markRead.execute(listOf(threadId)) {
-                        newState { copy(hasError = true) }
-                    }
+                .doOnNext {
+                    markRead.execute(listOf(threadId)) { newState { copy(hasError = true) } }
                 }
                 .autoDisposable(view.scope())
                 .subscribe()

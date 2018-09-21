@@ -18,8 +18,6 @@
  */
 package org.groebl.sms.common
 
-import android.app.Activity
-import android.app.ActivityOptions
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
@@ -28,7 +26,6 @@ import android.os.Build
 import android.provider.ContactsContract
 import android.provider.Settings
 import android.provider.Telephony
-import android.view.View
 import com.klinker.android.send_message.Utils
 import org.groebl.sms.BuildConfig
 import org.groebl.sms.feature.backup.BackupActivity
@@ -115,18 +112,6 @@ class Navigator @Inject constructor(
         val intent = Intent(context, GalleryActivity::class.java)
         intent.putExtra("partId", partId)
         startActivity(intent)
-    }
-
-    /**
-     * Shows the attachment full-screen
-     * The transitionName for the view should be the id of the image being displayed
-     */
-    fun showImageAnimated(from: Activity, view: View) {
-        val intent = Intent(context, GalleryActivity::class.java)
-        intent.putExtra("partId", view.transitionName.toLong())
-
-        val options = ActivityOptions.makeSceneTransitionAnimation(from, view, view.transitionName)
-        from.startActivity(intent, options.toBundle())
     }
 
     fun showBackup() {

@@ -33,10 +33,8 @@
   <string name="menu_call">Ligar</string>
   <string name="menu_info">Detalhes</string>
   <string name="menu_save">Guardar na galeria</string>
-  <string name="main_title">Caixa de entrada</string>
   <string name="main_drawer_open_cd">Abrir menu de navegação</string>
   <string name="main_title_selected">%d selecionada(s)</string>
-  <string name="main_menu_search">Pesquisar</string>
   <string name="main_menu_clear">Limpar</string>
   <string name="main_menu_archive">Arquivar</string>
   <string name="main_menu_unarchive">Retirar do arquivo</string>
@@ -55,8 +53,11 @@
   <string name="archived_empty_text">Suas conversas arquivadas irão aparecer aqui</string>
   <string name="main_fab_cd">Iniciar nova conversa</string>
   <string name="main_default_sms_title">SMS em grande estilo</string>
+  <string name="main_default_sms_message">Tornar QKSMS a aplicação padrão para SMS</string>
   <string name="main_default_sms_change">Alterar</string>
   <string name="main_permission_required">Permissão necessária</string>
+  <string name="main_permission_sms">QKSMS necessita da permissão para ver e enviar as mensagens</string>
+  <string name="main_permission_contacts">QKSMS necessita da permissão para ver os seus contactos</string>
   <string name="main_permission_allow">Permitir</string>
   <string name="drawer_inbox">Caixa de entrada</string>
   <string name="drawer_archived">Arquivadas</string>
@@ -69,6 +70,7 @@
   <string name="drawer_invite">Convidar amigos</string>
   <string name="drawer_plus_banner_title">QKSMS+</string>
   <string name="drawer_plus_banner_summary">Desbloqueie mais funcionalidades e ajude no desenvolvimento</string>
+  <string name="rate_title">Gosta do QKSMS?</string>
   <string name="rate_summary">Mostre o seu contentamento e avalie a aplicação na Google Play!</string>
   <string name="rate_okay">Está bem</string>
   <string name="rate_dismiss">Agora não</string>
@@ -129,6 +131,7 @@
   <string name="info_block">Bloquear</string>
   <string name="info_unblock">Desbloquear</string>
   <string name="info_delete">Apagar conversa</string>
+  <string name="gallery_error">Couldn\'t load media</string>
   <string name="gallery_toast_saved">Guardada na galeria</string>
   <string name="backup_title">Backup e restauro</string>
   <string name="backup_backing_up">Backup de mensagens</string>
@@ -272,6 +275,7 @@
   <string name="widget_more">Ver mais conversas</string>
   <string name="qkreply_menu_read">Marcar como lida</string>
   <string name="qkreply_menu_call">Ligar</string>
+  <string name="qkreply_menu_delete">Delete</string>
   <string name="qkreply_menu_expand">Mostrar mais</string>
   <string name="qkreply_menu_collapse">Mostrar menos</string>
   <string name="qkreply_menu_view">Abrir conversa</string>

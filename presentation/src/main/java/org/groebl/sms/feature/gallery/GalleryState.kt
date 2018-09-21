@@ -18,11 +18,10 @@
  */
 package org.groebl.sms.feature.gallery
 
-import android.net.Uri
+import io.realm.RealmResults
+import org.groebl.sms.model.MmsPart
 
 data class GalleryState(
         val navigationVisible: Boolean = true,
-        val title: String = "",
-        val uri: Uri? = null,
-        val type: String = ""
-)
+        val title: String? = "",
+        val parts: RealmResults<MmsPart>? = null)

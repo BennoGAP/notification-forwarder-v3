@@ -10,10 +10,12 @@ import org.groebl.sms.common.base.QkPresenter
 import org.groebl.sms.common.util.Colors
 import org.groebl.sms.common.util.DateFormatter
 import org.groebl.sms.interactor.SyncMessages
+import org.groebl.sms.repository.SyncRepository
 import org.groebl.sms.util.NightModeManager
 import org.groebl.sms.util.Preferences
 import timber.log.Timber
 import java.util.*
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class SettingsPresenter @Inject constructor(
@@ -23,7 +25,8 @@ class SettingsPresenter @Inject constructor(
         private val navigator: Navigator,
         private val nightModeManager: NightModeManager,
         private val prefs: Preferences,
-        private val syncMessages: SyncMessages
+        private val syncMessages: SyncMessages,
+        private val syncRepo: SyncRepository
 ) : QkPresenter<SettingsView, SettingsState>(SettingsState(theme = colors.theme().theme)) {
 
     init {
@@ -86,6 +89,11 @@ class SettingsPresenter @Inject constructor(
                     newState { copy(maxMmsSizeSummary = mmsSizeLabels[index], maxMmsSizeId = maxMmsSize) }
                 }
 
+        disposables += syncRepo.syncProgress
+                .sample(16, TimeUnit.MILLISECONDS)
+                .distinctUntilChanged()
+                .subscribe { syncProgress -> newState { copy(syncProgress = syncProgress) } }
+
         disposables += syncMessages
     }
 
@@ -134,12 +142,7 @@ class SettingsPresenter @Inject constructor(
 
                         R.id.mmsSize -> view.showMmsSizePicker()
 
-                        R.id.sync -> {
-                            newState { copy(syncing = true) }
-                            syncMessages.execute(Unit) {
-                                newState { copy(syncing = false) }
-                            }
-                        }
+                        R.id.sync -> syncMessages.execute(Unit)
 
                         R.id.about -> view.showAbout()
                     }

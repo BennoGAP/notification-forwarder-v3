@@ -19,9 +19,9 @@
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <resources>
-  <string name="shortcut_compose_long_label">New conversation</string>
-  <string name="shortcut_compose_short_label">Compose</string>
-  <string name="shortcut_compose_disabled_message">Shortcut disabled</string>
+  <string name="shortcut_compose_long_label">Nowa rozmowa</string>
+  <string name="shortcut_compose_short_label">Napisz</string>
+  <string name="shortcut_compose_disabled_message">Skrót wyłączony</string>
   <string name="title_archived">Archiwum</string>
   <string name="title_settings">Ustawienia</string>
   <string name="title_notification_prefs">Powiadomienia</string>
@@ -33,10 +33,8 @@
   <string name="menu_call">Zadzwoń</string>
   <string name="menu_info">Szczegóły</string>
   <string name="menu_save">Zapisz w galerii</string>
-  <string name="main_title">Skrzynka odbiorcza</string>
   <string name="main_drawer_open_cd">Otwórz panel nawigacyjny</string>
   <string name="main_title_selected">%d wybrano</string>
-  <string name="main_menu_search">Szukaj</string>
   <string name="main_menu_clear">Wyczyść</string>
   <string name="main_menu_archive">Archiwizuj</string>
   <string name="main_menu_unarchive">Przywróć</string>
@@ -55,8 +53,11 @@
   <string name="archived_empty_text">Twoje zarchiwizowane rozmowy będą wyświetlane tutaj</string>
   <string name="main_fab_cd">Rozpocznij nową rozmowę</string>
   <string name="main_default_sms_title">Pokochaj SMSowanie na nowo</string>
+  <string name="main_default_sms_message">Ustaw QKSMS jako domyślną aplikację do osbługi SMSów i MMSów</string>
   <string name="main_default_sms_change">Zmień</string>
   <string name="main_permission_required">Wymagane uprawnienie</string>
+  <string name="main_permission_sms">QKSMS wymaga uprawnień do wysyłania i przeglądania wiadomości</string>
+  <string name="main_permission_contacts">QKSMS wymaga uprawnień do przeglądania kontaktów</string>
   <string name="main_permission_allow">Zezwól</string>
   <string name="drawer_inbox">Odebrane</string>
   <string name="drawer_archived">Zarchiwizowane</string>
@@ -69,6 +70,7 @@
   <string name="drawer_invite">Poleć znajomym</string>
   <string name="drawer_plus_banner_title">QKSMS+</string>
   <string name="drawer_plus_banner_summary">Odblokuj nowe funkcje i wesprzyj rozwój aplikacji</string>
+  <string name="rate_title">Lubisz QKSMS?</string>
   <string name="rate_summary">Podziel się miłością i oceń nas w Sklepie Google Play!</string>
   <string name="rate_okay">W PORZĄDKU!</string>
   <string name="rate_dismiss">ODMAWIAM</string>
@@ -131,6 +133,7 @@
   <string name="info_block">Zablokuj</string>
   <string name="info_unblock">Odblokuj</string>
   <string name="info_delete">Usuń rozmowę</string>
+  <string name="gallery_error">Couldn\'t load media</string>
   <string name="gallery_toast_saved">Zapisano w galerii</string>
   <string name="backup_title">Kopia zapasowa i przywracanie</string>
   <string name="backup_backing_up">Tworzenie kopii zapasowej wiadomości</string>
@@ -276,6 +279,7 @@
   <string name="widget_more">Zobacz więcej konwersacji</string>
   <string name="qkreply_menu_read">Oznacz jako przeczytane</string>
   <string name="qkreply_menu_call">Zadzwoń</string>
+  <string name="qkreply_menu_delete">Delete</string>
   <string name="qkreply_menu_expand">Pokaż więcej</string>
   <string name="qkreply_menu_collapse">Pokaż mniej</string>
   <string name="qkreply_menu_view">Otwórz konwersację</string>

@@ -33,10 +33,8 @@
   <string name="menu_call">Bel</string>
   <string name="menu_info">Details</string>
   <string name="menu_save">Opslaan in galerij</string>
-  <string name="main_title">Inbox</string>
   <string name="main_drawer_open_cd">Open navigatie lade</string>
   <string name="main_title_selected">%d geselecteerd</string>
-  <string name="main_menu_search">Zoeken</string>
   <string name="main_menu_clear">Wissen</string>
   <string name="main_menu_archive">Archiveren</string>
   <string name="main_menu_unarchive">Terugzetten uit archief</string>
@@ -55,8 +53,11 @@
   <string name="archived_empty_text">Je gearchiveerde conversaties verschijnen hier</string>
   <string name="main_fab_cd">Start nieuwe conversatie</string>
   <string name="main_default_sms_title">Love texting again</string>
+  <string name="main_default_sms_message">QKSMS uw standaard SMS app maken</string>
   <string name="main_default_sms_change">Wijzigen</string>
   <string name="main_permission_required">Toestemming vereist</string>
+  <string name="main_permission_sms">QKSMS machtigen voor het verzenden en bekijken van SMS-berichten</string>
+  <string name="main_permission_contacts">QKSMS machtigen om uw contactpersonen te bekijken</string>
   <string name="main_permission_allow">Toestaan</string>
   <string name="drawer_inbox">Inbox</string>
   <string name="drawer_archived">Archief</string>
@@ -69,6 +70,7 @@
   <string name="drawer_invite">Vrienden uitnodigen</string>
   <string name="drawer_plus_banner_title">QKSMS+</string>
   <string name="drawer_plus_banner_summary">Ontgrendel geweldig nieuwe functies en ondersteun verdere ontwikkeling</string>
+  <string name="rate_title">Aan het genieten van QKSMS?</string>
   <string name="rate_summary">Deel je liefde voor QKSMS door een beoordeling op Google Play te plaatsen!</string>
   <string name="rate_okay">Ok</string>
   <string name="rate_dismiss">Sluiten</string>
@@ -129,6 +131,7 @@
   <string name="info_block">Blokkeren</string>
   <string name="info_unblock">Blokkering opheffen</string>
   <string name="info_delete">Conversatie verwijderen</string>
+  <string name="gallery_error">Couldn\'t load media</string>
   <string name="gallery_toast_saved">Opgeslagen in galerij</string>
   <string name="backup_title">Back-up en herstel</string>
   <string name="backup_backing_up">Back-up van berichten aan het maken</string>
@@ -272,6 +275,7 @@
   <string name="widget_more">Bekijk meer conversaties</string>
   <string name="qkreply_menu_read">Markeer als gelezen</string>
   <string name="qkreply_menu_call">Bel</string>
+  <string name="qkreply_menu_delete">Delete</string>
   <string name="qkreply_menu_expand">Toon meer</string>
   <string name="qkreply_menu_collapse">Toon minder</string>
   <string name="qkreply_menu_view">Open conversatie</string>

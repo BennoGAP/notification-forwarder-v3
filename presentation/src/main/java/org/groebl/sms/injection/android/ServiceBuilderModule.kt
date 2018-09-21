@@ -18,13 +18,12 @@
  */
 package org.groebl.sms.injection.android
 
+import dagger.Module
+import dagger.android.ContributesAndroidInjector
 import org.groebl.sms.feature.backup.RestoreBackupService
 import org.groebl.sms.injection.scope.ActivityScope
 import org.groebl.sms.service.HeadlessSmsSendService
-import org.groebl.sms.service.SendScheduledMessageService
 import org.groebl.sms.service.SendSmsService
-import dagger.Module
-import dagger.android.ContributesAndroidInjector
 
 @Module
 abstract class ServiceBuilderModule {
@@ -36,10 +35,6 @@ abstract class ServiceBuilderModule {
     @ActivityScope
     @ContributesAndroidInjector()
     abstract fun bindRestoreBackupService(): RestoreBackupService
-
-    @ActivityScope
-    @ContributesAndroidInjector()
-    abstract fun bindSendScheduledMessageReceiver(): SendScheduledMessageService
 
     @ActivityScope
     @ContributesAndroidInjector()

@@ -33,10 +33,8 @@
   <string name="menu_call">Opkald</string>
   <string name="menu_info">Oplysninger</string>
   <string name="menu_save">Gem i Galleri</string>
-  <string name="main_title">Indbakke</string>
   <string name="main_drawer_open_cd">Åbn navigeringsskuffe</string>
   <string name="main_title_selected">%d valgt</string>
-  <string name="main_menu_search">Søg</string>
   <string name="main_menu_clear">Ryd</string>
   <string name="main_menu_archive">Arkivér</string>
   <string name="main_menu_unarchive">Fjern fra arkiv</string>
@@ -55,8 +53,11 @@
   <string name="archived_empty_text">Dine arkiverede samtaler vil fremgå her</string>
   <string name="main_fab_cd">Start ny samtale</string>
   <string name="main_default_sms_title">Elsk at SMS\'e igen</string>
+  <string name="main_default_sms_message">Gør QKSMS til din standard SMS-app</string>
   <string name="main_default_sms_change">Skift</string>
   <string name="main_permission_required">Tilladelse nødvendig</string>
+  <string name="main_permission_sms">QKSMS behøver tilladelse til at sende og vise SMS\'er</string>
+  <string name="main_permission_contacts">QKSMS behøver tilladelse til at se dine kontakter</string>
   <string name="main_permission_allow">Tillad</string>
   <string name="drawer_inbox">Indbakke</string>
   <string name="drawer_archived">Arkiveret</string>
@@ -69,6 +70,7 @@
   <string name="drawer_invite">Invitér venner</string>
   <string name="drawer_plus_banner_title">QKSMS+</string>
   <string name="drawer_plus_banner_summary">Oplås fantastiske nye funktioner og støt udvikling</string>
+  <string name="rate_title">Synes om QKSMS?</string>
   <string name="rate_summary">Del og bedøm os på Google Play!</string>
   <string name="rate_okay">OKAY!</string>
   <string name="rate_dismiss">AFVIS</string>
@@ -129,6 +131,7 @@
   <string name="info_block">Blokér</string>
   <string name="info_unblock">Afblokér</string>
   <string name="info_delete">Slet samtale</string>
+  <string name="gallery_error">Couldn\'t load media</string>
   <string name="gallery_toast_saved">Gemt til galleri</string>
   <string name="backup_title">Sikkerhedskopiering og gendannelse</string>
   <string name="backup_backing_up">Sikkerhedskopierer beskeder</string>
@@ -272,6 +275,7 @@
   <string name="widget_more">Se flere samtaler</string>
   <string name="qkreply_menu_read">Markér som læst</string>
   <string name="qkreply_menu_call">Ring op</string>
+  <string name="qkreply_menu_delete">Delete</string>
   <string name="qkreply_menu_expand">Vis flere</string>
   <string name="qkreply_menu_collapse">Vis mindre</string>
   <string name="qkreply_menu_view">Åbn samtale</string>

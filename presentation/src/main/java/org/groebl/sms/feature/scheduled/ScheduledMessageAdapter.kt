@@ -24,19 +24,17 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.Subject
+import kotlinx.android.synthetic.main.scheduled_message_list_item.view.*
 import org.groebl.sms.R
 import org.groebl.sms.common.base.QkRealmAdapter
 import org.groebl.sms.common.base.QkViewHolder
 import org.groebl.sms.common.util.DateFormatter
 import org.groebl.sms.model.Contact
-import org.groebl.sms.model.PhoneNumber
 import org.groebl.sms.model.Recipient
 import org.groebl.sms.model.ScheduledMessage
 import org.groebl.sms.repository.ContactRepository
-import io.reactivex.subjects.PublishSubject
-import io.reactivex.subjects.Subject
-import io.realm.RealmList
-import kotlinx.android.synthetic.main.scheduled_message_list_item.view.*
 import javax.inject.Inject
 
 class ScheduledMessageAdapter @Inject constructor(
@@ -45,7 +43,7 @@ class ScheduledMessageAdapter @Inject constructor(
 ) : QkRealmAdapter<ScheduledMessage>() {
 
     private val contacts by lazy { contactRepo.getContacts() }
-    private val contactMap: HashMap<String, Contact> = hashMapOf()
+    private val contactCache = ContactCache()
     private val imagesViewPool = RecyclerView.RecycledViewPool()
 
     val clicks: Subject<Long> = PublishSubject.create()
@@ -68,19 +66,11 @@ class ScheduledMessageAdapter @Inject constructor(
         val message = getItem(position)!!
         val view = holder.itemView
 
-        message.recipients.forEach { address ->
-            if (!contactMap.containsKey(address)) {
-                contactMap[address] = contacts
-                        .firstOrNull { it.numbers.any { number -> PhoneNumberUtils.compare(address, number.address) } }
-                        ?: Contact(numbers = RealmList(PhoneNumber(address)))
-            }
-        }
-
         // GroupAvatarView only accepts recipients, so map the phone numbers to recipients
         view.avatars.contacts = message.recipients.map { address -> Recipient(address = address) }
 
         view.recipients.text = message.recipients.joinToString(",") { address ->
-            contactMap[address]?.name?.takeIf { it.isNotBlank() } ?: address
+            contactCache[address]?.name?.takeIf { it.isNotBlank() } ?: address
         }
 
         view.date.text = dateFormatter.getScheduledTimestamp(message.date)
@@ -91,4 +81,20 @@ class ScheduledMessageAdapter @Inject constructor(
         view.attachments.isVisible = message.attachments.isNotEmpty()
     }
 
+    /**
+     * Cache the contacts in a map by the address, because the messages we're binding don't have
+     * a reference to the contact.
+     */
+    private inner class ContactCache : HashMap<String, Contact?>() {
+        override fun get(key: String): Contact? {
+            if (super.get(key)?.isValid != true) {
+                set(key, contacts.firstOrNull { contact ->
+                    contact.numbers.any {
+                        PhoneNumberUtils.compare(it.address, key)
+                    }
+                })
+            }
+            return super.get(key)?.takeIf { it.isValid }
+        }
+    }
 }

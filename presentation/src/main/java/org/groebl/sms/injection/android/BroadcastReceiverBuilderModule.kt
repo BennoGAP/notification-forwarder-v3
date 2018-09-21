@@ -18,27 +18,11 @@
  */
 package org.groebl.sms.injection.android
 
-import org.groebl.sms.feature.widget.WidgetProvider
-import org.groebl.sms.injection.scope.ActivityScope
-import org.groebl.sms.receiver.BootReceiver
-import org.groebl.sms.receiver.DefaultSmsChangedReceiver
-import org.groebl.sms.receiver.DeleteMessagesReceiver
-import org.groebl.sms.receiver.MarkReadReceiver
-import org.groebl.sms.receiver.MarkSeenReceiver
-import org.groebl.sms.receiver.MmsReceivedReceiver
-import org.groebl.sms.receiver.MmsReceiver
-import org.groebl.sms.receiver.MmsSentReceiver
-import org.groebl.sms.receiver.MmsUpdatedReceiver
-import org.groebl.sms.receiver.NightModeReceiver
-import org.groebl.sms.receiver.RemoteMessagingReceiver
-import org.groebl.sms.receiver.SmsDeliveredReceiver
-import org.groebl.sms.receiver.SmsProviderChangedReceiver
-import org.groebl.sms.receiver.SmsReceiver
-import org.groebl.sms.receiver.SmsSentReceiver
-import org.groebl.sms.service.SendScheduledMessageService
-import org.groebl.sms.service.SendSmsService
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
+import org.groebl.sms.feature.widget.WidgetProvider
+import org.groebl.sms.injection.scope.ActivityScope
+import org.groebl.sms.receiver.*
 
 @Module
 abstract class BroadcastReceiverBuilderModule {
@@ -86,6 +70,10 @@ abstract class BroadcastReceiverBuilderModule {
     @ActivityScope
     @ContributesAndroidInjector()
     abstract fun bindRemoteMessagingReceiver(): RemoteMessagingReceiver
+
+    @ActivityScope
+    @ContributesAndroidInjector()
+    abstract fun bindSendScheduledMessageReceiver(): SendScheduledMessageReceiver
 
     @ActivityScope
     @ContributesAndroidInjector()
