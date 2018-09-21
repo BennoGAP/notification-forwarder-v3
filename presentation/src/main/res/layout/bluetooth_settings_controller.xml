@@ -46,6 +46,7 @@
                 android:layout_height="wrap_content"
                 app:summary="@string/settings_bluetooth_connected_summary"
                 app:title="@string/settings_bluetooth_connected_title"
+                app:icon="@drawable/ic_bluetooth_connected_24px"
                 app:widget="@layout/settings_switch_widget" />
 
             <org.groebl.sms.common.widget.PreferenceView
@@ -59,6 +60,7 @@
                 android:layout_height="wrap_content"
                 app:summary="@string/settings_bluetooth_delete_summary"
                 app:title="@string/settings_bluetooth_delete_title"
+                app:icon="@drawable/ic_bluetooth_delete_24px"
                 app:widget="@layout/settings_switch_widget" />
 
             <org.groebl.sms.common.widget.PreferenceView
@@ -66,14 +68,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:summary="@string/settings_bluetooth_devices_summary"
-                app:title="@string/settings_bluetooth_devices_title" />
+                app:title="@string/settings_bluetooth_devices_title"
+                app:icon="@drawable/ic_bluetooth_car_24px" />
 
             <org.groebl.sms.common.widget.PreferenceView
                 android:id="@+id/bluetooth_allowed_apps"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:summary="@string/settings_bluetooth_apps_summary"
-                app:title="@string/settings_bluetooth_apps_title" />
+                app:title="@string/settings_bluetooth_apps_title"
+                app:icon="@drawable/ic_bluetooth_apps_24px" />
 
             <View
                 android:layout_width="match_parent"
@@ -92,6 +96,7 @@
                 android:layout_height="wrap_content"
                 app:summary="@string/settings_bluetooth_markasread_summary"
                 app:title="@string/settings_bluetooth_markasread_title"
+                app:icon="@drawable/ic_drafts_black_24dp"
                 app:widget="@layout/settings_switch_widget" />
 
             <org.groebl.sms.common.widget.PreferenceView
@@ -100,6 +105,7 @@
                 android:layout_height="wrap_content"
                 app:summary="@string/settings_bluetooth_markasread_delayed_summary"
                 app:title="@string/settings_bluetooth_markasread_delayed_title"
+                app:icon="@drawable/ic_bluetooth_timer_24px"
                 app:widget="@layout/settings_switch_widget" />
 
             <org.groebl.sms.common.widget.PreferenceView
@@ -108,6 +114,7 @@
                 android:layout_height="wrap_content"
                 app:summary="@string/settings_bluetooth_emoji_summary"
                 app:title="@string/settings_bluetooth_emoji_title"
+                app:icon="@drawable/ic_bluetooth_emoji_24px"
                 app:widget="@layout/settings_switch_widget" />
 
             <org.groebl.sms.common.widget.PreferenceView
@@ -116,6 +123,7 @@
                 android:layout_height="wrap_content"
                 app:summary="@string/settings_bluetooth_showname_summary"
                 app:title="@string/settings_bluetooth_showname_title"
+                app:icon="@drawable/ic_bluetooth_contact_mail_24px"
                 app:widget="@layout/settings_switch_widget" />
 
             <org.groebl.sms.common.widget.PreferenceView
@@ -124,6 +132,7 @@
                 android:layout_height="wrap_content"
                 app:summary="@string/settings_bluetooth_shownumber_summary"
                 app:title="@string/settings_bluetooth_shownumber_title"
+                app:icon="@drawable/ic_bluetooth_contact_phone_24px"
                 app:widget="@layout/settings_switch_widget" />
 
             <View
@@ -143,6 +152,7 @@
                 android:layout_height="wrap_content"
                 app:summary="@string/settings_bluetooth_whatsapp_to_contact_summary"
                 app:title="@string/settings_bluetooth_whatsapp_to_contact_title"
+                app:icon="@drawable/ic_bluetooth_whatsapp_24px"
                 app:widget="@layout/settings_switch_widget" />
 
 
@@ -152,6 +162,7 @@
                 android:layout_height="wrap_content"
                 app:summary="@string/settings_bluetooth_whatsapp_hide_prefix_summary"
                 app:title="@string/settings_bluetooth_whatsapp_hide_prefix_title"
+                app:icon="@drawable/ic_bluetooth_list_24px"
                 app:widget="@layout/settings_switch_widget" />
 
             <org.groebl.sms.common.widget.PreferenceView
@@ -159,14 +170,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:summary="@string/settings_bluetooth_block_whatsapp_group_summary"
-                app:title="@string/settings_bluetooth_block_whatsapp_group_title" />
+                app:title="@string/settings_bluetooth_block_whatsapp_group_title"
+                app:icon="@drawable/ic_bluetooth_group_24px" />
 
             <org.groebl.sms.common.widget.PreferenceView
                 android:id="@+id/bluetooth_whatsapp_blocked_contact"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:summary="@string/settings_bluetooth_block_whatsapp_contact_summary"
-                app:title="@string/settings_bluetooth_block_whatsapp_contact_title" />
+                app:title="@string/settings_bluetooth_block_whatsapp_contact_title"
+                app:icon="@drawable/ic_bluetooth_person_24px" />
 
             <View
                 android:id="@+id/bluetooth_more_divider"
@@ -187,6 +200,7 @@
                 android:layout_height="wrap_content"
                 app:summary="@string/settings_bluetooth_max_vol_summary"
                 app:title="@string/settings_bluetooth_max_vol_title"
+                app:icon="@drawable/ic_bluetooth_volume_24px"
                 app:widget="@layout/settings_switch_widget" />
 
             <org.groebl.sms.common.widget.PreferenceView
@@ -196,6 +210,7 @@
                 android:visibility="gone"
                 app:summary="@string/settings_bluetooth_tethering_summary"
                 app:title="@string/settings_bluetooth_tethering_title"
+                app:icon="@drawable/ic_bluetooth_tethering_24px"
                 app:widget="@layout/settings_switch_widget" />
 
         </LinearLayout>
@@ -216,6 +231,7 @@
             android:id="@+id/bluetooth_notification_access"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:icon="@drawable/ic_bluetooth_notification_24px"
             app:title="@string/settings_bluetooth_notification_access_title" />
 
         <org.groebl.sms.common.widget.PreferenceView
@@ -223,7 +239,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:title="@string/settings_bluetooth_battery_title"
-            app:summary="@string/settings_bluetooth_battery_summary" />
+            app:summary="@string/settings_bluetooth_battery_summary"
+            app:icon="@drawable/ic_bluetooth_power_24px" />
 
         <View
             android:layout_width="match_parent"
@@ -243,7 +260,7 @@
             android:id="@+id/bluetooth_donate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:icon="@drawable/ic_star_black_24dp"
+            app:icon="@drawable/ic_bluetooth_gift_24px"
             app:title="@string/settings_bluetooth_donate" />
 
         <org.groebl.sms.common.widget.PreferenceView
