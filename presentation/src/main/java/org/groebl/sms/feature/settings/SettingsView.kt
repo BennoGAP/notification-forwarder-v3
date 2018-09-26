@@ -18,9 +18,10 @@
  */
 package org.groebl.sms.feature.settings
 
+import io.reactivex.Observable
 import org.groebl.sms.common.base.QkViewContract
 import org.groebl.sms.common.widget.PreferenceView
-import io.reactivex.Observable
+import org.groebl.sms.util.Preferences
 
 interface SettingsView : QkViewContract<SettingsState> {
     fun preferenceClicks(): Observable<PreferenceView>
@@ -41,4 +42,5 @@ interface SettingsView : QkViewContract<SettingsState> {
     fun showSwipeActions()
     fun showThemePicker()
     fun showAbout()
+    fun showSyncInfo(prefs: Preferences)
 }

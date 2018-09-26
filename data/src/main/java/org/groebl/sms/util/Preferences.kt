@@ -107,6 +107,7 @@ class Preferences @Inject constructor(private val rxPrefs: RxSharedPreferences) 
     val bluetooth_last_connect = rxPrefs.getLong("bluetoothLastConnect", 0L)
     val bluetooth_last_disconnect = rxPrefs.getLong("bluetoothLastDisconnect", 0L)
     val bluetooth_last_connect_device = rxPrefs.getString("bluetoothLastDevice", "")
+    val bluetooth_sync_dismiss = rxPrefs.getBoolean("bluetoothAlertSyncDismiss", false)
 
     fun theme(threadId: Long = 0): Preference<Int> {
         val default = rxPrefs.getInteger("theme", 0xFF0097A7.toInt())

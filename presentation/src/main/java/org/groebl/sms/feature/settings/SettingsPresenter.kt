@@ -142,7 +142,10 @@ class SettingsPresenter @Inject constructor(
 
                         R.id.mmsSize -> view.showMmsSizePicker()
 
-                        R.id.sync -> syncMessages.execute(Unit)
+                        R.id.sync -> {
+                            syncMessages.execute(Unit)
+                            if(prefs.bluetooth_enabled.get() && !prefs.bluetooth_sync_dismiss.get()) { view.showSyncInfo(prefs) }
+                        }
 
                         R.id.about -> view.showAbout()
                     }

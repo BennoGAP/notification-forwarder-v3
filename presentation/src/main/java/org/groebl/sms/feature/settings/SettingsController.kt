@@ -1,6 +1,7 @@
 package org.groebl.sms.feature.settings
 
 import android.animation.ObjectAnimator
+import android.app.AlertDialog
 import android.app.TimePickerDialog
 import android.content.Context
 import android.text.format.DateFormat
@@ -174,6 +175,15 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
         router.pushController(RouterTransaction.with(AboutController())
                 .pushChangeHandler(QkChangeHandler())
                 .popChangeHandler(QkChangeHandler()))
+    }
+
+    override fun showSyncInfo(prefs: Preferences) {
+        AlertDialog.Builder(activity!!)
+                .setTitle("Information")
+                .setMessage(R.string.bluetooth_alert_sync_info)
+                .setPositiveButton(R.string.bluetooth_alert_button_ok, null)
+                .setNeutralButton(R.string.bluetooth_alert_button_dismiss) { _, _ -> prefs.bluetooth_sync_dismiss.set(true) }
+                .show()
     }
 
 }
