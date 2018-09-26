@@ -28,6 +28,8 @@ import org.groebl.sms.feature.bluetooth.app.BluetoothAppActivity
 import org.groebl.sms.feature.bluetooth.app.BluetoothAppActivityModule
 import org.groebl.sms.feature.bluetooth.device.BluetoothDeviceActivity
 import org.groebl.sms.feature.bluetooth.device.BluetoothDeviceActivityModule
+import org.groebl.sms.feature.bluetooth.donate.BluetoothDonateActivity
+import org.groebl.sms.feature.bluetooth.donate.BluetoothDonateActivityModule
 import org.groebl.sms.feature.compose.ComposeActivity
 import org.groebl.sms.feature.compose.ComposeActivityModule
 import org.groebl.sms.feature.conversationinfo.ConversationInfoActivity
@@ -94,6 +96,10 @@ abstract class ActivityBuilderModule {
     @ActivityScope
     @ContributesAndroidInjector(modules = [BluetoothDeviceActivityModule::class])
     abstract fun bindBluetoothDeviceActivity(): BluetoothDeviceActivity
+
+    @ActivityScope
+    @ContributesAndroidInjector(modules = [BluetoothDonateActivityModule::class])
+    abstract fun bindBluetoothDonateActivity(): BluetoothDonateActivity
 
     @ActivityScope
     @ContributesAndroidInjector(modules = [BlockedActivityModule::class])

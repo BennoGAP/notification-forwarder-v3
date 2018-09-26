@@ -29,6 +29,7 @@ import org.groebl.sms.feature.bluetooth.common.BluetoothBatteryUtils
 import org.groebl.sms.feature.bluetooth.common.BluetoothHelper
 import org.groebl.sms.feature.bluetooth.common.BluetoothWABlocked
 import org.groebl.sms.feature.bluetooth.device.BluetoothDeviceActivity
+import org.groebl.sms.feature.bluetooth.donate.BluetoothDonateActivity
 import org.groebl.sms.feature.settings.about.AboutController
 import org.groebl.sms.injection.appComponent
 import org.groebl.sms.util.Preferences
@@ -64,10 +65,7 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
 
         if (prefs.bluetooth_enabled.get()) {
             var info_msg = ""
-            if (prefs.bluetooth_enabled.get() && !Utils.isDefaultSmsApp(context)) {
-                info_msg += "- " + context.getString(R.string.bluetooth_alert_info_defaultsms) + "\n"
-            }
-            if (prefs.bluetooth_enabled.get() && !BluetoothHelper.hasNotificationAccess(context)) {
+            if (prefs.bluetooth_enabled.get() && BluetoothHelper.hasNotificationAccess(context) && !BluetoothHelper.isNotificationServiceRunning(context)) {
                 info_msg += "- " + context.getString(R.string.bluetooth_alert_info_notifications) + "\n"
             }
             if (prefs.bluetooth_only_on_connect.get() && prefs.bluetooth_devices.get().isEmpty()) {
@@ -219,6 +217,11 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
                 .setPositiveButton(R.string.title_settings) { _, _ -> BluetoothBatteryUtils.startPowerSaverIntent(activity!!) }
                 .setNegativeButton(R.string.button_cancel, null)
                 .show()
+    }
+
+    override fun showBluetoothDonate() {
+        val intent = Intent(context, BluetoothDonateActivity::class.java)
+        startActivity(intent)
     }
 
     override fun showBluetoothApps() {

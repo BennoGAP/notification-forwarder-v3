@@ -38,16 +38,16 @@ class BillingManager @Inject constructor(
 ) : PurchasesUpdatedListener {
 
     companion object {
-        const val SKU_02 = "donate_02"
-        const val SKU_03 = "donate_03"
-        const val SKU_05 = "donate_05"
-        const val SKU_10 = "donate_10"
+        const val SKU_01 = "donate01" // 1,50 Euro
+        const val SKU_02 = "donate02" // 3 Euro
+        const val SKU_03 = "donate03" // 5 Euro
+        const val SKU_04 = "donate04" // 8 Euro
     }
 
     val products: Observable<List<SkuDetails>> = BehaviorSubject.create()
     val upgradeStatus: Observable<Boolean>
 
-    private val skus = listOf(SKU_02, SKU_03, SKU_05, SKU_10)
+    private val skus = listOf(SKU_01, SKU_02, SKU_03, SKU_04)
     private val purchaseListObservable = BehaviorSubject.create<List<Purchase>>()
 
     private val billingClient: BillingClient = BillingClient.newBuilder(context).setListener(this).build()
@@ -61,11 +61,13 @@ class BillingManager @Inject constructor(
 
         upgradeStatus = purchaseListObservable
                 .map { purchases ->
+                    purchases.any { it.sku == SKU_01 } ||
                     purchases.any { it.sku == SKU_02 } ||
                     purchases.any { it.sku == SKU_03 } ||
-                    purchases.any { it.sku == SKU_05 } ||
-                    purchases.any { it.sku == SKU_10 } }
-                .doOnNext { upgraded -> analyticsManager.setUserProperty("Upgraded", upgraded) }
+                    purchases.any { it.sku == SKU_04 } }
+                .doOnNext {
+                    upgraded -> analyticsManager.setUserProperty("Upgraded", upgraded)
+                }
     }
 
     private fun queryPurchases() {

@@ -40,7 +40,8 @@
     <string name="settings_bluetooth_connected_summary">Only forward messages when connected over Bluetooth</string>
     <string name="settings_bluetooth_apps_title">Application White List</string>
     <string name="settings_bluetooth_apps_summary">Select the apps, from which notifications get forwarded</string>
-    <string name="settings_bluetooth_apps_loading">Loading your apps...</string>
+    <string name="settings_bluetooth_apps_loading">Loading your apps&#8230;</string>
+    <string name="settings_bluetooth_apps_search">Search&#8230;</string>
     <string name="settings_bluetooth_delete_title">Delete Messages</string>
     <string name="settings_bluetooth_delete_summary">Delete the temporary Notification-Messages on a Bluetooth disconnect</string>
     <string name="settings_bluetooth_devices_title">Select Bluetooth-Device</string>
@@ -88,10 +89,29 @@
 
     <string name="bluetooth_alert_info_title">Information</string>
     <string name="bluetooth_alert_info_defaultsms">You need to set this as your default SMS-App</string>
-    <string name="bluetooth_alert_info_notifications">You need to enable Notification-Access</string>
+    <string name="bluetooth_alert_info_notifications">The System has stopped the \"Notification Access\". You need to disable and re-enable Notification-Access. To avoid this problem in the future, whitelist this App in the \"Battery Optimization\"-Settings</string>
     <string name="bluetooth_alert_info_device">You need to select at least one Bluetooth-Device or disable \"Only on Bluetooth connection\"</string>
     <string name="bluetooth_alert_info_apps">You need to select at least one app on the \"Application White List\"</string>
     <string name="bluetooth_alert_info_markasread">Enable \"Delayed Mark-as-Read\" is advised for this device</string>
+
+    <string name="bluetooth_alert_sync_info">This is just to check if the notification forwarding is working fine - there is no need to synchronize every time to get everything working. If the forwarded notifications appear in the overview now, the app is working as intended.</string>
+    <string name="bluetooth_alert_button_dismiss">Don\'t show again</string>
+    <string name="bluetooth_alert_button_ok">Okay</string>
+
+    <string name="bluetooth_donate_category_google">Donate with InApp-Payment</string>
+    <string name="bluetooth_donate_category_other">Other donation options</string>
+
+    <string name="bluetooth_donate_donate1_summary">🍵 A cup of tea</string>
+    <string name="bluetooth_donate_donate2_summary">☕ A cup of coffee </string>
+    <string name="bluetooth_donate_donate3_summary">☕☕ Two cups of coffee</string>
+    <string name="bluetooth_donate_donate4_summary">☕☕☕ Three cups of coffee</string>
+
+    <string name="bluetooth_donate_paypal_title">Donate with PayPal</string>
+    <string name="bluetooth_donate_paypal_summary">Amount can be chosen freely</string>
+
+    <string name="bluetooth_donate_price">Donate %1$s %2$s</string>
+    <string name="bluetooth_donate_thanks">Thank you for your donation</string>
+    <string name="bluetooth_donate_text">\n\nIf you like this app, a donation is highly appreciated :)</string>
 
     <string name="shortcut_compose_long_label">New conversation</string>
     <string name="shortcut_compose_short_label">Compose</string>
@@ -220,6 +240,7 @@
     <string name="info_unblock">Unblock</string>
     <string name="info_delete">Delete conversation</string>
 
+    <string name="gallery_error">Couldn\'t load media</string>
     <string name="gallery_toast_saved">Saved to gallery</string>
 
     <string name="backup_title">Backup and restore</string>
@@ -375,6 +396,7 @@
 
     <string name="qkreply_menu_read">Mark read</string>
     <string name="qkreply_menu_call">Call</string>
+    <string name="qkreply_menu_delete">Delete</string>
     <string name="qkreply_menu_expand">Show more</string>
     <string name="qkreply_menu_collapse">Show less</string>
     <string name="qkreply_menu_view">Open conversation</string>

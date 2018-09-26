@@ -12,6 +12,7 @@ interface BluetoothSettingsView : QkViewContract<BluetoothSettingsState> {
     fun showBluetoothDevices()
     fun showBluetoothAbout()
     fun showBluetoothBatteryOptimize()
+    fun showBluetoothDonate()
 
     fun showBluetoothWhatsAppBlockedContact()
     fun showBluetoothWhatsAppBlockedGroup()

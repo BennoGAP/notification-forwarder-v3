@@ -41,7 +41,8 @@
   <string name="settings_bluetooth_connected_summary">Nachrichten werden nur bei Verbindung mit einem ausgewähltem Bluetooth-Gerät weitergeleitet</string>
   <string name="settings_bluetooth_apps_title">Erlaubte Anwendungen</string>
   <string name="settings_bluetooth_apps_summary">Benachrichtungen der hier ausgewählten Anwendungen werden weitergeleitet</string>
-  <string name="settings_bluetooth_apps_loading">Apps werden geladen ...</string>
+  <string name="settings_bluetooth_apps_loading">Apps werden geladen&#8230;</string>
+  <string name="settings_bluetooth_apps_search">Suchen&#8230;</string>
   <string name="settings_bluetooth_delete_title">Nachrichten automatisch löschen</string>
   <string name="settings_bluetooth_delete_summary">Temporär angelegte Nachrichten beim trennen der Bluetooth-Verbindung löschen</string>
   <string name="settings_bluetooth_devices_title">Bluetooth-Geräte auswählen</string>
@@ -89,10 +90,29 @@
 
   <string name="bluetooth_alert_info_title">Information</string>
   <string name="bluetooth_alert_info_defaultsms">Die App muss als Standard-SMS-App eingestellt werden</string>
-  <string name="bluetooth_alert_info_notifications">Die App benötigt zum lesen der Benachrichtigungen den \"Benachrichtigungszugriff\"</string>
+  <string name="bluetooth_alert_info_notifications">Das System hat den \"Benachrichtigungszugriff\" beendet. Dieser muss daher deaktiviert und erneut aktiviert werden. Um solche Probleme in der Zukunft zu vermeiden wir empfohlen, die App auf die WhiteList der \"Akku-Leistungsoptimierung\" zu setzen</string>
   <string name="bluetooth_alert_info_device">Es muss noch mindestens ein Bluetooth-Gerät ausgewählt oder die Option \"Nur bei Bluetooth-Verbindung\" deaktiviert werden</string>
   <string name="bluetooth_alert_info_apps">Es muss noch mindestens eine App unter \"Erlaubte Anwendungen\" ausgewählt werden</string>
   <string name="bluetooth_alert_info_markasread">Die Option \"Verzögerte Gelesen-Markierung\" wird für dieses Gerät empfohlen</string>
+
+  <string name="bluetooth_alert_sync_info">Die manuelle Synchronisation dient lediglich zur Überprüfung, ob die Benachrichtigungs-Weiterleitung funktioniert. Wenn die Nachrichten nun in der Übersicht auftauchen funktioniert die Weiterleitung wie gewünscht. Die manuelle Synchronisation ist im normalen Betrieb nicht notwendig.</string>
+  <string name="bluetooth_alert_button_dismiss">Nicht mehr anzeigen</string>
+  <string name="bluetooth_alert_button_ok">Okay</string>
+
+  <string name="bluetooth_donate_category_google">Über InApp-Zahlung Spenden</string>
+  <string name="bluetooth_donate_category_other">Andere Spenden-Methoden</string>
+
+  <string name="bluetooth_donate_donate1_summary">🍵 Eine Tasse Tee</string>
+  <string name="bluetooth_donate_donate2_summary">☕ Eine Tasse Kaffee</string>
+  <string name="bluetooth_donate_donate3_summary">☕☕ Zwei Tassen Kaffee</string>
+  <string name="bluetooth_donate_donate4_summary">☕☕☕ Drei Tassen Kaffee</string>
+
+  <string name="bluetooth_donate_paypal_title">Mit PayPal spenden</string>
+  <string name="bluetooth_donate_paypal_summary">Betrag kann frei gewählt werden</string>
+
+  <string name="bluetooth_donate_price">%1$s %2$s Spenden</string>
+  <string name="bluetooth_donate_thanks">Vielen Dank für die Spende</string>
+  <string name="bluetooth_donate_text">\n\nFalls dir diese App gefällt würde ich mich über eine kleine Spende sehr freuen :)</string>
 
   <string name="shortcut_compose_long_label">Neue Unterhaltung</string>
   <string name="shortcut_compose_short_label">Verfassen</string>
@@ -108,10 +128,8 @@
   <string name="menu_call">Anrufen</string>
   <string name="menu_info">Details</string>
   <string name="menu_save">In Galerie speichern</string>
-  <string name="main_title">Posteingang</string>
   <string name="main_drawer_open_cd">Öffne den Navigation Drawer</string>
   <string name="main_title_selected">%d ausgewählt</string>
-  <string name="main_menu_search">Suchen</string>
   <string name="main_menu_clear">Zurücksetzen</string>
   <string name="main_menu_archive">Archivieren</string>
   <string name="main_menu_unarchive">Wiederherstellen</string>
@@ -208,6 +226,7 @@
   <string name="info_block">Blockieren</string>
   <string name="info_unblock">Entsperren</string>
   <string name="info_delete">Unterhaltung löschen</string>
+  <string name="gallery_error">Konnte nicht geladen werden</string>
   <string name="gallery_toast_saved">In Galerie gespeichert</string>
   <string name="backup_title">Sichern und Wiederherstellen</string>
   <string name="backup_backing_up">Sichere Nachrichten</string>
@@ -351,6 +370,7 @@
   <string name="widget_more">Weitere Unterhaltungen anzeigen</string>
   <string name="qkreply_menu_read">Als gelesen markieren</string>
   <string name="qkreply_menu_call">Anrufen</string>
+  <string name="qkreply_menu_delete">Löschen</string>
   <string name="qkreply_menu_expand">Mehr anzeigen</string>
   <string name="qkreply_menu_collapse">Weniger anzeigen</string>
   <string name="qkreply_menu_view">Unterhaltung öffnen</string>
