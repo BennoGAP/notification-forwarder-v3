@@ -2,6 +2,7 @@ package org.groebl.sms.feature.bluetooth.common
 
 import android.Manifest
 import android.app.Activity
+import android.app.ActivityManager
 import android.content.ContentValues
 import android.content.Context
 import android.content.pm.PackageManager
@@ -85,6 +86,17 @@ object BluetoothHelper  {
     fun hasNotificationAccess(context: Context): Boolean {
         val enabledNotificationListeners = Settings.Secure.getString(context.contentResolver, "enabled_notification_listeners")
         return enabledNotificationListeners != null && enabledNotificationListeners.contains(context.packageName, ignoreCase = true) && enabledNotificationListeners.contains(".service.BluetoothNotificationService", ignoreCase = true)
+    }
+
+    fun isNotificationServiceRunning(context: Context): Boolean {
+        val manager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        for (service in manager.getRunningServices(Integer.MAX_VALUE)) {
+            if(service.service.className == "org.groebl.sms.feature.bluetooth.service.BluetoothNotificationService") {
+                return true
+            }
+        }
+
+        return false
     }
 
     fun hasContactPermission(context: Context): Boolean {
