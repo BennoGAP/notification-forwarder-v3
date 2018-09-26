@@ -82,7 +82,7 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
                 AlertDialog.Builder(activity!!)
                         .setTitle("Information")
                         .setMessage(info_msg.trim())
-                        .setPositiveButton("Okay", null)
+                        .setPositiveButton(R.string.bluetooth_alert_button_ok, null)
                         .show()
             }
         }
@@ -240,6 +240,7 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
         items.toHashSet().toArray(array)
 
         val editText = EditText(activity!!)
+        editText.hint = "+49 998 877 665"
 
         AlertDialog.Builder(activity!!)
                 .setTitle(R.string.settings_bluetooth_block_whatsapp_contact_title)
