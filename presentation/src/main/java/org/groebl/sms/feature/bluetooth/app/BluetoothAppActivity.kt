@@ -7,6 +7,8 @@ import android.os.AsyncTask
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import dagger.android.AndroidInjection
@@ -22,6 +24,7 @@ class BluetoothAppActivity : QkThemedActivity(), BluetoothAppView {
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private val viewModel by lazy { ViewModelProviders.of(this, viewModelFactory)[BluetoothAppViewModel::class.java] }
+    private var scan = ArrayList<BluetoothAppModel>()
 
 
     private inner class LoadApplications(context: Context) : AsyncTask<Void, Int, Boolean>() {
@@ -30,16 +33,17 @@ class BluetoothAppActivity : QkThemedActivity(), BluetoothAppView {
             setMessage(getString(R.string.settings_bluetooth_apps_loading))
             setCancelable(false)
             setCanceledOnTouchOutside(false)
-            //setOnCancelListener { dialog -> this.cancel(true) }
         }
-        private var scan = ArrayList<BluetoothAppModel>()
 
         override fun onPreExecute() {
             pDialog.show()
         }
 
         override fun onPostExecute(result: Boolean?) {
-            listapps.adapter = BluetoothAppAdapter(scan, prefs.bluetooth_apps.get().toHashSet(), prefs)
+            if(this@BluetoothAppActivity.isDestroyed) { return }
+
+            listapps.adapter = BluetoothAppAdapter(scan, prefs)
+
             //TODO - Get rid of this .. "Temporary" Workaround
             Handler(Looper.getMainLooper()).postDelayed({ when {pDialog.isShowing -> pDialog.dismiss() } }, 250)
         }
@@ -59,6 +63,28 @@ class BluetoothAppActivity : QkThemedActivity(), BluetoothAppView {
         showBackButton(true)
         viewModel.bindView(this)
 
+        appsSearch.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
+
+            }
+
+            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
+                val scanFiltered = ArrayList<BluetoothAppModel>()
+
+                for(scan_output in scan) {
+                    if(scan_output.appName.contains(charSequence, ignoreCase = true)) {
+                        scanFiltered.add(scan_output)
+                    }
+                }
+
+                listapps.adapter = BluetoothAppAdapter(scanFiltered, prefs)
+            }
+
+            override fun afterTextChanged(editable: Editable) {
+
+            }
+        })
+
         LoadApplications(this).execute()
     }
 
@@ -68,14 +94,19 @@ class BluetoothAppActivity : QkThemedActivity(), BluetoothAppView {
 
 
     fun scanningInstalled(): ArrayList<BluetoothAppModel>{
-        var packageModel = ArrayList<BluetoothAppModel>()
-        var checkedApps =  prefs.bluetooth_apps.get()
-        var newCheckedApps: MutableSet<String> = mutableSetOf()
+        val packageModel = ArrayList<BluetoothAppModel>()
+        val checkedApps =  prefs.bluetooth_apps.get()
+        val newCheckedApps: MutableSet<String> = mutableSetOf()
+        val installedApps = packageManager.getInstalledPackages(0)
+        var currentAppCount: Int = 0
+        val allAppCount = installedApps.count()
 
-        var installedApps = packageManager.getInstalledPackages(0)
+
         for (apps in installedApps) {
+            currentAppCount += 1
+            //println("Load Apps: $currentAppCount / $allAppCount (${(currentAppCount*100)/allAppCount}%)")
             if(!packageManager(apps)) {
-                packageModel.add(BluetoothAppModel(apps.applicationInfo.loadLabel(packageManager).toString(), apps.packageName, apps.applicationInfo.loadIcon(packageManager), checkedApps.contains(apps.packageName)))
+                packageModel.add(BluetoothAppModel(apps.applicationInfo.loadLabel(packageManager).toString(), apps.packageName, apps.applicationInfo.loadIcon(packageManager)))
 
                 if(checkedApps.contains(apps.packageName)) { newCheckedApps.add(apps.packageName) }
             }

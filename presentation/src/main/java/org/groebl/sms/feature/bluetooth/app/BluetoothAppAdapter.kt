@@ -13,7 +13,9 @@ import org.groebl.sms.R
 import org.groebl.sms.util.Preferences
 import java.util.*
 
-class BluetoothAppAdapter(val data: ArrayList<BluetoothAppModel>, val allowedApps: MutableSet<String>, val prefs: Preferences): RecyclerView.Adapter<BluetoothAppAdapter.CustomViewHolder>() {
+class BluetoothAppAdapter(val data: ArrayList<BluetoothAppModel>, val prefs: Preferences): RecyclerView.Adapter<BluetoothAppAdapter.CustomViewHolder>() {
+
+    private val allowedApps = prefs.bluetooth_apps.get().toHashSet()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BluetoothAppAdapter.CustomViewHolder {
         return BluetoothAppAdapter.CustomViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.bluetooth_apps_list_item, parent, false))
@@ -24,13 +26,14 @@ class BluetoothAppAdapter(val data: ArrayList<BluetoothAppModel>, val allowedApp
     }
 
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
-        var dataModel = data[position]
+        val dataModel = data[position]
+        val isChecked = allowedApps.contains(dataModel.appApkName)
         holder.appName.text = dataModel.appName
         holder.appIcon.setImageDrawable(dataModel.appIcon)
         holder.itemView.tag = dataModel.appApkName
-        holder.appCheckBox.isChecked = dataModel.checked
+        holder.appCheckBox.isChecked = isChecked
 
-        when (dataModel.checked) {
+        when (isChecked) {
             false -> {  holder.appIcon.colorFilter = ColorMatrixColorFilter(ColorMatrix().apply { setSaturation(0f) }); }
         }
 
@@ -38,7 +41,7 @@ class BluetoothAppAdapter(val data: ArrayList<BluetoothAppModel>, val allowedApp
         holder.itemView.setOnClickListener { holder.appCheckBox.isChecked = !holder.appCheckBox.isChecked; toggleSelection(holder)  }
     }
 
-    fun toggleSelection(holder: BluetoothAppAdapter.CustomViewHolder) {
+    private fun toggleSelection(holder: BluetoothAppAdapter.CustomViewHolder) {
         when (allowedApps.contains(holder.itemView.tag.toString())) {
             true -> { allowedApps.remove(holder.itemView.tag.toString()); holder.appIcon.colorFilter = ColorMatrixColorFilter(ColorMatrix().apply { setSaturation(0f) }); }
             false -> { allowedApps.add(holder.itemView.tag.toString()); holder.appIcon.clearColorFilter(); }
