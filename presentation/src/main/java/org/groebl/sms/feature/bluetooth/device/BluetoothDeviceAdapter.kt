@@ -13,7 +13,9 @@ import org.groebl.sms.R
 import org.groebl.sms.util.Preferences
 import java.util.*
 
-class BluetoothDeviceAdapter(val data: ArrayList<BluetoothDeviceModel>, val allowedDevices: MutableSet<String>, val prefs: Preferences) : RecyclerView.Adapter<BluetoothDeviceAdapter.CustomViewHolder>() {
+class BluetoothDeviceAdapter(val data: ArrayList<BluetoothDeviceModel>, val prefs: Preferences) : RecyclerView.Adapter<BluetoothDeviceAdapter.CustomViewHolder>() {
+
+    private val allowedDevices = prefs.bluetooth_devices.get().toHashSet()
 
      override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BluetoothDeviceAdapter.CustomViewHolder {
         return BluetoothDeviceAdapter.CustomViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.bluetooth_devices_list_item, parent, false))
@@ -24,7 +26,7 @@ class BluetoothDeviceAdapter(val data: ArrayList<BluetoothDeviceModel>, val allo
     }
 
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
-        var dataModel = data[position]
+        val dataModel = data[position]
         holder.deviceName.text = dataModel.deviceName + "\n(" + dataModel.deviceMac + ")"
         holder.itemView.tag = dataModel.deviceMac
         holder.deviceCheckBox.isChecked = dataModel.checked

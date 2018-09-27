@@ -25,7 +25,7 @@ class BluetoothDeviceActivity  : QkThemedActivity(), BluetoothDeviceView {
         showBackButton(true)
         viewModel.bindView(this)
 
-        listdevices.adapter = BluetoothDeviceAdapter(getBondedDevices(), prefs.bluetooth_devices.get().toHashSet(), prefs)
+        listdevices.adapter = BluetoothDeviceAdapter(getBondedDevices(), prefs)
     }
 
     override fun render(state: BluetoothDeviceState) {
