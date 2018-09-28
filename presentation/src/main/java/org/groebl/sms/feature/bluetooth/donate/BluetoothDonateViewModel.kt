@@ -29,8 +29,8 @@ class BluetoothDonateViewModel @Inject constructor(
                         val upgrade4 = products.firstOrNull { it.sku == BillingManager.SKU_04 }
                         copy(
                                 upgradePrice1 = upgrade1?.price ?: "", upgradePrice2 = upgrade2?.price ?: "",
-                                upgradePrice3 = upgrade3?.price ?: "", upgradePrice4 = upgrade4?.price ?: "",
-                                currency = upgrade1?.priceCurrencyCode ?: upgrade2?.priceCurrencyCode ?: upgrade3?.priceCurrencyCode ?: upgrade4?.priceCurrencyCode ?: "")
+                                upgradePrice3 = upgrade3?.price ?: "", upgradePrice4 = upgrade4?.price ?: "")
+                        //currency = upgrade1?.priceCurrencyCode ?: upgrade2?.priceCurrencyCode ?: upgrade3?.priceCurrencyCode ?: upgrade4?.priceCurrencyCode ?: "")
                     }
                 }
     }

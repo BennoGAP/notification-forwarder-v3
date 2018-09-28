@@ -41,10 +41,10 @@ class BluetoothDonateActivity : QkThemedActivity(), BluetoothDonateView {
         if(state.upgradePrice1 == "" || state.upgradePrice2 == "" || state.upgradePrice3 == "" || state.upgradePrice4 == "") {
             layout_donate_google.setVisible(false)
         } else {
-            donate1.title = getString(R.string.bluetooth_donate_price, state.upgradePrice1, state.currency)
-            donate2.title = getString(R.string.bluetooth_donate_price, state.upgradePrice2, state.currency)
-            donate3.title = getString(R.string.bluetooth_donate_price, state.upgradePrice3, state.currency)
-            donate4.title = getString(R.string.bluetooth_donate_price, state.upgradePrice4, state.currency)
+            donate1.title = getString(R.string.bluetooth_donate_price, state.upgradePrice1)
+            donate2.title = getString(R.string.bluetooth_donate_price, state.upgradePrice2)
+            donate3.title = getString(R.string.bluetooth_donate_price, state.upgradePrice3)
+            donate4.title = getString(R.string.bluetooth_donate_price, state.upgradePrice4)
             layout_donate_google.setVisible(true)
         }
 
