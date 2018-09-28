@@ -109,7 +109,7 @@
     <string name="bluetooth_donate_paypal_title">Donate with PayPal</string>
     <string name="bluetooth_donate_paypal_summary">Amount can be chosen freely</string>
 
-    <string name="bluetooth_donate_price">Donate %1$s %2$s</string>
+    <string name="bluetooth_donate_price">Donate %1$s</string>
     <string name="bluetooth_donate_thanks">Thank you for your donation</string>
     <string name="bluetooth_donate_text">If you like this app, a donation is highly appreciated :)</string>
 
@@ -203,6 +203,7 @@
     <string name="compose_hint">Write a message…</string>
     <string name="compose_menu_copy">Copy text</string>
     <string name="compose_menu_forward">Forward</string>
+    <string name="compose_menu_share">Share</string>
     <string name="compose_menu_delete">Delete</string>
     <string name="compose_menu_previous">Previous</string>
     <string name="compose_menu_next">Next</string>

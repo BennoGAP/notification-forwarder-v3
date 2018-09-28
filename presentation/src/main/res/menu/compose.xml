@@ -62,6 +62,13 @@
         app:showAsAction="ifRoom" />
 
     <item
+        android:id="@+id/share"
+        android:icon="@drawable/ic_people_black_24dp"
+        android:title="@string/compose_menu_share"
+        android:visible="false"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/previous"
         android:icon="@drawable/ic_keyboard_arrow_up_black_24dp"
         android:title="@string/compose_menu_previous"

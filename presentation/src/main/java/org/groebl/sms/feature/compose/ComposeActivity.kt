@@ -37,29 +37,22 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.flexbox.FlexboxLayoutManager
-import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.widget.textChanges
-import org.groebl.sms.R
-import org.groebl.sms.common.androidxcompat.scope
-import org.groebl.sms.common.base.QkThemedActivity
-import org.groebl.sms.common.util.DateFormatter
-import org.groebl.sms.common.util.extensions.autoScrollToStart
-import org.groebl.sms.common.util.extensions.resolveThemeColor
-import org.groebl.sms.common.util.extensions.scrapViews
-import org.groebl.sms.common.util.extensions.setBackgroundTint
-import org.groebl.sms.common.util.extensions.setTint
-import org.groebl.sms.common.util.extensions.setVisible
-import org.groebl.sms.common.util.extensions.showKeyboard
-import org.groebl.sms.model.Attachment
-import org.groebl.sms.model.Contact
-import org.groebl.sms.model.Message
 import com.uber.autodispose.kotlin.autoDisposable
 import dagger.android.AndroidInjection
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import kotlinx.android.synthetic.main.compose_activity.*
+import org.groebl.sms.R
+import org.groebl.sms.common.androidxcompat.scope
+import org.groebl.sms.common.base.QkThemedActivity
+import org.groebl.sms.common.util.DateFormatter
+import org.groebl.sms.common.util.extensions.*
+import org.groebl.sms.model.Attachment
+import org.groebl.sms.model.Contact
+import org.groebl.sms.model.Message
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -188,6 +181,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         toolbar.menu.findItem(R.id.call)?.isVisible = !state.editingMode && state.selectedMessages == 0 && state.query.isEmpty()
         toolbar.menu.findItem(R.id.info)?.isVisible = !state.editingMode && state.selectedMessages == 0 && state.query.isEmpty()
         toolbar.menu.findItem(R.id.copy)?.isVisible = !state.editingMode && state.selectedMessages == 1
+        toolbar.menu.findItem(R.id.share)?.isVisible = !state.editingMode && state.selectedMessages == 1
         toolbar.menu.findItem(R.id.details)?.isVisible = !state.editingMode && state.selectedMessages == 1
         toolbar.menu.findItem(R.id.delete)?.isVisible = !state.editingMode && state.selectedMessages > 0
         toolbar.menu.findItem(R.id.forward)?.isVisible = !state.editingMode && state.selectedMessages == 1

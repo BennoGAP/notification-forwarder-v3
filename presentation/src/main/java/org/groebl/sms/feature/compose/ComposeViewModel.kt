@@ -19,6 +19,7 @@
 package org.groebl.sms.feature.compose
 
 import android.content.Context
+import android.content.Intent
 import android.telephony.PhoneNumberUtils
 import android.telephony.SmsMessage
 import android.view.inputmethod.EditorInfo
@@ -348,6 +349,21 @@ class ComposeViewModel @Inject constructor(
                 .autoDisposable(view.scope())
                 .subscribe { view.clearSelection() }
 
+        // Share the message contents
+        view.optionsItemIntent
+                .filter { it == R.id.share }
+                .withLatestFrom(view.messagesSelectedIntent) { _, messages ->
+                    messages?.firstOrNull()?.let { messageRepo.getMessage(it) }?.let { message ->
+
+                        val intent = Intent(Intent.ACTION_SEND)
+                                .setType("text/plain")
+                                .putExtra(Intent.EXTRA_TEXT, message.getText())
+
+                        context.startActivity(Intent.createChooser(intent, context.getString(R.string.compose_menu_share)))
+                    }
+                }
+                .autoDisposable(view.scope())
+                .subscribe { view.clearSelection() }
 
         // Show the previous search result
         view.optionsItemIntent

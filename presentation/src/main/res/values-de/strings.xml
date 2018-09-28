@@ -110,7 +110,7 @@
   <string name="bluetooth_donate_paypal_title">Mit PayPal spenden</string>
   <string name="bluetooth_donate_paypal_summary">Betrag kann frei gewählt werden</string>
 
-  <string name="bluetooth_donate_price">%1$s %2$s Spenden</string>
+  <string name="bluetooth_donate_price">%1$s Spenden</string>
   <string name="bluetooth_donate_thanks">Vielen Dank für die Spende</string>
   <string name="bluetooth_donate_text">Falls dir diese App gefällt würde ich mich über eine kleine Spende sehr freuen :)</string>
 
@@ -166,7 +166,7 @@
   <string name="drawer_plus_banner_title">QKSMS+</string>
   <string name="drawer_plus_banner_summary">Schalte erstaunliche Neue Funktionen frei und unterstütze die Entwicklung</string>
   <string name="rate_title_new">Gefällt dir die App?</string>
-  <string name="rate_summary">Teile etwas von deiner Liebe und bewerte uns auf Google Play!</string>
+  <string name="rate_summary">Teile etwas von deiner Liebe und bewerte die App auf Google Play!</string>
   <string name="rate_okay">OKAY!</string>
   <string name="rate_dismiss">VERWERFEN</string>
   <string name="dialog_delete_title">Löschen</string>
@@ -192,6 +192,7 @@
   <string name="compose_hint">Nachricht schreiben&#8230;</string>
   <string name="compose_menu_copy">Text kopieren</string>
   <string name="compose_menu_forward">Weiterleiten</string>
+  <string name="compose_menu_share">Teilen</string>
   <string name="compose_menu_delete">Löschen</string>
   <string name="compose_menu_previous">Vorherige</string>
   <string name="compose_menu_next">Nächste</string>
