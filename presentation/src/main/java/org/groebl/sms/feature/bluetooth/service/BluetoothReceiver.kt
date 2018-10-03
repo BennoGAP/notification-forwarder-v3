@@ -22,17 +22,19 @@ class BluetoothReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val mPrefs = PreferenceManager.getDefaultSharedPreferences(context)
 
-        val bt_device_whitelist = mPrefs.getStringSet("bluetoothDevices", HashSet())
-        val bt_device = intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
+        val btDeviceWhitelist = mPrefs.getStringSet("bluetoothDevices", HashSet())
+        val btCurrentDevice = intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
 
 
-        if (bt_device_whitelist!!.contains(bt_device.address)) {
+        if (btDeviceWhitelist!!.contains(btCurrentDevice.address)) {
+            val deviceID = if (btCurrentDevice.name != null) btCurrentDevice.name else btCurrentDevice.address
+
             when (intent.action) {
                 BluetoothDevice.ACTION_ACL_CONNECTED -> {
                     //Set Temp-Status to -Connected-
                     mPrefs.edit().putBoolean("bluetoothCurrentStatus", true).apply()
                     mPrefs.edit().putLong("bluetoothLastConnect", System.currentTimeMillis()).apply()
-                    mPrefs.edit().putString("bluetoothLastDevice", bt_device.name.toString()).apply()
+                    mPrefs.edit().putString("bluetoothLastDevice", deviceID).apply()
 
 
                     //Set Bluetooth Tethering
@@ -83,6 +85,7 @@ class BluetoothReceiver : BroadcastReceiver() {
                     //Set Temp-Status to -Disonnected-
                     mPrefs.edit().putBoolean("bluetoothCurrentStatus", false).apply()
                     mPrefs.edit().putLong("bluetoothLastDisconnect", System.currentTimeMillis()).apply()
+                    mPrefs.edit().putString("bluetoothLastDevice", deviceID).apply()
 
                     //Delete Temporary Messages
                     if (mPrefs.getBoolean("bluetoothEnabled", false)) {
