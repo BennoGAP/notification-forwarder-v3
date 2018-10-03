@@ -290,7 +290,6 @@ public class BluetoothNotificationFilter {
                         String WA_grp = "";
                         String WA_name = "";
                         String WA_msg = "";
-                        String phoneNumber = "";
 
                         //Yeah, here happens magic and stuff  ¯\_(ツ)_/¯
                         if (textline_whatsapp == null && !ticker.equals("") && !text.equals("")) {
@@ -330,6 +329,8 @@ public class BluetoothNotificationFilter {
 
                         }
 
+                        WA_grp = EmojiParser.removeAllEmojis(WA_grp).trim();
+
                         //Check if Message is from blocked group
                         if (BluetoothWABlocked.isWABlocked(mPrefs, WA_grp, true)) { return; }
 
@@ -339,7 +340,7 @@ public class BluetoothNotificationFilter {
                             this.errorCode = 778;
                         } else {
                             try {
-                                phoneNumber = BluetoothHelper.INSTANCE.findWhatsAppNumberFromName(mContext, WA_name);
+                                String phoneNumber = BluetoothHelper.INSTANCE.findWhatsAppNumberFromName(mContext, WA_name);
 
                                 //Check if everything went fine, otherwise back to the roots (╯°□°）╯︵ ┻━┻
                                 if (phoneNumber.equals("")) {
@@ -368,7 +369,7 @@ public class BluetoothNotificationFilter {
 
                         //Check if necessary (see above) // Private Msg or Group-Chat Msg
                         if (set_content.equals("")) {
-                            set_content = (WA_grp.equals("") ? WA_msg : EmojiParser.removeAllEmojis(WA_grp) + ": " + WA_msg);
+                            set_content = (WA_grp.equals("") ? WA_msg : WA_grp + ": " + WA_msg);
                         }
 
                         //Set WhatsApp Prefix to Msg
