@@ -73,6 +73,7 @@ public class BluetoothNotificationService extends NotificationListenerService {
         }
         catch(Exception e) {
             Crashlytics.setString("AppName", pack);
+            Crashlytics.logException(e);
             e.printStackTrace();
         }
     }
