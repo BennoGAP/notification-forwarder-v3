@@ -209,6 +209,15 @@ public class BluetoothNotificationFilter {
                     set_content = ticker;
                     break;
 
+                case "me.bluemail.mail":
+                    if (extras.get(Notification.EXTRA_BIG_TEXT) == null) {
+                        return;
+                    }
+
+                    set_sender = "E-Mail";
+                    set_content = title + ": " + extras.get(Notification.EXTRA_BIG_TEXT);
+                    break;
+
                 case "com.microsoft.office.outlook":
                     //Newest Msg = Last Item in Line; contains: Sender Subject Text
                     CharSequence[] textline_outlook = extras.getCharSequenceArray(Notification.EXTRA_TEXT_LINES);
