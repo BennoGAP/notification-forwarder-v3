@@ -81,7 +81,7 @@
 
   <string name="settings_bluetooth_block_whatsapp_group_add_title">WhatsApp-Gruppe blockieren</string>
   <string name="settings_bluetooth_block_whatsapp_contact_add_title">WhatsApp-Kontakt blockieren</string>
-  <string name="settings_bluetooth_block_whatsapp_group_add_summary">Gruppenname zum blockieren eintragen</string>
+  <string name="settings_bluetooth_block_whatsapp_group_add_summary">Gruppenname zum blockieren eintragen (ohne Emojis)</string>
   <string name="settings_bluetooth_block_whatsapp_contact_add_summary">Nummer des Kontaktes zum blockieren eintragen</string>
   <string name="settings_bluetooth_block_whatsapp_unblock_summary">%s von der Liste entfernen?</string>
   <string name="settings_bluetooth_block_whatsapp_unblock_confirm">Entfernen bestätigen</string>

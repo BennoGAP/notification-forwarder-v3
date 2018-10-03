@@ -235,9 +235,14 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
     }
 
     override fun showBluetoothWhatsAppBlockedContact() {
-        val items = prefs.bluetooth_whatsapp_blocked_contact.get()
-        val array = arrayOfNulls<String>(items.size)
-        items.toHashSet().toArray(array)
+        val arrlist = ArrayList<String>()
+        for(item in prefs.bluetooth_whatsapp_blocked_contact.get()) {
+            val name = BluetoothHelper.findWhatsAppNameFromNumber(context, item)
+            if(name == "")   { arrlist.add(item) }
+            else             { arrlist.add("$item\n($name)") }
+        }
+        val array = arrayOfNulls<String>(arrlist.size)
+        arrlist.toArray(array)
 
         val editText = EditText(activity!!)
         editText.hint = "+49 998 877 665"
@@ -245,12 +250,13 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
         AlertDialog.Builder(activity!!)
                 .setTitle(R.string.settings_bluetooth_block_whatsapp_contact_title)
                 .setItems(array) { _, which ->
+                    val parts = array[which]!!.split("\n")
                     AlertDialog.Builder(activity!!)
                             .setTitle(R.string.settings_bluetooth_block_whatsapp_unblock_confirm)
                             .setCancelable(false)
-                            .setMessage(context.getString(R.string.settings_bluetooth_block_whatsapp_unblock_summary, array[which]))
+                            .setMessage(context.getString(R.string.settings_bluetooth_block_whatsapp_unblock_summary, parts[0]))
                             .setPositiveButton(R.string.button_yes) { _, _ ->
-                                BluetoothWABlocked.setWAUnblock(context, array[which], false)
+                                BluetoothWABlocked.setWAUnblock(context, parts[0], false)
                                 //Toast.makeText(context, "Unblock: " + array[which], Toast.LENGTH_LONG).show()
                             }
                             .setNegativeButton(R.string.button_no) { dialog, _ -> dialog.cancel() }
@@ -304,7 +310,7 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
                             .setView(editText)
                             .setPositiveButton(R.string.button_add) { _, _ ->
                                 if(editText.text.isNotEmpty()) {
-                                    BluetoothWABlocked.setWABlock(context, editText.text.toString(), true)
+                                    BluetoothWABlocked.setWABlock(context, editText.text.toString().trim(), true)
                                     //Toast.makeText(context, "Add: " + editText.text.toString(), Toast.LENGTH_LONG).show()
                                 }
                             }

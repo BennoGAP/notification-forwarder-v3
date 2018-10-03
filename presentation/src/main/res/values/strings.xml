@@ -80,7 +80,7 @@
 
     <string name="settings_bluetooth_block_whatsapp_group_add_title">Block WhatsApp-Group</string>
     <string name="settings_bluetooth_block_whatsapp_contact_add_title">Block WhatsApp-Contact</string>
-    <string name="settings_bluetooth_block_whatsapp_group_add_summary">Enter Group-Name to block</string>
+    <string name="settings_bluetooth_block_whatsapp_group_add_summary">Enter Group-Name to block (without Emojis)</string>
     <string name="settings_bluetooth_block_whatsapp_contact_add_summary">Enter Contact-Number to block</string>
     <string name="settings_bluetooth_block_whatsapp_unblock_summary">Remove %s from block-list?</string>
     <string name="settings_bluetooth_block_whatsapp_unblock_confirm">Confirm Unblock</string>
