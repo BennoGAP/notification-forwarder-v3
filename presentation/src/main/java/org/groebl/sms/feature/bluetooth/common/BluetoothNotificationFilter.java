@@ -195,7 +195,7 @@ public class BluetoothNotificationFilter {
                     }
 
                     set_sender = "E-Mail";
-                    if (!title.equals("") && !text.equals("") && !(title.equals(null) && text.equals(null))) {
+                    if (!title.equals("") && !text.equals("")) {
                         set_content = title + ": " + text;
                     }
                     break;
@@ -412,6 +412,8 @@ public class BluetoothNotificationFilter {
                         set_content = (ticker.equals("") ? title + ": " + text : ticker);
                     }
             }
+
+            if(set_content.trim().equals("")) { return; }
 
             if(this.errorCode.equals(777)) {
                 if(mPrefs.getBoolean("bluetoothAppnameToNumber", false)) {
