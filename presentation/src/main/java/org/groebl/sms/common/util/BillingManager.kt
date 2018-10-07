@@ -23,7 +23,9 @@ import android.content.Context
 import com.android.billingclient.api.*
 import com.android.billingclient.api.BillingClient.BillingResponse
 import com.android.billingclient.api.BillingClient.SkuType
+import io.reactivex.Flowable
 import io.reactivex.Observable
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
 import org.groebl.sms.manager.AnalyticsManager
@@ -81,7 +83,7 @@ class BillingManager @Inject constructor(
 
 
     private fun startServiceConnection(onSuccess: () -> Unit) {
-        billingClient.startConnection(object : BillingClientStateListener {
+        val listener = object : BillingClientStateListener {
             override fun onBillingSetupFinished(@BillingResponse billingResponseCode: Int) {
                 if (billingResponseCode == BillingResponse.OK) {
                     isServiceConnected = true
@@ -95,7 +97,11 @@ class BillingManager @Inject constructor(
             override fun onBillingServiceDisconnected() {
                 isServiceConnected = false
             }
-        })
+        }
+
+        Flowable.fromCallable { billingClient.startConnection(listener) }
+        .subscribeOn(Schedulers.io())
+        .subscribe()
     }
 
     private fun querySkuDetailsAsync() {
