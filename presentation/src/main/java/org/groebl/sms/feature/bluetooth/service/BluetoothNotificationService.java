@@ -53,7 +53,7 @@ public class BluetoothNotificationService extends NotificationListenerService {
             if (BtData.allData()) {
 
                 //Check if this msg already exist
-               if (BluetoothDatabase.searchHash(getApplicationContext(), pack, BluetoothHelper.INSTANCE.notificationHash(BtData.getSender(), BtData.getContent()))) { return; }
+               if (BluetoothDatabase.searchBluetoothNotificationHash(getApplicationContext(), pack, BluetoothHelper.INSTANCE.notificationHash(BtData.getSender(), BtData.getContent()))) { return; }
 
                 //Enter the Data in the SMS-DB
                 //Toast.makeText(getApplicationContext(), EmojiParser.removeAllEmojis(BtData.getSender()) + ": " + emojiToNiceEmoji(set_content, mPrefs.getBoolean("bluetoothEmoji", true)), Toast.LENGTH_LONG).show(); // TODO

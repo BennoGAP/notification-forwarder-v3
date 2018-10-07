@@ -20,7 +20,7 @@ public class BluetoothDatabase {
         SQLiteDatabase db = context.openOrCreateDatabase(DATABASE, Context.MODE_PRIVATE, null);
 
         try {
-            final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE + " (app STRING(70) NOT NULL, hash STRING(32) NOT NULL, time DATE DEFAULT (datetime('now', 'localtime')) );";
+            final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE + " (app TEXT(70) NOT NULL, hash TEXT(32) NOT NULL, time DATE DEFAULT (datetime('now', 'localtime')) );";
             db.execSQL(CREATE_TABLE);
         } catch (SQLiteException e) {
             //catch
@@ -46,14 +46,19 @@ public class BluetoothDatabase {
 
     }
 
-    public static void deleteAfterTime(Context context) {
+    public static void deleteBluetoothDbData(Context context, Boolean afterTime) {
         SQLiteDatabase db = context.openOrCreateDatabase(DATABASE, Context.MODE_PRIVATE, null);
 
         try {
+            Integer amount = 0;
+            if(afterTime) { amount = -12; }
+
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+
             Calendar c = Calendar.getInstance();
             c.setTimeInMillis(System.currentTimeMillis());
             c.add(Calendar.HOUR_OF_DAY, -12);
+
             db.execSQL("DELETE from " + TABLE + " WHERE time <= " + "'" + dateFormat.format(c.getTime()) + "';");
         }
         catch (SQLiteException e) {
@@ -64,12 +69,10 @@ public class BluetoothDatabase {
         }
     }
 
-    public static boolean searchHash(Context context, String app, String hash) {
+    public static boolean searchBluetoothNotificationHash(Context context, String app, String hash) {
         SQLiteDatabase db = context.openOrCreateDatabase(DATABASE, Context.MODE_PRIVATE, null);
 
-        new Thread(() -> {
-            deleteAfterTime(context);
-        }).start();
+        new Thread(() -> deleteBluetoothDbData(context, true)).start();
 
         try {
             //Check if hash is in Database
