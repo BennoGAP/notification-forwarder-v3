@@ -90,9 +90,9 @@
 
   <string name="bluetooth_alert_info_title">Information</string>
   <string name="bluetooth_alert_info_defaultsms">Die App muss als Standard-SMS-App eingestellt werden</string>
-  <string name="bluetooth_alert_info_notifications">Das System hat den \"Benachrichtigungszugriff\" beendet. Dieser muss daher deaktiviert und erneut aktiviert werden. Um solche Probleme in der Zukunft zu vermeiden wir empfohlen, die App auf die WhiteList der \"Akku-Leistungsoptimierung\" zu setzen</string>
+  <string name="bluetooth_alert_info_notifications">Das System hat den \"Benachrichtigungszugriff\" beendet. Dieser muss daher im folgenden Fenster manuell deaktiviert und erneut aktiviert werden</string>
   <string name="bluetooth_alert_info_device">Es muss noch mindestens ein Bluetooth-Gerät ausgewählt oder die Option \"Nur bei Bluetooth-Verbindung\" deaktiviert werden</string>
-  <string name="bluetooth_alert_info_apps">Es muss noch mindestens eine App unter \"Erlaubte Anwendungen\" ausgewählt werden</string>
+  <string name="bluetooth_alert_info_apps">Es muss mindestens eine App unter \"Erlaubte Anwendungen\" ausgewählt werden</string>
   <string name="bluetooth_alert_info_markasread">Die Option \"Verzögerte Gelesen-Markierung\" wird für dieses Gerät empfohlen</string>
 
   <string name="bluetooth_alert_sync_info">Die manuelle Synchronisation dient lediglich zur Überprüfung, ob die Benachrichtigungs-Weiterleitung funktioniert. Wenn die Nachrichten nun in der Übersicht auftauchen funktioniert die Weiterleitung wie gewünscht. Die manuelle Synchronisation ist im normalen Betrieb nicht notwendig.</string>

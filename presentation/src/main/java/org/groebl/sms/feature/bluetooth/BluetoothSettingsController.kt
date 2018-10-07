@@ -26,6 +26,7 @@ import org.groebl.sms.common.util.extensions.setVisible
 import org.groebl.sms.common.widget.PreferenceView
 import org.groebl.sms.feature.bluetooth.app.BluetoothAppActivity
 import org.groebl.sms.feature.bluetooth.common.BluetoothBatteryUtils
+import org.groebl.sms.feature.bluetooth.common.BluetoothDatabase
 import org.groebl.sms.feature.bluetooth.common.BluetoothHelper
 import org.groebl.sms.feature.bluetooth.common.BluetoothWABlocked
 import org.groebl.sms.feature.bluetooth.device.BluetoothDeviceActivity
@@ -64,25 +65,28 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
         bluetooth_menu_full.postDelayed({ bluetooth_menu_full?.animateLayoutChanges = true }, 100)
 
         if (prefs.bluetooth_enabled.get()) {
-            var info_msg = ""
-            if (prefs.bluetooth_enabled.get() && BluetoothHelper.hasNotificationAccess(context) && !BluetoothHelper.isNotificationServiceRunning(context)) {
-                info_msg += "- " + context.getString(R.string.bluetooth_alert_info_notifications) + "\n"
+            val infoMsg = StringBuilder()
+            var openNotificationAccess = false
+
+            if (BluetoothHelper.hasNotificationAccess(context) && !BluetoothHelper.isNotificationServiceRunning(context)) {
+                infoMsg.append("- " + context.getString(R.string.bluetooth_alert_info_notifications) + "\n")
+                openNotificationAccess = true
             }
             if (prefs.bluetooth_only_on_connect.get() && prefs.bluetooth_devices.get().isEmpty()) {
-                info_msg += "- " + context.getString(R.string.bluetooth_alert_info_device) + "\n"
+                infoMsg.append("- " + context.getString(R.string.bluetooth_alert_info_device) + "\n")
             }
             if (prefs.bluetooth_apps.get().isEmpty()) {
-                info_msg += "- " + context.getString(R.string.bluetooth_alert_info_apps) + "\n"
+                infoMsg.append("- " + context.getString(R.string.bluetooth_alert_info_apps) + "\n")
             }
             if (prefs.bluetooth_save_read.get() && !prefs.bluetooth_delayed_read.get() && Build.MANUFACTURER.equals("samsung", ignoreCase = true) && Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-                info_msg += "- " + context.getString(R.string.bluetooth_alert_info_markasread) + "\n"
+                infoMsg.append("- " + context.getString(R.string.bluetooth_alert_info_markasread) + "\n")
             }
 
-            if (info_msg != "") {
+            if (infoMsg.isNotEmpty()) {
                 AlertDialog.Builder(activity!!)
                         .setTitle("Information")
-                        .setMessage(info_msg.trim())
-                        .setPositiveButton(R.string.bluetooth_alert_button_ok, null)
+                        .setMessage(infoMsg.toString().trim())
+                        .setPositiveButton(R.string.bluetooth_alert_button_ok)  { _, _ -> if(openNotificationAccess) navigator.showNotificationAccess() }
                         .show()
             }
         }
@@ -113,7 +117,8 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
         var local_bluetooth_whatsapp_to_contact = state.bluetooth_whatsapp_to_contact
 
         if(!state.bluetooth_enabled) {
-            BluetoothHelper.deleteBluetoothMessages(context, false)
+            Thread { BluetoothHelper.deleteBluetoothMessages(context, false) }.start()
+            Thread { BluetoothDatabase.deleteBluetoothDbData(context, false) }.start()
         }
 
         //Forwarding enabled but not default SMS-App or has no Notification-Access
