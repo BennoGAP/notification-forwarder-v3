@@ -48,12 +48,13 @@ class BluetoothDeviceActivity  : QkThemedActivity(), BluetoothDeviceView {
                 }
 
                 packageModel.sortBy { it.deviceName.toLowerCase() }
+
+                //Only paired Devices should be saved in the prefs
+                prefs.bluetooth_devices.set(newCheckedDevices)
+
             } else {
                 empty.text = getString(R.string.settings_bluetooth_no_devices)
             }
-
-            //Only paired Devices should be saved in the prefs
-            prefs.bluetooth_devices.set(newCheckedDevices)
 
         } catch (e: Exception) {
             empty.text = getString(R.string.settings_bluetooth_no_devices)
