@@ -112,7 +112,7 @@
 
   <string name="bluetooth_donate_price">%1$s Spenden</string>
   <string name="bluetooth_donate_thanks">Vielen Dank für die Spende</string>
-  <string name="bluetooth_donate_text">Ich hoffe dir gefällt diese App.\n\nDa die App auch weiterhin kostenfrei und ohne Werbung auskommen soll würde ich mich über eine freiwillige Spende freuen :)</string>
+  <string name="bluetooth_donate_text">Ich hoffe dir gefällt die App.\n\nDa die App auch weiterhin werbefrei und kostenfrei bleiben soll würde ich mich über eine freiwillige Spende freuen :)</string>
 
   <string name="shortcut_compose_long_label">Neue Unterhaltung</string>
   <string name="shortcut_compose_short_label">Verfassen</string>
