@@ -69,7 +69,7 @@
                 android:layout_height="wrap_content"
                 app:summary="@string/settings_bluetooth_devices_summary"
                 app:title="@string/settings_bluetooth_devices_title"
-                app:icon="@drawable/ic_bluetooth_car_24px" />
+                app:icon="@drawable/ic_bluetooth_car_signal_24px" />
 
             <org.groebl.sms.common.widget.PreferenceView
                 android:id="@+id/bluetooth_allowed_apps"
