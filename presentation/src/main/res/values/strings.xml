@@ -101,10 +101,10 @@
     <string name="bluetooth_donate_category_google">Donate with InApp-Payment</string>
     <string name="bluetooth_donate_category_other">Other donation options</string>
 
-    <string name="bluetooth_donate_donate1_summary">🍵 A cup of tea</string>
-    <string name="bluetooth_donate_donate2_summary">☕ A cup of coffee </string>
-    <string name="bluetooth_donate_donate3_summary">☕☕ Two cups of coffee</string>
-    <string name="bluetooth_donate_donate4_summary">☕☕☕ Three cups of coffee</string>
+    <string name="bluetooth_donate_donate1_summary">A cup of tea</string>
+    <string name="bluetooth_donate_donate2_summary">A cup of coffee </string>
+    <string name="bluetooth_donate_donate3_summary">Two cups of coffee</string>
+    <string name="bluetooth_donate_donate4_summary">Three cups of coffee</string>
 
     <string name="bluetooth_donate_paypal_title">Donate with PayPal</string>
     <string name="bluetooth_donate_paypal_summary">Amount can be chosen freely</string>

@@ -102,17 +102,17 @@
   <string name="bluetooth_donate_category_google">Über InApp-Zahlung Spenden</string>
   <string name="bluetooth_donate_category_other">Andere Spenden-Methoden</string>
 
-  <string name="bluetooth_donate_donate1_summary">🍵 Eine Tasse Tee</string>
-  <string name="bluetooth_donate_donate2_summary">☕ Eine Tasse Kaffee</string>
-  <string name="bluetooth_donate_donate3_summary">☕☕ Zwei Tassen Kaffee</string>
-  <string name="bluetooth_donate_donate4_summary">☕☕☕ Drei Tassen Kaffee</string>
+  <string name="bluetooth_donate_donate1_summary">Eine Tasse Tee</string>
+  <string name="bluetooth_donate_donate2_summary">Eine Tasse Kaffee</string>
+  <string name="bluetooth_donate_donate3_summary">Zwei Tassen Kaffee</string>
+  <string name="bluetooth_donate_donate4_summary">Drei Tassen Kaffee</string>
 
   <string name="bluetooth_donate_paypal_title">Mit PayPal spenden</string>
   <string name="bluetooth_donate_paypal_summary">Betrag kann frei gewählt werden</string>
 
   <string name="bluetooth_donate_price">%1$s Spenden</string>
   <string name="bluetooth_donate_thanks">Vielen Dank für die Spende</string>
-  <string name="bluetooth_donate_text">Falls dir diese App gefällt würde ich mich über eine kleine Spende sehr freuen :)</string>
+  <string name="bluetooth_donate_text">Ich hoffe dir gefällt diese App.\n\nDa die App auch weiterhin kostenfrei und ohne Werbung auskommen soll würde ich mich über eine freiwillige Spende freuen :)</string>
 
   <string name="shortcut_compose_long_label">Neue Unterhaltung</string>
   <string name="shortcut_compose_short_label">Verfassen</string>
