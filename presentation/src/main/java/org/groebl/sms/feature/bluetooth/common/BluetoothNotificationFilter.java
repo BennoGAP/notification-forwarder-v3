@@ -324,7 +324,7 @@ public class BluetoothNotificationFilter {
                                 WA_name = text.substring(0, text.indexOf(": "));
                                 WA_msg = text.substring(text.indexOf(": ") + 2, text.length());
                             }
-                        } else if (textline_whatsapp != null) {
+                        } else if (textline_whatsapp != null && !ticker.equals("")) {
                             text = removeDirectionChars(textline_whatsapp[textline_whatsapp.length - 1].toString());
                             if (ticker.endsWith(" @ " + title)) {
                                 WA_grp = title;
@@ -335,7 +335,8 @@ public class BluetoothNotificationFilter {
                                 WA_name = title;
                                 WA_msg = text;
                             }
-
+                        } else {
+                            return;
                         }
 
                         WA_grp = EmojiParser.removeAllEmojis(WA_grp).trim();
