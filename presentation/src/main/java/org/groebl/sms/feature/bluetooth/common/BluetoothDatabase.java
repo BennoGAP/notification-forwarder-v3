@@ -51,7 +51,7 @@ public class BluetoothDatabase {
 
         try {
             Integer amount = 0;
-            if(afterTime) { amount = -12; }
+            if(afterTime) { amount = -6; }
 
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
 
