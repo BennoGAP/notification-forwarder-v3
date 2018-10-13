@@ -32,8 +32,8 @@ android {
         applicationId "org.groebl.sms"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 3001
-        versionName '3.0.2'
+        versionCode 3003
+        versionName '3.0.3'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -84,17 +84,14 @@ android {
 androidExtensions {
     experimental = true
 }
-
-import com.android.build.OutputFile
-
 // For each APK output variant, override versionCode with one that is unique
 // https://developer.android.com/studio/build/gradle-tips.html#configure-dynamic-version-codes
-android.applicationVariants.all { variant ->
-    variant.outputs.each { output ->
-        def baseAbiVersionCode = abiCodes.get(output.getFilter(OutputFile.ABI), 0)
-        output.versionCodeOverride = baseAbiVersionCode * 1000 + variant.versionCode
-    }
-}
+//android.applicationVariants.all { variant ->
+//    variant.outputs.each { output ->
+//        def baseAbiVersionCode = abiCodes.get(output.getFilter(OutputFile.ABI), 0)
+//        output.versionCodeOverride = baseAbiVersionCode * 1000 + variant.versionCode
+//    }
+//}
 
 configurations {
     noAnalyticsDebug
