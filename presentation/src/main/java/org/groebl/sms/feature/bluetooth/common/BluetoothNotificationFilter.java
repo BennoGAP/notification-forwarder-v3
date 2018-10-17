@@ -210,6 +210,7 @@ public class BluetoothNotificationFilter {
                     break;
 
                 case "me.bluemail.mail":
+                case "org.kman.AquaMail":
                     if (extras.get(Notification.EXTRA_BIG_TEXT) == null) {
                         return;
                     }
