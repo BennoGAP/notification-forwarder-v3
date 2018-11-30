@@ -42,12 +42,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:title="@string/about_version_title"
-            tools:summary="3.0.8" />
+            tools:summary="3.x.x" />
 
         <org.groebl.sms.common.widget.PreferenceView
             android:id="@+id/bluetooth_developer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:icon="@drawable/ic_fox_black"
             app:summary="@string/bluetooth_about_developer"
             app:title="@string/about_developer_title" />
 
