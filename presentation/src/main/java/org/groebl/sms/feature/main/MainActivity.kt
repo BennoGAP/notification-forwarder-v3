@@ -23,10 +23,7 @@ import android.animation.ObjectAnimator
 import android.app.AlertDialog
 import android.content.res.ColorStateList
 import android.os.Bundle
-import android.view.Gravity
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
@@ -46,6 +43,8 @@ import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import kotlinx.android.synthetic.main.drawer_view.*
 import kotlinx.android.synthetic.main.main_activity.*
+import kotlinx.android.synthetic.main.main_permission_hint.*
+import kotlinx.android.synthetic.main.main_syncing.*
 import org.groebl.sms.R
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.androidxcompat.drawerOpen
@@ -96,7 +95,7 @@ class MainActivity : QkThemedActivity(), MainView {
     override val confirmDeleteIntent: Subject<List<Long>> = PublishSubject.create()
     override val swipeConversationIntent by lazy { itemTouchCallback.swipes }
     override val undoArchiveIntent: Subject<Unit> = PublishSubject.create()
-    override val snackbarButtonIntent by lazy { snackbarButton.clicks() }
+    override val snackbarButtonIntent: Subject<Unit> = PublishSubject.create()
     override val backPressedIntent: Subject<Unit> = PublishSubject.create()
 
     private val viewModel by lazy { ViewModelProviders.of(this, viewModelFactory)[MainViewModel::class.java] }
@@ -108,12 +107,22 @@ class MainActivity : QkThemedActivity(), MainView {
             setAction(R.string.button_undo) { undoArchiveIntent.onNext(Unit) }
         }
     }
+    private val snackbar by lazy { findViewById<View>(R.id.snackbar) }
+    private val syncing by lazy { findViewById<View>(R.id.syncing) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
         viewModel.bindView(this)
+
+        (snackbar as? ViewStub)?.setOnInflateListener { _, _ ->
+            snackbarButton.clicks().subscribe(snackbarButtonIntent)
+        }
+        (syncing as? ViewStub)?.setOnInflateListener { _, _ ->
+            syncingProgress?.progressTintList = ColorStateList.valueOf(theme.blockingFirst().theme)
+            syncingProgress?.indeterminateTintList = ColorStateList.valueOf(theme.blockingFirst().theme)
+        }
 
         toggle.syncState()
         toolbar.setNavigationOnClickListener {
@@ -128,7 +137,7 @@ class MainActivity : QkThemedActivity(), MainView {
         drawer.clicks().subscribe()
 
         // Set the theme color tint to the recyclerView, progressbar, and FAB
-        colors.themeObservable()
+        theme
                 .doOnNext { recyclerView.scrapViews() }
                 .autoDisposable(scope())
                 .subscribe { theme ->
@@ -142,7 +151,8 @@ class MainActivity : QkThemedActivity(), MainView {
                             }
 
                     // Miscellaneous views
-                    syncingProgress.indeterminateTintList = ColorStateList.valueOf(theme.theme)
+                    syncingProgress?.progressTintList = ColorStateList.valueOf(theme.theme)
+                    syncingProgress?.indeterminateTintList = ColorStateList.valueOf(theme.theme)
                     rateIcon.setTint(theme.theme)
                     compose.setBackgroundTint(theme.theme)
 
@@ -267,9 +277,9 @@ class MainActivity : QkThemedActivity(), MainView {
             }
 
             !state.contactPermission -> {
-                snackbarTitle.setText(R.string.main_permission_required)
-                snackbarMessage.setText(R.string.main_permission_contacts_new)
-                snackbarButton.setText(R.string.main_permission_allow)
+                snackbarTitle?.setText(R.string.main_permission_required)
+                snackbarMessage?.setText(R.string.main_permission_contacts_new)
+                snackbarButton?.setText(R.string.main_permission_allow)
             }
         }
     }
