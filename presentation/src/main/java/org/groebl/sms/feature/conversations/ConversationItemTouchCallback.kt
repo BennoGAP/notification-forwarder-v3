@@ -23,24 +23,24 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
 import androidx.core.graphics.drawable.toBitmap
-import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.Observables
+import io.reactivex.rxkotlin.plusAssign
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.Subject
 import org.groebl.sms.R
-import org.groebl.sms.common.androidxcompat.scope
 import org.groebl.sms.common.util.Colors
 import org.groebl.sms.common.util.extensions.dpToPx
 import org.groebl.sms.util.Preferences
-import com.uber.autodispose.kotlin.autoDisposable
-import io.reactivex.rxkotlin.Observables
-import io.reactivex.subjects.PublishSubject
-import io.reactivex.subjects.Subject
 import javax.inject.Inject
 
 
 class ConversationItemTouchCallback @Inject constructor(
         colors: Colors,
-        lifecycle: Lifecycle,
+        disposables: CompositeDisposable,
         prefs: Preferences,
         private val context: Context
 ) : ItemTouchHelper.SimpleCallback(0, 0) {
@@ -61,11 +61,12 @@ class ConversationItemTouchCallback @Inject constructor(
     private val iconLength = 24.dpToPx(context)
 
     init {
-        colors.themeObservable()
-                .autoDisposable(lifecycle.scope())
-                .subscribe { theme -> paint.color = theme.theme }
+        disposables += colors.themeObservable()
+                .doOnNext { theme -> paint.color = theme.theme }
+                .subscribeOn(Schedulers.io())
+                .subscribe()
 
-        Observables
+        disposables += Observables
                 .combineLatest(prefs.swipeRight.asObservable(), prefs.swipeLeft.asObservable(), colors.themeObservable()) { right, left, theme ->
                     rightAction = right
                     rightIcon = iconForAction(right, theme.textPrimary)
@@ -74,7 +75,7 @@ class ConversationItemTouchCallback @Inject constructor(
                     setDefaultSwipeDirs((if (right == Preferences.SWIPE_ACTION_NONE) 0 else ItemTouchHelper.RIGHT)
                             or (if (left == Preferences.SWIPE_ACTION_NONE) 0 else ItemTouchHelper.LEFT))
                 }
-                .autoDisposable(lifecycle.scope())
+                .subscribeOn(Schedulers.io())
                 .subscribe()
     }
 

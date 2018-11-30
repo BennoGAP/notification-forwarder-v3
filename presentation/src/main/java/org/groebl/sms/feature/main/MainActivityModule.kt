@@ -18,18 +18,20 @@
  */
 package org.groebl.sms.feature.main
 
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModel
-import org.groebl.sms.injection.ViewModelKey
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoMap
+import io.reactivex.disposables.CompositeDisposable
+import org.groebl.sms.injection.ViewModelKey
+import org.groebl.sms.injection.scope.ActivityScope
 
 @Module
 class MainActivityModule {
 
     @Provides
-    fun provideLifecycle(activity: MainActivity): Lifecycle = activity.lifecycle
+    @ActivityScope
+    fun provideCompositeDiposableLifecycle(): CompositeDisposable = CompositeDisposable()
 
     @Provides
     @IntoMap
