@@ -22,9 +22,6 @@ import android.content.Context
 import android.os.Environment
 import android.provider.Telephony
 import androidx.core.content.contentValuesOf
-import org.groebl.sms.model.BackupFile
-import org.groebl.sms.model.Message
-import org.groebl.sms.util.QkFileObserver
 import com.squareup.moshi.Moshi
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
@@ -32,6 +29,10 @@ import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
 import io.realm.Realm
 import okio.Okio
+import org.groebl.sms.model.BackupFile
+import org.groebl.sms.model.Message
+import org.groebl.sms.util.QkFileObserver
+import org.groebl.sms.util.tryOrNull
 import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
@@ -148,15 +149,16 @@ class BackupRepositoryImpl @Inject constructor(
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.computation())
             .map { files ->
-                files.map { file ->
-                    val backup = Okio.buffer(Okio.source(file)).use { source ->
-                        moshi.adapter(BackupMetadata::class.java).fromJson(source)
-                    }
+                files.mapNotNull { file ->
+                    val adapter = moshi.adapter(BackupMetadata::class.java)
+                    val backup = tryOrNull(false) {
+                        Okio.buffer(Okio.source(file)).use(adapter::fromJson)
+                    } ?: return@mapNotNull null
 
 
                     val path = file.path
                     val date = file.lastModified()
-                    val messages = backup?.messageCount ?: 0
+                    val messages = backup.messageCount
                     val size = file.length()
                     BackupFile(path, date, messages, size)
                 }
