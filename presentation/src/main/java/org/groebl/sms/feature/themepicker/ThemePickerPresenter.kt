@@ -25,15 +25,17 @@ import io.reactivex.rxkotlin.withLatestFrom
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.base.QkPresenter
 import org.groebl.sms.common.util.Colors
+import org.groebl.sms.manager.WidgetManager
 import org.groebl.sms.util.Preferences
 import javax.inject.Inject
 import javax.inject.Named
 
 class ThemePickerPresenter @Inject constructor(
-        @Named("threadId") threadId: Long,
         prefs: Preferences,
+        @Named("threadId") private val threadId: Long,
         private val colors: Colors,
-        private val navigator: Navigator
+        private val navigator: Navigator,
+        private val widgetManager: WidgetManager
 ) : QkPresenter<ThemePickerView, ThemePickerState>(ThemePickerState(threadId = threadId)) {
 
     private val theme: Preference<Int> = prefs.theme(threadId)
@@ -48,7 +50,12 @@ class ThemePickerPresenter @Inject constructor(
         // Update the theme when a material theme is clicked
         view.themeSelected()
                 .autoDisposable(view.scope())
-                .subscribe { color -> theme.set(color) }
+                .subscribe { color ->
+                    theme.set(color)
+                    if (threadId == 0L) {
+                        widgetManager.updateTheme()
+                    }
+                }
 
         // Update the color of the apply button
         view.hsvThemeSelected()
@@ -67,7 +74,7 @@ class ThemePickerPresenter @Inject constructor(
         view.applyHsvThemeClicks()
                 .withLatestFrom(view.hsvThemeSelected()) { _, color -> color }
                 .autoDisposable(view.scope())
-                .subscribe { color -> theme.set(color) }
+                .subscribe { color -> theme.set(color); if (threadId == 0L) { widgetManager.updateTheme() } }
 
         // Reset the theme
         view.clearHsvThemeClicks()

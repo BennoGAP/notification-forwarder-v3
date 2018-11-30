@@ -157,8 +157,6 @@
         <receiver android:name=".feature.widget.WidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-            <intent-filter>
                 <action android:name="org.groebl.sms.intent.action.ACTION_NOTIFY_DATASET_CHANGED" />
             </intent-filter>
 

@@ -28,6 +28,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.RemoteViews
+import dagger.android.AndroidInjection
 import org.groebl.sms.R
 import org.groebl.sms.common.util.Colors
 import org.groebl.sms.common.util.extensions.getColorCompat
@@ -35,7 +36,6 @@ import org.groebl.sms.feature.compose.ComposeActivity
 import org.groebl.sms.feature.main.MainActivity
 import org.groebl.sms.manager.WidgetManager
 import org.groebl.sms.util.Preferences
-import dagger.android.AndroidInjection
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -59,6 +59,7 @@ class WidgetProvider : AppWidgetProvider() {
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         super.onUpdate(context, appWidgetManager, appWidgetIds)
 
+        updateData(context)
         for (appWidgetId in appWidgetIds) {
             updateWidget(context, appWidgetId, isSmallWidget(appWidgetManager, appWidgetId))
         }
