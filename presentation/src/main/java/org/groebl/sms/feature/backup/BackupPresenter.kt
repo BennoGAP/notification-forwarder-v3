@@ -19,7 +19,6 @@
 package org.groebl.sms.feature.backup
 
 import android.content.Context
-import androidx.core.widget.toast
 import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.withLatestFrom
@@ -28,6 +27,7 @@ import io.reactivex.subjects.Subject
 import org.groebl.sms.R
 import org.groebl.sms.common.base.QkPresenter
 import org.groebl.sms.common.util.DateFormatter
+import org.groebl.sms.common.util.extensions.makeToast
 import org.groebl.sms.interactor.PerformBackup
 import org.groebl.sms.manager.PermissionManager
 import org.groebl.sms.repository.BackupRepository
@@ -84,8 +84,8 @@ class BackupPresenter @Inject constructor(
                         backupRepo.getRestoreProgress())
                 { _, backupProgress, restoreProgress ->
                     when {
-                        backupProgress.running -> context.toast(R.string.backup_restore_error_backup)
-                        restoreProgress.running -> context.toast(R.string.backup_restore_error_restore)
+                        backupProgress.running -> context.makeToast(R.string.backup_restore_error_backup)
+                        restoreProgress.running -> context.makeToast(R.string.backup_restore_error_restore)
                         !permissionManager.hasStorage() -> view.requestStoragePermission()
                         else -> view.selectFile()
                     }

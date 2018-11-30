@@ -1,7 +1,6 @@
 package org.groebl.sms.feature.settings
 
 import android.content.Context
-import androidx.core.widget.toast
 import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.rxkotlin.plusAssign
 import org.groebl.sms.R
@@ -9,6 +8,7 @@ import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.base.QkPresenter
 import org.groebl.sms.common.util.Colors
 import org.groebl.sms.common.util.DateFormatter
+import org.groebl.sms.common.util.extensions.makeToast
 import org.groebl.sms.interactor.SyncMessages
 import org.groebl.sms.repository.SyncRepository
 import org.groebl.sms.util.NightModeManager
@@ -156,7 +156,7 @@ class SettingsPresenter @Inject constructor(
                 .doOnNext { enabled -> prefs.logging.set(enabled) }
                 .autoDisposable(view.scope())
                 .subscribe { enabled ->
-                    context.toast(when (enabled) {
+                    context.makeToast(when (enabled) {
                         true -> R.string.settings_logging_enabled
                         false -> R.string.settings_logging_disabled
                     })

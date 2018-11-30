@@ -23,7 +23,6 @@ import android.content.Intent
 import android.telephony.PhoneNumberUtils
 import android.telephony.SmsMessage
 import android.view.inputmethod.EditorInfo
-import androidx.core.widget.toast
 import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -503,7 +502,7 @@ class ComposeViewModel @Inject constructor(
         view.scheduleSelectedIntent
                 .filter { scheduled ->
                     (scheduled > System.currentTimeMillis()).also { future ->
-                        if (!future) context.toast(R.string.compose_scheduled_future)
+                        if (!future) context.makeToast(R.string.compose_scheduled_future)
                     }
                 }
                 .autoDisposable(view.scope())
@@ -607,7 +606,7 @@ class ComposeViewModel @Inject constructor(
                             val uris = attachments.map { it.getUri() }.map { it.toString() }
                             val params = AddScheduledMessage.Params(state.scheduled, subId, addresses, state.sendAsGroup, body, uris)
                             addScheduledMessage.execute(params)
-                            context.toast(R.string.compose_scheduled_toast)
+                            context.makeToast(R.string.compose_scheduled_toast)
                         }
 
                         state.sendAsGroup -> {
