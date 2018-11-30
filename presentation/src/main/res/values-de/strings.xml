@@ -52,7 +52,7 @@
   <string name="settings_bluetooth_markasread_title">Nachrichten als gelesen speichern</string>
   <string name="settings_bluetooth_markasread_summary">Nachrichten werden direkt als gelesen abgespeichert</string>
   <string name="settings_bluetooth_markasread_delayed_title">Verzögerte Gelesen-Markierung</string>
-  <string name="settings_bluetooth_markasread_delayed_summary">Bei Problemen wie leeren Nachrichten sollte dies zusätzlich aktivieren (meist bei Samsung-Geräten mit Android 5 und Android 6)</string>
+  <string name="settings_bluetooth_markasread_delayed_summary">Bei Problemen wie leeren Nachrichten sollte dies zusätzlich aktiviert werden (meist bei Samsung-Geräten mit Android 5 und Android 6)</string>
   <string name="settings_bluetooth_emoji_title">Emojis umwandeln</string>
   <string name="settings_bluetooth_emoji_summary">Ersetzt die durch □ dargestellten Emojis durch ihre Textbeschreibung</string>
   <string name="settings_bluetooth_showname_title">App-Name als Absender</string>
