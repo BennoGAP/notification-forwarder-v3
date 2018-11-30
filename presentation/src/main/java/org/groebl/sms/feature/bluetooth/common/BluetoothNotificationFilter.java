@@ -209,7 +209,6 @@ public class BluetoothNotificationFilter {
                     set_content = ticker;
                     break;
 
-                case "me.bluemail.mail":
                 case "org.kman.AquaMail":
                     if (extras.get(Notification.EXTRA_BIG_TEXT) == null) {
                         return;
@@ -217,6 +216,16 @@ public class BluetoothNotificationFilter {
 
                     set_sender = "E-Mail";
                     set_content = title + ": " + extras.get(Notification.EXTRA_BIG_TEXT);
+                    break;
+
+                case "me.bluemail.mail":
+                    if (extras.get(Notification.EXTRA_BIG_TEXT) != null) {
+                        set_content = title + ": " + extras.get(Notification.EXTRA_BIG_TEXT);
+                    } else {
+                        set_content = title + ticker;
+                    }
+
+                    set_sender = "E-Mail";
                     break;
 
                 case "com.microsoft.office.outlook":
