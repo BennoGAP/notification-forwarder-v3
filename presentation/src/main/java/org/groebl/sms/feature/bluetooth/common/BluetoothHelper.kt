@@ -13,9 +13,14 @@ import android.telephony.PhoneNumberUtils
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.vdurmont.emoji.EmojiParser
+import io.realm.Realm
+import io.realm.Sort
+import org.groebl.sms.model.Conversation
+import org.groebl.sms.model.Message
 import java.math.BigInteger
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
+import java.util.concurrent.TimeUnit
 
 object BluetoothHelper  {
 
@@ -108,10 +113,51 @@ object BluetoothHelper  {
     }
 
     fun deleteBluetoothMessages(context: Context, afterTime: Boolean) {
+
+        Realm.getDefaultInstance().use { realm ->
+            realm.refresh()
+
+            val messages = realm.where(Message::class.java)
+                    .beginGroup()
+                    .equalTo("errorCode", 777.toInt())
+                    .or()
+                    .equalTo("errorCode", 778.toInt())
+                    .endGroup()
+                    .let { if (afterTime) it.lessThanOrEqualTo("date", System.currentTimeMillis() - TimeUnit.HOURS.toMillis(6)) else it }
+                    .findAll()
+
+            val updateIds = HashSet(messages.map { it.threadId })
+
+            realm.executeTransaction { messages.deleteAllFromRealm() }
+
+            updateIds.forEach { threadId ->
+                val conversation = realm.where(Conversation::class.java)
+                        .equalTo("id", threadId)
+                        .findFirst() ?: return
+
+                val messages = realm.where(Message::class.java)
+                        .equalTo("threadId", threadId)
+                        .sort("date", Sort.DESCENDING)
+                        .findAll()
+
+                val message = messages.firstOrNull()
+
+                realm.executeTransaction {
+                    conversation.count = messages.size
+                    conversation.date = message?.date ?: 0
+                    conversation.snippet = message?.getSummary() ?: ""
+                    conversation.read = message?.read ?: true
+                    conversation.me = message?.isMe() ?: false
+                }
+            }
+
+        }
+
         val selection: String = when {
-            afterTime ->    " AND date_sent < " + (System.currentTimeMillis() - 21600000)
+            afterTime ->    " AND date_sent <= " + (System.currentTimeMillis() - TimeUnit.HOURS.toMillis(6))
             else ->         ""
         }
+
         try {
             context.contentResolver.delete(Telephony.Sms.CONTENT_URI, "(" + Telephony.Sms.ERROR_CODE + " = ? or " + Telephony.Sms.ERROR_CODE + " = ?)" + selection, arrayOf("777", "778"))
         } catch(e: Exception) {
