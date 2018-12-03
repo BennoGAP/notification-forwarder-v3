@@ -6,6 +6,7 @@ import io.reactivex.rxkotlin.plusAssign
 import org.groebl.sms.R
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.base.QkPresenter
+import org.groebl.sms.feature.bluetooth.common.BluetoothHelper
 import org.groebl.sms.util.Preferences
 import timber.log.Timber
 import javax.inject.Inject
@@ -89,8 +90,12 @@ class BluetoothSettingsPresenter @Inject constructor(
                             prefs.bluetooth_last_connect.set(0L)
                             prefs.bluetooth_last_disconnect.set(0L)
                             prefs.bluetooth_last_connect_device.set("")
+                            Thread { BluetoothHelper.deleteBluetoothMessages(context, false) }.start()
                         }
-                        R.id.bluetooth_autodelete -> prefs.bluetooth_autodelete.set(!prefs.bluetooth_autodelete.get())
+                        R.id.bluetooth_autodelete -> {
+                            prefs.bluetooth_autodelete.set(!prefs.bluetooth_autodelete.get())
+                            Thread { BluetoothHelper.deleteBluetoothMessages(context, false) }.start()
+                        }
                         R.id.bluetooth_select_device -> view.showBluetoothDevices()
                         R.id.bluetooth_allowed_apps -> view.showBluetoothApps()
                         R.id.bluetooth_save_read -> prefs.bluetooth_save_read.set(!prefs.bluetooth_save_read.get())
