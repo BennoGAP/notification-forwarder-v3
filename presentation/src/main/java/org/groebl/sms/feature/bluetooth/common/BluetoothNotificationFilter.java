@@ -210,6 +210,11 @@ public class BluetoothNotificationFilter {
                     break;
 
                 case "org.kman.AquaMail":
+                case "com.ninefolders.hd3":
+                case "com.ninefolders.hd3.work":
+                case "com.ninefolders.hd3.work.rubus":
+                case "com.ninefolders.hd3.work.intune":
+                case "com.ninefolders.hd3.work.airwatch.gp":
                     if (extras.get(Notification.EXTRA_BIG_TEXT) == null) {
                         return;
                     }
@@ -222,7 +227,7 @@ public class BluetoothNotificationFilter {
                     if (extras.get(Notification.EXTRA_BIG_TEXT) != null) {
                         set_content = title + ": " + extras.get(Notification.EXTRA_BIG_TEXT);
                     } else {
-                        set_content = title + ticker;
+                        set_content = ticker;
                     }
 
                     set_sender = "E-Mail";
