@@ -69,8 +69,8 @@ class BluetoothSettingsPresenter @Inject constructor(
                             prefs.bluetooth_enabled.set(!prefs.bluetooth_enabled.get())
                         } //TODO //(when (!prefs.bluetooth_enabled.get() and (!isDefaultSmsApp(context) or !hasNotificationAccess(context))) { true -> navigator.showBluetoothAccess() else -> prefs.bluetooth_enabled.set(!prefs.bluetooth_enabled.get())} )
                         R.id.bluetooth_notification_access -> navigator.showNotificationAccess()
-                        R.id.bluetooth_faq-> navigator.showFAQ()
-                        R.id.bluetooth_donate-> view.showBluetoothDonate()
+                        //R.id.bluetooth_faq -> navigator.showFAQ()
+                        R.id.bluetooth_donate -> view.showBluetoothDonate()
                         R.id.bluetooth_about -> view.showBluetoothAbout()
                         R.id.bluetooth_battery -> view.showBluetoothBatteryOptimize()
                     }
