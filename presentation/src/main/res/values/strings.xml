@@ -89,7 +89,7 @@
 
     <string name="bluetooth_alert_info_title">Information</string>
     <string name="bluetooth_alert_info_defaultsms">You need to set this as your default SMS-App</string>
-    <string name="bluetooth_alert_info_notifications">The System has stopped the \"Notification Access\". You need to disable and re-enable Notification-Access</string>
+    <string name="bluetooth_alert_info_notifications">The System has stopped the \"Notification Access\". You need to disable and re-enable Notification-Access. If you encounter this problem often, please check the power-saving options</string>
     <string name="bluetooth_alert_info_device">You need to select at least one Bluetooth-Device or disable \"Only on Bluetooth connection\"</string>
     <string name="bluetooth_alert_info_apps">You need to select at least one app on the \"Application White List\"</string>
     <string name="bluetooth_alert_info_markasread">Enable \"Delayed Mark-as-Read\" is advised for this device</string>

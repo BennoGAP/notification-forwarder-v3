@@ -90,7 +90,7 @@
 
   <string name="bluetooth_alert_info_title">Information</string>
   <string name="bluetooth_alert_info_defaultsms">Die App muss als Standard-SMS-App eingestellt werden</string>
-  <string name="bluetooth_alert_info_notifications">Das System hat den \"Benachrichtigungszugriff\" beendet. Dieser muss daher im folgenden Fenster manuell deaktiviert und erneut aktiviert werden</string>
+  <string name="bluetooth_alert_info_notifications">Das System hat den \"Benachrichtigungszugriff\" beendet. Dieser muss daher im folgenden Fenster manuell deaktiviert und erneut aktiviert werden. Sollte dies öfter auftreten, bitte die Energiespareinstellungen prüfen</string>
   <string name="bluetooth_alert_info_device">Es muss noch mindestens ein Bluetooth-Gerät ausgewählt oder die Option \"Nur bei Bluetooth-Verbindung\" deaktiviert werden</string>
   <string name="bluetooth_alert_info_apps">Es muss mindestens eine App unter \"Erlaubte Anwendungen\" ausgewählt werden</string>
   <string name="bluetooth_alert_info_markasread">Die Option \"Verzögerte Gelesen-Markierung\" wird für dieses Gerät empfohlen</string>
