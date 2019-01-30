@@ -99,7 +99,7 @@ class BluetoothAppActivity : QkThemedActivity(), BluetoothAppView {
         val newCheckedApps: MutableSet<String> = mutableSetOf()
         val installedApps = packageManager.getInstalledPackages(0)
         var currentAppCount: Int = 0
-        val allAppCount = installedApps.count()
+        //val allAppCount = installedApps.count()
 
 
         for (apps in installedApps) {
