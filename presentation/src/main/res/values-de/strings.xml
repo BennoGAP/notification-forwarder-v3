@@ -99,7 +99,7 @@
   <string name="bluetooth_alert_button_dismiss">Nicht mehr anzeigen</string>
   <string name="bluetooth_alert_button_ok">Okay</string>
 
-  <string name="bluetooth_donate_category_google">Über InApp-Zahlung Spenden</string>
+  <string name="bluetooth_donate_category_google">Über InApp-Zahlung spenden</string>
   <string name="bluetooth_donate_category_other">Andere Spenden-Methoden</string>
 
   <string name="bluetooth_donate_donate1_summary">Eine Tasse Tee</string>
