@@ -369,8 +369,7 @@ class ComposeViewModel @Inject constructor(
                         val intent = Intent(Intent.ACTION_SEND)
                                 .setType("text/plain")
                                 .putExtra(Intent.EXTRA_TEXT, message.getText())
-
-                        context.startActivity(Intent.createChooser(intent, context.getString(R.string.compose_menu_share)))
+                        context.startActivity(Intent.createChooser(intent, context.getString(R.string.compose_menu_share)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
                     }
                 }
                 .autoDisposable(view.scope())
