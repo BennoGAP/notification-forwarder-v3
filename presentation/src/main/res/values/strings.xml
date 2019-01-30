@@ -16,102 +16,108 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
   -->
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name" translatable="false">SMS &amp; Notifications</string>
-    <string name="button_add">Add</string>
-    <string name="button_yes">Yes</string>
-    <string name="button_no">No</string>
-    <string name="settings_category_about_lower">Based on QKSMS</string>
-    <string name="theme_color">Color</string>
+    <string name="button_add" tools:ignore="MissingTranslation">Add</string>
+    <string name="button_yes" tools:ignore="MissingTranslation">Yes</string>
+    <string name="button_no" tools:ignore="MissingTranslation">No</string>
+    <string name="settings_category_about_lower" tools:ignore="MissingTranslation">Based on QKSMS</string>
+    <string name="theme_color" tools:ignore="MissingTranslation">Color</string>
 
-    <string name="title_settings_bluetooth">Bluetooth Settings</string>
-    <string name="drawer_feedback">Feedback</string>
+    <string name="title_settings_bluetooth" tools:ignore="MissingTranslation">Bluetooth Settings</string>
+    <string name="drawer_feedback" tools:ignore="MissingTranslation">Feedback</string>
 
-    <string name="settings_category_bluetooth_general">General</string>
-    <string name="settings_category_bluetooth_more">More settings</string>
-    <string name="settings_category_bluetooth_whatsapp">WhatsApp settings</string>
-    <string name="settings_category_bluetooth_other">Other settings</string>
-    <string name="settings_category_bluetooth_system">System settings</string>
+    <string name="settings_category_bluetooth_general" tools:ignore="MissingTranslation">General</string>
+    <string name="settings_category_bluetooth_more" tools:ignore="MissingTranslation">More settings</string>
+    <string name="settings_category_bluetooth_whatsapp" tools:ignore="MissingTranslation">WhatsApp settings</string>
+    <string name="settings_category_bluetooth_other" tools:ignore="MissingTranslation">Other settings</string>
+    <string name="settings_category_bluetooth_system" tools:ignore="MissingTranslation">System settings</string>
 
-    <string name="drawer_bluetoothsettings">Bluetooth Settings</string>
-    <string name="settings_bluetooth_enabled_title">Enable</string>
-    <string name="settings_bluetooth_enabled_summary">Enable the Notification forwarding</string>
-    <string name="settings_bluetooth_connected_title">Only with Bluetooth Connection</string>
-    <string name="settings_bluetooth_connected_summary">Only forward messages when connected over Bluetooth</string>
-    <string name="settings_bluetooth_apps_title">Application White List</string>
-    <string name="settings_bluetooth_apps_summary">Select the apps, from which notifications get forwarded</string>
-    <string name="settings_bluetooth_apps_loading">Loading your apps&#8230;</string>
-    <string name="settings_bluetooth_apps_search">Search&#8230;</string>
-    <string name="settings_bluetooth_delete_title">Delete Messages</string>
-    <string name="settings_bluetooth_delete_summary">Delete the temporary Notification-Messages on a Bluetooth disconnect</string>
-    <string name="settings_bluetooth_devices_title">Select Bluetooth-Device</string>
-    <string name="settings_bluetooth_devices_summary">Choose the devices, where the above mentioned actions should happen (e.g. the Car-Bluetooth)</string>
-    <string name="settings_bluetooth_device_status_connected">Connected with %s since %s</string>
-    <string name="settings_bluetooth_device_status_disconnected">Disconnected from %s since %s</string>
-    <string name="settings_bluetooth_markasread_title">Save messages as read</string>
-    <string name="settings_bluetooth_markasread_summary">Deactivate if encounter problems (mostly on Samsung-Devices)</string>
-    <string name="settings_bluetooth_markasread_delayed_title">Delayed Mark-as-Read</string>
-    <string name="settings_bluetooth_markasread_delayed_summary">Enable this if you get empty messages (mostly on Samsung devices with Android 5 and Android 6)</string>
-    <string name="settings_bluetooth_emoji_title">Replace Emojis</string>
-    <string name="settings_bluetooth_emoji_summary">Replace the □ Emojis with their description-text</string>
-    <string name="settings_bluetooth_showname_title">Show App-Name as Sender</string>
-    <string name="settings_bluetooth_showname_summary">Not supported for most of the devices</string>
-    <string name="settings_bluetooth_shownumber_title">Show App-Name as unique number</string>
-    <string name="settings_bluetooth_shownumber_summary">Assign a unique dummy number for every App</string>
-    <string name="settings_bluetooth_max_vol_title">Increase Bluetooth-Volume</string>
-    <string name="settings_bluetooth_max_vol_summary">Set the Bluetooth-Volume to 100% when connected to the selected Bluetooth-Device</string>
-    <string name="settings_bluetooth_tethering_title">Bluetooth-Tethering</string>
-    <string name="settings_bluetooth_tethering_summary">Enable Bluetooth-Tethering when connected to the selected Bluetooth-Device</string>
-    <string name="settings_bluetooth_tethering_dialog">To enable this option you need to permit %s to modify system settings</string>
-    <string name="settings_bluetooth_whatsapp_to_contact_title">Assign WhatsApp-Messages</string>
-    <string name="settings_bluetooth_whatsapp_to_contact_summary">Show the name and number from the sender of the WhatsApp-Message</string>
-    <string name="settings_bluetooth_whatsapp_hide_prefix_title">Hide WhatsApp-Prefix</string>
-    <string name="settings_bluetooth_whatsapp_hide_prefix_summary">Hide the \'WhatsApp\'-Prefix in front of the messages</string>
-    <string name="settings_bluetooth_block_whatsapp_group_title">Exclude WhatsApp groups</string>
-    <string name="settings_bluetooth_block_whatsapp_group_summary">WhatsApp-Messages from the following groups will not be forwarded</string>
-    <string name="settings_bluetooth_block_whatsapp_contact_title">Exclude WhatsApp contacts</string>
-    <string name="settings_bluetooth_block_whatsapp_contact_summary">WhatsApp-Messages from the following contacts will not be forwarded</string>
-    <string name="settings_bluetooth_notification_access_title">Notification Access</string>
-    <string name="settings_bluetooth_battery_title">Battery Optimization</string>
-    <string name="settings_bluetooth_battery_summary">If the forwarding stopped working after a time, check your battery/power-saving options</string>
-    <string name="settings_bluetooth_battery_dialog">Whitelist %s in the options, otherwise the app could be stopped from working in the background</string>
-    <string name="settings_bluetooth_donate">Donate</string>
-    <string name="settings_bluetooth_faq_title">FAQ</string>
+    <string name="drawer_bluetoothsettings" tools:ignore="MissingTranslation">Bluetooth Settings</string>
+    <string name="settings_bluetooth_enabled_title" tools:ignore="MissingTranslation">Enable</string>
+    <string name="settings_bluetooth_enabled_summary" tools:ignore="MissingTranslation">Enable the Notification forwarding</string>
+    <string name="settings_bluetooth_connected_title" tools:ignore="MissingTranslation">Only with Bluetooth Connection</string>
+    <string name="settings_bluetooth_connected_summary" tools:ignore="MissingTranslation">Only forward messages when connected over Bluetooth</string>
+    <string name="settings_bluetooth_apps_title" tools:ignore="MissingTranslation">Application White List</string>
+    <string name="settings_bluetooth_apps_summary" tools:ignore="MissingTranslation">Select the apps, from which notifications get forwarded</string>
+    <string name="settings_bluetooth_apps_loading" tools:ignore="MissingTranslation">Loading your apps&#8230;</string>
+    <string name="settings_bluetooth_apps_search" tools:ignore="MissingTranslation">Search&#8230;</string>
+    <string name="settings_bluetooth_delete_title" tools:ignore="MissingTranslation">Delete Messages</string>
+    <string name="settings_bluetooth_delete_summary" tools:ignore="MissingTranslation">Delete the temporary Notification-Messages on a Bluetooth disconnect</string>
+    <string name="settings_bluetooth_devices_title" tools:ignore="MissingTranslation">Select Bluetooth-Device</string>
+    <string name="settings_bluetooth_devices_summary" tools:ignore="MissingTranslation">Choose the devices, where the above mentioned actions should happen (e.g. the Car-Bluetooth)</string>
+    <string name="settings_bluetooth_device_status_connected" tools:ignore="MissingTranslation">Connected with %s since %s</string>
+    <string name="settings_bluetooth_device_status_disconnected" tools:ignore="MissingTranslation">Disconnected from %s since %s</string>
+    <string name="settings_bluetooth_markasread_title" tools:ignore="MissingTranslation">Save messages as read</string>
+    <string name="settings_bluetooth_markasread_summary" tools:ignore="MissingTranslation">Deactivate if encounter problems (mostly on Samsung-Devices)</string>
+    <string name="settings_bluetooth_markasread_delayed_title" tools:ignore="MissingTranslation">Delayed Mark-as-Read</string>
+    <string name="settings_bluetooth_markasread_delayed_summary" tools:ignore="MissingTranslation">Enable this if you get empty messages (mostly on Samsung devices with Android 5 and Android 6)</string>
+    <string name="settings_bluetooth_emoji_title" tools:ignore="MissingTranslation">Replace Emojis</string>
+    <string name="settings_bluetooth_emoji_summary" tools:ignore="MissingTranslation">Replace the □ Emojis with their description-text</string>
+    <string name="settings_bluetooth_showname_title" tools:ignore="MissingTranslation">Show App-Name as Sender</string>
+    <string name="settings_bluetooth_showname_summary" tools:ignore="MissingTranslation">Not supported for most of the devices</string>
+    <string name="settings_bluetooth_shownumber_title" tools:ignore="MissingTranslation">Show App-Name as unique number</string>
+    <string name="settings_bluetooth_shownumber_summary" tools:ignore="MissingTranslation">Assign a unique dummy number for every App</string>
+    <string name="settings_bluetooth_max_vol_title" tools:ignore="MissingTranslation">Increase Bluetooth-Volume</string>
+    <string name="settings_bluetooth_max_vol_summary" tools:ignore="MissingTranslation">Set the Bluetooth-Volume to 100% when connected to the selected Bluetooth-Device</string>
+    <string name="settings_bluetooth_tethering_title" tools:ignore="MissingTranslation">Bluetooth-Tethering</string>
+    <string name="settings_bluetooth_tethering_summary" tools:ignore="MissingTranslation">Enable Bluetooth-Tethering when connected to the selected Bluetooth-Device</string>
+    <string name="settings_bluetooth_tethering_dialog" tools:ignore="MissingTranslation">To enable this option you need to permit %s to modify system settings</string>
+    <string name="settings_bluetooth_whatsapp_to_contact_title" tools:ignore="MissingTranslation">Assign WhatsApp-Messages</string>
+    <string name="settings_bluetooth_whatsapp_to_contact_summary" tools:ignore="MissingTranslation">Show the name and number from the sender of the WhatsApp-Message</string>
+    <string name="settings_bluetooth_whatsapp_hide_prefix_title" tools:ignore="MissingTranslation">Hide WhatsApp-Prefix</string>
+    <string name="settings_bluetooth_whatsapp_hide_prefix_summary" tools:ignore="MissingTranslation">Hide the \'WhatsApp\'-Prefix in front of the messages</string>
+    <string name="settings_bluetooth_block_whatsapp_group_title" tools:ignore="MissingTranslation">Exclude WhatsApp groups</string>
+    <string name="settings_bluetooth_block_whatsapp_group_summary" tools:ignore="MissingTranslation">WhatsApp-Messages from the following groups will not be forwarded</string>
+    <string name="settings_bluetooth_block_whatsapp_contact_title" tools:ignore="MissingTranslation">Exclude WhatsApp contacts</string>
+    <string name="settings_bluetooth_block_whatsapp_contact_summary" tools:ignore="MissingTranslation">WhatsApp-Messages from the following contacts will not be forwarded</string>
+    <string name="settings_bluetooth_notification_access_title" tools:ignore="MissingTranslation">Notification Access</string>
+    <string name="settings_bluetooth_battery_title" tools:ignore="MissingTranslation">Battery Optimization</string>
+    <string name="settings_bluetooth_battery_summary" tools:ignore="MissingTranslation">If the forwarding stopped working after a time, check your battery/power-saving options</string>
+    <string name="settings_bluetooth_battery_dialog" tools:ignore="MissingTranslation">Whitelist %s in the options, otherwise the app could be stopped from working in the background</string>
+    <string name="settings_bluetooth_donate" tools:ignore="MissingTranslation">Donate</string>
+    <string name="settings_bluetooth_faq_title" tools:ignore="MissingTranslation">FAQ</string>
 
-    <string name="settings_bluetooth_block_whatsapp_group_add_title">Block WhatsApp-Group</string>
-    <string name="settings_bluetooth_block_whatsapp_contact_add_title">Block WhatsApp-Contact</string>
-    <string name="settings_bluetooth_block_whatsapp_group_add_summary">Enter Group-Name to block (without Emojis)</string>
-    <string name="settings_bluetooth_block_whatsapp_contact_add_summary">Enter Contact-Number to block</string>
-    <string name="settings_bluetooth_block_whatsapp_unblock_summary">Remove %s from block-list?</string>
-    <string name="settings_bluetooth_block_whatsapp_unblock_confirm">Confirm Unblock</string>
+    <string name="settings_bluetooth_block_whatsapp_group_add_title" tools:ignore="MissingTranslation">Block WhatsApp-Group</string>
+    <string name="settings_bluetooth_block_whatsapp_contact_add_title" tools:ignore="MissingTranslation">Block WhatsApp-Contact</string>
+    <string name="settings_bluetooth_block_whatsapp_group_add_summary" tools:ignore="MissingTranslation">Enter Group-Name to block (without Emojis)</string>
+    <string name="settings_bluetooth_block_whatsapp_contact_add_summary" tools:ignore="MissingTranslation">Enter Contact-Number to block</string>
+    <string name="settings_bluetooth_block_whatsapp_unblock_summary" tools:ignore="MissingTranslation">Remove %s from block-list?</string>
+    <string name="settings_bluetooth_block_whatsapp_unblock_confirm" tools:ignore="MissingTranslation">Confirm Unblock</string>
 
-    <string name="settings_bluetooth_no_devices">No paired Bluetooth devices found</string>
+    <string name="settings_bluetooth_no_devices" tools:ignore="MissingTranslation">No paired Bluetooth devices found</string>
 
-    <string name="bluetooth_alert_info_title">Information</string>
-    <string name="bluetooth_alert_info_defaultsms">You need to set this as your default SMS-App</string>
-    <string name="bluetooth_alert_info_notifications">The System has stopped the \"Notification Access\". You need to disable and re-enable Notification-Access. If you encounter this problem often, please check the power-saving options</string>
-    <string name="bluetooth_alert_info_device">You need to select at least one Bluetooth-Device or disable \"Only on Bluetooth connection\"</string>
-    <string name="bluetooth_alert_info_apps">You need to select at least one app on the \"Application White List\"</string>
-    <string name="bluetooth_alert_info_markasread">Enable \"Delayed Mark-as-Read\" is advised for this device</string>
+    <string name="bluetooth_alert_info_title" tools:ignore="MissingTranslation">Information</string>
+    <string name="bluetooth_alert_info_defaultsms" tools:ignore="MissingTranslation">You need to set this as your default SMS-App</string>
+    <string name="bluetooth_alert_info_notifications" tools:ignore="MissingTranslation">The System has stopped the \"Notification Access\". You need to disable and re-enable Notification-Access. If you encounter this problem often, please check the power-saving options</string>
+    <string name="bluetooth_alert_info_device" tools:ignore="MissingTranslation">You need to select at least one Bluetooth-Device or disable \"Only on Bluetooth connection\"</string>
+    <string name="bluetooth_alert_info_apps" tools:ignore="MissingTranslation">You need to select at least one app on the \"Application White List\"</string>
+    <string name="bluetooth_alert_info_markasread" tools:ignore="MissingTranslation">Enable \"Delayed Mark-as-Read\" is advised for this device</string>
 
-    <string name="bluetooth_alert_sync_info">This is just to check if the notification forwarding is working fine - there is no need to synchronize every time to get everything working. If the forwarded notifications appear in the overview now, the app is working as intended.</string>
-    <string name="bluetooth_alert_button_dismiss">Don\'t show again</string>
-    <string name="bluetooth_alert_button_ok">Okay</string>
+    <string name="bluetooth_alert_sync_info" tools:ignore="MissingTranslation">This is just to check if the notification forwarding is working fine - there is no need to synchronize every time to get everything working. If the forwarded notifications appear in the overview now, the app is working as intended.</string>
+    <string name="bluetooth_alert_button_dismiss" tools:ignore="MissingTranslation">Don\'t show again</string>
+    <string name="bluetooth_alert_button_ok" tools:ignore="MissingTranslation">Okay</string>
 
-    <string name="bluetooth_donate_category_google">Donate with InApp-Payment</string>
-    <string name="bluetooth_donate_category_other">Other donation options</string>
+    <string name="bluetooth_donate_category_google" tools:ignore="MissingTranslation">Donate with InApp-Payment</string>
+    <string name="bluetooth_donate_category_other" tools:ignore="MissingTranslation">Other donation options</string>
 
-    <string name="bluetooth_donate_donate1_summary">A cup of tea</string>
-    <string name="bluetooth_donate_donate2_summary">A cup of coffee </string>
-    <string name="bluetooth_donate_donate3_summary">Two cups of coffee</string>
-    <string name="bluetooth_donate_donate4_summary">Three cups of coffee</string>
+    <string name="bluetooth_donate_donate1_summary" tools:ignore="MissingTranslation">A cup of tea</string>
+    <string name="bluetooth_donate_donate2_summary" tools:ignore="MissingTranslation">A cup of coffee </string>
+    <string name="bluetooth_donate_donate3_summary" tools:ignore="MissingTranslation">Two cups of coffee</string>
+    <string name="bluetooth_donate_donate4_summary" tools:ignore="MissingTranslation">Three cups of coffee</string>
 
-    <string name="bluetooth_donate_paypal_title">Donate with PayPal</string>
-    <string name="bluetooth_donate_paypal_summary">Amount can be chosen freely</string>
+    <string name="bluetooth_donate_paypal_title" tools:ignore="MissingTranslation">Donate with PayPal</string>
+    <string name="bluetooth_donate_paypal_summary" tools:ignore="MissingTranslation">Amount can be chosen freely</string>
 
-    <string name="bluetooth_donate_price">Donate %1$s</string>
-    <string name="bluetooth_donate_thanks">Thank you for your donation</string>
-    <string name="bluetooth_donate_text">If you like this app, a donation is highly appreciated :)</string>
+    <string name="bluetooth_donate_price" tools:ignore="MissingTranslation">Donate %1$s</string>
+    <string name="bluetooth_donate_thanks" tools:ignore="MissingTranslation">Thank you for your donation</string>
+    <string name="bluetooth_donate_text" tools:ignore="MissingTranslation">If you like this app, a donation is highly appreciated :)</string>
+
+    <string name="main_default_sms_message_new" tools:ignore="MissingTranslation">Make this your default SMS app</string>
+    <string name="main_permission_sms_new" tools:ignore="MissingTranslation">This App needs permission to send and view SMS messages</string>
+    <string name="main_permission_contacts_new" tools:ignore="MissingTranslation">This App needs permission to view your contacts</string>
+    <string name="rate_title_new" tools:ignore="MissingTranslation">Enjoying this App?</string>
+    <string name="compose_menu_share" tools:ignore="MissingTranslation">Share</string>
 
     <string name="shortcut_compose_long_label">New conversation</string>
     <string name="shortcut_compose_short_label">Compose</string>
@@ -132,10 +138,8 @@
     <string name="menu_info">Details</string>
     <string name="menu_save">Save to gallery</string>
 
-    <string name="main_title">Inbox</string>
     <string name="main_drawer_open_cd">Open navigation drawer</string>
     <string name="main_title_selected">%d selected</string>
-    <string name="main_menu_search">Search</string>
     <string name="main_menu_clear">Clear</string>
     <string name="main_menu_archive">Archive</string>
     <string name="main_menu_unarchive">Unarchive</string>
@@ -154,11 +158,8 @@
     <string name="archived_empty_text">Your archived conversations will appear here</string>
     <string name="main_fab_cd">Start new conversation</string>
     <string name="main_default_sms_title">Love texting again</string>
-    <string name="main_default_sms_message_new">Make this your default SMS app</string>
     <string name="main_default_sms_change">Change</string>
     <string name="main_permission_required">Permission required</string>
-    <string name="main_permission_sms_new">This App needs permission to send and view SMS messages</string>
-    <string name="main_permission_contacts_new">This App needs permission to view your contacts</string>
     <string name="main_permission_allow">Allow</string>
 
     <string name="drawer_inbox">Inbox</string>
@@ -173,7 +174,6 @@
     <string name="drawer_plus_banner_title">QKSMS+</string>
     <string name="drawer_plus_banner_summary">Unlock amazing new features, and support development</string>
 
-    <string name="rate_title_new">Enjoying this App?</string>
     <string name="rate_summary">Share some love and rate on Google Play!</string>
     <string name="rate_okay">OKAY!</string>
     <string name="rate_dismiss">DISMISS</string>
@@ -203,7 +203,6 @@
     <string name="compose_hint">Write a message…</string>
     <string name="compose_menu_copy">Copy text</string>
     <string name="compose_menu_forward">Forward</string>
-    <string name="compose_menu_share">Share</string>
     <string name="compose_menu_delete">Delete</string>
     <string name="compose_menu_previous">Previous</string>
     <string name="compose_menu_next">Next</string>
@@ -223,6 +222,8 @@
     <string name="compose_gallery_cd">Attach a photo</string>
     <string name="compose_camera_cd">Take a photo</string>
     <string name="compose_schedule_cd">Schedule message</string>
+    <string name="compose_contact_cd">Attach a contact</string>
+    <string name="compose_contact_error">Error reading contact</string>
     <string name="compose_sim_cd">%s selected, change SIM card</string>
     <string name="compose_send_cd">Send message</string>
 

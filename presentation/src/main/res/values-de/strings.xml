@@ -114,6 +114,12 @@
   <string name="bluetooth_donate_thanks">Vielen Dank für die Spende</string>
   <string name="bluetooth_donate_text">Ich hoffe dir gefällt die App.\n\nDa die App auch weiterhin werbefrei und kostenfrei bleiben soll würde ich mich über eine freiwillige Spende freuen :)</string>
 
+  <string name="main_default_sms_message_new">Diese App als Standard-SMS-App festlegen</string>
+  <string name="main_permission_sms_new">Die App benötigt die Berechtigung zum Senden und Anzeigen von SMS-Nachrichten</string>
+  <string name="main_permission_contacts_new">Die App benötigt die Berechtigung zum Zugreifen auf die Kontakte</string>
+  <string name="rate_title_new">Gefällt dir die App?</string>
+  <string name="compose_menu_share">Teilen</string>
+
   <string name="shortcut_compose_long_label">Neue Unterhaltung</string>
   <string name="shortcut_compose_short_label">Verfassen</string>
   <string name="shortcut_compose_disabled_message">Schnellzugriff deaktiviert</string>
@@ -148,11 +154,8 @@
   <string name="archived_empty_text">Archivierte Unterhaltungen werden hier angezeigt</string>
   <string name="main_fab_cd">Neue Unterhaltung starten</string>
   <string name="main_default_sms_title">Liebe es wieder, SMS zu schreiben</string>
-  <string name="main_default_sms_message_new">Diese App als Standard-SMS-App festlegen</string>
   <string name="main_default_sms_change">Ändern</string>
   <string name="main_permission_required">Berechtigung erforderlich</string>
-  <string name="main_permission_sms_new">Die App benötigt die Berechtigung zum Senden und Anzeigen von SMS-Nachrichten</string>
-  <string name="main_permission_contacts_new">Die App benötigt die Berechtigung zum Zugreifen auf die Kontakte</string>
   <string name="main_permission_allow">Zulassen</string>
   <string name="drawer_inbox">Posteingang</string>
   <string name="drawer_archived">Archiviert</string>
@@ -165,7 +168,6 @@
   <string name="drawer_invite">Freunde einladen</string>
   <string name="drawer_plus_banner_title">QKSMS+</string>
   <string name="drawer_plus_banner_summary">Schalte erstaunliche Neue Funktionen frei und unterstütze die Entwicklung</string>
-  <string name="rate_title_new">Gefällt dir die App?</string>
   <string name="rate_summary">Teile etwas von deiner Liebe und bewerte die App auf Google Play!</string>
   <string name="rate_okay">OKAY!</string>
   <string name="rate_dismiss">VERWERFEN</string>
@@ -192,7 +194,6 @@
   <string name="compose_hint">Nachricht schreiben&#8230;</string>
   <string name="compose_menu_copy">Text kopieren</string>
   <string name="compose_menu_forward">Weiterleiten</string>
-  <string name="compose_menu_share">Teilen</string>
   <string name="compose_menu_delete">Löschen</string>
   <string name="compose_menu_previous">Vorherige</string>
   <string name="compose_menu_next">Nächste</string>
@@ -212,6 +213,8 @@
   <string name="compose_gallery_cd">Foto anhängen</string>
   <string name="compose_camera_cd">Foto aufnehmen</string>
   <string name="compose_schedule_cd">Plane Nachricht</string>
+  <string name="compose_contact_cd">Attach a contact</string>
+  <string name="compose_contact_error">Error reading contact</string>
   <string name="compose_sim_cd">%s ausgewählt, SIM-Karte ändern</string>
   <string name="compose_send_cd">Nachricht senden</string>
   <string name="message_status_sending">Wird gesendet&#8230;</string>
@@ -227,7 +230,7 @@
   <string name="info_block">Blockieren</string>
   <string name="info_unblock">Entsperren</string>
   <string name="info_delete">Unterhaltung löschen</string>
-  <string name="gallery_error">Konnte nicht geladen werden</string>
+  <string name="gallery_error">Mediendatei konnte nicht geladen werden</string>
   <string name="gallery_toast_saved">In Galerie gespeichert</string>
   <string name="backup_title">Sichern und Wiederherstellen</string>
   <string name="backup_backing_up">Sichere Nachrichten</string>
