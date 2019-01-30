@@ -20,13 +20,13 @@ package org.groebl.sms.common.base
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import org.groebl.sms.common.androidxcompat.RealmRecyclerViewAdapter
 import org.groebl.sms.common.util.extensions.setVisible
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
 import io.realm.OrderedRealmCollection
 import io.realm.RealmList
 import io.realm.RealmModel
+import io.realm.RealmRecyclerViewAdapter
 import io.realm.RealmResults
 
 abstract class QkRealmAdapter<T : RealmModel> : RealmRecyclerViewAdapter<T, QkViewHolder>(null, true) {
