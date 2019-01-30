@@ -19,6 +19,8 @@
 package org.groebl.sms.feature.compose
 
 import android.content.Context
+import android.net.Uri
+import android.provider.ContactsContract
 import android.content.Intent
 import android.telephony.PhoneNumberUtils
 import android.telephony.SmsMessage
@@ -58,9 +60,11 @@ import org.groebl.sms.repository.MessageRepository
 import org.groebl.sms.util.ActiveSubscriptionObservable
 import org.groebl.sms.util.Preferences
 import org.groebl.sms.util.tryOrNull
+import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Named
+
 
 class ComposeViewModel @Inject constructor(
         @Named("query") private val query: String,
@@ -517,6 +521,21 @@ class ComposeViewModel @Inject constructor(
                 .autoDisposable(view.scope())
                 .subscribe { scheduled -> newState { copy(scheduled = scheduled) } }
 
+        // Attach a contact
+        view.attachContactIntent
+                .doOnNext { newState { copy(attaching = false) } }
+                .autoDisposable(view.scope())
+                .subscribe { view.requestContact() }
+
+        // Contact was selected for attachment
+        view.contactSelectedIntent
+                .map(::vCard)
+                .autoDisposable(view.scope())
+                .subscribe({}, { error ->
+                    context.makeToast(R.string.compose_contact_error)
+                    Timber.w(error)
+                })
+
         // Detach a photo
         view.attachmentDeletedIntent
                 .withLatestFrom(attachments) { bitmap, attachments -> attachments.filter { it !== bitmap } }
@@ -667,6 +686,19 @@ class ComposeViewModel @Inject constructor(
                 .autoDisposable(view.scope())
                 .subscribe()
 
+    }
+
+    private fun vCard(contactData: Uri): String? {
+        val lookupKey = context.contentResolver.query(contactData, null, null, null, null)?.use { cursor ->
+            cursor.moveToFirst()
+            cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY))
+        }
+
+        val vCardUri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_VCARD_URI, lookupKey)
+        return context.contentResolver.openAssetFileDescriptor(vCardUri, "r")
+                ?.createInputStream()
+                ?.readBytes()
+                ?.let { bytes -> String(bytes) }
     }
 
 }
