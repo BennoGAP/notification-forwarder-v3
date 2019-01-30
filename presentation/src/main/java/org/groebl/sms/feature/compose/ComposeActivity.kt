@@ -58,7 +58,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
-
 class ComposeActivity : QkThemedActivity(), ComposeView {
 
     companion object {

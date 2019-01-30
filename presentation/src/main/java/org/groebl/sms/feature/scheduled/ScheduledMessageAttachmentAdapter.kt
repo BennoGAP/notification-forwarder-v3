@@ -25,7 +25,7 @@ import org.groebl.sms.R
 import org.groebl.sms.common.base.QkAdapter
 import org.groebl.sms.common.base.QkViewHolder
 import org.groebl.sms.util.GlideApp
-import kotlinx.android.synthetic.main.attachment_list_item.view.*
+import kotlinx.android.synthetic.main.attachment_image_list_item.view.*
 import javax.inject.Inject
 
 class ScheduledMessageAttachmentAdapter @Inject constructor() : QkAdapter<Uri>() {

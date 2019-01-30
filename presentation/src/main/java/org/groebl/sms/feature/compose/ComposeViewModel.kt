@@ -65,13 +65,12 @@ import java.util.*
 import javax.inject.Inject
 import javax.inject.Named
 
-
 class ComposeViewModel @Inject constructor(
         @Named("query") private val query: String,
         @Named("threadId") private val threadId: Long,
         @Named("address") private val address: String,
         @Named("text") private val sharedText: String,
-        @Named("attachments") private val sharedAttachments: List<Attachment>,
+        @Named("attachments") private val sharedAttachments: Attachments,
         private val context: Context,
         private val activeConversationManager: ActiveConversationManager,
         private val addScheduledMessage: AddScheduledMessage,
@@ -504,8 +503,8 @@ class ComposeViewModel @Inject constructor(
 
         // A photo was selected
         Observable.merge(
-                view.attachmentSelectedIntent.map { uri -> Attachment(uri) },
-                view.inputContentIntent.map { inputContent -> Attachment(inputContent = inputContent) })
+                view.attachmentSelectedIntent.map { uri -> Attachment.Image(uri) },
+                view.inputContentIntent.map { inputContent -> Attachment.Image(inputContent = inputContent) })
                 .withLatestFrom(attachments) { attachment, attachments -> attachments + attachment }
                 .doOnNext { attachments.onNext(it) }
                 .autoDisposable(view.scope())
@@ -529,12 +528,14 @@ class ComposeViewModel @Inject constructor(
 
         // Contact was selected for attachment
         view.contactSelectedIntent
-                .map(::vCard)
+                .map { uri -> Attachment.Contact(getVCard(uri)!!) }
+                .withLatestFrom(attachments) { attachment, attachments -> attachments + attachment}
+                .subscribeOn(Schedulers.io())
                 .autoDisposable(view.scope())
-                .subscribe({}, { error ->
+                .subscribe(attachments::onNext) { error ->
                     context.makeToast(R.string.compose_contact_error)
                     Timber.w(error)
-                })
+                }
 
         // Detach a photo
         view.attachmentDeletedIntent
@@ -632,7 +633,7 @@ class ComposeViewModel @Inject constructor(
                         // Scheduling a message
                         state.scheduled != 0L -> {
                             newState { copy(scheduled = 0) }
-                            val uris = attachments.map { it.getUri() }.map { it.toString() }
+                            val uris = attachments.mapNotNull { it as? Attachment.Image }.map { it.getUri() }.map { it.toString() }
                             val params = AddScheduledMessage.Params(state.scheduled, subId, addresses, state.sendAsGroup, body, uris)
                             addScheduledMessage.execute(params)
                             context.makeToast(R.string.compose_scheduled_toast)
@@ -688,7 +689,7 @@ class ComposeViewModel @Inject constructor(
 
     }
 
-    private fun vCard(contactData: Uri): String? {
+    private fun getVCard(contactData: Uri): String? {
         val lookupKey = context.contentResolver.query(contactData, null, null, null, null)?.use { cursor ->
             cursor.moveToFirst()
             cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY))
