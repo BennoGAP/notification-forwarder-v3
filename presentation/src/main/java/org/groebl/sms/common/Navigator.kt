@@ -28,6 +28,7 @@ import android.provider.Settings
 import android.provider.Telephony
 import com.klinker.android.send_message.Utils
 import org.groebl.sms.BuildConfig
+import org.groebl.sms.common.util.BillingManager
 import org.groebl.sms.feature.backup.BackupActivity
 import org.groebl.sms.feature.blocked.BlockedActivity
 import org.groebl.sms.feature.bluetooth.BluetoothSettingsActivity
@@ -49,6 +50,7 @@ import javax.inject.Singleton
 class Navigator @Inject constructor(
         private val context: Context,
         private val analyticsManager: AnalyticsManager,
+        private val billingManager: BillingManager,
         private val notificationManager: NotificationManager,
         private val permissions: PermissionManager
 ) {
@@ -207,10 +209,12 @@ class Navigator @Inject constructor(
         intent.putExtra(Intent.EXTRA_EMAIL, arrayOf("android@groebl.org"))
         intent.putExtra(Intent.EXTRA_SUBJECT, "[Notification Forwarder Pro]")
         intent.putExtra(Intent.EXTRA_TEXT, StringBuilder("\n\n")
-                .append("--- Please write your message above this line ---\n\n")
+                .append("\n\n--- Please write your message above this line ---\n\n")
+                .append("Package: ${context.packageName}\n")
                 .append("Version: ${BuildConfig.VERSION_NAME}\n")
                 .append("Device: ${Build.BRAND} ${Build.MODEL}\n")
-                .append("SDK: ${Build.VERSION.SDK_INT}")
+                .append("SDK: ${Build.VERSION.SDK_INT}\n")
+                .append("Donated".takeIf { billingManager.upgradeStatus.blockingFirst() } ?: "")
                 .toString())
         startActivityExternal(intent)
     }
