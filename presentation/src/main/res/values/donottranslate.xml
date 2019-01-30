@@ -32,6 +32,6 @@
 
     <string name="bluetooth_about_developer">Benno Gröbl</string>
     <string name="bluetooth_about_contact">android@groebl.org</string>
-    <string name="version_qksms">3.5.4</string>
+    <string name="version_qksms">3.6.1</string>
 
 </resources>
