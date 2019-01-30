@@ -1,14 +1,10 @@
 package org.groebl.sms.feature.bluetooth.common;
 
-import android.annotation.TargetApi;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.net.Uri;
-import android.os.Build;
-import android.os.PowerManager;
 import android.provider.Settings;
 
 import java.util.Arrays;
@@ -21,6 +17,7 @@ public class BluetoothBatteryUtils {
 
             new Intent().setComponent(new ComponentName("com.samsung.android.sm", "com.samsung.android.sm.ui.battery.BatteryActivity")),             //Samsung - <= API 23
             new Intent().setComponent(new ComponentName("com.samsung.android.lool", "com.samsung.android.sm.ui.battery.BatteryActivity")),           //Samsung - => API 24
+            new Intent().setComponent(new ComponentName("com.miui.powerkeeper", "com.miui.powerkeeper.ui.HiddenAppsContainerManagementActivity")),
             new Intent().setComponent(new ComponentName("com.miui.powerkeeper", "com.miui.powerkeeper.ui.HiddenAppsConfigActivity")),
             new Intent().setComponent(new ComponentName("com.huawei.systemmanager", "com.huawei.systemmanager.optimize.process.ProtectActivity")),   //Huawei, Honor - <= API 25
             //new Intent().setComponent(new ComponentName("com.coloros.oppoguardelf", "com.coloros.powermanager.fuelgaue.PowerUsageModelActivity")),
@@ -42,7 +39,7 @@ public class BluetoothBatteryUtils {
             }
         }
 
-        context.startActivity(start_intent);
+        context.startActivity(start_intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
 
         /*
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -69,6 +66,7 @@ public class BluetoothBatteryUtils {
         return list.size() > 0;
     }
 
+    /*
     @TargetApi(Build.VERSION_CODES.M)
     public static boolean isBatteryOptimizationDisabled(Context context) {
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
@@ -80,10 +78,12 @@ public class BluetoothBatteryUtils {
         Intent intent = new Intent();
         intent.setAction(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
         intent.setData(Uri.parse("package:" + context.getPackageName()));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         return intent;
     }
 
     public static boolean isBatteryOptimizationSettingsAvailable() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
     }
+    */
 }
