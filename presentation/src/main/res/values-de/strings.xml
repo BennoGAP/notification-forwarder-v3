@@ -85,6 +85,10 @@
   <string name="settings_bluetooth_block_whatsapp_contact_add_summary">Nummer des Kontaktes zum blockieren eintragen</string>
   <string name="settings_bluetooth_block_whatsapp_unblock_summary">%s von der Liste entfernen?</string>
   <string name="settings_bluetooth_block_whatsapp_unblock_confirm">Entfernen bestätigen</string>
+  <string name="settings_bluetooth_block_whatsapp_contact_no_wa">Kontakt ist kein WhatsApp-Kontakt</string>
+  <string name="settings_bluetooth_block_whatsapp_phonebook">Telefonbuch</string>
+  <string name="settings_bluetooth_block_whatsapp_manual">Manuell</string>
+  <string name="settings_bluetooth_block_whatsapp_contact_ask_summary">Kontakt aus dem Telefonbuch auswählen oder Nummer manuell eingeben?</string>
 
   <string name="settings_bluetooth_no_devices">Keine gekoppelten Bluetooth-Geräte gefunden</string>
 

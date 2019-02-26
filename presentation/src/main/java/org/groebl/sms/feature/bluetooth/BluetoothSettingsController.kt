@@ -1,14 +1,20 @@
 package org.groebl.sms.feature.bluetooth
 
+import android.Manifest
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
+import android.provider.ContactsContract
 import android.provider.Settings
 import android.telephony.PhoneNumberUtils
 import android.view.View
 import android.widget.EditText
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.bluelinelabs.conductor.RouterTransaction
 import com.jakewharton.rxbinding2.view.clicks
 import com.klinker.android.send_message.Utils
@@ -270,18 +276,27 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
                 }
                 .setPositiveButton(R.string.button_add) { _, _ ->
                     AlertDialog.Builder(activity!!)
-                            .setTitle(R.string.settings_bluetooth_block_whatsapp_contact_add_title)
-                            .setCancelable(false)
-                            .setMessage(R.string.settings_bluetooth_block_whatsapp_contact_add_summary)
-                            .setView(editText)
-                            .setPositiveButton(R.string.button_add) { _, _ ->
-                                if(editText.text.isNotEmpty()) {
-                                    BluetoothWABlocked.setWABlock(context, PhoneNumberUtils.stripSeparators(editText.text.toString()), false)
-                                    //Toast.makeText(context, "Add " + PhoneNumberUtils.stripSeparators(editText.text.toString()), Toast.LENGTH_LONG).show()
+                        .setTitle(R.string.settings_bluetooth_block_whatsapp_contact_add_title)
+                        .setMessage(R.string.settings_bluetooth_block_whatsapp_contact_ask_summary)
+                        .setCancelable(false)
+                        .setPositiveButton(R.string.settings_bluetooth_block_whatsapp_phonebook) { _, _ -> selectContact() }
+                        .setNeutralButton(R.string.settings_bluetooth_block_whatsapp_manual) { _, _ ->
+                            AlertDialog.Builder(activity!!)
+                                .setTitle(R.string.settings_bluetooth_block_whatsapp_contact_add_title)
+                                .setCancelable(false)
+                                .setMessage(R.string.settings_bluetooth_block_whatsapp_contact_add_summary)
+                                .setView(editText)
+                                .setPositiveButton(R.string.button_add) { _, _ ->
+                                    if (editText.text.isNotEmpty()) {
+                                        BluetoothWABlocked.setWABlock(context, PhoneNumberUtils.stripSeparators(editText.text.toString()), false)
+                                        //Toast.makeText(context, "Add " + PhoneNumberUtils.stripSeparators(editText.text.toString()), Toast.LENGTH_LONG).show()
+                                    }
                                 }
-                            }
-                            .setNegativeButton(R.string.button_cancel) { dialog, _ -> dialog.cancel() }
-                            .show()
+                                .setNegativeButton(R.string.button_cancel) { dialog, _ -> dialog.cancel() }
+                                .show()
+                        }
+                        .show()
+
                 }
                 .setNegativeButton(R.string.button_cancel) { dialog, _ -> dialog.cancel() }
                 .show()
@@ -327,5 +342,57 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
                 .show()
     }
 
+    private fun selectContact() {
+        if (Build.VERSION.SDK_INT < 23) {
+            startActivityForResult(Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI), 2)
+        } else if (ContextCompat.checkSelfPermission(activity!!, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(activity!!, arrayOf(Manifest.permission.READ_CONTACTS), 0)
+        } else {
+            startActivityForResult(Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI), 2)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, intentData: Intent?) {
+        if (requestCode == 2 && resultCode == Activity.RESULT_OK) {
+            try {
+                val uri = intentData!!.data
+                val cursor = context.contentResolver.query(uri, null, null, null, null)
+
+                cursor?.use {
+                    if (cursor.moveToFirst()) {
+                        val cursorWA = context.contentResolver.query(ContactsContract.RawContacts.CONTENT_URI, null, ContactsContract.RawContacts.CONTACT_ID + " = ? AND " + ContactsContract.RawContacts.ACCOUNT_TYPE + " = ?", arrayOf(cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.Contacts._ID)), "com.whatsapp"), null)
+                        cursorWA?.use {
+                            if (cursorWA.moveToFirst()) {
+                                val split = cursorWA.getString(cursorWA.getColumnIndex(ContactsContract.RawContacts.SYNC1)).split("@")
+                                BluetoothWABlocked.setWABlock(context, "+" + split[0], false)
+                            } else {
+                                AlertDialog.Builder(activity!!)
+                                        .setTitle(R.string.settings_bluetooth_block_whatsapp_contact_add_title)
+                                        .setMessage(R.string.settings_bluetooth_block_whatsapp_contact_no_wa)
+                                        .setCancelable(true)
+                                        .setPositiveButton(R.string.bluetooth_alert_button_ok) { dialog, _ -> dialog.cancel() }
+                                        .show()
+                            }
+                        }
+                    } else {
+                        AlertDialog.Builder(activity!!)
+                                .setTitle(R.string.settings_bluetooth_block_whatsapp_contact_add_title)
+                                .setMessage(context.getString(R.string.compose_details_error_code, 2))
+                                .setCancelable(true)
+                                .setPositiveButton(R.string.bluetooth_alert_button_ok) { dialog, _ -> dialog.cancel() }
+                                .show()
+                    }
+                }
+            }
+            catch (e: Exception) {
+                AlertDialog.Builder(activity!!)
+                        .setTitle(R.string.settings_bluetooth_block_whatsapp_contact_add_title)
+                        .setMessage(context.getString(R.string.compose_details_error_code, 1))
+                        .setCancelable(true)
+                        .setPositiveButton(R.string.bluetooth_alert_button_ok) { dialog, _ -> dialog.cancel() }
+                        .show()
+            }
+        }
+    }
 
 }

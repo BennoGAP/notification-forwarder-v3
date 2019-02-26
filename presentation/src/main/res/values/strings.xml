@@ -84,6 +84,10 @@
     <string name="settings_bluetooth_block_whatsapp_contact_add_summary" tools:ignore="MissingTranslation">Enter Contact-Number to block</string>
     <string name="settings_bluetooth_block_whatsapp_unblock_summary" tools:ignore="MissingTranslation">Remove %s from block-list?</string>
     <string name="settings_bluetooth_block_whatsapp_unblock_confirm" tools:ignore="MissingTranslation">Confirm Unblock</string>
+    <string name="settings_bluetooth_block_whatsapp_contact_no_wa" tools:ignore="MissingTranslation">Contact it not a WhatsApp-Contact</string>
+    <string name="settings_bluetooth_block_whatsapp_phonebook" tools:ignore="MissingTranslation">Phonebook</string>
+    <string name="settings_bluetooth_block_whatsapp_manual" tools:ignore="MissingTranslation">Manual</string>
+    <string name="settings_bluetooth_block_whatsapp_contact_ask_summary" tools:ignore="MissingTranslation">Select contact from phonebook or enter manual?</string>
 
     <string name="settings_bluetooth_no_devices" tools:ignore="MissingTranslation">No paired Bluetooth devices found</string>
 
