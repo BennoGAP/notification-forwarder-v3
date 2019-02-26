@@ -45,7 +45,7 @@
     <string name="settings_bluetooth_delete_title" tools:ignore="MissingTranslation">Delete Messages</string>
     <string name="settings_bluetooth_delete_summary" tools:ignore="MissingTranslation">Delete the temporary Notification-Messages on a Bluetooth disconnect</string>
     <string name="settings_bluetooth_devices_title" tools:ignore="MissingTranslation">Select Bluetooth-Device</string>
-    <string name="settings_bluetooth_devices_summary" tools:ignore="MissingTranslation">Choose the devices, where the above mentioned actions should happen (e.g. the Car-Bluetooth)</string>
+    <string name="settings_bluetooth_devices_summary" tools:ignore="MissingTranslation">Choose the devices, where the notification forwarding should be enabled on connecting (e.g. the Car)</string>
     <string name="settings_bluetooth_device_status_connected" tools:ignore="MissingTranslation">Connected with %s since %s</string>
     <string name="settings_bluetooth_device_status_disconnected" tools:ignore="MissingTranslation">Disconnected from %s since %s</string>
     <string name="settings_bluetooth_markasread_title" tools:ignore="MissingTranslation">Save messages as read</string>
