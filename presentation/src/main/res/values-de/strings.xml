@@ -119,6 +119,7 @@
   <string name="main_permission_contacts_new">Die App benötigt die Berechtigung zum Zugreifen auf die Kontakte</string>
   <string name="rate_title_new">Gefällt dir die App?</string>
   <string name="compose_menu_share">Teilen</string>
+  <string name="button_info">Info</string>
 
   <string name="shortcut_compose_long_label">Neue Unterhaltung</string>
   <string name="shortcut_compose_short_label">Verfassen</string>

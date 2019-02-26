@@ -220,6 +220,7 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
                 .setTitle(R.string.settings_bluetooth_battery_title)
                 .setMessage(String.format(context.getString(R.string.settings_bluetooth_battery_dialog), context.getString(R.string.app_name)))
                 .setPositiveButton(R.string.title_settings) { _, _ -> BluetoothBatteryUtils.startPowerSaverIntent(activity!!) }
+                .setNeutralButton(R.string.button_info) { _, _ -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://dontkillmyapp.com"))) }
                 .setNegativeButton(R.string.button_cancel, null)
                 .show()
     }
