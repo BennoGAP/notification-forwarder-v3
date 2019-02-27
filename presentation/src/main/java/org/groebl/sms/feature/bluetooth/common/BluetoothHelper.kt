@@ -3,8 +3,10 @@ package org.groebl.sms.feature.bluetooth.common
 import android.Manifest
 import android.app.Activity
 import android.app.ActivityManager
+import android.content.ComponentName
 import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.provider.ContactsContract
 import android.provider.Settings
@@ -15,6 +17,7 @@ import androidx.core.content.ContextCompat
 import com.vdurmont.emoji.EmojiParser
 import io.realm.Realm
 import io.realm.Sort
+import org.groebl.sms.feature.bluetooth.service.BluetoothNotificationService
 import org.groebl.sms.model.Conversation
 import org.groebl.sms.model.Message
 import java.math.BigInteger
@@ -88,6 +91,13 @@ object BluetoothHelper  {
         }
     }
 
+    private fun toggleNotificationListenerService(context: Context) {
+        val componentName = ComponentName(context, BluetoothNotificationService::class.java)
+        val packageManager = context.packageManager
+        packageManager.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP)
+        packageManager.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP)
+    }
+
     fun hasNotificationAccess(context: Context): Boolean {
         val enabledNotificationListeners = Settings.Secure.getString(context.contentResolver, "enabled_notification_listeners")
         return enabledNotificationListeners != null && enabledNotificationListeners.contains(context.packageName, ignoreCase = true) && enabledNotificationListeners.contains(".service.BluetoothNotificationService", ignoreCase = true)
@@ -102,6 +112,13 @@ object BluetoothHelper  {
         }
 
         return false
+    }
+
+    fun checkAndRestartNotificationListener(context: Context) {
+        if(!isNotificationServiceRunning(context)) {
+            toggleNotificationListenerService(context)
+            context.startService(Intent(context, BluetoothNotificationService::class.java))
+        }
     }
 
     fun hasContactPermission(context: Context): Boolean {

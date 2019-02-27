@@ -72,11 +72,10 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
 
         if (prefs.bluetooth_enabled.get()) {
             val infoMsg = StringBuilder()
-            var openNotificationAccess = false
 
             if (BluetoothHelper.hasNotificationAccess(context) && !BluetoothHelper.isNotificationServiceRunning(context)) {
                 infoMsg.append("- " + context.getString(R.string.bluetooth_alert_info_notifications) + "\n")
-                openNotificationAccess = true
+                BluetoothHelper.checkAndRestartNotificationListener(context)
             }
             if (prefs.bluetooth_only_on_connect.get() && prefs.bluetooth_devices.get().isEmpty()) {
                 infoMsg.append("- " + context.getString(R.string.bluetooth_alert_info_device) + "\n")
@@ -92,7 +91,7 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
                 AlertDialog.Builder(activity!!)
                         .setTitle("Information")
                         .setMessage(infoMsg.toString().trim())
-                        .setPositiveButton(R.string.bluetooth_alert_button_ok)  { _, _ -> if(openNotificationAccess) navigator.showNotificationAccess() }
+                        .setPositiveButton(R.string.bluetooth_alert_button_ok)  { null }
                         .show()
             }
         }
