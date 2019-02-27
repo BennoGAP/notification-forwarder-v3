@@ -33,6 +33,7 @@ import org.groebl.sms.feature.backup.BackupActivity
 import org.groebl.sms.feature.blocked.BlockedActivity
 import org.groebl.sms.feature.bluetooth.BluetoothSettingsActivity
 import org.groebl.sms.feature.bluetooth.common.BluetoothHelper
+import org.groebl.sms.feature.bluetooth.donate.BluetoothDonateActivity
 import org.groebl.sms.feature.compose.ComposeActivity
 import org.groebl.sms.feature.conversationinfo.ConversationInfoActivity
 import org.groebl.sms.feature.gallery.GalleryActivity
@@ -135,6 +136,11 @@ class Navigator @Inject constructor(
     fun showBluetoothSettings() {
         analyticsManager.track("Viewed BluetoothSettings")
         val intent = Intent(context, BluetoothSettingsActivity::class.java)
+        startActivity(intent)
+    }
+
+    fun showBluetoothDonateScreen() {
+        val intent = Intent(context, BluetoothDonateActivity::class.java)
         startActivity(intent)
     }
 

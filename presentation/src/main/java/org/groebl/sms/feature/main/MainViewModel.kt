@@ -238,7 +238,13 @@ class MainViewModel @Inject constructor(
                 .autoDisposable(view.scope())
                 .subscribe {
                     navigator.showRating()
-                    ratingManager.rate()
+                    //ratingManager.rate()
+                }
+
+        view.rateDonateIntent
+                .autoDisposable(view.scope())
+                .subscribe {
+                    navigator.showBluetoothDonateScreen()
                 }
 
         view.dismissRatingIntent

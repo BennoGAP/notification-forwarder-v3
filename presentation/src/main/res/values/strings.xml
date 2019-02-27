@@ -180,7 +180,10 @@
     <string name="drawer_plus_banner_summary">Unlock amazing new features, and support development</string>
 
     <string name="rate_summary">Share some love and rate on Google Play!</string>
+    <string name="rate_summary_new" tools:ignore="MissingTranslation">How about a small donation or a rating on Google Play&#8230;</string>
     <string name="rate_okay">OKAY!</string>
+    <string name="rate_rate" tools:ignore="MissingTranslation">RATE</string>
+    <string name="rate_donate" tools:ignore="MissingTranslation">DONATE</string>
     <string name="rate_dismiss">DISMISS</string>
 
     <string name="dialog_delete_title">Delete</string>

@@ -32,6 +32,7 @@ interface MainView : QkView<MainState> {
     val optionsItemIntent: Observable<Int>
     val dismissRatingIntent: Observable<*>
     val rateIntent: Observable<*>
+    val rateDonateIntent: Observable<*>
     val conversationsSelectedIntent: Observable<List<Long>>
     val confirmDeleteIntent: Observable<List<Long>>
     val swipeConversationIntent: Observable<Pair<Long, Int>>

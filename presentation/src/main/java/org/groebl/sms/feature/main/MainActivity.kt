@@ -91,6 +91,7 @@ class MainActivity : QkThemedActivity(), MainView {
     override val optionsItemIntent: Subject<Int> = PublishSubject.create()
     override val dismissRatingIntent by lazy { rateDismiss.clicks() }
     override val rateIntent by lazy { rateOkay.clicks() }
+    override val rateDonateIntent by lazy { rateDonate.clicks() }
     override val conversationsSelectedIntent by lazy { conversationsAdapter.selectionChanges }
     override val confirmDeleteIntent: Subject<List<Long>> = PublishSubject.create()
     override val swipeConversationIntent by lazy { itemTouchCallback.swipes }

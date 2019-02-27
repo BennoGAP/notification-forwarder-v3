@@ -174,7 +174,10 @@
   <string name="drawer_plus_banner_title">QKSMS+</string>
   <string name="drawer_plus_banner_summary">Schalte erstaunliche Neue Funktionen frei und unterstütze die Entwicklung</string>
   <string name="rate_summary">Teile etwas von deiner Liebe und bewerte die App auf Google Play!</string>
+  <string name="rate_summary_new">Wie wäre es mit einer kleinen Spende oder einer Bewertung auf Google Play&#8230;</string>
   <string name="rate_okay">OKAY!</string>
+  <string name="rate_rate">BEWERTEN</string>
+  <string name="rate_donate">SPENDEN</string>
   <string name="rate_dismiss">VERWERFEN</string>
   <string name="dialog_delete_title">Löschen</string>
   <plurals name="dialog_delete_message">
