@@ -9,6 +9,7 @@ import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.extensions.LayoutContainer
 import org.groebl.sms.R
 import org.groebl.sms.util.Preferences
 import java.util.*
@@ -28,7 +29,7 @@ class BluetoothDeviceAdapter(val data: ArrayList<BluetoothDeviceModel>, val pref
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
         val dataModel = data[position]
         holder.deviceName.text = dataModel.deviceName + "\n(" + dataModel.deviceMac + ")"
-        holder.itemView.tag = dataModel.deviceMac
+        holder.containerView.tag = dataModel.deviceMac
         holder.deviceCheckBox.isChecked = dataModel.checked
 
         when (dataModel.checked) {
@@ -36,13 +37,13 @@ class BluetoothDeviceAdapter(val data: ArrayList<BluetoothDeviceModel>, val pref
         }
 
         holder.deviceCheckBox.setOnClickListener { toggleSelection(holder) }
-        holder.itemView.setOnClickListener { holder.deviceCheckBox.isChecked = !holder.deviceCheckBox.isChecked; toggleSelection(holder)  }
+        holder.containerView.setOnClickListener { holder.deviceCheckBox.isChecked = !holder.deviceCheckBox.isChecked; toggleSelection(holder)  }
     }
 
     private fun toggleSelection(holder: BluetoothDeviceAdapter.CustomViewHolder) {
-        when (allowedDevices.contains(holder.itemView.tag.toString())) {
+        when (allowedDevices.contains(holder.containerView.tag.toString())) {
             true -> {
-                allowedDevices.remove(holder.itemView.tag.toString())
+                allowedDevices.remove(holder.containerView.tag.toString())
                 holder.deviceBluetoothIcon.colorFilter = ColorMatrixColorFilter(ColorMatrix().apply { setSaturation(0f) })
 
                 //Set connection status to disconnected when device get unselected
@@ -53,7 +54,7 @@ class BluetoothDeviceAdapter(val data: ArrayList<BluetoothDeviceModel>, val pref
                 }
             }
             false -> {
-                allowedDevices.add(holder.itemView.tag.toString())
+                allowedDevices.add(holder.containerView.tag.toString())
                 holder.deviceBluetoothIcon.clearColorFilter()
             }
         }
@@ -65,10 +66,11 @@ class BluetoothDeviceAdapter(val data: ArrayList<BluetoothDeviceModel>, val pref
         prefs.bluetooth_devices.set(allowedDevices)
     }
 
-    class CustomViewHolder(itemView: View):RecyclerView.ViewHolder(itemView){
+    class CustomViewHolder(itemView: View):RecyclerView.ViewHolder(itemView), LayoutContainer {
         var deviceName = itemView.findViewById<TextView>(R.id.title)
         var deviceCheckBox = itemView.findViewById<CheckBox>(R.id.checkBox)
         var deviceBluetoothIcon = itemView.findViewById<ImageView>(R.id.bluetoothIcon)
+        override val containerView: View = itemView
     }
 
 }

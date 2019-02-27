@@ -9,6 +9,7 @@ import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.extensions.LayoutContainer
 import org.groebl.sms.R
 import org.groebl.sms.util.Preferences
 import java.util.*
@@ -30,7 +31,7 @@ class BluetoothAppAdapter(val data: ArrayList<BluetoothAppModel>, val prefs: Pre
         val isChecked = allowedApps.contains(dataModel.appApkName)
         holder.appName.text = dataModel.appName
         holder.appIcon.setImageDrawable(dataModel.appIcon)
-        holder.itemView.tag = dataModel.appApkName
+        holder.containerView.tag = dataModel.appApkName
         holder.appCheckBox.isChecked = isChecked
 
         when (isChecked) {
@@ -38,21 +39,22 @@ class BluetoothAppAdapter(val data: ArrayList<BluetoothAppModel>, val prefs: Pre
         }
 
         holder.appCheckBox.setOnClickListener { toggleSelection(holder) }
-        holder.itemView.setOnClickListener { holder.appCheckBox.isChecked = !holder.appCheckBox.isChecked; toggleSelection(holder)  }
+        holder.containerView.setOnClickListener { holder.appCheckBox.isChecked = !holder.appCheckBox.isChecked; toggleSelection(holder)  }
     }
 
     private fun toggleSelection(holder: BluetoothAppAdapter.CustomViewHolder) {
-        when (allowedApps.contains(holder.itemView.tag.toString())) {
-            true -> { allowedApps.remove(holder.itemView.tag.toString()); holder.appIcon.colorFilter = ColorMatrixColorFilter(ColorMatrix().apply { setSaturation(0f) }); }
-            false -> { allowedApps.add(holder.itemView.tag.toString()); holder.appIcon.clearColorFilter(); }
+        when (allowedApps.contains(holder.containerView.tag.toString())) {
+            true -> { allowedApps.remove(holder.containerView.tag.toString()); holder.appIcon.colorFilter = ColorMatrixColorFilter(ColorMatrix().apply { setSaturation(0f) }); }
+            false -> { allowedApps.add(holder.containerView.tag.toString()); holder.appIcon.clearColorFilter(); }
         }
 
         prefs.bluetooth_apps.set(allowedApps)
     }
 
-    class CustomViewHolder(itemView: View):RecyclerView.ViewHolder(itemView){
+    class CustomViewHolder(itemView: View):RecyclerView.ViewHolder(itemView), LayoutContainer {
         var appName = itemView.findViewById<TextView>(R.id.appTitle)
         var appIcon = itemView.findViewById<ImageView>(R.id.appIcon)
         var appCheckBox = itemView.findViewById<CheckBox>(R.id.appCheckBox)
+        override val containerView: View = itemView
     }
 }
