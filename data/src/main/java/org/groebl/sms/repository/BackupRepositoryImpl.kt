@@ -177,6 +177,7 @@ class BackupRepositoryImpl @Inject constructor(
         }
 
         val messageCount = backup?.messages?.size ?: 0
+        var errorCount = 0
 
         backup?.messages?.forEachIndexed { index, message ->
             if (stopFlag) {
@@ -188,7 +189,8 @@ class BackupRepositoryImpl @Inject constructor(
             // Update the progress
             restoreProgress.onNext(BackupRepository.Progress.Running(messageCount, index))
 
-            context.contentResolver.insert(Telephony.Sms.CONTENT_URI, contentValuesOf(
+            try {
+                context.contentResolver.insert(Telephony.Sms.CONTENT_URI, contentValuesOf(
                     Telephony.Sms.TYPE to message.type,
                     Telephony.Sms.ADDRESS to message.address,
                     Telephony.Sms.DATE to message.date,
@@ -201,6 +203,14 @@ class BackupRepositoryImpl @Inject constructor(
                     Telephony.Sms.SERVICE_CENTER to message.serviceCenter,
                     Telephony.Sms.LOCKED to message.locked,
                     Telephony.Sms.SUBSCRIPTION_ID to message.subId))
+            } catch (e: Exception) {
+                Timber.w(e)
+                errorCount++
+            }
+        }
+
+        if (errorCount > 0) {
+            Timber.w(Exception("Failed to backup $errorCount/$messageCount messages"))
         }
 
         // Sync the messages
