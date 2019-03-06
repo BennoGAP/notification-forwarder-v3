@@ -91,7 +91,7 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
                 AlertDialog.Builder(activity!!)
                         .setTitle("Information")
                         .setMessage(infoMsg.toString().trim())
-                        .setPositiveButton(R.string.bluetooth_alert_button_ok)  { null }
+                        .setPositiveButton(R.string.bluetooth_alert_button_ok, null)
                         .show()
             }
         }
