@@ -73,7 +73,7 @@
     <string name="settings_bluetooth_block_whatsapp_contact_summary" tools:ignore="MissingTranslation">WhatsApp-Messages from the following contacts will not be forwarded</string>
     <string name="settings_bluetooth_notification_access_title" tools:ignore="MissingTranslation">Notification Access</string>
     <string name="settings_bluetooth_battery_title" tools:ignore="MissingTranslation">Battery Optimization</string>
-    <string name="settings_bluetooth_battery_summary" tools:ignore="MissingTranslation">If the forwarding stopped working after a time, check your battery/power-saving options</string>
+    <string name="settings_bluetooth_battery_summary" tools:ignore="MissingTranslation">If the forwarding stopped working after a time, check your autostart/power-saving options</string>
     <string name="settings_bluetooth_battery_dialog" tools:ignore="MissingTranslation">Whitelist %s in the options, otherwise the app could be stopped from working in the background</string>
     <string name="settings_bluetooth_donate" tools:ignore="MissingTranslation">Donate</string>
     <string name="settings_bluetooth_faq_title" tools:ignore="MissingTranslation">FAQ</string>

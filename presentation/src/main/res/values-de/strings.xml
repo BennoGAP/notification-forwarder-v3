@@ -74,7 +74,7 @@
   <string name="settings_bluetooth_block_whatsapp_contact_summary">Nachrichten von den ausgewählten Kontakten werden nicht weitergeleitet</string>
   <string name="settings_bluetooth_notification_access_title">Benachrichtigungszugriff</string>
   <string name="settings_bluetooth_battery_title">Akku Leistungsoptimierung</string>
-  <string name="settings_bluetooth_battery_summary">Sollte die Weiterleitung aufhören zu funktionieren, bitte zunächst die Akku/Energiespareinstellungen prüfen</string>
+  <string name="settings_bluetooth_battery_summary">Sollte die Weiterleitung aufhören zu funktionieren, bitte zunächst die Autostart/Energiespareinstellungen prüfen</string>
   <string name="settings_bluetooth_battery_dialog">Die App %s muss auf die entsprechende Whitelist gesetzt werden um zu verhindern, das diese im Hintergrund gestoppt wird</string>
   <string name="settings_bluetooth_donate">Spenden</string>
   <string name="settings_bluetooth_faq_title">FAQ</string>

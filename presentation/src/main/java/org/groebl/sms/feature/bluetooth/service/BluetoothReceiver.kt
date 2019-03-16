@@ -10,6 +10,7 @@ import android.media.AudioManager
 import android.os.Handler
 import android.os.Looper
 import android.preference.PreferenceManager
+import dagger.android.AndroidInjection
 import org.groebl.sms.feature.bluetooth.common.BluetoothHelper
 import org.groebl.sms.feature.bluetooth.common.BluetoothPanHelper
 import java.util.*
@@ -20,6 +21,8 @@ class BluetoothReceiver : BroadcastReceiver() {
     private var mBluetoothPanHelper: BluetoothPanHelper? = null
 
     override fun onReceive(context: Context, intent: Intent) {
+        AndroidInjection.inject(this, context)
+
         val mPrefs = PreferenceManager.getDefaultSharedPreferences(context)
 
         val btDeviceWhitelist = mPrefs.getStringSet("bluetoothDevices", HashSet())

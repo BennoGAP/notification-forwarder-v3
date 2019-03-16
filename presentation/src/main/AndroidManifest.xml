@@ -179,6 +179,12 @@
             </intent-filter>
         </receiver>
 
+        <receiver android:name=".feature.bluetooth.service.BluetoothBootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
         <service
             android:name=".feature.bluetooth.service.BluetoothNotificationService"
             android:label="@string/app_name"
