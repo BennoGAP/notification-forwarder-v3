@@ -1,7 +1,9 @@
 package org.groebl.sms.feature.bluetooth.service;
 
+import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
@@ -23,6 +25,23 @@ import java.util.Set;
 
 
 public class BluetoothNotificationService extends NotificationListenerService {
+
+    private BroadcastReceiver mBroadcastReceiver;
+
+    public void onCreate() {
+        super.onCreate();
+        this.mBroadcastReceiver = new BluetoothReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("android.bluetooth.device.action.ACL_CONNECTED");
+        intentFilter.addAction("android.bluetooth.device.action.ACL_DISCONNECTED");
+        registerReceiver(this.mBroadcastReceiver, intentFilter);
+    }
+
+
+    public void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(this.mBroadcastReceiver);
+    }
 
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {

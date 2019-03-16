@@ -172,13 +172,6 @@
                 android:resource="@xml/widget_info" />
         </receiver>
 
-        <receiver android:name=".feature.bluetooth.service.BluetoothReceiver">
-            <intent-filter>
-                <action android:name="android.bluetooth.device.action.ACL_CONNECTED" />
-                <action android:name="android.bluetooth.device.action.ACL_DISCONNECTED" />
-            </intent-filter>
-        </receiver>
-
         <receiver android:name=".feature.bluetooth.service.BluetoothBootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
