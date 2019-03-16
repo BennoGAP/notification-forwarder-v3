@@ -115,7 +115,7 @@ object BluetoothHelper  {
     }
 
     fun checkAndRestartNotificationListener(context: Context) {
-        if(!isNotificationServiceRunning(context)) {
+        if(BluetoothHelper.hasNotificationAccess(context) && !isNotificationServiceRunning(context)) {
             toggleNotificationListenerService(context)
             context.startService(Intent(context, BluetoothNotificationService::class.java))
         }
