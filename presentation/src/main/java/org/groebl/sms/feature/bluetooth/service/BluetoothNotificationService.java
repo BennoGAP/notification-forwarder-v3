@@ -77,10 +77,10 @@ public class BluetoothNotificationService extends NotificationListenerService {
 
                 //Enter the Data in the SMS-DB
                 //Toast.makeText(getApplicationContext(), EmojiParser.removeAllEmojis(BtData.getSender()) + ": " + emojiToNiceEmoji(set_content, mPrefs.getBoolean("bluetoothEmoji", true)), Toast.LENGTH_LONG).show(); // TODO
-                BluetoothHelper.INSTANCE.addMessageToInboxAsRead(getApplicationContext(), EmojiParser.removeAllEmojis(BtData.getSender()), BluetoothHelper.INSTANCE.emojiToNiceEmoji(BtData.getContent(), mPrefs.getBoolean("bluetoothEmoji", true)), BtData.getSendTime(), (mPrefs.getBoolean("bluetoothSaveRead", true) && !mPrefs.getBoolean("bluetoothDelayedRead", false)), BtData.getErrorCode());
+                BluetoothHelper.INSTANCE.addMessageToInboxAsRead(getApplicationContext(), EmojiParser.removeAllEmojis(BtData.getSender()), BluetoothHelper.INSTANCE.emojiToNiceEmoji(BtData.getContent(), mPrefs.getBoolean("bluetoothEmoji", true)), BtData.getSendTime(), (mPrefs.getBoolean("bluetoothSaveRead", false) && !mPrefs.getBoolean("bluetoothDelayedRead", false)), BtData.getErrorCode());
 
                 //Delayed Mark-as-Read
-                if (mPrefs.getBoolean("bluetoothSaveRead", true) && mPrefs.getBoolean("bluetoothDelayedRead", false)) {
+                if (mPrefs.getBoolean("bluetoothSaveRead", false) && mPrefs.getBoolean("bluetoothDelayedRead", false)) {
                     ContentValues cv = new ContentValues();
                     cv.put("read", true);
 

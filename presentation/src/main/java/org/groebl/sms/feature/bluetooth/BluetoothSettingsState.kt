@@ -5,7 +5,7 @@ data class BluetoothSettingsState(
         val bluetooth_only_on_connect: Boolean = true,
         val bluetooth_autodelete: Boolean = true,
 
-        val bluetooth_save_read: Boolean = true,
+        val bluetooth_save_read: Boolean = false,
         val bluetooth_delayed_read: Boolean = false,
         val bluetooth_emoji: Boolean = true,
         val bluetooth_appname_as_sender_text: Boolean = false,
