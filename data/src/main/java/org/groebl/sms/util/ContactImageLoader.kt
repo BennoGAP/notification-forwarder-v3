@@ -29,10 +29,10 @@ import com.bumptech.glide.load.data.DataFetcher
 import com.bumptech.glide.load.model.ModelLoader
 import com.bumptech.glide.load.model.ModelLoaderFactory
 import com.bumptech.glide.load.model.MultiModelLoaderFactory
-import org.groebl.sms.repository.ContactRepository
-import org.groebl.sms.repository.ContactRepositoryImpl
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import org.groebl.sms.repository.ContactRepository
+import org.groebl.sms.repository.ContactRepositoryImpl
 import java.io.InputStream
 import java.security.MessageDigest
 
@@ -51,7 +51,10 @@ class ContactImageLoader(
     }
 
     class Factory(val context: Context, val prefs: Preferences) : ModelLoaderFactory<String, InputStream> {
-        override fun build(multiFactory: MultiModelLoaderFactory) = ContactImageLoader(context, ContactRepositoryImpl(context, prefs))
+        override fun build(multiFactory: MultiModelLoaderFactory): ContactImageLoader {
+            return ContactImageLoader(context, ContactRepositoryImpl(context, prefs))
+        }
+
         override fun teardown() {} // nothing to do here
     }
 

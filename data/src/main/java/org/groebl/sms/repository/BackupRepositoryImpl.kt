@@ -116,7 +116,8 @@ class BackupRepositoryImpl @Inject constructor(
         try {
             // Create the directory and file
             val dir = File(BACKUP_DIRECTORY).apply { mkdirs() }
-            val file = File(dir, "backup-${SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault()).format(System.currentTimeMillis())}.json")
+            val timestamp = SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault()).format(System.currentTimeMillis())
+            val file = File(dir, "backup-$timestamp.json")
 
             // Write the log to the file
             FileOutputStream(file, true).use { fileOutputStream -> fileOutputStream.write(json) }
