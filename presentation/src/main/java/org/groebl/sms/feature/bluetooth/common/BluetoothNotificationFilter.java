@@ -133,18 +133,31 @@ public class BluetoothNotificationFilter {
 
             switch(pack) {
                 case "org.telegram.messenger":
-                    if (ticker.equals("")) {
-                        CharSequence[] textline_telegram = extras.getCharSequenceArray(Notification.EXTRA_TEXT_LINES);
+                    if (!ticker.equals("")) {
+                        return;
+                    }
 
-                        if (textline_telegram != null) {
-                            ticker = textline_telegram[0].toString();
-                        } else {
-                            return;
-                        }
+                    CharSequence[] textline_telegram = extras.getCharSequenceArray(Notification.EXTRA_TEXT_LINES);
+                    if (textline_telegram != null) {
+                        return;
                     }
 
                     set_sender = "Telegram";
-                    set_content = ticker;
+                    set_content = title + ": " + text;
+                    break;
+
+                case "org.thunderdog.challegram":
+                    if (ticker.equals("")) {
+                        return;
+                    }
+
+                    CharSequence[] textline_telegramx = extras.getCharSequenceArray(Notification.EXTRA_TEXT_LINES);
+                    if (textline_telegramx != null) {
+                        return;
+                    }
+
+                    set_sender = "Telegram X";
+                    set_content = title + ": " + text;
                     break;
 
                 case "ch.threema.app":
