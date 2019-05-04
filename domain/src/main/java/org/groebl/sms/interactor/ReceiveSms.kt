@@ -53,7 +53,7 @@ class ReceiveSms @Inject constructor(
                     val time = messages[0].timestampMillis
                     val body: String = messages
                             .mapNotNull { message -> message.displayMessageBody }
-                            .reduce { body, new -> body + new } ?: ""
+                            .reduce { body, new -> body + new }
 
                     messageRepo.insertReceivedSms(it.subId, address, body, time) // Add the message to the db
                 }
