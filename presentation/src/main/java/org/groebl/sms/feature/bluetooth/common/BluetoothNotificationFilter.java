@@ -16,6 +16,9 @@ import com.vdurmont.emoji.EmojiParser;
 
 import org.groebl.sms.BuildConfig;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class BluetoothNotificationFilter {
 
     private static boolean isPhoneNumber(String name) {
@@ -156,6 +159,11 @@ public class BluetoothNotificationFilter {
                         return;
                     }
 
+                    Matcher matcher = Pattern.compile("(.+?)(?:\\ \\([0-9]+\\):\\ |:\\ )(.*)").matcher(title);
+                    if (matcher.find()) {
+                        title = matcher.group(2) + " @ " + matcher.group(1);
+                    }
+
                     set_sender = "Telegram X";
                     set_content = title + ": " + text;
                     break;
@@ -228,6 +236,7 @@ public class BluetoothNotificationFilter {
                 case "com.ninefolders.hd3.work.rubus":
                 case "com.ninefolders.hd3.work.intune":
                 case "com.ninefolders.hd3.work.airwatch.gp":
+                case "com.blackberry.hub":
                     if (extras.get(Notification.EXTRA_BIG_TEXT) == null) {
                         return;
                     }
