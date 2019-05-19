@@ -38,7 +38,7 @@
   <string name="settings_bluetooth_enabled_title">Aktivieren</string>
   <string name="settings_bluetooth_enabled_summary">Aktiviert die Weiterleitung der Benachrichtigungen</string>
   <string name="settings_bluetooth_connected_title">Nur bei Bluetooth-Verbindung</string>
-  <string name="settings_bluetooth_connected_summary">Nachrichten werden nur bei Verbindung mit einem ausgewähltem Bluetooth-Gerät weitergeleitet</string>
+  <string name="settings_bluetooth_connected_summary">Nachrichten nur bei aktiver Bluetooth-Verbindung weiterleiten. Bei BLE-Geräten (z.B. Smartwatches) Option deaktivieren</string>
   <string name="settings_bluetooth_apps_title">Erlaubte Anwendungen</string>
   <string name="settings_bluetooth_apps_summary">Benachrichtungen der hier ausgewählten Anwendungen werden weitergeleitet</string>
   <string name="settings_bluetooth_apps_loading">Apps werden geladen&#8230;</string>

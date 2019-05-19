@@ -37,7 +37,7 @@
     <string name="settings_bluetooth_enabled_title" tools:ignore="MissingTranslation">Enable</string>
     <string name="settings_bluetooth_enabled_summary" tools:ignore="MissingTranslation">Enable the Notification forwarding</string>
     <string name="settings_bluetooth_connected_title" tools:ignore="MissingTranslation">Only with Bluetooth Connection</string>
-    <string name="settings_bluetooth_connected_summary" tools:ignore="MissingTranslation">Only forward messages when connected over Bluetooth</string>
+    <string name="settings_bluetooth_connected_summary" tools:ignore="MissingTranslation">Only forward messages when connected over Bluetooth. Disable for BLE-Devices (e.g. Smartwatches)</string>
     <string name="settings_bluetooth_apps_title" tools:ignore="MissingTranslation">Application White List</string>
     <string name="settings_bluetooth_apps_summary" tools:ignore="MissingTranslation">Select the apps, from which notifications get forwarded</string>
     <string name="settings_bluetooth_apps_loading" tools:ignore="MissingTranslation">Loading your apps&#8230;</string>
