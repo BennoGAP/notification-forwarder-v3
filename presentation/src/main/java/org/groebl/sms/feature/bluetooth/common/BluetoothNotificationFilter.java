@@ -174,7 +174,7 @@ public class BluetoothNotificationFilter {
                     }
 
                     set_sender = "Threema";
-                    set_content = ticker;
+                    set_content = title + ": " + text;
                     break;
 
                 case "com.skype.raider":
