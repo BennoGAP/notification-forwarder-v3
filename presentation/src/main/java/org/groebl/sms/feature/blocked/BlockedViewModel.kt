@@ -19,6 +19,9 @@
 package org.groebl.sms.feature.blocked
 
 import android.content.Context
+import com.uber.autodispose.kotlin.autoDisposable
+import io.reactivex.rxkotlin.plusAssign
+import io.reactivex.rxkotlin.withLatestFrom
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.androidxcompat.scope
 import org.groebl.sms.common.base.QkViewModel
@@ -27,9 +30,6 @@ import org.groebl.sms.manager.AnalyticsManager
 import org.groebl.sms.repository.ConversationRepository
 import org.groebl.sms.util.Preferences
 import org.groebl.sms.util.tryOrNull
-import com.uber.autodispose.kotlin.autoDisposable
-import io.reactivex.rxkotlin.plusAssign
-import io.reactivex.rxkotlin.withLatestFrom
 import javax.inject.Inject
 
 class BlockedViewModel @Inject constructor(
@@ -53,7 +53,8 @@ class BlockedViewModel @Inject constructor(
 
         view.siaClickedIntent
                 .map {
-                    tryOrNull(false) { context.packageManager.getApplicationInfo("org.mistergroup.shouldianswerpersonal", 0).enabled }
+                    tryOrNull(false) { context.packageManager.getApplicationInfo("org.mistergroup.shouldianswer", 0).enabled }
+                            ?: tryOrNull(false) { context.packageManager.getApplicationInfo("org.mistergroup.shouldianswerpersonal", 0).enabled }
                             ?: tryOrNull(false) { context.packageManager.getApplicationInfo("org.mistergroup.muzutozvednout", 0).enabled }
                             ?: false
                 }

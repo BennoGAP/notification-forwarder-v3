@@ -27,10 +27,10 @@ import android.os.IBinder
 import android.os.Message
 import android.os.Messenger
 import androidx.core.os.bundleOf
-import org.groebl.sms.util.Preferences
-import org.groebl.sms.util.tryOrNull
 import io.reactivex.Single
 import io.reactivex.subjects.SingleSubject
+import org.groebl.sms.util.Preferences
+import org.groebl.sms.util.tryOrNull
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -73,6 +73,9 @@ class ExternalBlockingManagerImpl @Inject constructor(
             // intent to request a rating
             if (prefs.sia.get()) {
                 intent = tryOrNull(false) {
+                    context.packageManager.getApplicationInfo("org.mistergroup.shouldianswer", 0).enabled
+                    Intent("org.mistergroup.shouldianswer.PublicService").setPackage("org.mistergroup.shouldianswer")
+                } ?: tryOrNull(false) {
                     context.packageManager.getApplicationInfo("org.mistergroup.shouldianswerpersonal", 0).enabled
                     Intent("org.mistergroup.shouldianswerpersonal.PublicService").setPackage("org.mistergroup.shouldianswerpersonal")
                 } ?: tryOrNull(false) {
@@ -95,20 +98,21 @@ class ExternalBlockingManagerImpl @Inject constructor(
             serviceMessenger = Messenger(service)
             isBound = true
 
-            val msg = Message()
-            msg.what = GET_NUMBER_RATING
-            msg.data = bundleOf(Pair("number", address))
-            msg.replyTo = Messenger(IncomingHandler { rating ->
-                subject.onSuccess(rating == RATING_NEGATIVE)
-                Timber.v("Should block: ${rating == RATING_NEGATIVE}")
+            val message = Message().apply {
+                what = GET_NUMBER_RATING
+                data = bundleOf("number" to address)
+                replyTo = Messenger(IncomingHandler { rating ->
+                    subject.onSuccess(rating == RATING_NEGATIVE)
+                    Timber.v("Should block: ${rating == RATING_NEGATIVE}")
 
-                // We're done, so unbind the service
-                if (isBound && serviceMessenger != null) {
-                    context.unbindService(this)
-                }
-            })
+                    // We're done, so unbind the service
+                    if (isBound && serviceMessenger != null) {
+                        context.unbindService(this@Binder)
+                    }
+                })
+            }
 
-            serviceMessenger?.send(msg)
+            serviceMessenger?.send(message)
         }
 
         override fun onServiceDisconnected(className: ComponentName) {
