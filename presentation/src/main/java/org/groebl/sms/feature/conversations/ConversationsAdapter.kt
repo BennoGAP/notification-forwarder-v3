@@ -32,6 +32,7 @@ import org.groebl.sms.common.util.extensions.resolveThemeColor
 import org.groebl.sms.model.Conversation
 import kotlinx.android.synthetic.main.conversation_list_item.view.*
 import org.groebl.sms.common.util.Colors
+import org.groebl.sms.common.util.extensions.setTint
 import javax.inject.Inject
 
 class ConversationsAdapter @Inject constructor(
