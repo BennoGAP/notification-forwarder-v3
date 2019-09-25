@@ -42,9 +42,9 @@ import org.groebl.sms.model.Attachment
 import org.groebl.sms.model.Conversation
 import org.groebl.sms.model.Message
 import org.groebl.sms.model.MmsPart
+import org.groebl.sms.receiver.SendSmsReceiver
 import org.groebl.sms.receiver.SmsDeliveredReceiver
 import org.groebl.sms.receiver.SmsSentReceiver
-import org.groebl.sms.service.SendSmsService
 import org.groebl.sms.util.ImageUtils
 import org.groebl.sms.util.Preferences
 import org.groebl.sms.util.tryOrNull
@@ -293,8 +293,8 @@ class MessageRepositoryImpl @Inject constructor(
     }
 
     private fun getIntentForDelayedSms(id: Long): PendingIntent {
-        val intent = Intent(context, SendSmsService::class.java).putExtra("id", id)
-        return PendingIntent.getService(context, id.toInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val intent = Intent(context, SendSmsReceiver::class.java).putExtra("id", id)
+        return PendingIntent.getBroadcast(context, id.toInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
     override fun insertSentSms(subId: Int, threadId: Long, address: String, body: String, date: Long): Message {
