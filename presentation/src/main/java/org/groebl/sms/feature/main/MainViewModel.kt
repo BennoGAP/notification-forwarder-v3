@@ -32,6 +32,7 @@ import org.groebl.sms.common.androidxcompat.scope
 import org.groebl.sms.common.base.QkViewModel
 import org.groebl.sms.extensions.removeAccents
 import org.groebl.sms.interactor.*
+//import org.groebl.sms.manager.ChangelogManager
 import org.groebl.sms.manager.PermissionManager
 import org.groebl.sms.manager.RatingManager
 import org.groebl.sms.model.SyncLog
@@ -45,6 +46,7 @@ class MainViewModel @Inject constructor(
         markAllSeen: MarkAllSeen,
         migratePreferences: MigratePreferences,
         syncRepository: SyncRepository,
+//        private val changelogManager: ChangelogManager,
         private val conversationRepo: ConversationRepository,
         private val deleteConversations: DeleteConversations,
         private val markArchived: MarkArchived,
@@ -125,6 +127,11 @@ class MainViewModel @Inject constructor(
                 .take(1)
                 .autoDisposable(view.scope())
                 .subscribe { syncMessages.execute(Unit) }
+
+        // Show changelog
+        //if (changelogManager.didUpdate()) {
+        //    view.showChangelog()
+        //}
 
         view.queryChangedIntent
                 .debounce(200, TimeUnit.MILLISECONDS)

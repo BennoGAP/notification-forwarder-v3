@@ -88,6 +88,9 @@ class AppModule(private var application: Application) {
     fun externalBlockingManager(manager: ExternalBlockingManagerImpl): ExternalBlockingManager = manager
 
     @Provides
+    fun changelogManager(manager: ChangelogManagerImpl): ChangelogManager = manager
+
+    @Provides
     fun provideKeyManager(manager: KeyManagerImpl): KeyManager = manager
 
     @Provides

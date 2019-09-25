@@ -87,6 +87,7 @@ class Preferences @Inject constructor(private val rxPrefs: RxSharedPreferences) 
     val mobileOnly = rxPrefs.getBoolean("mobileOnly", false)
     val mmsSize = rxPrefs.getInteger("mmsSize", 300)
     val logging = rxPrefs.getBoolean("logging", false)
+    val version = rxPrefs.getInteger("version", 0)
 
     val bluetooth_enabled = rxPrefs.getBoolean("bluetoothEnabled", false)
     val bluetooth_apps = rxPrefs.getStringSet("bluetoothApps", HashSet<String>())

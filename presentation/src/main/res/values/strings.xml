@@ -506,4 +506,17 @@
         <item>That\'s okay</item>
     </string-array>
 
+    <string name="changelog_title">New</string>
+    <string name="changelog_version">Version %s</string>
+    <string-array name="changelog_keywords">
+        <item>Added</item>
+        <item>Improved</item>
+        <item>Fixed</item>
+    </string-array>
+    <string-array name="changelog">
+        <item>Fixed</item>
+        <item>- Minor bugs</item>
+    </string-array>
+    <string name="changelog_dismiss">Dismiss</string>
+
 </resources>

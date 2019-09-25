@@ -460,4 +460,18 @@
     <item>LOL</item>
     <item>Das ist OK</item>
   </string-array>
+
+  <string name="changelog_title">Änderungen</string>
+  <string name="changelog_version">Version %s</string>
+  <string-array name="changelog_keywords">
+    <item>Hinzugefügt</item>
+    <item>Verbessert</item>
+    <item>Behoben</item>
+  </string-array>
+  <string-array name="changelog">
+    <item>Behoben</item>
+    <item>- Kleinere Fehler</item>
+  </string-array>
+  <string name="changelog_dismiss">Schließen</string>
+
 </resources>
