@@ -322,6 +322,7 @@
     <item>Löschen</item>
     <item>Anrufen</item>
     <item>Als gelesen markieren</item>
+    <item>Als ungelesen markieren</item>
   </string-array>
   <string name="settings_delivery_title">Zustellbestätigungen</string>
   <string name="settings_delivery_summary">Bestätigung, dass Nachrichten erfolgreich gesendet wurden</string>
