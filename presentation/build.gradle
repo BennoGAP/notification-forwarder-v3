@@ -168,10 +168,10 @@ dependencies {
 
     //Crashlytics
     implementation 'com.crashlytics.sdk.android:crashlytics:2.9.9'
-    implementation 'com.google.firebase:firebase-core:16.0.8'
     implementation 'com.android.billingclient:billing:1.0'
     implementation 'com.github.chrisbanes:PhotoView:2.0.0'
     implementation "com.f2prateek.rx.preferences2:rx-preferences:$rx_preferences_version"
+    implementation 'com.google.firebase:firebase-core:16.0.9'
     implementation 'com.google.android:flexbox:0.3.1'
     implementation "com.jakewharton.timber:timber:$timber_version"
     implementation "com.squareup.moshi:moshi:$moshi_version"
