@@ -25,7 +25,6 @@ import android.content.BroadcastReceiver
 import androidx.core.provider.FontRequest
 import androidx.emoji.text.EmojiCompat
 import androidx.emoji.text.FontRequestEmojiCompatConfig
-import com.akaita.java.rxjava2debug.RxJava2Debug
 import dagger.android.*
 import io.realm.Realm
 import io.realm.RealmConfiguration
@@ -38,6 +37,8 @@ import org.groebl.sms.injection.appComponent
 import org.groebl.sms.manager.AnalyticsManager
 import org.groebl.sms.migration.QkRealmMigration
 import org.groebl.sms.util.NightModeManager
+import com.uber.rxdogtag.RxDogTag
+import com.uber.rxdogtag.autodispose.AutoDisposeConfigurer
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -90,7 +91,9 @@ class QKApplication : Application(), HasActivityInjector, HasBroadcastReceiverIn
 
         Timber.plant(Timber.DebugTree(), CrashlyticsTree(), fileLoggingTree)
 
-        RxJava2Debug.enableRxJava2AssemblyTracking(arrayOf("org.groebl.sms"))
+        RxDogTag.builder()
+                .configureWith(AutoDisposeConfigurer::configure)
+                .install()
 
         BluetoothDatabase.init(this)
     }
