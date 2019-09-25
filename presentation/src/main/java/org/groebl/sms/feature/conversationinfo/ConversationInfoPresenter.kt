@@ -18,22 +18,19 @@
  */
 package org.groebl.sms.feature.conversationinfo
 
-import org.groebl.sms.common.Navigator
-import org.groebl.sms.common.base.QkPresenter
-import org.groebl.sms.extensions.asObservable
-import org.groebl.sms.interactor.DeleteConversations
-import org.groebl.sms.interactor.MarkArchived
-import org.groebl.sms.interactor.MarkBlocked
-import org.groebl.sms.interactor.MarkUnarchived
-import org.groebl.sms.interactor.MarkUnblocked
-import org.groebl.sms.model.Conversation
-import org.groebl.sms.repository.ConversationRepository
-import org.groebl.sms.repository.MessageRepository
 import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.withLatestFrom
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
+import org.groebl.sms.common.Navigator
+import org.groebl.sms.common.base.QkPresenter
+import org.groebl.sms.extensions.asObservable
+import org.groebl.sms.interactor.*
+import org.groebl.sms.manager.PermissionManager
+import org.groebl.sms.model.Conversation
+import org.groebl.sms.repository.ConversationRepository
+import org.groebl.sms.repository.MessageRepository
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -46,7 +43,8 @@ class ConversationInfoPresenter @Inject constructor(
         private val markUnarchived: MarkUnarchived,
         private val markBlocked: MarkBlocked,
         private val markUnblocked: MarkUnblocked,
-        private val navigator: Navigator
+        private val navigator: Navigator,
+        private val permissionManager: PermissionManager
 ) : QkPresenter<ConversationInfoView, ConversationInfoState>(
         ConversationInfoState(threadId = threadId, media = messageRepo.getPartsForConversation(threadId))
 ) {
@@ -151,6 +149,7 @@ class ConversationInfoPresenter @Inject constructor(
 
         // Show the delete confirmation dialog
         view.deleteClicks()
+                .filter { permissionManager.isDefaultSms().also { if (!it) navigator.showDefaultSmsDialog() } }
                 .autoDisposable(view.scope())
                 .subscribe { view.showDeleteDialog() }
 
