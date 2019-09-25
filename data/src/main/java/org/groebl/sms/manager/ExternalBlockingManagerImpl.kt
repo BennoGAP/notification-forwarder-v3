@@ -22,10 +22,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
-import android.os.Handler
-import android.os.IBinder
-import android.os.Message
-import android.os.Messenger
+import android.os.*
 import androidx.core.os.bundleOf
 import io.reactivex.Single
 import io.reactivex.subjects.SingleSubject
@@ -101,9 +98,10 @@ class ExternalBlockingManagerImpl @Inject constructor(
             val message = Message().apply {
                 what = GET_NUMBER_RATING
                 data = bundleOf("number" to address)
-                replyTo = Messenger(IncomingHandler { rating ->
-                    subject.onSuccess(rating == RATING_NEGATIVE)
-                    Timber.v("Should block: ${rating == RATING_NEGATIVE}")
+                replyTo = Messenger(IncomingHandler { response ->
+                    val shouldBlock = response.rating == RATING_NEGATIVE || response.wantBlock
+                    subject.onSuccess(shouldBlock)
+                    Timber.v("Should block: $shouldBlock")
 
                     // We're done, so unbind the service
                     if (isBound && serviceMessenger != null) {
@@ -121,11 +119,15 @@ class ExternalBlockingManagerImpl @Inject constructor(
         }
     }
 
-    private class IncomingHandler(private val callback: (rating: Int) -> Unit) : Handler() {
+    private class IncomingHandler(private val callback: (response: Response) -> Unit) : Handler() {
+        class Response(bundle: Bundle) {
+            val rating: Int = bundle.getInt("rating")
+            val wantBlock = bundle.getInt("wantBlock") == 1
+        }
 
         override fun handleMessage(msg: Message) {
             when (msg.what) {
-                GET_NUMBER_RATING -> callback(msg.data.getInt("rating"))
+                GET_NUMBER_RATING -> callback(Response(msg.data))
                 else -> super.handleMessage(msg)
             }
         }
