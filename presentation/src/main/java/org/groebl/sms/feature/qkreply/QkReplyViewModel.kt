@@ -19,7 +19,8 @@
 package org.groebl.sms.feature.qkreply
 
 import android.telephony.SmsMessage
-import com.uber.autodispose.kotlin.autoDisposable
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.withLatestFrom
@@ -29,7 +30,6 @@ import io.reactivex.subjects.Subject
 import io.realm.RealmResults
 import org.groebl.sms.R
 import org.groebl.sms.common.Navigator
-import org.groebl.sms.common.androidxcompat.scope
 import org.groebl.sms.common.base.QkViewModel
 import org.groebl.sms.compat.SubscriptionManagerCompat
 import org.groebl.sms.extensions.asObservable

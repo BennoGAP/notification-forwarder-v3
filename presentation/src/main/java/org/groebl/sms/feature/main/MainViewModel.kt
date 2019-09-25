@@ -19,7 +19,8 @@
 package org.groebl.sms.feature.main
 
 import androidx.recyclerview.widget.ItemTouchHelper
-import com.uber.autodispose.kotlin.autoDisposable
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.plusAssign
@@ -28,7 +29,6 @@ import io.reactivex.schedulers.Schedulers
 import io.realm.Realm
 import org.groebl.sms.R
 import org.groebl.sms.common.Navigator
-import org.groebl.sms.common.androidxcompat.scope
 import org.groebl.sms.common.base.QkViewModel
 import org.groebl.sms.extensions.removeAccents
 import org.groebl.sms.interactor.*

@@ -36,7 +36,7 @@ import org.groebl.sms.model.Contact
 import org.groebl.sms.model.Recipient
 import org.groebl.sms.util.GlideApp
 import com.uber.autodispose.android.ViewScopeProvider
-import com.uber.autodispose.kotlin.autoDisposable
+import com.uber.autodispose.autoDisposable
 import kotlinx.android.synthetic.main.avatar_view.view.*
 import javax.inject.Inject
 

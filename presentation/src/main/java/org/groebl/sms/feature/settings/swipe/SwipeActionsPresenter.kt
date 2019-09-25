@@ -23,7 +23,8 @@ import androidx.annotation.DrawableRes
 import org.groebl.sms.R
 import org.groebl.sms.common.base.QkPresenter
 import org.groebl.sms.util.Preferences
-import com.uber.autodispose.kotlin.autoDisposable
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.withLatestFrom
 import javax.inject.Inject

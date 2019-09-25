@@ -20,8 +20,8 @@ package org.groebl.sms.common.base
 
 import androidx.annotation.CallSuper
 import androidx.lifecycle.ViewModel
-import org.groebl.sms.common.androidxcompat.scope
-import com.uber.autodispose.kotlin.autoDisposable
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject

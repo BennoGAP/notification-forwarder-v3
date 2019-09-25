@@ -23,12 +23,12 @@ import android.media.RingtoneManager
 import android.net.Uri
 import org.groebl.sms.R
 import org.groebl.sms.common.Navigator
-import org.groebl.sms.common.androidxcompat.scope
 import org.groebl.sms.common.base.QkViewModel
 import org.groebl.sms.extensions.mapNotNull
 import org.groebl.sms.repository.ConversationRepository
 import org.groebl.sms.util.Preferences
-import com.uber.autodispose.kotlin.autoDisposable
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
 import io.reactivex.Flowable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.withLatestFrom

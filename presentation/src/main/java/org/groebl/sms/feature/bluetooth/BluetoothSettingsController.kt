@@ -18,7 +18,8 @@ import androidx.core.content.ContextCompat
 import com.bluelinelabs.conductor.RouterTransaction
 import com.jakewharton.rxbinding2.view.clicks
 import com.klinker.android.send_message.Utils
-import com.uber.autodispose.kotlin.autoDisposable
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.bluetooth_settings_controller.*
 import kotlinx.android.synthetic.main.settings_switch_widget.view.*

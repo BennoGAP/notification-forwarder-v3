@@ -37,7 +37,6 @@ import org.groebl.sms.common.util.extensions.dpToPx
 import org.groebl.sms.util.Preferences
 import javax.inject.Inject
 
-
 class ConversationItemTouchCallback @Inject constructor(
         colors: Colors,
         disposables: CompositeDisposable,

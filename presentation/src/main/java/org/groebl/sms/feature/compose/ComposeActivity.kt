@@ -41,14 +41,14 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.widget.textChanges
-import com.uber.autodispose.kotlin.autoDisposable
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
 import dagger.android.AndroidInjection
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import kotlinx.android.synthetic.main.compose_activity.*
 import org.groebl.sms.R
-import org.groebl.sms.common.androidxcompat.scope
 import org.groebl.sms.common.base.QkThemedActivity
 import org.groebl.sms.common.util.DateFormatter
 import org.groebl.sms.common.util.extensions.*

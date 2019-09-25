@@ -19,7 +19,8 @@
 package org.groebl.sms.feature.themepicker
 
 import com.f2prateek.rx.preferences2.Preference
-import com.uber.autodispose.kotlin.autoDisposable
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.rxkotlin.withLatestFrom
 import org.groebl.sms.common.Navigator

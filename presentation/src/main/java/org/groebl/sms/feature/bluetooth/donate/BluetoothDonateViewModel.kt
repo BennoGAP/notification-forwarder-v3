@@ -1,10 +1,10 @@
 package org.groebl.sms.feature.bluetooth.donate
 
-import com.uber.autodispose.kotlin.autoDisposable
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.plusAssign
 import org.groebl.sms.common.Navigator
-import org.groebl.sms.common.androidxcompat.scope
 import org.groebl.sms.common.base.QkViewModel
 import org.groebl.sms.common.util.BillingManager
 import org.groebl.sms.manager.AnalyticsManager

@@ -27,11 +27,11 @@ import android.view.View
 import androidx.core.view.iterator
 import androidx.lifecycle.Lifecycle
 import org.groebl.sms.R
-import org.groebl.sms.common.androidxcompat.scope
 import org.groebl.sms.common.util.Colors
 import org.groebl.sms.common.util.extensions.resolveThemeColor
 import org.groebl.sms.util.Preferences
-import com.uber.autodispose.kotlin.autoDisposable
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.subjects.BehaviorSubject

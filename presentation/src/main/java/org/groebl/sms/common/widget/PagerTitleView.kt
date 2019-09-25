@@ -31,7 +31,7 @@ import org.groebl.sms.common.util.extensions.forEach
 import org.groebl.sms.common.util.extensions.resolveThemeColor
 import org.groebl.sms.injection.appComponent
 import com.uber.autodispose.android.ViewScopeProvider
-import com.uber.autodispose.kotlin.autoDisposable
+import com.uber.autodispose.autoDisposable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
 import kotlinx.android.synthetic.main.tab_view.view.*

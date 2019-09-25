@@ -35,7 +35,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.widget.textChanges
-import com.uber.autodispose.kotlin.autoDisposable
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
 import dagger.android.AndroidInjection
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -48,7 +49,6 @@ import kotlinx.android.synthetic.main.main_syncing.*
 import org.groebl.sms.R
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.androidxcompat.drawerOpen
-import org.groebl.sms.common.androidxcompat.scope
 import org.groebl.sms.common.base.QkThemedActivity
 import org.groebl.sms.common.util.extensions.*
 import org.groebl.sms.feature.bluetooth.common.BluetoothDatabase
@@ -118,7 +118,7 @@ class MainActivity : QkThemedActivity(), MainView {
         viewModel.bindView(this)
 
         (snackbar as? ViewStub)?.setOnInflateListener { _, _ ->
-            snackbarButton.clicks().subscribe(snackbarButtonIntent)
+            snackbarButton.clicks().autoDisposable(scope()).subscribe(snackbarButtonIntent)
         }
         (syncing as? ViewStub)?.setOnInflateListener { _, _ ->
             syncingProgress?.progressTintList = ColorStateList.valueOf(theme.blockingFirst().theme)
@@ -135,7 +135,7 @@ class MainActivity : QkThemedActivity(), MainView {
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         // Don't allow clicks to pass through the drawer layout
-        drawer.clicks().subscribe()
+        drawer.clicks().autoDisposable(scope()).subscribe()
 
         // Set the theme color tint to the recyclerView, progressbar, and FAB
         theme

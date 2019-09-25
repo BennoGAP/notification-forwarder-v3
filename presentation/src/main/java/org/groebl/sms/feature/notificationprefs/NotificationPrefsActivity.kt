@@ -30,12 +30,12 @@ import androidx.lifecycle.ViewModelProviders
 import com.jakewharton.rxbinding2.view.clicks
 import org.groebl.sms.R
 import org.groebl.sms.common.QkDialog
-import org.groebl.sms.common.androidxcompat.scope
 import org.groebl.sms.common.base.QkThemedActivity
 import org.groebl.sms.common.util.extensions.animateLayoutChanges
 import org.groebl.sms.common.util.extensions.setVisible
 import org.groebl.sms.common.widget.PreferenceView
-import com.uber.autodispose.kotlin.autoDisposable
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
 import dagger.android.AndroidInjection
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject

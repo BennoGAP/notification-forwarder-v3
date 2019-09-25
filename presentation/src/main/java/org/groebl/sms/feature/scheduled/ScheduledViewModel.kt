@@ -18,10 +18,10 @@
  */
 package org.groebl.sms.feature.scheduled
 
-import com.uber.autodispose.kotlin.autoDisposable
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
 import io.reactivex.rxkotlin.withLatestFrom
 import org.groebl.sms.common.Navigator
-import org.groebl.sms.common.androidxcompat.scope
 import org.groebl.sms.common.base.QkViewModel
 import org.groebl.sms.interactor.SendScheduledMessage
 import org.groebl.sms.repository.ScheduledMessageRepository

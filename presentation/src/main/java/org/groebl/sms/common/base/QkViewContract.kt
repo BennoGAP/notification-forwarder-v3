@@ -1,12 +1,10 @@
 package org.groebl.sms.common.base
 
-import com.bluelinelabs.conductor.autodispose.ControllerEvent
-import com.uber.autodispose.LifecycleScopeProvider
+import androidx.lifecycle.LifecycleOwner
 
-interface QkViewContract<in State> {
+
+interface QkViewContract<in State>: LifecycleOwner {
 
     fun render(state: State)
-
-    fun scope(): LifecycleScopeProvider<ControllerEvent>
 
 }

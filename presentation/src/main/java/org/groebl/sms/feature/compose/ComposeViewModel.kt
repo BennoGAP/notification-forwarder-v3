@@ -25,7 +25,8 @@ import android.content.Intent
 import android.telephony.PhoneNumberUtils
 import android.telephony.SmsMessage
 import android.view.inputmethod.EditorInfo
-import com.uber.autodispose.kotlin.autoDisposable
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.Observables
@@ -38,7 +39,6 @@ import io.reactivex.subjects.Subject
 import io.realm.RealmList
 import org.groebl.sms.R
 import org.groebl.sms.common.Navigator
-import org.groebl.sms.common.androidxcompat.scope
 import org.groebl.sms.common.base.QkViewModel
 import org.groebl.sms.common.util.ClipboardUtils
 import org.groebl.sms.common.util.MessageDetailsFormatter
