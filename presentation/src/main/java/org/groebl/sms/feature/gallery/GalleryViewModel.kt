@@ -29,6 +29,7 @@ import org.groebl.sms.common.base.QkViewModel
 import org.groebl.sms.common.util.extensions.makeToast
 import org.groebl.sms.extensions.mapNotNull
 import org.groebl.sms.interactor.SaveImage
+import org.groebl.sms.manager.PermissionManager
 import org.groebl.sms.repository.ConversationRepository
 import org.groebl.sms.repository.MessageRepository
 import javax.inject.Inject
@@ -39,7 +40,8 @@ class GalleryViewModel @Inject constructor(
         messageRepo: MessageRepository,
         @Named("partId") private val partId: Long,
         private val context: Context,
-        private val saveImage: SaveImage
+        private val saveImage: SaveImage,
+        private val permissions: PermissionManager
 ) : QkViewModel<GalleryView, GalleryState>(GalleryState()) {
 
     init {
@@ -47,7 +49,11 @@ class GalleryViewModel @Inject constructor(
                 .mapNotNull(messageRepo::getMessageForPart)
                 .mapNotNull { message -> message.threadId }
                 .doOnNext { threadId -> newState { copy(parts = messageRepo.getPartsForConversation(threadId)) } }
-                .doOnNext { threadId -> newState { copy(title = conversationRepo.getConversation(threadId)?.getTitle()) } }
+                .doOnNext { threadId ->
+                    newState {
+                        copy(title = conversationRepo.getConversation(threadId)?.getTitle())
+                    }
+                }
                 .subscribe()
     }
 
@@ -64,6 +70,7 @@ class GalleryViewModel @Inject constructor(
         // Save image to device
         view.optionsItemSelected()
                 .filter { itemId -> itemId == R.id.save }
+                .filter { permissions.hasStorage().also { if (!it) view.requestStoragePermission() }
                 .withLatestFrom(view.pageChanged()) { _, part -> part.id }
                 .autoDisposable(view.scope())
                 .subscribe { partId -> saveImage.execute(partId) { context.makeToast(R.string.gallery_toast_saved) } }
