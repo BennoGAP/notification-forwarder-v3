@@ -31,9 +31,11 @@ import org.groebl.sms.common.util.DateFormatter
 import org.groebl.sms.common.util.extensions.resolveThemeColor
 import org.groebl.sms.model.Conversation
 import kotlinx.android.synthetic.main.conversation_list_item.view.*
+import org.groebl.sms.common.util.Colors
 import javax.inject.Inject
 
 class ConversationsAdapter @Inject constructor(
+        private val colors: Colors,
         private val context: Context,
         private val dateFormatter: DateFormatter,
         private val navigator: Navigator
@@ -55,6 +57,9 @@ class ConversationsAdapter @Inject constructor(
             view.snippet.setTypeface(view.snippet.typeface, Typeface.BOLD)
             view.snippet.setTextColor(textColorPrimary)
             view.snippet.maxLines = 5
+
+            view.unread.isVisible = true
+            view.unread.setTint(colors.theme().theme)
 
             view.date.setTypeface(view.date.typeface, Typeface.BOLD)
             view.date.setTextColor(textColorPrimary)
