@@ -31,6 +31,7 @@ interface SettingsView : QkViewContract<SettingsState> {
     fun nightEndSelected(): Observable<Pair<Int, Int>>
     fun textSizeSelected(): Observable<Int>
     fun sendDelaySelected(): Observable<Int>
+    fun signatureSet(): Observable<String>
     fun mmsSizeSelected(): Observable<Int>
 
     fun showNightModeDialog()
@@ -38,6 +39,7 @@ interface SettingsView : QkViewContract<SettingsState> {
     fun showEndTimePicker(hour: Int, minute: Int)
     fun showTextSizePicker()
     fun showDelayDurationDialog()
+    fun showSignatureDialog(signature: String)
     fun showMmsSizePicker()
     fun showSwipeActions()
     fun showThemePicker()

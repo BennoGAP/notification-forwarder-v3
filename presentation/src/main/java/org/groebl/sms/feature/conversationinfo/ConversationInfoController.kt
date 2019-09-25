@@ -18,7 +18,6 @@
  */
 package org.groebl.sms.feature.conversationinfo
 
-import android.text.InputFilter
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import com.bluelinelabs.conductor.RouterTransaction
@@ -33,19 +32,25 @@ import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.QkChangeHandler
 import org.groebl.sms.common.base.QkController
 import org.groebl.sms.common.util.extensions.*
-import org.groebl.sms.common.widget.QkEditText
+import org.groebl.sms.common.widget.FieldDialog
 import org.groebl.sms.feature.conversationinfo.injection.ConversationInfoModule
 import org.groebl.sms.feature.themepicker.ThemePickerController
 import org.groebl.sms.injection.appComponent
 import javax.inject.Inject
 
-class ConversationInfoController(val threadId: Long = 0) : QkController<ConversationInfoView, ConversationInfoState, ConversationInfoPresenter>(), ConversationInfoView {
+class ConversationInfoController(
+        val threadId: Long = 0
+) : QkController<ConversationInfoView, ConversationInfoState, ConversationInfoPresenter>(), ConversationInfoView {
 
     @Inject override lateinit var presenter: ConversationInfoPresenter
     @Inject lateinit var navigator: Navigator
     @Inject lateinit var recipientAdapter: ConversationRecipientAdapter
     @Inject lateinit var mediaAdapter: ConversationMediaAdapter
     @Inject lateinit var itemDecoration: GridSpacingItemDecoration
+
+    private val nameDialog: FieldDialog by lazy {
+        FieldDialog(activity!!, activity!!.getString(R.string.info_name), nameChangeSubject::onNext)
+    }
 
     private val nameChangeSubject: Subject<String> = PublishSubject.create()
     private val confirmDeleteSubject: Subject<Unit> = PublishSubject.create()
@@ -126,26 +131,7 @@ class ConversationInfoController(val threadId: Long = 0) : QkController<Conversa
         mediaAdapter.updateData(state.media)
     }
 
-    override fun showNameDialog(name: String) {
-        val editText = QkEditText(activity!!).apply {
-            val padding = 8.dpToPx(activity!!)
-            setPadding(padding * 3, padding, padding * 3, padding)
-            setSingleLine(true)
-            setHint(R.string.info_name_hint)
-            setText(name)
-            setHintTextColor(context.resolveThemeColor(android.R.attr.textColorTertiary))
-            setTextColor(context.resolveThemeColor(android.R.attr.textColorPrimary))
-            filters = arrayOf(InputFilter.LengthFilter(30))
-            background = null
-        }
-
-        AlertDialog.Builder(activity!!)
-                .setTitle(R.string.info_name)
-                .setView(editText)
-                .setPositiveButton(R.string.button_save) { _, _ -> nameChangeSubject.onNext(editText.text.toString()) }
-                .setNegativeButton(R.string.button_cancel, null)
-                .show()
-    }
+    override fun showNameDialog(name: String) = nameDialog.setText(name).show()
 
     override fun showThemePicker(threadId: Long) {
         router.pushController(RouterTransaction.with(ThemePickerController(threadId))
