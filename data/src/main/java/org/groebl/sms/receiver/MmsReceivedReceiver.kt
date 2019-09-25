@@ -22,8 +22,8 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import com.klinker.android.send_message.MmsReceivedReceiver
-import org.groebl.sms.interactor.ReceiveMms
 import dagger.android.AndroidInjection
+import org.groebl.sms.interactor.ReceiveMms
 import javax.inject.Inject
 
 class MmsReceivedReceiver : MmsReceivedReceiver() {
