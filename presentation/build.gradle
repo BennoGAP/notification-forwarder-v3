@@ -167,7 +167,7 @@ dependencies {
     testImplementation "org.mockito:mockito-core:$mockito_version"
 
     //Crashlytics
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.9'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
     implementation 'com.android.billingclient:billing:1.0'
     implementation 'com.github.chrisbanes:PhotoView:2.0.0'
     implementation "com.f2prateek.rx.preferences2:rx-preferences:$rx_preferences_version"
@@ -190,4 +190,5 @@ dependencies {
     implementation 'com.vdurmont:emoji-java:4.0.0'
 }
 
+apply plugin: 'io.fabric'
 apply plugin: 'com.google.gms.google-services'

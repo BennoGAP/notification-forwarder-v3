@@ -30,6 +30,7 @@ import dagger.android.*
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import org.groebl.sms.R
+import org.groebl.sms.common.util.CrashlyticsTree
 import org.groebl.sms.common.util.FileLoggingTree
 import org.groebl.sms.feature.bluetooth.common.BluetoothDatabase
 import org.groebl.sms.injection.AppComponentManager
@@ -61,8 +62,6 @@ class QKApplication : Application(), HasActivityInjector, HasBroadcastReceiverIn
     override fun onCreate() {
         super.onCreate()
 
-        RxJava2Debug.enableRxJava2AssemblyTracking()
-
 //        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
 
         Realm.init(this)
@@ -89,7 +88,9 @@ class QKApplication : Application(), HasActivityInjector, HasBroadcastReceiverIn
 
         EmojiCompat.init(FontRequestEmojiCompatConfig(this, fontRequest))
 
-        Timber.plant(Timber.DebugTree(), fileLoggingTree)
+        Timber.plant(Timber.DebugTree(), CrashlyticsTree(), fileLoggingTree)
+
+        RxJava2Debug.enableRxJava2AssemblyTracking(arrayOf("org.groebl.sms"))
 
         BluetoothDatabase.init(this)
     }
