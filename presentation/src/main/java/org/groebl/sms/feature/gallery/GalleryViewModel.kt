@@ -70,7 +70,7 @@ class GalleryViewModel @Inject constructor(
         // Save image to device
         view.optionsItemSelected()
                 .filter { itemId -> itemId == R.id.save }
-                .filter { permissions.hasStorage().also { if (!it) view.requestStoragePermission() }
+                .filter { permissions.hasStorage().also { if (!it) view.requestStoragePermission() } }
                 .withLatestFrom(view.pageChanged()) { _, part -> part.id }
                 .autoDisposable(view.scope())
                 .subscribe { partId -> saveImage.execute(partId) { context.makeToast(R.string.gallery_toast_saved) } }
