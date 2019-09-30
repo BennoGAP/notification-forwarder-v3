@@ -103,11 +103,6 @@ class MainActivity : QkThemedActivity(), MainView {
     private val toggle by lazy { ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.main_drawer_open_cd, 0) }
     private val itemTouchHelper by lazy { ItemTouchHelper(itemTouchCallback) }
     private val progressAnimator by lazy { ObjectAnimator.ofInt(syncingProgress, "progress", 0, 0) }
-    private val archiveSnackbar by lazy {
-        Snackbar.make(drawerLayout, R.string.toast_archived, Snackbar.LENGTH_LONG).apply {
-            setAction(R.string.button_undo) { undoArchiveIntent.onNext(Unit) }
-        }
-    }
     private val snackbar by lazy { findViewById<View>(R.id.snackbar) }
     private val syncing by lazy { findViewById<View>(R.id.syncing) }
 
@@ -327,7 +322,11 @@ class MainActivity : QkThemedActivity(), MainView {
     }
 
     override fun showArchivedSnackbar() {
-        archiveSnackbar.show()
+        Snackbar.make(drawerLayout, R.string.toast_archived, Snackbar.LENGTH_LONG).apply {
+            setAction(R.string.button_undo) { undoArchiveIntent.onNext(Unit) }
+            setActionTextColor(colors.theme().theme)
+            show()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
