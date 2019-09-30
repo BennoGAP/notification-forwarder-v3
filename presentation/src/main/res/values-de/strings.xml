@@ -278,6 +278,7 @@
   <string name="scheduled_options_title">Geplante Nachricht</string>
   <string-array name="scheduled_options">
     <item>Sofort senden</item>
+    <item>Text kopieren</item>
     <item>Löschen</item>
   </string-array>
   <string name="settings_category_appearance">Aussehen</string>

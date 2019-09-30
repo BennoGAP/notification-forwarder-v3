@@ -18,26 +18,27 @@
  */
 package org.groebl.sms.feature.scheduled
 
+import android.content.Context
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import io.reactivex.rxkotlin.withLatestFrom
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.base.QkViewModel
+import org.groebl.sms.common.util.ClipboardUtils
 import org.groebl.sms.interactor.SendScheduledMessage
+import org.groebl.sms.repository.MessageRepository
 import org.groebl.sms.repository.ScheduledMessageRepository
 import javax.inject.Inject
 
 class ScheduledViewModel @Inject constructor(
+        private val context: Context,
+        private val messageRepo: MessageRepository,
         private val navigator: Navigator,
         private val scheduledMessageRepo: ScheduledMessageRepository,
         private val sendScheduledMessage: SendScheduledMessage
 ) : QkViewModel<ScheduledView, ScheduledState>(ScheduledState(
         scheduledMessages = scheduledMessageRepo.getScheduledMessages()
 )) {
-
-    init {
-
-    }
 
     override fun bindView(view: ScheduledView) {
         super.bindView(view)
@@ -50,8 +51,13 @@ class ScheduledViewModel @Inject constructor(
                 .withLatestFrom(view.messageClickIntent) { itemId, messageId ->
                     when (itemId) {
                         0 -> sendScheduledMessage.execute(messageId)
-                        1 -> scheduledMessageRepo.deleteScheduledMessage(messageId)
+                        1 -> scheduledMessageRepo.getScheduledMessage(messageId)?.let { message ->
+                            ClipboardUtils.copy(context, message.body)
+                            context.makeToast(R.string.toast_copied)
+                        }
+                        2 -> scheduledMessageRepo.deleteScheduledMessage(messageId)
                     }
+                    Unit
                 }
                 .autoDisposable(view.scope())
                 .subscribe()
