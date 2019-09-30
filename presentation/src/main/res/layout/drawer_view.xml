@@ -211,11 +211,11 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:text="@string/rate_title_new"
+                android:textColor="?android:attr/textColorPrimary"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/rateIcon"
                 app:layout_constraintTop_toTopOf="parent"
-                app:textColor="primary"
                 app:textSize="primary" />
 
             <org.groebl.sms.common.widget.QkTextView
@@ -228,7 +228,7 @@
                 app:layout_constraintEnd_toEndOf="@id/rateTitle"
                 app:layout_constraintStart_toStartOf="@id/rateTitle"
                 app:layout_constraintTop_toBottomOf="@id/rateTitle"
-                app:textColor="secondary"
+                android:textColor="?android:attr/textColorSecondary"
                 app:textSize="secondary" />
 
             <org.groebl.sms.common.widget.QkTextView
@@ -243,7 +243,7 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@id/rateDonate"
                 app:layout_constraintTop_toBottomOf="@id/rateSummary"
-                app:textColor="tertiary"
+                android:textColor="?android:attr/textColorTertiary"
                 app:textSize="secondary" />
 
             <org.groebl.sms.common.widget.QkTextView
@@ -260,7 +260,7 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@id/rateOkay"
                 app:layout_constraintTop_toBottomOf="@id/rateSummary"
-                app:textColor="secondary"
+                android:textColor="?android:attr/textColorSecondary"
                 app:textSize="secondary" />
 
             <org.groebl.sms.common.widget.QkTextView
@@ -278,7 +278,7 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rateSummary"
-                app:textColor="secondary"
+                android:textColor="?android:attr/textColorSecondary"
                 app:textSize="secondary" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

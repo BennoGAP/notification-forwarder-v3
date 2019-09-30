@@ -64,11 +64,11 @@
         android:layout_marginStart="16dp"
         android:gravity="center"
         android:text="#"
+        android:textColor="?android:attr/textColorPrimary"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/hexLabel"
         app:layout_constraintStart_toEndOf="@id/hexSeparator"
         app:layout_constraintTop_toTopOf="@id/hexLabel"
-        app:textColor="primary"
         app:textSize="secondary"
         tools:ignore="HardcodedText" />
 
@@ -80,11 +80,11 @@
         android:gravity="center"
         android:paddingEnd="16dp"
         android:textAllCaps="true"
+        android:textColor="?android:attr/textColorPrimary"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/hexLabel"
         app:layout_constraintStart_toEndOf="@id/hexSign"
         app:layout_constraintTop_toTopOf="@id/hexLabel"
-        app:textColor="primary"
         app:textSize="secondary"
         tools:text="1B8AE8" />
 

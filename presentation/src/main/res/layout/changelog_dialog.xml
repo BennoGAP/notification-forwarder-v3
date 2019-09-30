@@ -31,11 +31,11 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
         android:text="@string/changelog_title"
+        android:textColor="?android:attr/textColorPrimary"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/version"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_weight="1"
-        app:textColor="primary"
         app:textSize="dialog" />
 
     <org.groebl.sms.common.widget.QkTextView
