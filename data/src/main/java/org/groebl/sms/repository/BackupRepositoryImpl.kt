@@ -31,6 +31,7 @@ import io.realm.Realm
 import okio.Okio
 import org.groebl.sms.model.BackupFile
 import org.groebl.sms.model.Message
+import org.groebl.sms.util.Preferences
 import org.groebl.sms.util.QkFileObserver
 import org.groebl.sms.util.tryOrNull
 import timber.log.Timber
@@ -47,6 +48,7 @@ import kotlin.concurrent.schedule
 class BackupRepositoryImpl @Inject constructor(
         private val context: Context,
         private val moshi: Moshi,
+        private val prefs: Preferences,
         private val syncRepo: SyncRepository
 ) : BackupRepository {
 
@@ -191,7 +193,7 @@ class BackupRepositoryImpl @Inject constructor(
             restoreProgress.onNext(BackupRepository.Progress.Running(messageCount, index))
 
             try {
-                context.contentResolver.insert(Telephony.Sms.CONTENT_URI, contentValuesOf(
+                val values = contentValuesOf(
                     Telephony.Sms.TYPE to message.type,
                     Telephony.Sms.ADDRESS to message.address,
                     Telephony.Sms.DATE to message.date,
@@ -202,8 +204,14 @@ class BackupRepositoryImpl @Inject constructor(
                     Telephony.Sms.BODY to message.body,
                     Telephony.Sms.PROTOCOL to message.protocol,
                     Telephony.Sms.SERVICE_CENTER to message.serviceCenter,
-                    Telephony.Sms.LOCKED to message.locked,
-                    Telephony.Sms.SUBSCRIPTION_ID to message.subId))
+                    Telephony.Sms.LOCKED to message.locked
+                )
+
+                if (prefs.canUseSubId.get()) {
+                    values.put(Telephony.Sms.SUBSCRIPTION_ID, message.subId)
+                }
+
+                context.contentResolver.insert(Telephony.Sms.CONTENT_URI, values)
             } catch (e: Exception) {
                 Timber.w(e)
                 errorCount++
