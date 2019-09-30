@@ -29,6 +29,7 @@ import io.realm.Sort
 import org.groebl.sms.compat.TelephonyCompat
 import org.groebl.sms.extensions.anyOf
 import org.groebl.sms.extensions.map
+import org.groebl.sms.extensions.removeAccents
 import org.groebl.sms.filter.ConversationFilter
 import org.groebl.sms.mapper.CursorToConversation
 import org.groebl.sms.mapper.CursorToRecipient
@@ -95,13 +96,14 @@ class ConversationRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun searchConversations(query: String): List<SearchResult> {
+    override fun searchConversations(query: CharSequence): List<SearchResult> {
+        val normalizedQuery = query.removeAccents()
         val conversations = getConversationsSnapshot()
 
         val messagesByConversation = Realm.getDefaultInstance()
                 .where(Message::class.java)
                 .beginGroup()
-                .contains("body", query, Case.INSENSITIVE)
+                .contains("body", normalizedQuery, Case.INSENSITIVE)
                 .or()
                 .contains("parts.text", normalizedQuery, Case.INSENSITIVE)
                 .endGroup()
@@ -110,13 +112,13 @@ class ConversationRepositoryImpl @Inject constructor(
                 .groupBy { message -> message.threadId }
                 .filter { (threadId, _) -> conversations.firstOrNull { it.id == threadId } != null }
                 .map { (threadId, messages) -> Pair(conversations.first { it.id == threadId }, messages.size) }
-                .map { (conversation, messages) -> SearchResult(query, conversation, messages) }
+                .map { (conversation, messages) -> SearchResult(normalizedQuery, conversation, messages) }
                 .sortedByDescending { result -> result.messages }
                 .toList()
 
         return conversations
-                .filter { conversation -> conversationFilter.filter(conversation, query) }
-                .map { conversation -> SearchResult(query, conversation, 0) }
+                .filter { conversation -> conversationFilter.filter(conversation, normalizedQuery) }
+                .map { conversation -> SearchResult(normalizedQuery, conversation, 0) }
                 .plus(messagesByConversation)
     }
 

@@ -32,6 +32,7 @@ import org.groebl.sms.common.base.QkViewHolder
 import org.groebl.sms.common.util.Colors
 import org.groebl.sms.common.util.DateFormatter
 import org.groebl.sms.common.util.extensions.setVisible
+import org.groebl.sms.extensions.removeAccents
 import org.groebl.sms.model.SearchResult
 import javax.inject.Inject
 
@@ -64,7 +65,7 @@ class SearchAdapter @Inject constructor(
 
         val query = result.query
         val title = SpannableString(result.conversation.getTitle())
-        var index = title.indexOf(query, ignoreCase = true)
+        var index = title.removeAccents().indexOf(query, ignoreCase = true)
 
         while (index >= 0) {
             title.setSpan(BackgroundColorSpan(highlightColor), index, index + query.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
