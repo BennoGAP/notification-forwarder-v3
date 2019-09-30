@@ -28,6 +28,7 @@ import androidx.core.view.iterator
 import androidx.lifecycle.Lifecycle
 import org.groebl.sms.R
 import org.groebl.sms.common.util.Colors
+import org.groebl.sms.common.util.extensions.resolveThemeBoolean
 import org.groebl.sms.common.util.extensions.resolveThemeColor
 import org.groebl.sms.util.Preferences
 import com.uber.autodispose.android.lifecycle.scope
@@ -79,6 +80,13 @@ abstract class QkThemedActivity : QkActivity() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .autoDisposable(scope())
                 .subscribe { recreate() }
+
+        // We can only set light nav bar on API 27 in attrs, but we can do it in API 26 here
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.O) {
+            val night = !resolveThemeBoolean(R.attr.isLightTheme)
+            window.decorView.systemUiVisibility = if (night) 0 else
+                View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+        }
 
         // Some devices don't let you modify android.R.attr.navigationBarColor
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
