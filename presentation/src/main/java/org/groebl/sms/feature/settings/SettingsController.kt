@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator
 import android.app.AlertDialog
 import android.app.TimePickerDialog
 import android.content.Context
+import android.os.Build
 import android.text.format.DateFormat
 import android.view.View
 import androidx.core.view.isVisible
@@ -19,6 +20,7 @@ import kotlinx.android.synthetic.main.settings_controller.*
 import kotlinx.android.synthetic.main.settings_switch_widget.view.*
 import kotlinx.android.synthetic.main.settings_theme_widget.*
 import org.groebl.sms.R
+import org.groebl.sms.common.MenuItem
 import org.groebl.sms.common.QkChangeHandler
 import org.groebl.sms.common.QkDialog
 import org.groebl.sms.common.base.QkController
@@ -70,7 +72,12 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
     override fun onViewCreated() {
         preferences.postDelayed({ preferences?.animateLayoutChanges = true }, 100)
 
-        nightModeDialog.adapter.setData(R.array.night_modes)
+        when (Build.VERSION.SDK_INT >= 29) {
+            true -> nightModeDialog.adapter.setData(R.array.night_modes)
+            false -> nightModeDialog.adapter.data = context.resources.getStringArray(R.array.night_modes)
+                    .mapIndexed { index, title -> MenuItem(title, index) }
+                    .drop(1)
+        }
         textSizeDialog.adapter.setData(R.array.text_sizes)
         sendDelayDialog.adapter.setData(R.array.delayed_sending_labels)
         mmsSizeDialog.adapter.setData(R.array.mms_sizes, R.array.mms_sizes_ids)

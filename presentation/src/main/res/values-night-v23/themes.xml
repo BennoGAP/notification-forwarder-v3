@@ -19,12 +19,9 @@
   -->
 <resources>
 
-    <!-- On Oreo, use the light status and navigation bars -->
+    <!-- On Marshmallow, explicitly don't use the light status bar -->
     <style name="AppTheme" parent="AppBaseTheme">
-        <item name="android:navigationBarColor">@color/white</item>
-        <item name="android:statusBarColor">@color/statusBarLight</item>
-        <item name="android:windowLightNavigationBar">true</item>
-        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightStatusBar">false</item>
     </style>
 
 </resources>

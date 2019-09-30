@@ -25,6 +25,7 @@ import androidx.appcompat.widget.SwitchCompat
 import org.groebl.sms.R
 import org.groebl.sms.common.util.Colors
 import org.groebl.sms.common.util.extensions.getColorCompat
+import org.groebl.sms.common.util.extensions.resolveThemeColor
 import org.groebl.sms.common.util.extensions.withAlpha
 import org.groebl.sms.injection.appComponent
 import org.groebl.sms.util.Preferences
@@ -50,26 +51,15 @@ class QkSwitch @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
                     intArrayOf(android.R.attr.state_checked),
                     intArrayOf())
 
-            val themeColor = colors.theme().theme
+            thumbTintList = ColorStateList(states, intArrayOf(
+                    context.resolveThemeColor(R.attr.switchThumbDisabled),
+                    colors.theme().theme,
+                    context.resolveThemeColor(R.attr.switchThumbEnabled)))
 
-            val switchThumbEnabled: Int = prefs.night.get()
-                    .let { night -> if (night) R.color.switchThumbEnabledDark else R.color.switchThumbEnabledLight }
-                    .let { res -> context.getColorCompat(res) }
-
-            val switchThumbDisabled: Int = prefs.night.get()
-                    .let { night -> if (night) R.color.switchThumbDisabledDark else R.color.switchThumbDisabledLight }
-                    .let { res -> context.getColorCompat(res) }
-
-            val switchTrackEnabled: Int = prefs.night.get()
-                    .let { night -> if (night) R.color.switchTrackEnabledDark else R.color.switchTrackEnabledLight }
-                    .let { res -> context.getColorCompat(res) }
-
-            val switchTrackDisabled: Int = prefs.night.get()
-                    .let { night -> if (night) R.color.switchTrackDisabledDark else R.color.switchTrackDisabledLight }
-                    .let { res -> context.getColorCompat(res) }
-
-            thumbTintList = ColorStateList(states, intArrayOf(switchThumbDisabled, themeColor, switchThumbEnabled))
-            trackTintList = ColorStateList(states, intArrayOf(switchTrackDisabled, themeColor.withAlpha(0x4D), switchTrackEnabled))
+            trackTintList = ColorStateList(states, intArrayOf(
+                    context.resolveThemeColor(R.attr.switchTrackDisabled),
+                    colors.theme().theme.withAlpha(0x4D),
+                    context.resolveThemeColor(R.attr.switchTrackEnabled)))
         }
     }
 }
