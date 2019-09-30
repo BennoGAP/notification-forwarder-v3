@@ -100,13 +100,19 @@ class ConversationRepositoryImpl @Inject constructor(
 
         val messagesByConversation = Realm.getDefaultInstance()
                 .where(Message::class.java)
+                .beginGroup()
                 .contains("body", query, Case.INSENSITIVE)
+                .or()
+                .contains("parts.text", normalizedQuery, Case.INSENSITIVE)
+                .endGroup()
                 .findAll()
+                .asSequence()
                 .groupBy { message -> message.threadId }
                 .filter { (threadId, _) -> conversations.firstOrNull { it.id == threadId } != null }
                 .map { (threadId, messages) -> Pair(conversations.first { it.id == threadId }, messages.size) }
                 .map { (conversation, messages) -> SearchResult(query, conversation, messages) }
                 .sortedByDescending { result -> result.messages }
+                .toList()
 
         return conversations
                 .filter { conversation -> conversationFilter.filter(conversation, query) }
