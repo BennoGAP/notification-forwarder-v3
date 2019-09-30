@@ -43,7 +43,8 @@
             <org.groebl.sms.common.widget.QkTextView
                 android:id="@+id/toolbarTitle"
                 style="@style/ToolbarText"
-                android:layout_marginStart="16dp" />
+                android:layout_marginStart="16dp"
+                android:visibility="gone" />
 
             <org.groebl.sms.common.widget.QkEditText
                 android:id="@+id/toolbarSearch"
