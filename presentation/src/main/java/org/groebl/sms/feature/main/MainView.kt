@@ -28,7 +28,7 @@ interface MainView : QkView<MainState> {
     val composeIntent: Observable<Unit>
     val drawerOpenIntent: Observable<Boolean>
     val homeIntent: Observable<*>
-    val drawerItemIntent: Observable<DrawerItem>
+    val navigationIntent: Observable<NavItem>
     val optionsItemIntent: Observable<Int>
     val dismissRatingIntent: Observable<*>
     val rateIntent: Observable<*>
@@ -38,7 +38,6 @@ interface MainView : QkView<MainState> {
     val swipeConversationIntent: Observable<Pair<Long, Int>>
     val undoArchiveIntent: Observable<Unit>
     val snackbarButtonIntent: Observable<Unit>
-    val backPressedIntent: Observable<Unit>
 
     fun requestPermissions()
     fun clearSearch()
@@ -48,4 +47,4 @@ interface MainView : QkView<MainState> {
 
 }
 
-enum class DrawerItem { INBOX, ARCHIVED, BACKUP, SCHEDULED, BLOCKING, SETTINGS, SETTINGS_BLUETOOTH, HELP, INVITE }
+enum class NavItem { BACK, INBOX, ARCHIVED, BACKUP, SCHEDULED, BLOCKING, SETTINGS, SETTINGS_BLUETOOTH, HELP, INVITE }
