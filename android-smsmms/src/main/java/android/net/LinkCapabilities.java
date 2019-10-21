@@ -18,7 +18,6 @@ package android.net;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import com.klinker.android.logger.Log;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -26,13 +25,14 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import timber.log.Timber;
+
 /**
  * A class representing the capabilities of a link
  *
  * @hide
  */
 public class LinkCapabilities implements Parcelable {
-    private static final String TAG = "LinkCapabilities";
     private static final boolean DBG = false;
 
     /**
@@ -388,6 +388,6 @@ public class LinkCapabilities implements Parcelable {
      * Debug logging
      */
     protected static void log(String s) {
-        Log.d(TAG, s);
+        Timber.d(s);
     }
 }
