@@ -18,12 +18,15 @@ package com.android.mms;
 
 import android.content.Context;
 import android.content.res.XmlResourceParser;
-import com.klinker.android.logger.Log;
+
 import com.klinker.android.send_message.R;
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+
+import timber.log.Timber;
 
 public class MmsConfig {
     private static final boolean DEBUG = true;
