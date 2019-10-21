@@ -22,6 +22,7 @@ import android.Manifest
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
@@ -36,7 +37,6 @@ import kotlinx.android.synthetic.main.gallery_activity.*
 import org.groebl.sms.R
 import org.groebl.sms.common.base.QkActivity
 import org.groebl.sms.common.util.DateFormatter
-import org.groebl.sms.common.util.extensions.addOnPageChangeListener
 import org.groebl.sms.common.util.extensions.setVisible
 import org.groebl.sms.model.MmsPart
 import javax.inject.Inject
@@ -55,6 +55,7 @@ class GalleryActivity : QkActivity(), GalleryView {
     private val viewModel by lazy { ViewModelProviders.of(this, viewModelFactory)[GalleryViewModel::class.java] }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        delegate.setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.gallery_activity)
