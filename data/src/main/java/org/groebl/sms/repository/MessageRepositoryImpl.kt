@@ -96,12 +96,14 @@ class MessageRepositoryImpl @Inject constructor(
     }
 
     override fun getUnreadCount(): Long {
-        return Realm.getDefaultInstance()
-                .where(Conversation::class.java)
-                .equalTo("archived", false)
-                .equalTo("blocked", false)
-                .equalTo("read", false)
-                .count()
+        return Realm.getDefaultInstance().use { realm ->
+            realm.refresh()
+            realm.where(Conversation::class.java)
+                    .equalTo("archived", false)
+                    .equalTo("blocked", false)
+                    .equalTo("read", false)
+                    .count()
+        }
     }
 
     override fun getPart(id: Long): MmsPart? {
