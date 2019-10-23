@@ -26,6 +26,7 @@ import io.realm.Case
 import io.realm.Realm
 import io.realm.RealmResults
 import io.realm.Sort
+import org.groebl.sms.blocking.BlockingClient
 import org.groebl.sms.compat.TelephonyCompat
 import org.groebl.sms.extensions.anyOf
 import org.groebl.sms.extensions.map
@@ -42,6 +43,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class ConversationRepositoryImpl @Inject constructor(
+        private val blockingClient: BlockingClient,
         private val context: Context,
         private val conversationFilter: ConversationFilter,
         private val cursorToConversation: CursorToConversation,
@@ -343,6 +345,10 @@ class ConversationRepositoryImpl @Inject constructor(
                                     }
                                 }
                             }
+
+                    conversation.blocked = recipients.any { recipient ->
+                        blockingClient.shouldBlock(recipient.address).blockingGet()
+                    }
 
                     conversation.recipients.clear()
                     conversation.recipients.addAll(recipients)

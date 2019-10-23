@@ -22,17 +22,18 @@ import android.telephony.SmsMessage
 import io.reactivex.Flowable
 import org.groebl.sms.blocking.BlockingClient
 import org.groebl.sms.extensions.mapNotNull
-import org.groebl.sms.manager.ExternalBlockingManager
 import org.groebl.sms.manager.NotificationManager
 import org.groebl.sms.manager.ShortcutManager
 import org.groebl.sms.repository.ConversationRepository
 import org.groebl.sms.repository.MessageRepository
+import org.groebl.sms.util.Preferences
 import timber.log.Timber
 import javax.inject.Inject
 
 class ReceiveSms @Inject constructor(
         private val conversationRepo: ConversationRepository,
         private val blockingClient: BlockingClient,
+        private val prefs: Preferences,
         private val messageRepo: MessageRepository,
         private val notificationManager: NotificationManager,
         private val updateBadge: UpdateBadge,
@@ -44,22 +45,31 @@ class ReceiveSms @Inject constructor(
     override fun buildObservable(params: Params): Flowable<*> {
         return Flowable.just(params)
                 .filter { it.messages.isNotEmpty() }
-                .filter {
+                .mapNotNull {
                     // Don't continue if the sender is blocked
-                    val address = it.messages[0].displayOriginatingAddress
-                    val shouldBlock = blockingClient.shouldBlock(address).blockingGet()
-                    Timber.v("Should block: $shouldBlock")
-                    !shouldBlock
-                }
-                .map {
                     val messages = it.messages
                     val address = messages[0].displayOriginatingAddress
+                    val shouldBlock = blockingClient.shouldBlock(address).blockingGet()
+                    val shouldDrop = prefs.drop.get()
+                    Timber.v("block=$shouldBlock, drop=$shouldDrop")
+
+                    // If we should drop the message, don't even save it
+                    if (shouldBlock && shouldDrop) {
+                        return@mapNotNull null
+                    }
                     val time = messages[0].timestampMillis
                     val body: String = messages
                             .mapNotNull { message -> message.displayMessageBody }
                             .reduce { body, new -> body + new }
 
-                    messageRepo.insertReceivedSms(it.subId, address, body, time) // Add the message to the db
+                    // Add the message to the db
+                    val message = messageRepo.insertReceivedSms(it.subId, address, body, time)
+
+                    if (shouldBlock) {
+                        conversationRepo.markBlocked(message.threadId)
+                    }
+
+                    message
                 }
                 .doOnNext { message -> conversationRepo.updateConversations(message.threadId) } // Update the conversation
                 .mapNotNull { message -> conversationRepo.getOrCreateConversation(message.threadId) } // Map message to conversation
