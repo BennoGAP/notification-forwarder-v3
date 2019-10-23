@@ -18,10 +18,11 @@
  */
 package org.groebl.sms.feature.blocked
 
-import org.groebl.sms.model.Conversation
 import io.realm.RealmResults
+import org.groebl.sms.model.Conversation
 
 data class BlockedState(
+        val ccEnabled: Boolean = false,
         val siaEnabled: Boolean = false,
         val data: RealmResults<Conversation>? = null
 )

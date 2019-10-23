@@ -18,11 +18,12 @@
  */
 package org.groebl.sms.feature.blocked
 
-import org.groebl.sms.common.base.QkView
 import io.reactivex.Observable
+import org.groebl.sms.common.base.QkView
 
 interface BlockedView : QkView<BlockedState> {
 
+    val ccClickedIntent: Observable<*>
     val siaClickedIntent: Observable<*>
     val unblockIntent: Observable<Long>
     val confirmUnblockIntent: Observable<Long>
