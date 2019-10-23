@@ -20,6 +20,7 @@ package org.groebl.sms.interactor
 
 import android.telephony.SmsMessage
 import io.reactivex.Flowable
+import org.groebl.sms.blocking.BlockingClient
 import org.groebl.sms.extensions.mapNotNull
 import org.groebl.sms.manager.ExternalBlockingManager
 import org.groebl.sms.manager.NotificationManager
@@ -30,7 +31,7 @@ import javax.inject.Inject
 
 class ReceiveSms @Inject constructor(
         private val conversationRepo: ConversationRepository,
-        private val externalBlockingManager: ExternalBlockingManager,
+        private val blockingClient: BlockingClient,
         private val messageRepo: MessageRepository,
         private val notificationManager: NotificationManager,
         private val updateBadge: UpdateBadge,
@@ -45,7 +46,7 @@ class ReceiveSms @Inject constructor(
                 .filter {
                     // Don't continue if the sender is blocked
                     val address = it.messages[0].displayOriginatingAddress
-                    !externalBlockingManager.shouldBlock(address).blockingGet()
+                    !blockingClient.shouldBlock(address).blockingGet()
                 }
                 .map {
                     val messages = it.messages

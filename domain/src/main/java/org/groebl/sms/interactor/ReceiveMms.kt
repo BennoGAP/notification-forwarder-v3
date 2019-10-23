@@ -20,6 +20,7 @@ package org.groebl.sms.interactor
 
 import android.net.Uri
 import io.reactivex.Flowable
+import org.groebl.sms.blocking.BlockingClient
 import org.groebl.sms.extensions.mapNotNull
 import org.groebl.sms.manager.ActiveConversationManager
 import org.groebl.sms.manager.ExternalBlockingManager
@@ -32,7 +33,7 @@ import javax.inject.Inject
 class ReceiveMms @Inject constructor(
         private val activeConversationManager: ActiveConversationManager,
         private val conversationRepo: ConversationRepository,
-        private val externalBlockingManager: ExternalBlockingManager,
+        private val blockingClient: BlockingClient,
         private val syncManager: SyncRepository,
         private val messageRepo: MessageRepository,
         private val notificationManager: NotificationManager,
@@ -54,7 +55,7 @@ class ReceiveMms @Inject constructor(
                     // to check if it should be blocked after we've pulled it into realm. If it
                     // turns out that it should be blocked, then delete it
                     // TODO Don't store blocked messages in the first place
-                    !externalBlockingManager.shouldBlock(message.address).blockingGet().also { blocked ->
+                    !blockingClient.shouldBlock(message.address).blockingGet().also { blocked ->
                         if (blocked) messageRepo.deleteMessages(message.id)
                     }
                 }

@@ -27,6 +27,8 @@ import com.f2prateek.rx.preferences2.RxSharedPreferences
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
+import org.groebl.sms.blocking.BlockingClient
+import org.groebl.sms.blocking.ShouldIAnswerBlockingClient
 import org.groebl.sms.common.ViewModelFactory
 import org.groebl.sms.common.util.NotificationManagerImpl
 import org.groebl.sms.common.util.ShortcutManagerImpl
@@ -85,7 +87,7 @@ class AppModule(private var application: Application) {
     fun provideAnalyticsManager(manager: AnalyticsManagerImpl): AnalyticsManager = manager
 
     @Provides
-    fun externalBlockingManager(manager: ExternalBlockingManagerImpl): ExternalBlockingManager = manager
+    fun externalBlockingManager(manager: ShouldIAnswerBlockingClient): BlockingClient = manager
 
     @Provides
     fun changelogManager(manager: ChangelogManagerImpl): ChangelogManager = manager
