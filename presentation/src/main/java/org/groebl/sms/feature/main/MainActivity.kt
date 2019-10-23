@@ -52,6 +52,7 @@ import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.androidxcompat.drawerOpen
 import org.groebl.sms.common.base.QkThemedActivity
 import org.groebl.sms.common.util.extensions.*
+import org.groebl.sms.feature.blocked.BlockingDialog
 import org.groebl.sms.feature.bluetooth.common.BluetoothDatabase
 import org.groebl.sms.feature.bluetooth.common.BluetoothHelper
 import org.groebl.sms.feature.conversations.ConversationItemTouchCallback
@@ -61,6 +62,7 @@ import javax.inject.Inject
 
 class MainActivity : QkThemedActivity(), MainView {
 
+    @Inject lateinit var blockingDialog: BlockingDialog
     @Inject lateinit var disposables: CompositeDisposable
     @Inject lateinit var navigator: Navigator
     @Inject lateinit var conversationsAdapter: ConversationsAdapter
@@ -142,7 +144,8 @@ class MainActivity : QkThemedActivity(), MainView {
                 .autoDisposable(scope())
                 .subscribe { theme ->
                     // Set the color for the drawer icons
-                    val states = arrayOf(intArrayOf(android.R.attr.state_activated), intArrayOf(-android.R.attr.state_activated))
+                    val states = arrayOf(intArrayOf(android.R.attr.state_activated),
+                            intArrayOf(-android.R.attr.state_activated))
                     resolveThemeColor(android.R.attr.textColorSecondary)
                             .let { textSecondary -> ColorStateList(states, intArrayOf(theme.theme, textSecondary)) }
                             .let { tintList ->
@@ -248,8 +251,10 @@ class MainActivity : QkThemedActivity(), MainView {
         inbox.isActivated = state.page is Inbox
         archived.isActivated = state.page is Archived
 
-        if (drawerLayout.isDrawerOpen(GravityCompat.START) && !state.drawerOpen) drawerLayout.closeDrawer(GravityCompat.START)
-        else if (!drawerLayout.isDrawerVisible(GravityCompat.START) && state.drawerOpen) drawerLayout.openDrawer(GravityCompat.START)
+        if (drawerLayout.isDrawerOpen(GravityCompat.START) && !state.drawerOpen) drawerLayout.closeDrawer(
+                GravityCompat.START)
+        else if (!drawerLayout.isDrawerVisible(GravityCompat.START) && state.drawerOpen) drawerLayout.openDrawer(
+                GravityCompat.START)
 
         when (state.syncing) {
             is SyncRepository.SyncProgress.Idle -> {
@@ -318,6 +323,10 @@ class MainActivity : QkThemedActivity(), MainView {
 
     override fun clearSelection() {
         conversationsAdapter.clearSelection()
+    }
+
+    override fun showBlockingDialog(conversations: List<Long>, block: Boolean) {
+        blockingDialog.show(this, conversations, block)
     }
 
     override fun showDeleteDialog(conversations: List<Long>) {

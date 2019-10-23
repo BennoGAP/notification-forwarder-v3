@@ -18,8 +18,8 @@
  */
 package org.groebl.sms.feature.conversationinfo
 
-import org.groebl.sms.common.base.QkViewContract
 import io.reactivex.Observable
+import org.groebl.sms.common.base.QkViewContract
 
 interface ConversationInfoView : QkViewContract<ConversationInfoState> {
 
@@ -34,6 +34,7 @@ interface ConversationInfoView : QkViewContract<ConversationInfoState> {
 
     fun showNameDialog(name: String)
     fun showThemePicker(threadId: Long)
+    fun showBlockingDialog(conversations: List<Long>, block: Boolean)
     fun showDeleteDialog()
 
 }

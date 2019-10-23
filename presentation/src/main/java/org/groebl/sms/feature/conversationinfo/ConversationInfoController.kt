@@ -34,6 +34,7 @@ import org.groebl.sms.common.QkChangeHandler
 import org.groebl.sms.common.base.QkController
 import org.groebl.sms.common.util.extensions.*
 import org.groebl.sms.common.widget.FieldDialog
+import org.groebl.sms.feature.blocked.BlockingDialog
 import org.groebl.sms.feature.conversationinfo.injection.ConversationInfoModule
 import org.groebl.sms.feature.themepicker.ThemePickerController
 import org.groebl.sms.injection.appComponent
@@ -44,6 +45,7 @@ class ConversationInfoController(
 ) : QkController<ConversationInfoView, ConversationInfoState, ConversationInfoPresenter>(), ConversationInfoView {
 
     @Inject override lateinit var presenter: ConversationInfoPresenter
+    @Inject lateinit var blockingDialog: BlockingDialog
     @Inject lateinit var navigator: Navigator
     @Inject lateinit var recipientAdapter: ConversationRecipientAdapter
     @Inject lateinit var mediaAdapter: ConversationMediaAdapter
@@ -138,6 +140,10 @@ class ConversationInfoController(
         router.pushController(RouterTransaction.with(ThemePickerController(threadId))
                 .pushChangeHandler(QkChangeHandler())
                 .popChangeHandler(QkChangeHandler()))
+    }
+
+    override fun showBlockingDialog(conversations: List<Long>, block: Boolean) {
+        blockingDialog.show(activity!!, conversations, block)
     }
 
     override fun showDeleteDialog() {

@@ -27,7 +27,9 @@ import io.reactivex.subjects.Subject
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.base.QkPresenter
 import org.groebl.sms.extensions.asObservable
-import org.groebl.sms.interactor.*
+import org.groebl.sms.interactor.DeleteConversations
+import org.groebl.sms.interactor.MarkArchived
+import org.groebl.sms.interactor.MarkUnarchived
 import org.groebl.sms.manager.PermissionManager
 import org.groebl.sms.model.Conversation
 import org.groebl.sms.repository.ConversationRepository
@@ -42,8 +44,6 @@ class ConversationInfoPresenter @Inject constructor(
         private val deleteConversations: DeleteConversations,
         private val markArchived: MarkArchived,
         private val markUnarchived: MarkUnarchived,
-        private val markBlocked: MarkBlocked,
-        private val markUnblocked: MarkUnblocked,
         private val navigator: Navigator,
         private val permissionManager: PermissionManager
 ) : QkPresenter<ConversationInfoView, ConversationInfoState>(
@@ -67,8 +67,6 @@ class ConversationInfoPresenter @Inject constructor(
 
         disposables += markArchived
         disposables += markUnarchived
-        disposables += markBlocked
-        disposables += markUnblocked
         disposables += deleteConversations
 
         // Update the recipients whenever they change
@@ -141,12 +139,7 @@ class ConversationInfoPresenter @Inject constructor(
         view.blockClicks()
                 .withLatestFrom(conversation) { _, conversation -> conversation }
                 .autoDisposable(view.scope())
-                .subscribe { conversation ->
-                    when (conversation.blocked) {
-                        true -> markUnblocked.execute(listOf(conversation.id))
-                        false -> markBlocked.execute(listOf(conversation.id))
-                    }
-                }
+                .subscribe { conversation -> view.showBlockingDialog(listOf(conversation.id), !conversation.blocked) }
 
         // Show the delete confirmation dialog
         view.deleteClicks()
