@@ -28,6 +28,8 @@ import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import org.groebl.sms.blocking.BlockingClient
+import org.groebl.sms.blocking.CallControlBlockingClient
+import org.groebl.sms.blocking.QkBlockingClient
 import org.groebl.sms.blocking.ShouldIAnswerBlockingClient
 import org.groebl.sms.common.ViewModelFactory
 import org.groebl.sms.common.util.NotificationManagerImpl
@@ -39,6 +41,7 @@ import org.groebl.sms.listener.ContactAddedListenerImpl
 import org.groebl.sms.manager.*
 import org.groebl.sms.mapper.*
 import org.groebl.sms.repository.*
+import org.groebl.sms.util.Preferences
 import org.groebl.smsmanager.ActiveConversationManagerImpl
 import javax.inject.Singleton
 
@@ -87,7 +90,16 @@ class AppModule(private var application: Application) {
     fun provideAnalyticsManager(manager: AnalyticsManagerImpl): AnalyticsManager = manager
 
     @Provides
-    fun externalBlockingManager(manager: ShouldIAnswerBlockingClient): BlockingClient = manager
+    fun externalBlockingManager(
+            callControl: CallControlBlockingClient,
+            sia: ShouldIAnswerBlockingClient,
+            qksms: QkBlockingClient,
+            prefs: Preferences
+    ): BlockingClient = when {
+        prefs.callControl.get() -> callControl
+        prefs.sia.get() -> sia
+        else -> qksms
+    }
 
     @Provides
     fun changelogManager(manager: ChangelogManagerImpl): ChangelogManager = manager
@@ -110,7 +122,6 @@ class AppModule(private var application: Application) {
     @Provides
     fun provideWidgetManager(manager: WidgetManagerImpl): WidgetManager = manager
 
-
     // Mapper
 
     @Provides
@@ -127,7 +138,6 @@ class AppModule(private var application: Application) {
 
     @Provides
     fun provideCursorToRecipient(mapper: CursorToRecipientImpl): CursorToRecipient = mapper
-
 
     // Repository
 

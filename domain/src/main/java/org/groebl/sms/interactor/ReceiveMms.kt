@@ -28,6 +28,7 @@ import org.groebl.sms.manager.NotificationManager
 import org.groebl.sms.repository.ConversationRepository
 import org.groebl.sms.repository.MessageRepository
 import org.groebl.sms.repository.SyncRepository
+import timber.log.Timber
 import javax.inject.Inject
 
 class ReceiveMms @Inject constructor(
@@ -56,6 +57,7 @@ class ReceiveMms @Inject constructor(
                     // turns out that it should be blocked, then delete it
                     // TODO Don't store blocked messages in the first place
                     !blockingClient.shouldBlock(message.address).blockingGet().also { blocked ->
+                        Timber.v("Should block: $blocked")
                         if (blocked) messageRepo.deleteMessages(message.id)
                     }
                 }

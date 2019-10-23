@@ -27,6 +27,7 @@ import org.groebl.sms.manager.NotificationManager
 import org.groebl.sms.manager.ShortcutManager
 import org.groebl.sms.repository.ConversationRepository
 import org.groebl.sms.repository.MessageRepository
+import timber.log.Timber
 import javax.inject.Inject
 
 class ReceiveSms @Inject constructor(
@@ -46,7 +47,9 @@ class ReceiveSms @Inject constructor(
                 .filter {
                     // Don't continue if the sender is blocked
                     val address = it.messages[0].displayOriginatingAddress
-                    !blockingClient.shouldBlock(address).blockingGet()
+                    val shouldBlock = blockingClient.shouldBlock(address).blockingGet()
+                    Timber.v("Should block: $shouldBlock")
+                    !shouldBlock
                 }
                 .map {
                     val messages = it.messages
