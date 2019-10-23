@@ -24,11 +24,11 @@ import com.uber.autodispose.autoDisposable
 import io.reactivex.rxkotlin.plusAssign
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.base.QkViewModel
+import org.groebl.sms.common.util.extensions.isInstalled
 import org.groebl.sms.interactor.MarkUnblocked
 import org.groebl.sms.manager.AnalyticsManager
 import org.groebl.sms.repository.ConversationRepository
 import org.groebl.sms.util.Preferences
-import org.groebl.sms.util.tryOrNull
 import javax.inject.Inject
 
 class BlockedViewModel @Inject constructor(
@@ -54,7 +54,7 @@ class BlockedViewModel @Inject constructor(
         super.bindView(view)
 
         view.ccClickedIntent
-                .map { tryOrNull(false) { context.packageManager.getApplicationInfo("com.flexaspect.android.everycallcontrol", 0).enabled } ?: false }
+                .map { context.isInstalled("com.flexaspect.android.everycallcontrol") }
                 .map { installed ->
                     if (!installed) {
                         navigator.showCallControl()
@@ -69,10 +69,10 @@ class BlockedViewModel @Inject constructor(
 
         view.siaClickedIntent
                 .map {
-                    tryOrNull(false) { context.packageManager.getApplicationInfo("org.mistergroup.shouldianswer", 0).enabled }
-                            ?: tryOrNull(false) { context.packageManager.getApplicationInfo("org.mistergroup.shouldianswerpersonal", 0).enabled }
-                            ?: tryOrNull(false) { context.packageManager.getApplicationInfo("org.mistergroup.muzutozvednout", 0).enabled }
-                            ?: false
+                    listOf("org.mistergroup.shouldianswer",
+                            "org.mistergroup.shouldianswerpersonal",
+                            "org.mistergroup.muzutozvednout")
+                            .any(context::isInstalled)
                 }
                 .map { installed ->
                     if (!installed) {
