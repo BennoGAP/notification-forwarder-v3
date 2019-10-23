@@ -193,7 +193,7 @@ dependencies {
     withAnalyticsRelease project(path: ':data', configuration: 'withAnalyticsRelease')
 
     //bluetooth
-    implementation 'com.vdurmont:emoji-java:4.0.0'
+    implementation 'com.vdurmont:emoji-java:5.1.1'
 }
 
 apply plugin: 'io.fabric'
