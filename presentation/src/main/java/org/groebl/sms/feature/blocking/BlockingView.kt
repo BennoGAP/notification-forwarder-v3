@@ -16,12 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.groebl.sms.feature.blocked
+package org.groebl.sms.feature.blocking
 
 import io.reactivex.Observable
 import org.groebl.sms.common.base.QkView
 
-interface BlockedView : QkView<BlockedState> {
+interface BlockingView : QkView<BlockingState> {
 
     val ccClickedIntent: Observable<*>
     val siaClickedIntent: Observable<*>

@@ -30,7 +30,7 @@ import com.klinker.android.send_message.Utils
 import org.groebl.sms.BuildConfig
 import org.groebl.sms.common.util.BillingManager
 import org.groebl.sms.feature.backup.BackupActivity
-import org.groebl.sms.feature.blocked.BlockedActivity
+import org.groebl.sms.feature.blocking.BlockingActivity
 import org.groebl.sms.feature.bluetooth.BluetoothSettingsActivity
 import org.groebl.sms.feature.bluetooth.common.BluetoothHelper
 import org.groebl.sms.feature.bluetooth.donate.BluetoothDonateActivity
@@ -177,7 +177,7 @@ class Navigator @Inject constructor(
     }
 
     fun showBlockedConversations() {
-        val intent = Intent(context, BlockedActivity::class.java)
+        val intent = Intent(context, BlockingActivity::class.java)
         startActivity(intent)
     }
 

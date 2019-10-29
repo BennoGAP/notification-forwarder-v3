@@ -307,19 +307,6 @@
   <string name="settings_qkreply_summary">Popup für neue Nachrichten</string>
   <string name="settings_qkreply_tap_dismiss_title">Zum Verwerfen tippen</string>
   <string name="settings_qkreply_tap_dismiss_summary">Tippe außerhalb des Popup um es zu schließen</string>
-  <string name="settings_blocking_title">Blockieren</string>
-  <plurals name="settings_blocking_block_external">
-    <item quantity="one">Soll diese Nummer auch in %s blockiert werden?</item>
-    <item quantity="other">Sollen diese Nummern auch in %s blockiert werden?</item>
-  </plurals>
-  <plurals name="settings_blocking_unblock_external">
-    <item quantity="one">Soll diese Nummer auch in %s entsperrt werden?</item>
-    <item quantity="other">Sollen diese Nummern auch in %s entsperrt werden?</item>
-  </plurals>
-  <string name="settings_blocking_manager_android">Android Blocking Manager</string>
-  <!-- Do not translate -->
-  <string name="settings_should_i_answer_title">Should I Answer?</string>
-  <string name="settings_should_i_answer_summary">Nachrichten von unerwünschten Nummern automatisch mit Hilfe der App \"Should I Answer?\" filtern</string>
   <string name="settings_delayed_title">Verzögertes Senden</string>
   <string name="settings_swipe_actions">Gesten</string>
   <string name="settings_swipe_actions_summary">Konfiguriere Gesten für Unterhaltungen</string>
@@ -349,8 +336,32 @@
   <string name="settings_logging_enabled">Protokollierung zur Fehlerbehebung aktiviert</string>
   <string name="settings_logging_disabled">Protokollierung zur Fehlerbehebung deaktiviert</string>
   <string name="settings_delay_duration_hint">Dauer eingeben (in Sekunden)</string>
-  <string name="blocked_title">Blockieren</string>
-  <string name="blocked_empty">Blockierte Unterhaltungen werden hier angezeigt</string>
+  <string name="blocking_title">Blockieren</string>
+  <string name="blocking_drop_title">Nachricht verwerfen</string>
+  <string name="blocking_drop_summary">Löscht eine einkommende Nachricht von einem blockierten Absender anstatt sie nur zu verstecken</string>
+  <string name="blocking_conversations">Blockierte Unterhaltungen</string>
+
+  <string name="blocking_empty">Blockierte Unterhaltungen werden hier angezeigt</string>
+
+  <string name="blocking_manager_title">Blocking Manager</string>
+  <string name="blocking_manager_qksms_summary">Eingebaute Blockier-Funktion</string>
+  <string name="blocking_manager_android">Android Blocking Manager</string>
+
+  <string name="blocking_manager_call_control_title">Call Control</string>
+  <string name="blocking_manager_call_control_summary">Filtert automatisch Anrufe und Nachrichten an einem Ort! Community IQ™ unterbindet mit Hilfe der Community unerwünschte Nachrichten von bekannten Spammern</string>
+
+  <string name="blocking_manager_sia_title">Should I Answer?</string>
+  <string name="blocking_manager_sia_summary">Nachrichten von unerwünschten Nummern automatisch mit Hilfe der App \"Should I Answer?\" filtern</string>
+
+  <plurals name="blocking_block_external">
+    <item quantity="one">Soll diese Nummer auch in %s blockiert werden?</item>
+    <item quantity="other">Sollen diese Nummern auch in %s blockiert werden?</item>
+  </plurals>
+  <plurals name="blocking_unblock_external">
+    <item quantity="one">Soll diese Nummer auch in %s entsperrt werden?</item>
+    <item quantity="other">Sollen diese Nummern auch in %s entsperrt werden?</item>
+  </plurals>
+
   <string name="about_title">Über</string>
   <string name="about_version_title">Version</string>
   <string name="about_developer_title">Entwickler</string>

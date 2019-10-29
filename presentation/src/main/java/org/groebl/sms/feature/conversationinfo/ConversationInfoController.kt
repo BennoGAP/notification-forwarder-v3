@@ -34,7 +34,7 @@ import org.groebl.sms.common.QkChangeHandler
 import org.groebl.sms.common.base.QkController
 import org.groebl.sms.common.util.extensions.*
 import org.groebl.sms.common.widget.FieldDialog
-import org.groebl.sms.feature.blocked.BlockingDialog
+import org.groebl.sms.feature.blocking.BlockingDialog
 import org.groebl.sms.feature.conversationinfo.injection.ConversationInfoModule
 import org.groebl.sms.feature.themepicker.ThemePickerController
 import org.groebl.sms.injection.appComponent

@@ -16,20 +16,14 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.groebl.sms.feature.blocked
+package org.groebl.sms.feature.blocking
 
-import androidx.lifecycle.ViewModel
-import org.groebl.sms.injection.ViewModelKey
-import dagger.Module
-import dagger.Provides
-import dagger.multibindings.IntoMap
+import io.realm.RealmResults
+import org.groebl.sms.model.Conversation
 
-@Module
-class BlockedActivityModule {
-
-    @Provides
-    @IntoMap
-    @ViewModelKey(BlockedViewModel::class)
-    fun provideBlockedViewModel(viewModel: BlockedViewModel): ViewModel = viewModel
-
-}
+data class BlockingState(
+        val ccEnabled: Boolean = false,
+        val siaEnabled: Boolean = false,
+        val dropEnabled: Boolean = false,
+        val data: RealmResults<Conversation>? = null
+)

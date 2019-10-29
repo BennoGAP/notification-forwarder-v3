@@ -52,7 +52,7 @@ import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.androidxcompat.drawerOpen
 import org.groebl.sms.common.base.QkThemedActivity
 import org.groebl.sms.common.util.extensions.*
-import org.groebl.sms.feature.blocked.BlockingDialog
+import org.groebl.sms.feature.blocking.BlockingDialog
 import org.groebl.sms.feature.bluetooth.common.BluetoothDatabase
 import org.groebl.sms.feature.bluetooth.common.BluetoothHelper
 import org.groebl.sms.feature.conversations.ConversationItemTouchCallback

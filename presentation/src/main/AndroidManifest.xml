@@ -103,7 +103,7 @@
             android:theme="@style/AppTheme.Black" />
         <activity android:name=".feature.conversationinfo.ConversationInfoActivity" />
         <activity android:name=".feature.notificationprefs.NotificationPrefsActivity" />
-        <activity android:name=".feature.blocked.BlockedActivity" />
+        <activity android:name=".feature.blocking.BlockingActivity" />
         <activity android:name=".feature.bluetooth.BluetoothSettingsActivity" />
         <activity android:name=".feature.bluetooth.app.BluetoothAppActivity" />
         <activity android:name=".feature.bluetooth.device.BluetoothDeviceActivity" />
