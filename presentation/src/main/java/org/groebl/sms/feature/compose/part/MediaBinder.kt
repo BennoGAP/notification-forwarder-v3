@@ -21,7 +21,7 @@ package org.groebl.sms.feature.compose.part
 import android.content.Context
 import android.view.View
 import org.groebl.sms.R
-import org.groebl.sms.common.Navigator
+import org.groebl.sms.common.util.Colors
 import org.groebl.sms.common.util.extensions.setVisible
 import org.groebl.sms.common.widget.BubbleImageView
 import org.groebl.sms.extensions.isImage
@@ -30,16 +30,24 @@ import org.groebl.sms.model.Message
 import org.groebl.sms.model.MmsPart
 import org.groebl.sms.util.GlideApp
 import kotlinx.android.synthetic.main.mms_preview_list_item.view.*
+import javax.inject.Inject
 
-class MediaBinder(private val context: Context, private val navigator: Navigator) : PartBinder {
+class MediaBinder @Inject constructor(colors: Colors, private val context: Context) : PartBinder() {
 
     override val partLayout = R.layout.mms_preview_list_item
+    override var theme = colors.theme()
 
     override fun canBindPart(part: MmsPart) = part.isImage() || part.isVideo()
 
-    override fun bindPart(view: View, part: MmsPart, message: Message, canGroupWithPrevious: Boolean, canGroupWithNext: Boolean) {
+    override fun bindPart(
+        view: View,
+        part: MmsPart,
+        message: Message,
+        canGroupWithPrevious: Boolean,
+        canGroupWithNext: Boolean
+    ) {
         view.video.setVisible(part.isVideo())
-        view.setOnClickListener { navigator.showMedia(part.id) }
+        view.setOnClickListener { clicks.onNext(part.id) }
 
         view.thumbnail.bubbleStyle = when {
             !canGroupWithPrevious && canGroupWithNext -> if (message.isMe()) BubbleImageView.Style.OUT_FIRST else BubbleImageView.Style.IN_FIRST

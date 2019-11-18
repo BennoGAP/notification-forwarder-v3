@@ -13,7 +13,7 @@ import javax.inject.Singleton
 class BlockingManager @Inject constructor(
     private val prefs: Preferences,
     private val callControlBlockingClient: CallControlBlockingClient,
-    private val qkBlockingClient: QkBlockingClient,
+    private val qksmsBlockingClient: QksmsBlockingClient,
     private val shouldIAnswerBlockingClient: ShouldIAnswerBlockingClient
 ) : BlockingClient {
 
@@ -21,17 +21,19 @@ class BlockingManager @Inject constructor(
         get() = when (prefs.blockingManager.get()) {
             Preferences.BLOCKING_MANAGER_SIA -> shouldIAnswerBlockingClient
             Preferences.BLOCKING_MANAGER_CC -> callControlBlockingClient
-            else -> qkBlockingClient
+            else -> qksmsBlockingClient
         }
 
-    override fun isBlocked(address: String): Single<Boolean> = client.isBlocked(address)
+    override fun isAvailable(): Boolean = client.isAvailable()
 
-    override fun canBlock(): Boolean = client.canBlock()
+    override fun getClientCapability(): BlockingClient.Capability = client.getClientCapability()
+
+    override fun getAction(address: String): Single<BlockingClient.Action> = client.getAction(address)
 
     override fun block(addresses: List<String>): Completable = client.block(addresses)
 
-    override fun canUnblock(): Boolean = client.canUnblock()
-
     override fun unblock(addresses: List<String>): Completable = client.unblock(addresses)
+
+    override fun openSettings() = client.openSettings()
 
 }

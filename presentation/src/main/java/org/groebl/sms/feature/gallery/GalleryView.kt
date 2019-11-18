@@ -18,9 +18,9 @@
  */
 package org.groebl.sms.feature.gallery
 
-import io.reactivex.Observable
 import org.groebl.sms.common.base.QkView
 import org.groebl.sms.model.MmsPart
+import io.reactivex.Observable
 
 interface GalleryView : QkView<GalleryState> {
 

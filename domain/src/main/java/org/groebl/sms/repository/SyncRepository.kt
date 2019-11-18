@@ -19,8 +19,8 @@
 package org.groebl.sms.repository
 
 import android.net.Uri
-import io.reactivex.Observable
 import org.groebl.sms.model.Message
+import io.reactivex.Observable
 
 interface SyncRepository {
 

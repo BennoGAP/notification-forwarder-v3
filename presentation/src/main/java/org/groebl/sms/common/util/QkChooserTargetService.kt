@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2017 Moez Bhatti <moez.bhatti@gmail.com>
+ *
+ * This file is part of QKSMS.
+ *
+ * QKSMS is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * QKSMS is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.groebl.sms.common.util
 
 import android.content.ComponentName
@@ -6,7 +24,6 @@ import android.graphics.drawable.Icon
 import android.os.Build
 import android.service.chooser.ChooserTarget
 import android.service.chooser.ChooserTargetService
-import android.telephony.PhoneNumberUtils
 import androidx.annotation.RequiresApi
 import androidx.core.os.bundleOf
 import org.groebl.sms.R
@@ -41,7 +58,7 @@ class QkChooserTargetService : ChooserTargetService() {
                 val request = GlideApp.with(this)
                         .asBitmap()
                         .circleCrop()
-                        .load(PhoneNumberUtils.stripSeparators(address))
+                        .load("tel:$address")
                         .submit()
                 val bitmap = tryOrNull(false) { request.get() }
 

@@ -19,15 +19,28 @@
 package org.groebl.sms.feature.compose.part
 
 import android.view.View
+import org.groebl.sms.common.util.Colors
 import org.groebl.sms.model.Message
 import org.groebl.sms.model.MmsPart
+import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.Subject
 
-interface PartBinder {
+abstract class PartBinder {
 
-    val partLayout: Int
+    val clicks: Subject<Long> = PublishSubject.create()
 
-    fun canBindPart(part: MmsPart): Boolean
+    abstract val partLayout: Int
 
-    fun bindPart(view: View, part: MmsPart, message: Message, canGroupWithPrevious: Boolean, canGroupWithNext: Boolean)
+    abstract var theme: Colors.Theme
+
+    abstract fun canBindPart(part: MmsPart): Boolean
+
+    abstract fun bindPart(
+        view: View,
+        part: MmsPart,
+        message: Message,
+        canGroupWithPrevious: Boolean,
+        canGroupWithNext: Boolean
+    )
 
 }

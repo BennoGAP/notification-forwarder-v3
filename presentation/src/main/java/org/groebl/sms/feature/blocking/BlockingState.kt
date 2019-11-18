@@ -18,12 +18,7 @@
  */
 package org.groebl.sms.feature.blocking
 
-import io.realm.RealmResults
-import org.groebl.sms.model.Conversation
-
 data class BlockingState(
-        val ccEnabled: Boolean = false,
-        val siaEnabled: Boolean = false,
-        val dropEnabled: Boolean = false,
-        val data: RealmResults<Conversation>? = null
+    val blockingManager: String = "",
+    val dropEnabled: Boolean = false
 )

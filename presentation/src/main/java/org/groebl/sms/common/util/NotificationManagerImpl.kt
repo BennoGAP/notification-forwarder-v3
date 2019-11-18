@@ -29,14 +29,12 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.provider.ContactsContract
-import android.telephony.PhoneNumberUtils
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.Person
 import androidx.core.app.RemoteInput
 import androidx.core.app.TaskStackBuilder
 import androidx.core.graphics.drawable.IconCompat
-import androidx.core.graphics.get
 import org.groebl.sms.R
 import org.groebl.sms.common.util.extensions.dpToPx
 import org.groebl.sms.extensions.isImage
@@ -48,10 +46,10 @@ import org.groebl.sms.receiver.DeleteMessagesReceiver
 import org.groebl.sms.receiver.MarkReadReceiver
 import org.groebl.sms.receiver.MarkSeenReceiver
 import org.groebl.sms.receiver.RemoteMessagingReceiver
-import org.groebl.sms.repository.ContactRepository
 import org.groebl.sms.repository.ConversationRepository
 import org.groebl.sms.repository.MessageRepository
 import org.groebl.sms.util.GlideApp
+import org.groebl.sms.util.PhoneNumberUtils
 import org.groebl.sms.util.Preferences
 import org.groebl.sms.util.tryOrNull
 import javax.inject.Inject
@@ -59,12 +57,13 @@ import javax.inject.Singleton
 
 @Singleton
 class NotificationManagerImpl @Inject constructor(
-        private val context: Context,
-        private val colors: Colors,
-        private val conversationRepo: ConversationRepository,
-        private val prefs: Preferences,
-        private val messageRepo: MessageRepository,
-        private val permissions: PermissionManager
+    private val context: Context,
+    private val colors: Colors,
+    private val conversationRepo: ConversationRepository,
+    private val prefs: Preferences,
+    private val messageRepo: MessageRepository,
+    private val permissions: PermissionManager,
+    private val phoneNumberUtils: PhoneNumberUtils
 ) : org.groebl.sms.manager.NotificationManager {
 
     companion object {
@@ -136,6 +135,7 @@ class NotificationManagerImpl @Inject constructor(
                 .setDeleteIntent(seenPI)
                 .setSound(ringtone)
                 .setLights(Color.WHITE, 500, 2000)
+                .setWhen(conversation.lastMessage?.date ?: System.currentTimeMillis())
                 .setVibrate(if (prefs.vibration(threadId).get()) VIBRATE_PATTERN else longArrayOf(0))
 
         // Tell the notification if it's a group message
@@ -151,14 +151,14 @@ class NotificationManagerImpl @Inject constructor(
 
             if (!message.isMe()) {
                 val recipient = conversation.recipients
-                        .firstOrNull { PhoneNumberUtils.compare(it.address, message.address) }
+                        .firstOrNull { phoneNumberUtils.compare(it.address, message.address) }
 
                 person.setName(recipient?.getDisplayName() ?: message.address)
 
                 person.setIcon(GlideApp.with(context)
                         .asBitmap()
                         .circleCrop()
-                        .load(PhoneNumberUtils.stripSeparators(message.address))
+                        .load("tel:${message.address}")
                         .submit(64.dpToPx(context), 64.dpToPx(context))
                         .let { futureGet -> tryOrNull(false) { futureGet.get() } }
                         ?.let(IconCompat::createWithBitmap))
@@ -183,7 +183,7 @@ class NotificationManagerImpl @Inject constructor(
                     GlideApp.with(context)
                             .asBitmap()
                             .circleCrop()
-                            .load(PhoneNumberUtils.stripSeparators(address))
+                            .load("tel:$address")
                             .submit(64.dpToPx(context), 64.dpToPx(context))
                 }
                 ?.let { futureGet -> tryOrNull(false) { futureGet.get() } }
@@ -212,9 +212,9 @@ class NotificationManagerImpl @Inject constructor(
 
         // Add all of the people from this conversation to the notification, so that the system can
         // appropriately bypass DND mode
-        conversation.recipients
-                .mapNotNull { recipient -> recipient.contact?.lookupKey }
-                .forEach { uri -> notification.addPerson(uri) }
+        conversation.recipients.forEach { recipient ->
+            notification.addPerson("tel:${recipient.address}")
+        }
 
         // Add the action buttons
         val actionLabels = context.resources.getStringArray(R.array.notification_actions)

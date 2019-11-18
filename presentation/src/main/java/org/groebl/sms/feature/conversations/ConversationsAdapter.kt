@@ -27,19 +27,19 @@ import org.groebl.sms.R
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.base.QkRealmAdapter
 import org.groebl.sms.common.base.QkViewHolder
+import org.groebl.sms.common.util.Colors
 import org.groebl.sms.common.util.DateFormatter
 import org.groebl.sms.common.util.extensions.resolveThemeColor
+import org.groebl.sms.common.util.extensions.setTint
 import org.groebl.sms.model.Conversation
 import kotlinx.android.synthetic.main.conversation_list_item.view.*
-import org.groebl.sms.common.util.Colors
-import org.groebl.sms.common.util.extensions.setTint
 import javax.inject.Inject
 
 class ConversationsAdapter @Inject constructor(
-        private val colors: Colors,
-        private val context: Context,
-        private val dateFormatter: DateFormatter,
-        private val navigator: Navigator
+    private val colors: Colors,
+    private val context: Context,
+    private val dateFormatter: DateFormatter,
+    private val navigator: Navigator
 ) : QkRealmAdapter<Conversation>() {
 
     init {
@@ -106,6 +106,6 @@ class ConversationsAdapter @Inject constructor(
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (getItem(position)?.read == true) 0 else 1
+        return if (getItem(position)?.unread == false) 0 else 1
     }
 }

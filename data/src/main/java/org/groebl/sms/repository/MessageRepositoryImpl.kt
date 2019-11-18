@@ -20,21 +20,24 @@ package org.groebl.sms.repository
 
 import android.app.AlarmManager
 import android.app.PendingIntent
-import android.content.*
+import android.content.ContentUris
+import android.content.ContentValues
+import android.content.Context
+import android.content.Intent
+import android.media.MediaScannerConnection
 import android.os.Build
+import android.os.Environment
 import android.provider.Telephony
-import android.telephony.PhoneNumberUtils
 import android.telephony.SmsManager
+import android.webkit.MimeTypeMap
 import androidx.core.content.contentValuesOf
 import com.google.android.mms.ContentType
 import com.google.android.mms.MMSPart
+import com.google.android.mms.pdu_alt.MultimediaMessagePdu
+import com.google.android.mms.pdu_alt.PduPersister
 import com.klinker.android.send_message.SmsManagerFactory
 import com.klinker.android.send_message.StripAccents
 import com.klinker.android.send_message.Transaction
-import io.realm.Case
-import io.realm.Realm
-import io.realm.RealmResults
-import io.realm.Sort
 import org.groebl.sms.compat.TelephonyCompat
 import org.groebl.sms.extensions.anyOf
 import org.groebl.sms.manager.ActiveConversationManager
@@ -47,20 +50,31 @@ import org.groebl.sms.receiver.SendSmsReceiver
 import org.groebl.sms.receiver.SmsDeliveredReceiver
 import org.groebl.sms.receiver.SmsSentReceiver
 import org.groebl.sms.util.ImageUtils
+import org.groebl.sms.util.PhoneNumberUtils
 import org.groebl.sms.util.Preferences
 import org.groebl.sms.util.tryOrNull
+import io.realm.Case
+import io.realm.Realm
+import io.realm.RealmResults
+import io.realm.Sort
 import timber.log.Timber
+import java.io.File
+import java.io.FileNotFoundException
+import java.io.FileOutputStream
+import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class MessageRepositoryImpl @Inject constructor(
-        private val activeConversationManager: ActiveConversationManager,
-        private val context: Context,
-        private val messageIds: KeyManager,
-        private val imageRepository: ImageRepository,
-        private val prefs: Preferences,
-        private val syncRepository: SyncRepository) : MessageRepository {
+    private val activeConversationManager: ActiveConversationManager,
+    private val context: Context,
+    private val imageRepository: ImageRepository,
+    private val messageIds: KeyManager,
+    private val phoneNumberUtils: PhoneNumberUtils,
+    private val prefs: Preferences,
+    private val syncRepository: SyncRepository
+) : MessageRepository {
 
     override fun getMessages(threadId: Long, query: String): RealmResults<Message> {
         return Realm.getDefaultInstance()
@@ -101,7 +115,7 @@ class MessageRepositoryImpl @Inject constructor(
             realm.where(Conversation::class.java)
                     .equalTo("archived", false)
                     .equalTo("blocked", false)
-                    .equalTo("read", false)
+                    .equalTo("lastMessage.read", false)
                     .count()
         }
     }
@@ -124,6 +138,38 @@ class MessageRepositoryImpl @Inject constructor(
                 .endGroup()
                 .sort("id", Sort.DESCENDING)
                 .findAllAsync()
+    }
+
+    override fun savePart(id: Long): File? {
+        val part = getPart(id) ?: return null
+
+        val extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(part.type) ?: return null
+        val date = part.messages?.first()?.date
+        val dir = File(Environment.getExternalStorageDirectory(), "SMS/Media").apply { mkdirs() }
+        val fileName = part.name?.takeIf { name -> name.endsWith(extension) }
+                ?: "${part.type.split("/").last()}_$date.$extension"
+        var file: File
+        var index = 0
+        do {
+            file = File(dir, if (index == 0) fileName else fileName.replace(".$extension", " ($index).$extension"))
+            index++
+        } while (file.exists())
+
+        try {
+            FileOutputStream(file).use { outputStream ->
+                context.contentResolver.openInputStream(part.getUri())?.use { inputStream ->
+                    inputStream.copyTo(outputStream, 1024)
+                }
+            }
+        } catch (e: FileNotFoundException) {
+            e.printStackTrace()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+
+        MediaScannerConnection.scanFile(context, arrayOf(file.path), null, null)
+
+        return file.takeIf { it.exists() }
     }
 
     /**
@@ -207,18 +253,27 @@ class MessageRepositoryImpl @Inject constructor(
 
     override fun markUnread(vararg threadIds: Long) {
         Realm.getDefaultInstance()?.use { realm ->
-            val conversation = realm.where(Conversation::class.java)
+            val conversations = realm.where(Conversation::class.java)
                     .anyOf("id", threadIds)
-                    .equalTo("read", true)
+                    .equalTo("lastMessage.read", true)
                     .findAll()
 
             realm.executeTransaction {
-                conversation.forEach { it.read = false }
+                conversations.forEach { conversation ->
+                    conversation.lastMessage?.read = false
+                }
             }
         }
     }
 
-    override fun sendMessage(subId: Int, threadId: Long, addresses: List<String>, body: String, attachments: List<Attachment>, delay: Int) {
+    override fun sendMessage(
+        subId: Int,
+        threadId: Long,
+        addresses: List<String>,
+        body: String,
+        attachments: List<Attachment>,
+        delay: Int
+    ) {
         val signedBody = when {
             prefs.signature.get().isEmpty() -> body
             body.isNotEmpty() -> body + '\n' + prefs.signature.get()
@@ -277,8 +332,7 @@ class MessageRepositoryImpl @Inject constructor(
                     .map { attachment -> attachment.vCard.toByteArray() }
                     .map { vCard -> MMSPart("contact", ContentType.TEXT_VCARD, vCard) }
 
-            val transaction = Transaction(context)
-            transaction.sendNewMessage(subId, threadId, addresses.map(PhoneNumberUtils::stripSeparators), parts, null)
+            Transaction(context).sendNewMessage(subId, threadId, addresses, parts, null, null)
         }
     }
 
@@ -287,19 +341,19 @@ class MessageRepositoryImpl @Inject constructor(
                 ?.let(SmsManagerFactory::createSmsManager)
                 ?: SmsManager.getDefault()
 
-        val parts = smsManager.divideMessage(if (prefs.unicode.get()) StripAccents.stripAccents(message.body) else message.body)
+        val parts = smsManager
+                .divideMessage(if (prefs.unicode.get()) StripAccents.stripAccents(message.body) else message.body)
                 ?: arrayListOf()
 
         val sentIntents = parts.map {
-            context.registerReceiver(SmsSentReceiver(), IntentFilter(SmsSentReceiver.ACTION))
-            val intent = Intent(SmsSentReceiver.ACTION).putExtra("id", message.id)
+            val intent = Intent(context, SmsSentReceiver::class.java).putExtra("id", message.id)
             PendingIntent.getBroadcast(context, message.id.toInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
         }
 
         val deliveredIntents = parts.map {
-            context.registerReceiver(SmsDeliveredReceiver(), IntentFilter(SmsDeliveredReceiver.ACTION))
-            val intent = Intent(SmsDeliveredReceiver.ACTION).putExtra("id", message.id)
-            val pendingIntent = PendingIntent.getBroadcast(context, message.id.toInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
+            val intent = Intent(context, SmsDeliveredReceiver::class.java).putExtra("id", message.id)
+            val pendingIntent = PendingIntent
+                    .getBroadcast(context, message.id.toInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
             if (prefs.delivery.get()) pendingIntent else null
         }
 
@@ -310,11 +364,30 @@ class MessageRepositoryImpl @Inject constructor(
                     parts,
                     ArrayList(sentIntents),
                     ArrayList(deliveredIntents)
-                    )
+            )
         } catch (e: IllegalArgumentException) {
-            Timber.w(e, "Message body lengths: ${parts.map { it.length }}")
+            Timber.w(e, "Message body lengths: ${parts.map { it?.length }}")
             markFailed(message.id, Telephony.MmsSms.ERR_TYPE_GENERIC)
         }
+    }
+
+    override fun resendMms(message: Message) {
+        val subId = message.subId
+        val threadId = message.threadId
+        val pdu = tryOrNull {
+            PduPersister.getPduPersister(context).load(message.getUri()) as MultimediaMessagePdu
+        } ?: return
+
+        val addresses = pdu.to.map { it.string }.filter { it.isNotBlank() }
+        val parts = message.parts.mapNotNull { part ->
+            val bytes = tryOrNull {
+                context.contentResolver.openInputStream(part.getUri())?.use { inputStream -> inputStream.readBytes() }
+            } ?: return@mapNotNull null
+
+            MMSPart(part.name.orEmpty(), part.type, bytes)
+        }
+
+        Transaction(context).sendNewMessage(subId, threadId, addresses, parts, message.subject, message.getUri())
     }
 
     override fun cancelDelayedSms(id: Long) {
@@ -369,7 +442,9 @@ class MessageRepositoryImpl @Inject constructor(
         //
         // We do this after inserting the message because it might be slow, and we want the message
         // to be inserted into Realm immediately. We don't need to do this after receiving one
-        realm.executeTransaction { managedMessage?.takeIf { it.isValid }?.contentId = uri.lastPathSegment.toLong() }
+        uri?.lastPathSegment?.toLong()?.let { id ->
+            realm.executeTransaction { managedMessage?.takeIf { it.isValid }?.contentId = id }
+        }
         realm.close()
 
         // On some devices, we can't obtain a threadId until after the first message is sent in a
@@ -413,9 +488,9 @@ class MessageRepositoryImpl @Inject constructor(
             values.put(Telephony.Sms.SUBSCRIPTION_ID, message.subId)
         }
 
-        context.contentResolver.insert(Telephony.Sms.Inbox.CONTENT_URI, values)?.let { uri ->
+        context.contentResolver.insert(Telephony.Sms.Inbox.CONTENT_URI, values)?.lastPathSegment?.toLong()?.let { id ->
             // Update the contentId after the message has been inserted to the content provider
-            realm.executeTransaction { managedMessage?.contentId = uri.lastPathSegment.toLong() }
+            realm.executeTransaction { managedMessage?.contentId = id }
         }
 
         realm.close()
@@ -434,12 +509,17 @@ class MessageRepositoryImpl @Inject constructor(
             message?.let {
                 // Update the message in realm
                 realm.executeTransaction {
-                    message.boxId = Telephony.Sms.MESSAGE_TYPE_OUTBOX
+                    message.boxId = when (message.isSms()) {
+                        true -> Telephony.Sms.MESSAGE_TYPE_OUTBOX
+                        false -> Telephony.Mms.MESSAGE_BOX_OUTBOX
+                    }
                 }
 
                 // Update the message in the native ContentProvider
-                val values = ContentValues()
-                values.put(Telephony.Sms.TYPE, Telephony.Sms.MESSAGE_TYPE_OUTBOX)
+                val values = when (message.isSms()) {
+                    true -> contentValuesOf(Telephony.Sms.TYPE to Telephony.Sms.MESSAGE_TYPE_OUTBOX)
+                    false -> contentValuesOf(Telephony.Mms.MESSAGE_BOX to Telephony.Mms.MESSAGE_BOX_OUTBOX)
+                }
                 context.contentResolver.update(message.getUri(), values, null, null)
             }
         }

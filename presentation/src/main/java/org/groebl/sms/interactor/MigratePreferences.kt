@@ -20,9 +20,9 @@ package org.groebl.sms.interactor
 
 import android.bluetooth.BluetoothAdapter
 import com.f2prateek.rx.preferences2.RxSharedPreferences
-import io.reactivex.Flowable
 import org.groebl.sms.util.NightModeManager
 import org.groebl.sms.util.Preferences
+import io.reactivex.Flowable
 import timber.log.Timber
 import javax.inject.Inject
 

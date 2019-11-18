@@ -39,16 +39,21 @@ import javax.inject.Singleton
 
 @Singleton
 class ContactRepositoryImpl @Inject constructor(
-        private val context: Context,
-        private val prefs: Preferences
+    private val context: Context,
+    private val prefs: Preferences
 ) : ContactRepository {
 
     override fun findContactUri(address: String): Single<Uri> {
         return Flowable.just(address)
                 .map {
                     when {
-                        address.contains('@') -> Uri.withAppendedPath(Email.CONTENT_FILTER_URI, Uri.encode(address))
-                        else -> Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(address))
+                        address.contains('@') -> {
+                            Uri.withAppendedPath(Email.CONTENT_FILTER_URI, Uri.encode(address))
+                        }
+
+                        else -> {
+                            Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(address))
+                        }
                     }
                 }
                 .mapNotNull { uri -> context.contentResolver.query(uri, arrayOf(BaseColumns._ID), null, null, null) }

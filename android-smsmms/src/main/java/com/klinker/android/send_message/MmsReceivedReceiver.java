@@ -23,7 +23,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.Telephony;
 import android.telephony.SmsManager;
-
 import com.android.mms.service_alt.DownloadRequest;
 import com.android.mms.service_alt.MmsConfig;
 import com.android.mms.transaction.DownloadManager;
@@ -41,6 +40,7 @@ import com.google.android.mms.pdu_alt.PduParser;
 import com.google.android.mms.pdu_alt.PduPersister;
 import com.google.android.mms.pdu_alt.RetrieveConf;
 import com.google.android.mms.util_alt.SqliteWrapper;
+import timber.log.Timber;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -50,8 +50,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import timber.log.Timber;
 
 import static com.google.android.mms.pdu_alt.PduHeaders.STATUS_RETRIEVED;
 

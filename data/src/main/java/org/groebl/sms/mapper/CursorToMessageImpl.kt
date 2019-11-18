@@ -35,11 +35,11 @@ import org.groebl.sms.util.tryOrNull
 import javax.inject.Inject
 
 class CursorToMessageImpl @Inject constructor(
-        private val context: Context,
-        private val cursorToPart: CursorToPart,
-        private val keys: KeyManager,
-        private val permissionManager: PermissionManager,
-        private val preferences: Preferences
+    private val context: Context,
+    private val cursorToPart: CursorToPart,
+    private val keys: KeyManager,
+    private val permissionManager: PermissionManager,
+    private val preferences: Preferences
 ) : CursorToMessage {
 
     private val uri = Uri.parse("content://mms-sms/complete-conversations")
@@ -67,7 +67,8 @@ class CursorToMessageImpl @Inject constructor(
             Mms.DELIVERY_REPORT,
             Mms.READ_REPORT,
             MmsSms.PendingMessages.ERROR_TYPE,
-            Mms.STATUS)
+            Mms.STATUS
+    )
 
     override fun map(from: Pair<Cursor, CursorToMessage.MessageColumns>): Message {
         val cursor = from.first

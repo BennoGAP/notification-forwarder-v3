@@ -18,29 +18,38 @@
  */
 package org.groebl.sms.feature.compose.part
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.base.QkAdapter
 import org.groebl.sms.common.base.QkViewHolder
 import org.groebl.sms.common.util.Colors
 import org.groebl.sms.common.util.extensions.forwardTouches
-import org.groebl.sms.extensions.isImage
-import org.groebl.sms.extensions.isVCard
-import org.groebl.sms.extensions.isVideo
+import org.groebl.sms.extensions.isSmil
+import org.groebl.sms.extensions.isText
 import org.groebl.sms.feature.compose.BubbleUtils.canGroup
 import org.groebl.sms.model.Message
 import org.groebl.sms.model.MmsPart
+import io.reactivex.Observable
 import kotlinx.android.synthetic.main.message_list_item_in.view.*
+import javax.inject.Inject
 
-class PartsAdapter(context: Context, navigator: Navigator, theme: Colors.Theme) : QkAdapter<MmsPart>() {
+class PartsAdapter @Inject constructor(
+    colors: Colors,
+    fileBinder: FileBinder,
+    mediaBinder: MediaBinder,
+    vCardBinder: VCardBinder
+) : QkAdapter<MmsPart>() {
 
-    private val partBinders = listOf(
-            MediaBinder(context, navigator),
-            VCardBinder(context, navigator, theme)
-    )
+    private val partBinders = listOf(mediaBinder, vCardBinder, fileBinder)
+
+    var theme: Colors.Theme = colors.theme()
+        set(value) {
+            field = value
+            partBinders.forEach { binder -> binder.theme = value }
+        }
+
+    val clicks: Observable<Long> = Observable.merge(partBinders.map { it.clicks })
 
     private lateinit var message: Message
     private var previous: Message? = null
@@ -54,7 +63,7 @@ class PartsAdapter(context: Context, navigator: Navigator, theme: Colors.Theme) 
         this.next = next
         this.messageView = messageView
         this.bodyVisible = messageView.body.visibility == View.VISIBLE
-        this.data = message.parts.filter { it.isImage() || it.isVideo() || it.isVCard() }
+        this.data = message.parts.filter { !it.isSmil() && !it.isText() }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QkViewHolder {

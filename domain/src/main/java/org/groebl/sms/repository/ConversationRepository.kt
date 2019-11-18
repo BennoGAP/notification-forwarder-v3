@@ -19,6 +19,7 @@
 package org.groebl.sms.repository
 
 import org.groebl.sms.model.Conversation
+import org.groebl.sms.model.Recipient
 import org.groebl.sms.model.SearchResult
 import io.realm.RealmResults
 
@@ -39,6 +40,8 @@ interface ConversationRepository {
 
     fun getBlockedConversations(): RealmResults<Conversation>
 
+    fun getBlockedConversationsAsync(): RealmResults<Conversation>
+
     fun getConversationAsync(threadId: Long): Conversation
 
     fun getConversation(threadId: Long): Conversation?
@@ -47,6 +50,8 @@ interface ConversationRepository {
      * Returns all conversations with an id in [threadIds]
      */
     fun getConversations(vararg threadIds: Long): RealmResults<Conversation>
+
+    fun getRecipient(recipientId: Long): Recipient?
 
     fun getThreadId(recipient: String): Long?
 
@@ -73,7 +78,7 @@ interface ConversationRepository {
 
     fun markUnpinned(vararg threadIds: Long)
 
-    fun markBlocked(vararg threadIds: Long)
+    fun markBlocked(threadIds: List<Long>, blockingClient: Int, blockReason: String?)
 
     fun markUnblocked(vararg threadIds: Long)
 

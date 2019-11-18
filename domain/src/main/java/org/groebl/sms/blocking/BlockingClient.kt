@@ -23,16 +23,36 @@ import io.reactivex.Single
 
 interface BlockingClient {
 
-    /**
-     * Return a Single<Boolean> which emits whether or not the given [address] should be blocked
-     */
-    fun isBlocked(address: String): Single<Boolean>
+    enum class Capability {
+        BLOCK_WITHOUT_PERMISSION,
+        BLOCK_WITH_PERMISSION ,
+        CANT_BLOCK
+    }
+
+    sealed class Action {
+        class Block(val reason: String? = null) : Action()
+        object Unblock : Action()
+
+        // We only need these for Should I Answer, because they don't allow us to block numbers in their app directly.
+        // This means there's a good chance that if a number is blocked in QK, it won't be blocked there, so we
+        // shouldn't unblock the conversation in that case
+        object DoNothing : Action()
+    }
 
     /**
-     * Returns true if the client is capable of blocking the address in the manager without any
-     * further user input
+     * Returns true if the target blocking client is available for use, ie. it is installed
      */
-    fun canBlock(): Boolean = false
+    fun isAvailable(): Boolean
+
+    /**
+     * Returns the level of access that the given blocking client provides to QKSMS
+     */
+    fun getClientCapability(): Capability
+
+    /**
+     * Returns the recommendation action to perform given a message from the [address]
+     */
+    fun getAction(address: String): Single<Action>
 
     /**
      * Blocks the numbers or opens the manager
@@ -40,14 +60,13 @@ interface BlockingClient {
     fun block(addresses: List<String>): Completable
 
     /**
-     * Returns true if the client is capable of unblocking the address in the manager without any
-     * further user input
-     */
-    fun canUnblock(): Boolean = false
-
-    /**
      * Unblocks the numbers or opens the manager
      */
     fun unblock(addresses: List<String>): Completable
+
+    /**
+     * Opens the settings page for the blocking manager
+     */
+    fun openSettings()
 
 }

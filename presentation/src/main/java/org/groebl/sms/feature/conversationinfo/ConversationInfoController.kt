@@ -32,7 +32,9 @@ import org.groebl.sms.R
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.QkChangeHandler
 import org.groebl.sms.common.base.QkController
-import org.groebl.sms.common.util.extensions.*
+import org.groebl.sms.common.util.extensions.animateLayoutChanges
+import org.groebl.sms.common.util.extensions.scrapViews
+import org.groebl.sms.common.util.extensions.setVisible
 import org.groebl.sms.common.widget.FieldDialog
 import org.groebl.sms.feature.blocking.BlockingDialog
 import org.groebl.sms.feature.conversationinfo.injection.ConversationInfoModule
@@ -41,7 +43,7 @@ import org.groebl.sms.injection.appComponent
 import javax.inject.Inject
 
 class ConversationInfoController(
-        val threadId: Long = 0
+    val threadId: Long = 0
 ) : QkController<ConversationInfoView, ConversationInfoState, ConversationInfoPresenter>(), ConversationInfoView {
 
     @Inject override lateinit var presenter: ConversationInfoPresenter
@@ -89,6 +91,8 @@ class ConversationInfoController(
         showBackButton(true)
     }
 
+    override fun recipientClicks(): Observable<Long> = recipientAdapter.clicks
+
     override fun nameClicks(): Observable<*> = name.clicks()
 
     override fun nameChanges(): Observable<String> = nameChangeSubject
@@ -118,9 +122,11 @@ class ConversationInfoController(
         name.setVisible(state.recipients?.size ?: 0 >= 2)
         name.summary = state.name
 
-        notifications.setVisible(!state.blocked)
+        notifications.isEnabled = !state.blocked
 
-        archive.setVisible(!state.blocked)
+        themePrefs.isEnabled = !state.blocked
+
+        archive.isEnabled = !state.blocked
         archive.title = activity?.getString(when (state.archived) {
             true -> R.string.info_unarchive
             false -> R.string.info_archive
@@ -144,6 +150,10 @@ class ConversationInfoController(
 
     override fun showBlockingDialog(conversations: List<Long>, block: Boolean) {
         blockingDialog.show(activity!!, conversations, block)
+    }
+
+    override fun requestDefaultSms() {
+        navigator.showDefaultSmsDialog(activity!!)
     }
 
     override fun showDeleteDialog() {

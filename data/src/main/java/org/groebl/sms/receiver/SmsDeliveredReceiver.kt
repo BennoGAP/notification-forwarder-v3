@@ -29,27 +29,22 @@ import javax.inject.Inject
 
 class SmsDeliveredReceiver : BroadcastReceiver() {
 
-    companion object {
-        const val ACTION = "org.groebl.sms.SMS_DELIVERED"
-    }
-
     @Inject lateinit var markDelivered: MarkDelivered
     @Inject lateinit var markDeliveryFailed: MarkDeliveryFailed
 
     override fun onReceive(context: Context, intent: Intent) {
         AndroidInjection.inject(this, context)
-        context.unregisterReceiver(this)
 
         val id = intent.getLongExtra("id", 0L)
 
         when (resultCode) {
-        // TODO notify about delivery
+            // TODO notify about delivery
             Activity.RESULT_OK -> {
                 val pendingResult = goAsync()
                 markDelivered.execute(id) { pendingResult.finish() }
             }
 
-        // TODO notify about delivery failure
+            // TODO notify about delivery failure
             Activity.RESULT_CANCELED -> {
                 val pendingResult = goAsync()
                 markDeliveryFailed.execute(MarkDeliveryFailed.Params(id, resultCode)) { pendingResult.finish() }

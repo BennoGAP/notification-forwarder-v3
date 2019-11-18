@@ -28,7 +28,8 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
 import io.realm.Realm
-import okio.Okio
+import okio.buffer
+import okio.source
 import org.groebl.sms.model.BackupFile
 import org.groebl.sms.model.Message
 import org.groebl.sms.util.Preferences
@@ -43,22 +44,21 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.concurrent.schedule
 
-
 @Singleton
 class BackupRepositoryImpl @Inject constructor(
-        private val context: Context,
-        private val moshi: Moshi,
-        private val prefs: Preferences,
-        private val syncRepo: SyncRepository
+    private val context: Context,
+    private val moshi: Moshi,
+    private val prefs: Preferences,
+    private val syncRepo: SyncRepository
 ) : BackupRepository {
 
     companion object {
-        private val BACKUP_DIRECTORY = Environment.getExternalStorageDirectory().toString() + "/QKSMS/Backups"
+        private val BACKUP_DIRECTORY = Environment.getExternalStorageDirectory().toString() + "/SMS/Backups"
     }
 
     data class Backup(
-            val messageCount: Int = 0,
-            val messages: List<BackupMessage> = listOf()
+        val messageCount: Int = 0,
+        val messages: List<BackupMessage> = listOf()
     )
 
     /**
@@ -66,25 +66,28 @@ class BackupRepositoryImpl @Inject constructor(
      * needing to parse the entire file
      */
     data class BackupMetadata(
-            val messageCount: Int = 0
+        val messageCount: Int = 0
     )
 
     data class BackupMessage(
-            val type: Int,
-            val address: String,
-            val date: Long,
-            val dateSent: Long,
-            val read: Boolean,
-            val status: Int,
-            val body: String,
-            val protocol: Int,
-            val serviceCenter: String?,
-            val locked: Boolean,
-            val subId: Int)
+        val type: Int,
+        val address: String,
+        val date: Long,
+        val dateSent: Long,
+        val read: Boolean,
+        val status: Int,
+        val body: String,
+        val protocol: Int,
+        val serviceCenter: String?,
+        val locked: Boolean,
+        val subId: Int
+    )
 
     // Subjects to emit our progress events to
-    private val backupProgress: Subject<BackupRepository.Progress> = BehaviorSubject.createDefault(BackupRepository.Progress.Idle())
-    private val restoreProgress: Subject<BackupRepository.Progress> = BehaviorSubject.createDefault(BackupRepository.Progress.Idle())
+    private val backupProgress: Subject<BackupRepository.Progress> =
+            BehaviorSubject.createDefault(BackupRepository.Progress.Idle())
+    private val restoreProgress: Subject<BackupRepository.Progress> =
+            BehaviorSubject.createDefault(BackupRepository.Progress.Idle())
 
     @Volatile private var stopFlag: Boolean = false
 
@@ -143,7 +146,8 @@ class BackupRepositoryImpl @Inject constructor(
             protocol = 0,
             serviceCenter = null,
             locked = message.locked,
-            subId = message.subId)
+            subId = message.subId
+    )
 
     override fun getBackupProgress(): Observable<BackupRepository.Progress> = backupProgress
 
@@ -155,9 +159,8 @@ class BackupRepositoryImpl @Inject constructor(
                 files.mapNotNull { file ->
                     val adapter = moshi.adapter(BackupMetadata::class.java)
                     val backup = tryOrNull(false) {
-                        Okio.buffer(Okio.source(file)).use(adapter::fromJson)
+                        file.source().buffer().use(adapter::fromJson)
                     } ?: return@mapNotNull null
-
 
                     val path = file.path
                     val date = file.lastModified()
@@ -175,7 +178,7 @@ class BackupRepositoryImpl @Inject constructor(
         restoreProgress.onNext(BackupRepository.Progress.Parsing())
 
         val file = File(filePath)
-        val backup = Okio.buffer(Okio.source(file)).use { source ->
+        val backup = file.source().buffer().use { source ->
             moshi.adapter(Backup::class.java).fromJson(source)
         }
 
@@ -194,17 +197,17 @@ class BackupRepositoryImpl @Inject constructor(
 
             try {
                 val values = contentValuesOf(
-                    Telephony.Sms.TYPE to message.type,
-                    Telephony.Sms.ADDRESS to message.address,
-                    Telephony.Sms.DATE to message.date,
-                    Telephony.Sms.DATE_SENT to message.dateSent,
-                    Telephony.Sms.READ to message.read,
-                    Telephony.Sms.SEEN to 1,
-                    Telephony.Sms.STATUS to message.status,
-                    Telephony.Sms.BODY to message.body,
-                    Telephony.Sms.PROTOCOL to message.protocol,
-                    Telephony.Sms.SERVICE_CENTER to message.serviceCenter,
-                    Telephony.Sms.LOCKED to message.locked
+                        Telephony.Sms.TYPE to message.type,
+                        Telephony.Sms.ADDRESS to message.address,
+                        Telephony.Sms.DATE to message.date,
+                        Telephony.Sms.DATE_SENT to message.dateSent,
+                        Telephony.Sms.READ to message.read,
+                        Telephony.Sms.SEEN to 1,
+                        Telephony.Sms.STATUS to message.status,
+                        Telephony.Sms.BODY to message.body,
+                        Telephony.Sms.PROTOCOL to message.protocol,
+                        Telephony.Sms.SERVICE_CENTER to message.serviceCenter,
+                        Telephony.Sms.LOCKED to message.locked
                 )
 
                 if (prefs.canUseSubId.get()) {

@@ -3,11 +3,13 @@ package org.groebl.sms.feature.bluetooth.common
 import android.Manifest
 import android.app.Activity
 import android.app.ActivityManager
+import android.app.role.RoleManager
 import android.content.ComponentName
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import android.provider.ContactsContract
 import android.provider.Settings
 import android.provider.Telephony
@@ -24,6 +26,7 @@ import java.math.BigInteger
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.util.concurrent.TimeUnit
+
 
 object BluetoothHelper  {
 
@@ -115,9 +118,17 @@ object BluetoothHelper  {
     }
 
     fun checkAndRestartNotificationListener(context: Context) {
-        if(BluetoothHelper.hasNotificationAccess(context) && !isNotificationServiceRunning(context)) {
+        if(hasNotificationAccess(context) && !isNotificationServiceRunning(context)) {
             toggleNotificationListenerService(context)
             context.startService(Intent(context, BluetoothNotificationService::class.java))
+        }
+    }
+
+    fun isDefaultSms(context: Context): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            context.getSystemService(RoleManager::class.java)?.isRoleHeld(RoleManager.ROLE_SMS) == true
+        } else {
+            Telephony.Sms.getDefaultSmsPackage(context) == context.packageName
         }
     }
 
@@ -152,19 +163,13 @@ object BluetoothHelper  {
                         .equalTo("id", threadId)
                         .findFirst() ?: return
 
-                val messages = realm.where(Message::class.java)
+                val message = realm.where(Message::class.java)
                         .equalTo("threadId", threadId)
                         .sort("date", Sort.DESCENDING)
-                        .findAll()
-
-                val message = messages.firstOrNull()
+                        .findFirst()
 
                 realm.executeTransaction {
-                    conversation.count = messages.size
-                    conversation.date = message?.date ?: 0
-                    conversation.snippet = message?.getSummary() ?: ""
-                    conversation.read = message?.read ?: true
-                    conversation.me = message?.isMe() ?: false
+                    conversation.lastMessage = message
                 }
             }
 
@@ -199,6 +204,15 @@ object BluetoothHelper  {
 
     fun findWhatsAppNameFromNumber(context: Context, number: String): String {
         var setName = ""
+        /*
+        val country = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            context.resources.configuration.locales.get(0).country
+        } else {
+            context.resources.configuration.locale.country
+        }
+        PhoneNumberUtils.formatNumberToE164(PhoneNumberUtils.stripSeparators(number), country)
+        */
+
         val c = context.contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
                 arrayOf(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME),
                 ContactsContract.CommonDataKinds.Phone.NUMBER + " = ? AND account_type = ?",
@@ -210,6 +224,22 @@ object BluetoothHelper  {
         }
 
         return setName
+    }
+
+    fun getDontKillMyAppUrl(appName: String): String {
+        return when (Build.MANUFACTURER) {
+            "Xiaomi" -> "https://dontkillmyapp.com/xiaomi$appName"
+            "Nokia" -> "https://dontkillmyapp.com/nokia$appName"
+            "OnePlus" -> "https://dontkillmyapp.com/oneplus$appName"
+            "Huawei" -> "https://dontkillmyapp.com/huawei$appName"
+            "Meizu" -> "https://dontkillmyapp.com/meizu$appName"
+            "Samsung" -> "https://dontkillmyapp.com/samsung$appName"
+            "Sony" -> "https://dontkillmyapp.com/sony$appName"
+            "HTC" -> "https://dontkillmyapp.com/htc$appName"
+            "Google" -> "https://dontkillmyapp.com/stock_android$appName"
+            "Lenovo" -> "https://dontkillmyapp.com/lenovo$appName"
+            else -> "https://dontkillmyapp.com/$appName"
+        }
     }
 
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright (C) 2017 Moez Bhatti <moez.bhatti@gmail.com>
+  ~ Copyright (C) 2019 Moez Bhatti <moez.bhatti@gmail.com>
   ~
   ~ This file is part of QKSMS.
   ~
@@ -17,10 +17,10 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
   -->
-<FrameLayout android:id="@+id/root"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="org.groebl.sms.feature.gallery.GalleryActivity">
@@ -43,6 +43,7 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:orientation="vertical">
+
             <org.groebl.sms.common.widget.QkTextView
                 android:id="@+id/toolbarTitle"
                 android:layout_width="match_parent"
@@ -54,6 +55,7 @@
                 android:textColor="@color/textPrimaryDark"
                 app:textSize="toolbar"
                 tools:text="Conversations" />
+
             <org.groebl.sms.common.widget.QkTextView
                 android:id="@+id/toolbarSubtitle"
                 android:layout_width="match_parent"
@@ -62,6 +64,7 @@
                 android:textColor="@color/textTertiaryDark"
                 android:visibility="gone"
                 app:textSize="secondary" />
+
         </LinearLayout>
 
     </androidx.appcompat.widget.Toolbar>

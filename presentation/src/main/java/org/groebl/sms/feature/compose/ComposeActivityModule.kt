@@ -21,12 +21,12 @@ package org.groebl.sms.feature.compose
 import android.content.Intent
 import android.net.Uri
 import androidx.lifecycle.ViewModel
-import dagger.Module
-import dagger.Provides
-import dagger.multibindings.IntoMap
 import org.groebl.sms.injection.ViewModelKey
 import org.groebl.sms.model.Attachment
 import org.groebl.sms.model.Attachments
+import dagger.Module
+import dagger.Provides
+import dagger.multibindings.IntoMap
 import java.net.URLDecoder
 import javax.inject.Named
 
@@ -49,10 +49,10 @@ class ComposeActivityModule {
         activity.intent.data?.let {
             val data = it.toString()
             address = when {
-                it.scheme.startsWith("smsto") -> data.replace("smsto:", "")
-                it.scheme.startsWith("mmsto") -> data.replace("mmsto:", "")
-                it.scheme.startsWith("sms") -> data.replace("sms:", "")
-                it.scheme.startsWith("mms") -> data.replace("mms:", "")
+                it.scheme?.startsWith("smsto") == true -> data.replace("smsto:", "")
+                it.scheme?.startsWith("mmsto") == true -> data.replace("mmsto:", "")
+                it.scheme?.startsWith("sms") == true -> data.replace("sms:", "")
+                it.scheme?.startsWith("mms") == true -> data.replace("mms:", "")
                 else -> ""
             }
 

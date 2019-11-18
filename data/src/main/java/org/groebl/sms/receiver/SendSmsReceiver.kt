@@ -18,13 +18,12 @@
  */
 package org.groebl.sms.receiver
 
-
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import dagger.android.AndroidInjection
 import org.groebl.sms.interactor.RetrySending
 import org.groebl.sms.repository.MessageRepository
+import dagger.android.AndroidInjection
 import javax.inject.Inject
 
 class SendSmsReceiver : BroadcastReceiver() {
@@ -40,7 +39,7 @@ class SendSmsReceiver : BroadcastReceiver() {
                 ?.let(messageRepo::getMessage)
                 ?.let { message ->
                     val result = goAsync()
-                    retrySending.execute(message) { result.finish() }
+                    retrySending.execute(message.id) { result.finish() }
                 }
     }
 

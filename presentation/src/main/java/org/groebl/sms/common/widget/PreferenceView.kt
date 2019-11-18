@@ -26,13 +26,13 @@ import android.widget.TextView
 import androidx.appcompat.widget.LinearLayoutCompat
 import org.groebl.sms.R
 import org.groebl.sms.common.util.extensions.resolveThemeAttribute
-import org.groebl.sms.common.util.extensions.resolveThemeColor
-import org.groebl.sms.common.util.extensions.setTint
 import org.groebl.sms.common.util.extensions.setVisible
 import org.groebl.sms.injection.appComponent
 import kotlinx.android.synthetic.main.preference_view.view.*
 
-class PreferenceView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : LinearLayoutCompat(context, attrs) {
+class PreferenceView @JvmOverloads constructor(
+    context: Context, attrs: AttributeSet? = null
+) : LinearLayoutCompat(context, attrs) {
 
     var title: String? = null
         set(value) {
@@ -70,9 +70,6 @@ class PreferenceView @JvmOverloads constructor(context: Context, attrs: Attribut
         setBackgroundResource(context.resolveThemeAttribute(R.attr.selectableItemBackground))
         orientation = HORIZONTAL
         gravity = Gravity.CENTER_VERTICAL
-
-        val textSecondary = context.resolveThemeColor(android.R.attr.textColorSecondary)
-        icon.setTint(textSecondary)
 
         context.obtainStyledAttributes(attrs, R.styleable.PreferenceView)?.run {
             title = getString(R.styleable.PreferenceView_title)

@@ -18,9 +18,9 @@
  */
 package org.groebl.sms.feature.backup
 
-import io.reactivex.Observable
 import org.groebl.sms.common.base.QkViewContract
 import org.groebl.sms.model.BackupFile
+import io.reactivex.Observable
 
 interface BackupView : QkViewContract<BackupState> {
 

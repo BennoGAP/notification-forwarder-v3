@@ -19,12 +19,33 @@
 package org.groebl.sms.feature.compose
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.provider.ContactsContract
-import android.content.Intent
-import android.telephony.PhoneNumberUtils
 import android.telephony.SmsMessage
 import android.view.inputmethod.EditorInfo
+
+import org.groebl.sms.R
+import org.groebl.sms.common.Navigator
+import org.groebl.sms.common.base.QkViewModel
+import org.groebl.sms.common.util.ClipboardUtils
+import org.groebl.sms.common.util.MessageDetailsFormatter
+import org.groebl.sms.common.util.extensions.makeToast
+import org.groebl.sms.compat.SubscriptionManagerCompat
+import org.groebl.sms.compat.TelephonyCompat
+import org.groebl.sms.extensions.*
+import org.groebl.sms.filter.ContactFilter
+import org.groebl.sms.interactor.*
+import org.groebl.sms.manager.ActiveConversationManager
+import org.groebl.sms.manager.PermissionManager
+import org.groebl.sms.model.*
+import org.groebl.sms.repository.ContactRepository
+import org.groebl.sms.repository.ConversationRepository
+import org.groebl.sms.repository.MessageRepository
+import org.groebl.sms.util.ActiveSubscriptionObservable
+import org.groebl.sms.util.PhoneNumberUtils
+import org.groebl.sms.util.Preferences
+import org.groebl.sms.util.tryOrNull
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import io.reactivex.Observable
@@ -37,29 +58,6 @@ import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import io.realm.RealmList
-import org.groebl.sms.R
-import org.groebl.sms.common.Navigator
-import org.groebl.sms.common.base.QkViewModel
-import org.groebl.sms.common.util.ClipboardUtils
-import org.groebl.sms.common.util.MessageDetailsFormatter
-import org.groebl.sms.common.util.extensions.makeToast
-import org.groebl.sms.compat.SubscriptionManagerCompat
-import org.groebl.sms.compat.TelephonyCompat
-import org.groebl.sms.extensions.asObservable
-import org.groebl.sms.extensions.isImage
-import org.groebl.sms.extensions.mapNotNull
-import org.groebl.sms.extensions.removeAccents
-import org.groebl.sms.filter.ContactFilter
-import org.groebl.sms.interactor.*
-import org.groebl.sms.manager.ActiveConversationManager
-import org.groebl.sms.manager.PermissionManager
-import org.groebl.sms.model.*
-import org.groebl.sms.repository.ContactRepository
-import org.groebl.sms.repository.ConversationRepository
-import org.groebl.sms.repository.MessageRepository
-import org.groebl.sms.util.ActiveSubscriptionObservable
-import org.groebl.sms.util.Preferences
-import org.groebl.sms.util.tryOrNull
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
@@ -84,6 +82,7 @@ class ComposeViewModel @Inject constructor(
         private val messageRepo: MessageRepository,
         private val navigator: Navigator,
         private val permissionManager: PermissionManager,
+    private val phoneNumberUtils: PhoneNumberUtils,
         private val prefs: Preferences,
         private val retrySending: RetrySending,
         private val sendMessage: SendMessage,
@@ -120,11 +119,12 @@ class ComposeViewModel @Inject constructor(
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext { newState { copy(loading = false) } }
                 .switchMap { (threadId, addresses) ->
-                    // If we already have this thread in realm, or were able to obtain it from the
+                    // If we already have this thread in realm, or we're able to obtain it from the
                     // system, just return that.
                     threadId.takeIf { it > 0 }?.let {
                         return@switchMap conversationRepo.getConversationAsync(threadId).asObservable()
                     }
+
                     // Otherwise, we'll monitor the conversations until our expected conversation is created
                     conversationRepo.getConversations().asObservable()
                             .filter { it.isLoaded }
@@ -247,10 +247,9 @@ class ComposeViewModel @Inject constructor(
                             .filter { contact -> contactFilter.filter(contact, normalizedQuery) }
 
                     // If the entry is a valid destination, allow it as a recipient
-                    if (PhoneNumberUtils.isWellFormedSmsAddress(query.toString())) {
-                        val newAddress = PhoneNumberUtils.formatNumber(query.toString(), Locale.getDefault().country)
-                        val newContact = Contact(numbers = RealmList(PhoneNumber(address = newAddress
-                                ?: query.toString())))
+                    if (phoneNumberUtils.isPossibleNumber(query.toString())) {
+                        val newAddress = phoneNumberUtils.formatNumber(query)
+                        val newContact = Contact(numbers = RealmList(PhoneNumber(address = newAddress)))
                         filteredContacts = listOf(newContact) + filteredContacts
                     }
 
@@ -343,7 +342,7 @@ class ComposeViewModel @Inject constructor(
         // Delete the messages
         view.optionsItemIntent
                 .filter { it == R.id.delete }
-                .filter { permissionManager.isDefaultSms().also { if (!it) navigator.showDefaultSmsDialog() } }
+                .filter { permissionManager.isDefaultSms().also { if (!it) view.requestDefaultSms() } }
                 .withLatestFrom(view.messagesSelectedIntent, conversation) { _, messages, conversation ->
                     deleteMessages.execute(DeleteMessages.Params(messages, conversation.id))
                 }
@@ -356,7 +355,7 @@ class ComposeViewModel @Inject constructor(
                 .withLatestFrom(view.messagesSelectedIntent) { _, messages ->
                     messages?.firstOrNull()?.let { messageRepo.getMessage(it) }?.let { message ->
                         val images = message.parts.filter { it.isImage() }.mapNotNull { it.getUri() }
-                        navigator.showCompose(message.body, images)
+                        navigator.showCompose(message.getText(), images)
                     }
                 }
                 .autoDisposable(view.scope())
@@ -421,10 +420,31 @@ class ComposeViewModel @Inject constructor(
 
         // Retry sending
         view.messageClickIntent
+                .mapNotNull(messageRepo::getMessage)
                 .filter { message -> message.isFailedMessage() }
-                .doOnNext { message -> retrySending.execute(message) }
+                .doOnNext { message -> retrySending.execute(message.id) }
                 .autoDisposable(view.scope())
                 .subscribe()
+
+        // Media attachment clicks
+        view.messagePartClickIntent
+                .mapNotNull(messageRepo::getPart)
+                .filter { part -> part.isImage() || part.isVideo() }
+                .autoDisposable(view.scope())
+                .subscribe { part -> navigator.showMedia(part.id) }
+
+        // Non-media attachment clicks
+        view.messagePartClickIntent
+                .mapNotNull(messageRepo::getPart)
+                .filter { part -> !part.isImage() && !part.isVideo() }
+                .autoDisposable(view.scope())
+                .subscribe { part ->
+                    if (permissionManager.hasStorage()) {
+                        messageRepo.savePart(part.id)?.let(navigator::viewFile)
+                    } else {
+                        view.requestStoragePermission()
+                    }
+                }
 
         // Update the State when the message selected count changes
         view.messagesSelectedIntent
@@ -434,6 +454,7 @@ class ComposeViewModel @Inject constructor(
 
         // Cancel sending a message
         view.cancelSendingIntent
+                .mapNotNull(messageRepo::getMessage)
                 .doOnNext { message -> view.setDraft(message.getText()) }
                 .autoDisposable(view.scope())
                 .subscribe { message -> cancelMessage.execute(message.id) }
@@ -606,7 +627,7 @@ class ComposeViewModel @Inject constructor(
 
         // Send a message when the send button is clicked, and disable editing mode if it's enabled
         view.sendIntent
-                .filter { permissionManager.isDefaultSms().also { if (!it) navigator.showDefaultSmsDialog() } }
+                .filter { permissionManager.isDefaultSms().also { if (!it) view.requestDefaultSms() } }
                 .filter { permissionManager.hasSendSms().also { if (!it) view.requestSmsPermission() } }
                 .withLatestFrom(view.textChangedIntent) { _, body -> body }
                 .map { body -> body.toString() }
@@ -643,11 +664,13 @@ class ComposeViewModel @Inject constructor(
                             sendMessage.execute(SendMessage
                                     .Params(subId, conversation.id, addresses, body, attachments, delay))
                         }
+
                         // Sending a message to an existing conversation with one recipient
                         conversation.recipients.size == 1 -> {
                             val address = conversation.recipients.map { it.address }
                             sendMessage.execute(SendMessage.Params(subId, threadId, address, body, attachments, delay))
                         }
+
                         // Create a new conversation with one address
                         addresses.size == 1 -> {
                             sendMessage.execute(SendMessage
@@ -660,7 +683,6 @@ class ComposeViewModel @Inject constructor(
                                 val threadId = tryOrNull(false) {
                                     TelephonyCompat.getOrCreateThreadId(context, addr)
                                 } ?: 0
-
                                 val address = listOf(conversationRepo
                                         .getConversation(threadId)?.recipients?.firstOrNull()?.address ?: addr)
                                 sendMessage.execute(SendMessage

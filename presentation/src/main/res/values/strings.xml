@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright (C) 2017 Moez Bhatti <moez.bhatti@gmail.com>
+  ~ Copyright (C) 2019 Moez Bhatti <moez.bhatti@gmail.com>
   ~
   ~ This file is part of QKSMS.
   ~
@@ -18,8 +18,11 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name" translatable="false">SMS &amp; Notifications</string>
+    <string name="bluetooth_about_developer" translatable="false">Benno Gröbl</string>
+    <string name="bluetooth_about_contact" translatable="false">android@groebl.org</string>
+    <string name="version_qksms" translatable="false">3.7.7</string>
+
     <string name="button_add" tools:ignore="MissingTranslation">Add</string>
-    <string name="button_yes" tools:ignore="MissingTranslation">Yes</string>
     <string name="button_no" tools:ignore="MissingTranslation">No</string>
     <string name="settings_category_about_lower" tools:ignore="MissingTranslation">Based on QKSMS</string>
     <string name="theme_color" tools:ignore="MissingTranslation">Color</string>
@@ -120,9 +123,14 @@
     <string name="main_default_sms_message_new" tools:ignore="MissingTranslation">Make this your default SMS app</string>
     <string name="main_permission_sms_new" tools:ignore="MissingTranslation">This App needs permission to send and view SMS messages</string>
     <string name="main_permission_contacts_new" tools:ignore="MissingTranslation">This App needs permission to view your contacts</string>
+    <string name="blocking_manager_qksms_title_new" tools:ignore="MissingTranslation">Intern</string>
+    <string name="blocking_manager_qksms_summary_new" tools:ignore="MissingTranslation">Built-in blocking functionality</string>
     <string name="rate_title_new" tools:ignore="MissingTranslation">Enjoying this App?</string>
+    <string name="rate_summary_new" tools:ignore="MissingTranslation">How about a small donation or a rating on Google Play&#8230;</string>
     <string name="compose_menu_share" tools:ignore="MissingTranslation">Share</string>
     <string name="button_info" tools:ignore="MissingTranslation">Info</string>
+    <string name="rate_rate" tools:ignore="MissingTranslation">RATE</string>
+    <string name="rate_donate" tools:ignore="MissingTranslation">DONATE</string>
 
     <string name="shortcut_compose_long_label">New conversation</string>
     <string name="shortcut_compose_short_label">Compose</string>
@@ -149,10 +157,11 @@
     <string name="main_menu_archive">Archive</string>
     <string name="main_menu_unarchive">Unarchive</string>
     <string name="main_menu_delete">Delete</string>
+    <string name="main_menu_add_contact">Add to contacts</string>
     <string name="main_menu_pin">Pin to top</string>
     <string name="main_menu_unpin">Unpin</string>
-    <string name="main_menu_read">Mark read</string>
-    <string name="main_menu_unread">Mark unread</string>
+    <string name="main_menu_read">Mark as read</string>
+    <string name="main_menu_unread">Mark as unread</string>
     <string name="main_menu_block">Block</string>
     <string name="main_syncing">Syncing messages…</string>
     <string name="main_sender_you">You: %s</string>
@@ -164,27 +173,27 @@
     <string name="archived_empty_text">Your archived conversations will appear here</string>
     <string name="main_fab_cd">Start new conversation</string>
     <string name="main_default_sms_title">Love texting again</string>
+    <string name="main_default_sms_message">Make QKSMS your default SMS app</string>
     <string name="main_default_sms_change">Change</string>
     <string name="main_permission_required">Permission required</string>
+    <string name="main_permission_sms">QKSMS needs permission to send and view SMS messages</string>
+    <string name="main_permission_contacts">QKSMS needs permission to view your contacts</string>
     <string name="main_permission_allow">Allow</string>
-
     <string name="drawer_inbox">Inbox</string>
     <string name="drawer_archived">Archived</string>
     <string name="drawer_scheduled">Scheduled</string>
     <string name="drawer_blocking">Blocking</string>
     <string name="drawer_more">More</string>
     <string name="drawer_settings">Settings</string>
-    <string name="drawer_plus">QKSMS+</string>
+    <string name="drawer_plus" translatable="false">QKSMS+</string>
     <string name="drawer_help">Help &amp; feedback</string>
     <string name="drawer_invite">Invite friends</string>
-    <string name="drawer_plus_banner_title">QKSMS+</string>
+    <string name="drawer_plus_banner_title" translatable="false">QKSMS+</string>
     <string name="drawer_plus_banner_summary">Unlock amazing new features, and support development</string>
 
-    <string name="rate_summary">Share some love and rate on Google Play!</string>
-    <string name="rate_summary_new" tools:ignore="MissingTranslation">How about a small donation or a rating on Google Play&#8230;</string>
+    <string name="rate_title">Enjoying QKSMS?</string>
+    <string name="rate_summary">Share some love and rate us on Google Play!</string>
     <string name="rate_okay">OKAY!</string>
-    <string name="rate_rate" tools:ignore="MissingTranslation">RATE</string>
-    <string name="rate_donate" tools:ignore="MissingTranslation">DONATE</string>
     <string name="rate_dismiss">DISMISS</string>
 
     <string name="dialog_delete_title">Delete</string>
@@ -269,7 +278,7 @@
     <string name="backup_restore_stop_title">Stop restore</string>
     <string name="backup_restore_stop_message">Messages that have already been restored will remain on your device</string>
     <string name="backup_restore_dialog_title">Backups</string>
-    <string name="backup_restore_dialog_summary" translatable="false">/QKSMS/Backups</string>
+    <string name="backup_restore_dialog_summary" translatable="false">/SMS/Backups</string>
     <string name="backup_restore_dialog_empty">No backups found</string>
     <plurals name="backup_message_count">
         <item quantity="zero">No messages</item>
@@ -290,6 +299,7 @@
     <string name="scheduled_empty_message_1">Hey! When was your birthday again?</string>
     <string name="scheduled_empty_message_2">It\'s on December 23rd</string>
     <string name="scheduled_empty_message_3">Happy birthday! Look at what a great friend I am, remembering your birthday</string>
+    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
     <string name="scheduled_empty_message_3_timestamp">Sending on December 23rd&#x200A;</string>
     <string name="scheduled_compose_cd">Schedule a message</string>
     <string name="scheduled_options_title">Scheduled message</string>
@@ -336,12 +346,13 @@
         <item>Archive</item>
         <item>Delete</item>
         <item>Call</item>
-        <item>Mark read</item>
-        <item>Mark unread</item>
+        <item>Mark as read</item>
+        <item>Mark as unread</item>
     </string-array>
     <string name="settings_delivery_title">Delivery confirmations</string>
     <string name="settings_delivery_summary">Confirm that messages were sent successfully</string>
     <string name="settings_signature_title">Signature</string>
+    <string name="settings_signature_summary">Add a signature to the end of your messages</string>
     <string name="settings_unicode_title">Strip accents</string>
     <string name="settings_unicode_summary">Remove accents from characters in outgoing SMS messages</string>
     <string name="settings_mobile_title">Mobile numbers only</string>
@@ -360,25 +371,36 @@
     <string name="blocking_drop_title">Drop messages</string>
     <string name="blocking_drop_summary">Drop incoming messages from blocked senders instead of hiding them</string>
     <string name="blocking_conversations">Blocked conversations</string>
-    <string name="blocking_empty">Your blocked conversations will appear here</string>
 
     <string name="blocking_manager_title">Blocking Manager</string>
+    <string name="blocking_manager_qksms_title">QKSMS</string>
     <string name="blocking_manager_qksms_summary">Built-in blocking functionality in QKSMS</string>
-    <string name="blocking_manager_android">Android Blocking Manager</string>
-    <!-- Do not translate -->
-    <string name="blocking_manager_call_control_title">Call Control</string>
+    <string name="blocking_manager_call_control_title" translatable="false">Call Control</string>
     <string name="blocking_manager_call_control_summary">Automatically filter your calls and messages in one convenient place! Community IQ™ allows you to prevent unwanted messages from community known spammers</string>
-    <!-- Do not translate -->
-    <string name="blocking_manager_sia_title">Should I Answer?</string>
+    <string name="blocking_manager_sia_title" translatable="false">Should I Answer?</string>
     <string name="blocking_manager_sia_summary">Automatically filter messages from unsolicited numbers by using the \"Should I Answer\" app</string>
+    <string name="blocking_manager_copy_title">Copy blocked numbers</string>
+    <string name="blocking_manager_copy_summary">Continue to %s and copy over your existing blocked numbers</string>
 
+    <string name="blocked_numbers_title">Blocked numbers</string>
+    <string name="blocked_numbers_empty">Your blocked numbers will appear here</string>
+    <string name="blocked_numbers_add_cd">Block a new number</string>
+    <string name="blocked_numbers_dialog_title">Block texts from</string>
+    <string name="blocked_numbers_dialog_hint">Phone number</string>
+    <string name="blocked_numbers_dialog_block">Block</string>
+
+    <string name="blocked_messages_title">Blocked messages</string>
+    <string name="blocked_messages_empty">Your blocked messages will appear here</string>
+
+    <string name="blocking_block_title">Block</string>
+    <string name="blocking_unblock_title">Unblock</string>
     <plurals name="blocking_block_external">
-        <item quantity="one">Would you also like to block this number in %s?</item>
-        <item quantity="other">Would you also like to block these numbers in %s?</item>
+        <item quantity="one">Continue to %s and block this number</item>
+        <item quantity="other">Continue to %s and block these numbers</item>
     </plurals>
     <plurals name="blocking_unblock_external">
-        <item quantity="one">Would you also like to unblock this number in %s?</item>
-        <item quantity="other">Would you also like to unblock these numbers in %s?</item>
+        <item quantity="one">Continue to %s and allow this number</item>
+        <item quantity="other">Continue to %s and allow these numbers</item>
     </plurals>
 
     <string name="about_title">About</string>
@@ -396,7 +418,7 @@
     <string name="qksms_plus_upgrade_donate">Unlock + donate for %1$s %2$s</string>
     <string name="qksms_plus_thanks_title">Thank you for supporting QKSMS!</string>
     <string name="qksms_plus_thanks_summary">You now have access to all QKSMS+ features</string>
-    <string name="qksms_plus_free_title">QKSMS+ is free for F-Droid users! If you\'d like to support development, feel free to make a donation.</string>
+    <string name="qksms_plus_free_title">QKSMS+ is free for F-Droid users! If you\'d like to support development, a donation would be highly appreciated.</string>
     <string name="qksms_plus_donate">Donate via PayPal</string>
     <string name="qksms_plus_coming_soon">Coming soon</string>
     <string name="qksms_plus_themes_title">Premium themes</string>
@@ -423,7 +445,7 @@
     <string name="widget_loading">Loading…</string>
     <string name="widget_more">View more conversations</string>
 
-    <string name="qkreply_menu_read">Mark read</string>
+    <string name="qkreply_menu_read">Mark as read</string>
     <string name="qkreply_menu_call">Call</string>
     <string name="qkreply_menu_delete">Delete</string>
     <string name="qkreply_menu_expand">Show more</string>
@@ -431,18 +453,27 @@
     <string name="qkreply_menu_view">Open conversation</string>
 
     <string name="theme_material">Material</string>
-    <string name="theme_plus">QKSMS+</string>
+    <string name="theme_plus" translatable="false">QKSMS+</string>
     <string name="theme_hex">HEX</string>
     <string name="theme_apply">Apply</string>
 
+    <string name="about_developer" translatable="false">Moez Bhatti</string>
+    <string name="about_source" translatable="false">https://github.com/moezbhatti/qksms</string>
+    <string name="about_changelog" translatable="false">https://github.com/moezbhatti/qksms/releases</string>
+    <string name="about_contact" translatable="false">moez@qklabs.com</string>
+    <string name="about_license" translatable="false">GNU General Public License v3.0</string>
+    <string name="about_copyright" translatable="false">© 2014–2019</string>
+
     <string-array name="notification_actions">
         <item>None</item>
-        <item>Mark read</item>
+        <item>Mark as read</item>
         <item>Reply</item>
         <item>Call</item>
         <item>Delete</item>
     </string-array>
 
+    <string name="button_yes">Yes</string>
+    <string name="button_continue">Continue</string>
     <string name="button_cancel">Cancel</string>
     <string name="button_delete">Delete</string>
     <string name="button_save">Save</string>
@@ -524,8 +555,8 @@
         <item>That\'s okay</item>
     </string-array>
 
-    <string name="changelog_title">New</string>
-    <string name="changelog_version">Version %s</string>
+    <string name="changelog_title" tools:ignore="MissingTranslation">New</string>
+    <string name="changelog_version" tools:ignore="MissingTranslation">Version %s</string>
     <string-array name="changelog_keywords">
         <item>Added</item>
         <item>Improved</item>
@@ -535,6 +566,11 @@
         <item>Fixed</item>
         <item>- Minor bugs</item>
     </string-array>
-    <string name="changelog_dismiss">Dismiss</string>
+    <string name="changelog_dismiss" tools:ignore="MissingTranslation">Dismiss</string>
+
+    <string name="changelog_added" translatable="false">Added</string>
+    <string name="changelog_improved" translatable="false">Improved</string>
+    <string name="changelog_fixed" translatable="false">Fixed</string>
+    <string name="changelog_more" translatable="false">More</string>
 
 </resources>

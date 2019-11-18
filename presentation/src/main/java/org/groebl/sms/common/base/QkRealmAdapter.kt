@@ -20,10 +20,14 @@ package org.groebl.sms.common.base
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import org.groebl.sms.common.util.extensions.setVisible
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
-import io.realm.*
-import org.groebl.sms.common.util.extensions.setVisible
+import io.realm.OrderedRealmCollection
+import io.realm.RealmList
+import io.realm.RealmModel
+import io.realm.RealmRecyclerViewAdapter
+import io.realm.RealmResults
 import timber.log.Timber
 
 abstract class QkRealmAdapter<T : RealmModel> : RealmRecyclerViewAdapter<T, QkViewHolder>(null, true) {
@@ -46,7 +50,7 @@ abstract class QkRealmAdapter<T : RealmModel> : RealmRecyclerViewAdapter<T, QkVi
 
     val selectionChanges: Subject<List<Long>> = BehaviorSubject.create()
 
-    private val selection = mutableListOf<Long>()
+    private var selection = listOf<Long>()
 
     /**
      * Toggles the selected state for a particular view
@@ -57,9 +61,9 @@ abstract class QkRealmAdapter<T : RealmModel> : RealmRecyclerViewAdapter<T, QkVi
     protected fun toggleSelection(id: Long, force: Boolean = true): Boolean {
         if (!force && selection.isEmpty()) return false
 
-        when (selection.contains(id)) {
-            true -> selection.remove(id)
-            false -> selection.add(id)
+        selection = when (selection.contains(id)) {
+            true -> selection - id
+            false -> selection + id
         }
 
         selectionChanges.onNext(selection)
@@ -71,7 +75,7 @@ abstract class QkRealmAdapter<T : RealmModel> : RealmRecyclerViewAdapter<T, QkVi
     }
 
     fun clearSelection() {
-        selection.clear()
+        selection = listOf()
         selectionChanges.onNext(selection)
         notifyDataSetChanged()
     }

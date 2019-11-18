@@ -18,11 +18,11 @@
  */
 package org.groebl.sms.feature.settings.about
 
-import com.uber.autodispose.android.lifecycle.scope
-import com.uber.autodispose.autoDisposable
 import org.groebl.sms.R
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.base.QkPresenter
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
 import javax.inject.Inject
 
 class AboutPresenter @Inject constructor(

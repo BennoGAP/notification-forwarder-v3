@@ -19,15 +19,6 @@
 package org.groebl.sms.feature.qkreply
 
 import android.telephony.SmsMessage
-import com.uber.autodispose.android.lifecycle.scope
-import com.uber.autodispose.autoDisposable
-import io.reactivex.rxkotlin.Observables
-import io.reactivex.rxkotlin.plusAssign
-import io.reactivex.rxkotlin.withLatestFrom
-import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.BehaviorSubject
-import io.reactivex.subjects.Subject
-import io.realm.RealmResults
 import org.groebl.sms.R
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.base.QkViewModel
@@ -41,19 +32,28 @@ import org.groebl.sms.model.Message
 import org.groebl.sms.repository.ConversationRepository
 import org.groebl.sms.repository.MessageRepository
 import org.groebl.sms.util.ActiveSubscriptionObservable
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
+import io.reactivex.rxkotlin.Observables
+import io.reactivex.rxkotlin.plusAssign
+import io.reactivex.rxkotlin.withLatestFrom
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.Subject
+import io.realm.RealmResults
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Named
 
 class QkReplyViewModel @Inject constructor(
-        @Named("threadId") private val threadId: Long,
-        private val conversationRepo: ConversationRepository,
-        private val deleteMessages: DeleteMessages,
-        private val markRead: MarkRead,
-        private val messageRepo: MessageRepository,
-        private val navigator: Navigator,
-        private val sendMessage: SendMessage,
-        private val subscriptionManager: SubscriptionManagerCompat
+    @Named("threadId") private val threadId: Long,
+    private val conversationRepo: ConversationRepository,
+    private val deleteMessages: DeleteMessages,
+    private val markRead: MarkRead,
+    private val messageRepo: MessageRepository,
+    private val navigator: Navigator,
+    private val sendMessage: SendMessage,
+    private val subscriptionManager: SubscriptionManagerCompat
 ) : QkViewModel<QkReplyView, QkReplyState>(QkReplyState(selectedConversation = threadId)) {
 
     private val conversation by lazy {

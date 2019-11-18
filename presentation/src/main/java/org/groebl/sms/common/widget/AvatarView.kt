@@ -19,9 +19,6 @@
 package org.groebl.sms.common.widget
 
 import android.content.Context
-import android.net.Uri
-import android.provider.ContactsContract
-import android.telephony.PhoneNumberUtils
 import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
@@ -32,19 +29,15 @@ import org.groebl.sms.common.util.Colors
 import org.groebl.sms.common.util.extensions.setBackgroundTint
 import org.groebl.sms.common.util.extensions.setTint
 import org.groebl.sms.injection.appComponent
-import org.groebl.sms.listener.ContactAddedListener
 import org.groebl.sms.model.Contact
 import org.groebl.sms.model.Recipient
 import org.groebl.sms.util.GlideApp
-import com.uber.autodispose.android.ViewScopeProvider
-import com.uber.autodispose.autoDisposable
 import kotlinx.android.synthetic.main.avatar_view.view.*
 import javax.inject.Inject
 
 class AvatarView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : FrameLayout(context, attrs) {
 
     @Inject lateinit var colors: Colors
-    @Inject lateinit var contactAddedListener: ContactAddedListener
     @Inject lateinit var navigator: Navigator
 
     /**
@@ -71,24 +64,6 @@ class AvatarView @JvmOverloads constructor(context: Context, attrs: AttributeSet
 
         setBackgroundResource(R.drawable.circle)
         clipToOutline = true
-
-        setOnClickListener {
-            if (lookupKey.isNullOrEmpty()) {
-                address?.let { address ->
-                    // Allow the user to add the contact
-                    navigator.addContact(address)
-
-                    // Listen for contact changes
-                    contactAddedListener.listen(address)
-                            .autoDisposable(ViewScopeProvider.from(this))
-                            .subscribe()
-                }
-            } else {
-                val uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_LOOKUP_URI, lookupKey)
-                ContactsContract.QuickContact.showQuickContact(context, this@AvatarView, uri,
-                        ContactsContract.QuickContact.MODE_MEDIUM, null)
-            }
-        }
     }
 
     /**
@@ -151,7 +126,7 @@ class AvatarView @JvmOverloads constructor(context: Context, attrs: AttributeSet
         photo.setImageDrawable(null)
         address?.let { address ->
             GlideApp.with(photo)
-                    .load(PhoneNumberUtils.stripSeparators(address))
+                    .load("tel:$address")
                     .signature(ObjectKey(lastUpdated ?: 0L))
                     .into(photo)
         }

@@ -18,6 +18,8 @@
  */
 package org.groebl.sms.common
 
+import android.app.Activity
+import android.app.role.RoleManager
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
@@ -26,13 +28,13 @@ import android.os.Build
 import android.provider.ContactsContract
 import android.provider.Settings
 import android.provider.Telephony
-import com.klinker.android.send_message.Utils
+import android.webkit.MimeTypeMap
+import androidx.core.content.FileProvider
 import org.groebl.sms.BuildConfig
 import org.groebl.sms.common.util.BillingManager
 import org.groebl.sms.feature.backup.BackupActivity
 import org.groebl.sms.feature.blocking.BlockingActivity
 import org.groebl.sms.feature.bluetooth.BluetoothSettingsActivity
-import org.groebl.sms.feature.bluetooth.common.BluetoothHelper
 import org.groebl.sms.feature.bluetooth.donate.BluetoothDonateActivity
 import org.groebl.sms.feature.compose.ComposeActivity
 import org.groebl.sms.feature.conversationinfo.ConversationInfoActivity
@@ -43,6 +45,7 @@ import org.groebl.sms.feature.settings.SettingsActivity
 import org.groebl.sms.manager.AnalyticsManager
 import org.groebl.sms.manager.NotificationManager
 import org.groebl.sms.manager.PermissionManager
+import java.io.File
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -69,22 +72,19 @@ class Navigator @Inject constructor(
         }
     }
 
-    fun showBluetoothAccess() {
-        if(!Utils.isDefaultSmsApp(context)) { showDefaultSmsDialog() }
-        if(!BluetoothHelper.hasNotificationAccess(context)) { showNotificationAccess() }
-    }
-
-    fun showNotificationAccess() {
-        val intent = Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS")
-        startActivity(intent)
-    }
-
-    fun showDefaultSmsDialog() {
+    /**
+     * This won't work unless we use startActivityForResult
+     */
+    fun showDefaultSmsDialog(context: Activity) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            val roleManager = context.getSystemService(RoleManager::class.java) as RoleManager
+            val intent = roleManager.createRequestRoleIntent(RoleManager.ROLE_SMS)
+            context.startActivityForResult(intent, 42389)
+        } else {
         val intent = Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT)
-        if (Telephony.Sms.getDefaultSmsPackage(context) != context.packageName) {
             intent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME, context.packageName)
+            context.startActivity(intent)
         }
-        startActivity(intent)
     }
 
     fun showCompose(body: String? = null, images: List<Uri>? = null) {
@@ -147,33 +147,33 @@ class Navigator @Inject constructor(
     fun showDonationBluetooth() {
         analyticsManager.track("Clicked Donate")
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse("http://android.groebl.org/sms/donate"))
-        startActivity(intent)
+        startActivityExternal(intent)
     }
 
     fun showFAQ() {
         analyticsManager.track("Clicked FAQ")
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://android.groebl.org/sms/faq/"))
-        startActivity(intent)
+        startActivityExternal(intent)
     }
 
     fun showDeveloper() {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/moezbhatti"))
-        startActivity(intent)
+        startActivityExternal(intent)
     }
 
     fun showSourceCode() {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/moezbhatti/qksms"))
-        startActivity(intent)
+        startActivityExternal(intent)
     }
 
     fun showChangelog() {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/moezbhatti/qksms/releases"))
-        startActivity(intent)
+        startActivityExternal(intent)
     }
 
     fun showLicense() {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/moezbhatti/qksms/blob/master/LICENSE"))
-        startActivity(intent)
+        startActivityExternal(intent)
     }
 
     fun showBlockedConversations() {
@@ -194,28 +194,29 @@ class Navigator @Inject constructor(
                         or Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
 
         try {
-            startActivity(intent)
+            startActivityExternal(intent)
         } catch (e: ActivityNotFoundException) {
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=org.groebl.sms")))
+            val url = "http://play.google.com/store/apps/details?id=org.groebl.sms"
+            startActivityExternal(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
         }
     }
 
     /**
      * Launch the Play Store and display the Call Control listing
      */
-    fun showCallControl() {
+    fun installCallControl() {
         val url = "https://play.google.com/store/apps/details?id=com.flexaspect.android.everycallcontrol"
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-        startActivity(intent)
+        startActivityExternal(intent)
     }
 
     /**
      * Launch the Play Store and display the Should I Answer? listing
      */
-    fun showSia() {
+    fun installSia() {
         val url = "https://play.google.com/store/apps/details?id=org.mistergroup.shouldianswer"
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-        startActivity(intent)
+        startActivityExternal(intent)
     }
 
     fun showSupport() {
@@ -240,7 +241,7 @@ class Navigator @Inject constructor(
                 .setType("text/plain")
                 .putExtra(Intent.EXTRA_TEXT, "https://android.groebl.org")
                 .let { Intent.createChooser(it, null) }
-                .let(this::startActivityExternal)
+                .let(::startActivityExternal)
     }
 
     fun addContact(address: String) {
@@ -256,9 +257,19 @@ class Navigator @Inject constructor(
         startActivityExternal(intent)
     }
 
-    fun saveVcard(uri: Uri) {
+    fun showContact(lookupKey: String) {
         val intent = Intent(Intent.ACTION_VIEW)
-                .setDataAndType(uri, "text/x-vcard")
+                .setData(Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_LOOKUP_URI, lookupKey))
+
+        startActivityExternal(intent)
+    }
+
+    fun viewFile(file: File) {
+        val data = FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
+        val type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(file.name.split(".").last())
+        val intent = Intent(Intent.ACTION_VIEW)
+                .setDataAndType(data, type)
+                .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 
         startActivityExternal(intent)
     }

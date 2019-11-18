@@ -16,39 +16,37 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.groebl.sms.feature.blocking
+package org.groebl.sms.feature.blocking.numbers
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import org.groebl.sms.R
 import org.groebl.sms.common.base.QkRealmAdapter
 import org.groebl.sms.common.base.QkViewHolder
-import org.groebl.sms.model.Conversation
+import org.groebl.sms.model.BlockedNumber
 import io.reactivex.subjects.PublishSubject
-import kotlinx.android.synthetic.main.blocked_list_item.view.*
-import javax.inject.Inject
+import io.reactivex.subjects.Subject
+import kotlinx.android.synthetic.main.blocked_number_list_item.*
+import kotlinx.android.synthetic.main.blocked_number_list_item.view.*
 
-class BlockingAdapter @Inject constructor() : QkRealmAdapter<Conversation>() {
+class BlockedNumbersAdapter : QkRealmAdapter<BlockedNumber>() {
 
-    val clicks: PublishSubject<Long> = PublishSubject.create()
+    val unblockAddress: Subject<Long> = PublishSubject.create()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QkViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.blocked_list_item, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.blocked_number_list_item, parent, false)
         return QkViewHolder(view).apply {
-            view.setOnClickListener {
-                val conversation = getItem(adapterPosition) ?: return@setOnClickListener
-                clicks.onNext(conversation.id)
+            containerView.unblock.setOnClickListener {
+                val number = getItem(adapterPosition) ?: return@setOnClickListener
+                unblockAddress.onNext(number.id)
             }
         }
     }
 
     override fun onBindViewHolder(holder: QkViewHolder, position: Int) {
-        val conversation = getItem(position) ?: return
-        val view = holder.containerView
+        val item = getItem(position)!!
 
-        view.avatars.contacts = conversation.recipients
-        view.title.collapseEnabled = conversation.recipients.size > 1
-        view.title.text = conversation.getTitle()
+        holder.number.text = item.address
     }
 
 }

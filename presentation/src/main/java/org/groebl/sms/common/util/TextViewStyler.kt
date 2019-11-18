@@ -19,7 +19,9 @@
 package org.groebl.sms.common.util
 
 import android.graphics.Typeface
+import android.os.Build
 import android.util.AttributeSet
+import android.widget.EditText
 import android.widget.TextView
 import org.groebl.sms.R
 import org.groebl.sms.common.util.TextViewStyler.Companion.SIZE_PRIMARY
@@ -32,10 +34,12 @@ import org.groebl.sms.common.widget.QkTextView
 import org.groebl.sms.util.Preferences
 import javax.inject.Inject
 
+
+
 class TextViewStyler @Inject constructor(
-        private val prefs: Preferences,
-        private val colors: Colors,
-        private val fontProvider: FontProvider
+    private val prefs: Preferences,
+    private val colors: Colors,
+    private val fontProvider: FontProvider
 ) {
 
     companion object {
@@ -49,6 +53,7 @@ class TextViewStyler @Inject constructor(
         const val SIZE_TERTIARY = 2
         const val SIZE_TOOLBAR = 3
         const val SIZE_DIALOG = 4
+        const val SIZE_EMOJI = 5
 
         fun applyEditModeAttributes(textView: TextView, attrs: AttributeSet?) {
             textView.run {
@@ -84,6 +89,7 @@ class TextViewStyler @Inject constructor(
                     SIZE_TERTIARY -> 12f
                     SIZE_TOOLBAR -> 20f
                     SIZE_DIALOG -> 18f
+                    SIZE_EMOJI -> 32f
                     else -> textSize / paint.density
                 }
             }
@@ -91,41 +97,45 @@ class TextViewStyler @Inject constructor(
     }
 
     fun applyAttributes(textView: TextView, attrs: AttributeSet?) {
-        textView.run {
-            var colorAttr = 0
-            var textSizeAttr = 0
+        var colorAttr = 0
+        var textSizeAttr = 0
 
-            if (!prefs.systemFont.get()) {
-                fontProvider.getLato { lato ->
-                    setTypeface(lato, typeface?.style ?: Typeface.NORMAL)
-                }
+        if (!prefs.systemFont.get()) {
+            fontProvider.getLato { lato ->
+                textView.setTypeface(lato, textView.typeface?.style ?: Typeface.NORMAL)
+            }
+        }
+
+        when (textView) {
+            is QkTextView -> textView.context.obtainStyledAttributes(attrs, R.styleable.QkTextView).run {
+                colorAttr = getInt(R.styleable.QkTextView_textColor, -1)
+                textSizeAttr = getInt(R.styleable.QkTextView_textSize, -1)
+                recycle()
             }
 
-            when (this) {
-                is QkTextView -> context.obtainStyledAttributes(attrs, R.styleable.QkTextView)?.run {
-                    colorAttr = getInt(R.styleable.QkTextView_textColor, -1)
-                    textSizeAttr = getInt(R.styleable.QkTextView_textSize, -1)
-                    recycle()
-                }
-
-                is QkEditText -> context.obtainStyledAttributes(attrs, R.styleable.QkEditText)?.run {
-                    colorAttr = getInt(R.styleable.QkEditText_textColor, -1)
-                    textSizeAttr = getInt(R.styleable.QkEditText_textSize, -1)
-                    recycle()
-                }
-
-                else -> return
+            is QkEditText -> textView.context.obtainStyledAttributes(attrs, R.styleable.QkEditText).run {
+                colorAttr = getInt(R.styleable.QkEditText_textColor, -1)
+                textSizeAttr = getInt(R.styleable.QkEditText_textSize, -1)
+                recycle()
             }
 
-            setTextColor(when (colorAttr) {
-                COLOR_THEME -> colors.theme().theme
-                COLOR_PRIMARY_ON_THEME -> colors.theme().textPrimary
-                COLOR_SECONDARY_ON_THEME -> colors.theme().textSecondary
-                COLOR_TERTIARY_ON_THEME -> colors.theme().textTertiary
-                else -> currentTextColor
-            })
+            else -> return
+        }
 
-            setTextSize(textView, textSizeAttr)
+        when (colorAttr) {
+            COLOR_THEME -> textView.setTextColor(colors.theme().theme)
+            COLOR_PRIMARY_ON_THEME -> textView.setTextColor(colors.theme().textPrimary)
+            COLOR_SECONDARY_ON_THEME -> textView.setTextColor(colors.theme().textSecondary)
+            COLOR_TERTIARY_ON_THEME -> textView.setTextColor(colors.theme().textTertiary)
+        }
+
+        setTextSize(textView, textSizeAttr)
+
+        if (textView is EditText) {
+            val drawable = textView.resources.getDrawable(R.drawable.cursor).apply { setTint(colors.theme().theme) }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                textView.textCursorDrawable = drawable
+            }
         }
     }
 
@@ -176,6 +186,14 @@ class TextViewStyler @Inject constructor(
                 Preferences.TEXT_SIZE_LARGE -> 20f
                 Preferences.TEXT_SIZE_LARGER -> 24f
                 else -> 18f
+            }
+
+            SIZE_EMOJI -> textView.textSize = when (textSizePref) {
+                Preferences.TEXT_SIZE_SMALL -> 28f
+                Preferences.TEXT_SIZE_NORMAL -> 32f
+                Preferences.TEXT_SIZE_LARGE -> 36f
+                Preferences.TEXT_SIZE_LARGER -> 40f
+                else -> 32f
             }
         }
     }

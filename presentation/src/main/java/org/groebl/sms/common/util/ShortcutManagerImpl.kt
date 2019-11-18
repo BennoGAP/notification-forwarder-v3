@@ -25,7 +25,6 @@ import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
 import android.os.Build
-import android.telephony.PhoneNumberUtils
 import org.groebl.sms.R
 import org.groebl.sms.feature.compose.ComposeActivity
 import org.groebl.sms.model.Conversation
@@ -37,9 +36,9 @@ import me.leolin.shortcutbadger.ShortcutBadger
 import javax.inject.Inject
 
 class ShortcutManagerImpl @Inject constructor(
-        private val context: Context,
-        private val conversationRepo: ConversationRepository,
-        private val messageRepo: MessageRepository
+    private val context: Context,
+    private val conversationRepo: ConversationRepository,
+    private val messageRepo: MessageRepository
 ) : org.groebl.sms.manager.ShortcutManager {
 
     override fun updateBadge() {
@@ -66,7 +65,7 @@ class ShortcutManagerImpl @Inject constructor(
                 val request = GlideApp.with(context)
                         .asBitmap()
                         .circleCrop()
-                        .load(PhoneNumberUtils.stripSeparators(address))
+                        .load("tel:$address")
                         .submit(shortcutManager.iconMaxWidth, shortcutManager.iconMaxHeight)
                 val bitmap = tryOrNull(false) { request.get() }
 

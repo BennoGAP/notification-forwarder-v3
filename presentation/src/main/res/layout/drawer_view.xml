@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright (C) 2017 Moez Bhatti <moez.bhatti@gmail.com>
+  ~ Copyright (C) 2019 Moez Bhatti <moez.bhatti@gmail.com>
   ~
   ~ This file is part of QKSMS.
   ~
@@ -28,8 +28,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingBottom="8dp"
-        android:paddingTop="8dp">
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp">
 
         <LinearLayout
             android:id="@+id/inbox"
@@ -66,8 +66,8 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             android:background="?android:attr/divider" />
 
         <LinearLayout
@@ -118,8 +118,8 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             android:background="?android:attr/divider" />
 
         <LinearLayout
@@ -186,9 +186,9 @@
             android:id="@+id/rateLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
             android:background="@drawable/rounded_rectangle_outline_2dp"
             android:backgroundTint="?android:attr/divider">
 
@@ -207,9 +207,9 @@
                 android:id="@+id/rateTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
                 android:text="@string/rate_title_new"
                 android:textColor="?android:attr/textColorPrimary"
                 android:textStyle="bold"
@@ -222,28 +222,31 @@
                 android:id="@+id/rateSummary"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
                 android:layout_marginTop="2dp"
+                android:layout_marginEnd="16dp"
                 android:text="@string/rate_summary_new"
+                android:textColor="?android:attr/textColorSecondary"
                 app:layout_constraintEnd_toEndOf="@id/rateTitle"
                 app:layout_constraintStart_toStartOf="@id/rateTitle"
                 app:layout_constraintTop_toBottomOf="@id/rateTitle"
-                android:textColor="?android:attr/textColorSecondary"
                 app:textSize="secondary" />
 
             <org.groebl.sms.common.widget.QkTextView
                 android:id="@+id/rateDismiss"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
+                android:paddingStart="16dp"
+                android:paddingLeft="8dp"
                 android:paddingTop="16dp"
+                android:paddingRight="8dp"
                 android:paddingBottom="16dp"
                 android:text="@string/rate_dismiss"
+                android:textColor="?android:attr/textColorTertiary"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@id/rateDonate"
                 app:layout_constraintTop_toBottomOf="@id/rateSummary"
-                android:textColor="?android:attr/textColorTertiary"
                 app:textSize="secondary" />
 
             <org.groebl.sms.common.widget.QkTextView
@@ -257,10 +260,10 @@
                 android:paddingRight="8dp"
                 android:paddingBottom="16dp"
                 android:text="@string/rate_donate"
+                android:textColor="?android:attr/textColorSecondary"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@id/rateOkay"
                 app:layout_constraintTop_toBottomOf="@id/rateSummary"
-                android:textColor="?android:attr/textColorSecondary"
                 app:textSize="secondary" />
 
             <org.groebl.sms.common.widget.QkTextView
@@ -275,10 +278,10 @@
                 android:paddingRight="8dp"
                 android:paddingBottom="16dp"
                 android:text="@string/rate_rate"
+                android:textColor="?android:attr/textColorSecondary"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rateSummary"
-                android:textColor="?android:attr/textColorSecondary"
                 app:textSize="secondary" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

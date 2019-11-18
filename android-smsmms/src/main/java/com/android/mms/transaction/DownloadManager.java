@@ -18,6 +18,8 @@ import android.text.TextUtils;
 import com.android.mms.MmsConfig;
 import com.klinker.android.send_message.BroadcastUtils;
 import com.klinker.android.send_message.MmsReceivedReceiver;
+import com.klinker.android.send_message.SmsManagerFactory;
+
 import timber.log.Timber;
 
 import java.io.File;
@@ -41,7 +43,7 @@ public class DownloadManager {
 
     }
 
-    public void downloadMultimediaMessage(final Context context, final String location, Uri uri, boolean byPush) {
+    public void downloadMultimediaMessage(final Context context, final String location, Uri uri, boolean byPush, int subscriptionId) {
         if (location == null || mMap.get(location) != null) {
             return;
         }
@@ -73,15 +75,17 @@ public class DownloadManager {
         final PendingIntent pendingIntent = PendingIntent.getBroadcast(
                 context, 0, download, PendingIntent.FLAG_CANCEL_CURRENT);
 
+        final SmsManager smsManager = SmsManagerFactory.INSTANCE.createSmsManager(subscriptionId);
         Bundle configOverrides = new Bundle();
         String httpParams = MmsConfig.getHttpParams();
         if (!TextUtils.isEmpty(httpParams)) {
             configOverrides.putString(SmsManager.MMS_CONFIG_HTTP_PARAMS, httpParams);
+        } else {
+            configOverrides = smsManager.getCarrierConfigValues();
         }
 
         grantUriPermission(context, contentUri);
-        SmsManager.getDefault().downloadMultimediaMessage(context,
-                location, contentUri, configOverrides, pendingIntent);
+        smsManager.downloadMultimediaMessage(context, location, contentUri, configOverrides, pendingIntent);
     }
 
     private void grantUriPermission(Context context, Uri contentUri) {

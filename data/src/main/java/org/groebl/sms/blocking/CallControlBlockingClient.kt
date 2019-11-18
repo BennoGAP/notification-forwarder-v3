@@ -19,14 +19,16 @@
 package org.groebl.sms.blocking
 
 import android.content.Context
+import android.content.Intent
 import android.database.Cursor
 import android.net.Uri
 import androidx.core.database.getStringOrNull
 import com.callcontrol.datashare.CallControl
-import io.reactivex.Completable
-import io.reactivex.Single
+import org.groebl.sms.common.util.extensions.isInstalled
 import org.groebl.sms.extensions.map
 import org.groebl.sms.util.tryOrNull
+import io.reactivex.Completable
+import io.reactivex.Single
 import javax.inject.Inject
 
 class CallControlBlockingClient @Inject constructor(
@@ -42,28 +44,38 @@ class CallControlBlockingClient @Inject constructor(
         val blockReason: String? = cursor.getStringOrNull(0)
     }
 
-    override fun isBlocked(address: String): Single<Boolean> {
+    override fun isAvailable(): Boolean = context.isInstalled("com.flexaspect.android.everycallcontrol")
+
+    override fun getClientCapability() = BlockingClient.Capability.BLOCK_WITH_PERMISSION
+
+    override fun getAction(address: String): Single<BlockingClient.Action> = Single.fromCallable {
         val uri = Uri.withAppendedPath(CallControl.LOOKUP_TEXT_URI, address)
-        return Single.fromCallable {
-            tryOrNull {
-                context.contentResolver.query(uri, projection, null, null, null) // Query URI
-                        ?.use { cursor -> cursor.map(::LookupResult) } // Map to Result object
-                        ?.any { result -> result.blockReason != null } // Check if any are blocked
-            } == true // If none are blocked or we errored at some point, return false
+        val blockReason = tryOrNull {
+            context.contentResolver.query(uri, projection, null, null, null) // Query URI
+                    ?.use { cursor -> cursor.map(::LookupResult) } // Map to Result object
+                    ?.find { result -> result.blockReason != null } // Check if any are blocked
+        }?.blockReason // If none are blocked or we errored at some point, return false
+
+        when (blockReason) {
+            null -> BlockingClient.Action.Unblock
+            else -> BlockingClient.Action.Block(blockReason)
         }
     }
 
-    override fun canBlock(): Boolean = true
-
     override fun block(addresses: List<String>): Completable = Completable.fromCallable {
         val reports = addresses.map { CallControl.Report(it) }
-        CallControl.report(context, arrayListOf<CallControl.Report>().apply { addAll(reports) })
+        val reportsArrayList = arrayListOf<CallControl.Report>().apply { addAll(reports) }
+        CallControl.addRule(context, reportsArrayList, Intent.FLAG_ACTIVITY_NEW_TASK)
     }
 
     override fun unblock(addresses: List<String>): Completable = Completable.fromCallable {
-        // Only show a particular address if we're only unblocking that one
-        val address = addresses.takeIf { it.size == 1 }?.first()
-        CallControl.openBlockedList(context, address)
+        val reports = addresses.map { CallControl.Report(it, null, false) }
+        val reportsArrayList = arrayListOf<CallControl.Report>().apply { addAll(reports) }
+        CallControl.addRule(context, reportsArrayList, Intent.FLAG_ACTIVITY_NEW_TASK)
+    }
+
+    override fun openSettings() {
+        CallControl.openBlockedList(context, Intent.FLAG_ACTIVITY_NEW_TASK)
     }
 
 }

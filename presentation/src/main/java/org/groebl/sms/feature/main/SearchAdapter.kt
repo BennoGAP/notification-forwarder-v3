@@ -24,7 +24,6 @@ import android.text.Spanned
 import android.text.style.BackgroundColorSpan
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.search_list_item.view.*
 import org.groebl.sms.R
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.base.QkAdapter
@@ -34,13 +33,14 @@ import org.groebl.sms.common.util.DateFormatter
 import org.groebl.sms.common.util.extensions.setVisible
 import org.groebl.sms.extensions.removeAccents
 import org.groebl.sms.model.SearchResult
+import kotlinx.android.synthetic.main.search_list_item.view.*
 import javax.inject.Inject
 
 class SearchAdapter @Inject constructor(
-        colors: Colors,
-        private val context: Context,
-        private val dateFormatter: DateFormatter,
-        private val navigator: Navigator
+    colors: Colors,
+    private val context: Context,
+    private val dateFormatter: DateFormatter,
+    private val navigator: Navigator
 ) : QkAdapter<SearchResult>() {
 
     private val highlightColor: Int by lazy { colors.theme().highlight }

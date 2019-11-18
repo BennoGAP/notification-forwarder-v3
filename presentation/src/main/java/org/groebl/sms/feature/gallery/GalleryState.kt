@@ -18,10 +18,11 @@
  */
 package org.groebl.sms.feature.gallery
 
-import io.realm.RealmResults
 import org.groebl.sms.model.MmsPart
+import io.realm.RealmResults
 
 data class GalleryState(
-        val navigationVisible: Boolean = true,
-        val title: String? = "",
-        val parts: RealmResults<MmsPart>? = null)
+    val navigationVisible: Boolean = true,
+    val title: String? = "",
+    val parts: RealmResults<MmsPart>? = null
+)

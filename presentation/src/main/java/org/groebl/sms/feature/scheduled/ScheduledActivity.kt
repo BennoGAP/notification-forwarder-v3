@@ -20,18 +20,19 @@ package org.groebl.sms.feature.scheduled
 
 import android.graphics.Typeface
 import android.os.Bundle
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.jakewharton.rxbinding2.view.clicks
-import dagger.android.AndroidInjection
-import kotlinx.android.synthetic.main.collapsing_toolbar.*
-import kotlinx.android.synthetic.main.scheduled_activity.*
 import org.groebl.sms.R
 import org.groebl.sms.common.QkDialog
 import org.groebl.sms.common.base.QkThemedActivity
 import org.groebl.sms.common.util.FontProvider
 import org.groebl.sms.common.util.extensions.setBackgroundTint
 import org.groebl.sms.common.util.extensions.setTint
+import dagger.android.AndroidInjection
+import kotlinx.android.synthetic.main.collapsing_toolbar.*
+import kotlinx.android.synthetic.main.scheduled_activity.*
 import javax.inject.Inject
 
 

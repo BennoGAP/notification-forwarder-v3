@@ -18,34 +18,39 @@
  */
 package org.groebl.sms.feature.conversationinfo
 
-import com.uber.autodispose.android.lifecycle.scope
-import com.uber.autodispose.autoDisposable
-import io.reactivex.rxkotlin.plusAssign
-import io.reactivex.rxkotlin.withLatestFrom
-import io.reactivex.subjects.BehaviorSubject
-import io.reactivex.subjects.Subject
+import androidx.lifecycle.Lifecycle
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.base.QkPresenter
 import org.groebl.sms.extensions.asObservable
+import org.groebl.sms.extensions.mapNotNull
 import org.groebl.sms.interactor.DeleteConversations
 import org.groebl.sms.interactor.MarkArchived
 import org.groebl.sms.interactor.MarkUnarchived
+import org.groebl.sms.listener.ContactAddedListener
 import org.groebl.sms.manager.PermissionManager
 import org.groebl.sms.model.Conversation
 import org.groebl.sms.repository.ConversationRepository
 import org.groebl.sms.repository.MessageRepository
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
+import io.reactivex.Observable
+import io.reactivex.rxkotlin.plusAssign
+import io.reactivex.rxkotlin.withLatestFrom
+import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.Subject
 import javax.inject.Inject
 import javax.inject.Named
 
 class ConversationInfoPresenter @Inject constructor(
-        @Named("threadId") threadId: Long,
-        messageRepo: MessageRepository,
-        private val conversationRepo: ConversationRepository,
-        private val deleteConversations: DeleteConversations,
-        private val markArchived: MarkArchived,
-        private val markUnarchived: MarkUnarchived,
-        private val navigator: Navigator,
-        private val permissionManager: PermissionManager
+    @Named("threadId") threadId: Long,
+    messageRepo: MessageRepository,
+    private val contactAddedListener: ContactAddedListener,
+    private val conversationRepo: ConversationRepository,
+    private val deleteConversations: DeleteConversations,
+    private val markArchived: MarkArchived,
+    private val markUnarchived: MarkUnarchived,
+    private val navigator: Navigator,
+    private val permissionManager: PermissionManager
 ) : QkPresenter<ConversationInfoView, ConversationInfoState>(
         ConversationInfoState(threadId = threadId, media = messageRepo.getPartsForConversation(threadId))
 ) {
@@ -97,6 +102,23 @@ class ConversationInfoPresenter @Inject constructor(
     override fun bindIntents(view: ConversationInfoView) {
         super.bindIntents(view)
 
+        // Add or display the contact
+        view.recipientClicks()
+                .mapNotNull(conversationRepo::getRecipient)
+                .flatMap { recipient ->
+                    val lookupKey = recipient.contact?.lookupKey
+                    if (lookupKey != null) {
+                        navigator.showContact(lookupKey)
+                        Observable.empty<Unit>()
+                    } else {
+                        // Allow the user to add the contact, then listen for changes
+                        navigator.addContact(recipient.address)
+                        contactAddedListener.listen(recipient.address)
+                    }
+                }
+                .autoDisposable(view.scope(Lifecycle.Event.ON_DESTROY)) // ... this should be the default
+                .subscribe()
+
         // Show the conversation title dialog
         view.nameClicks()
                 .withLatestFrom(conversation) { _, conversation -> conversation }
@@ -143,7 +165,7 @@ class ConversationInfoPresenter @Inject constructor(
 
         // Show the delete confirmation dialog
         view.deleteClicks()
-                .filter { permissionManager.isDefaultSms().also { if (!it) navigator.showDefaultSmsDialog() } }
+                .filter { permissionManager.isDefaultSms().also { if (!it) view.requestDefaultSms() } }
                 .autoDisposable(view.scope())
                 .subscribe { view.showDeleteDialog() }
 

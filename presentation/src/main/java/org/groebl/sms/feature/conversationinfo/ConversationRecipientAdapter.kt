@@ -22,20 +22,20 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import org.groebl.sms.R
-import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.base.QkRealmAdapter
 import org.groebl.sms.common.base.QkViewHolder
 import org.groebl.sms.common.util.extensions.setVisible
 import org.groebl.sms.model.Recipient
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.Subject
 import kotlinx.android.synthetic.main.conversation_recipient_list_item.view.*
 import javax.inject.Inject
 
-class ConversationRecipientAdapter @Inject constructor(
-        private val navigator: Navigator
-) : QkRealmAdapter<Recipient>() {
+class ConversationRecipientAdapter @Inject constructor() : QkRealmAdapter<Recipient>() {
 
     var threadId: Long = 0L
+    val clicks: Subject<Long> = PublishSubject.create()
 
     private val disposables = CompositeDisposable()
 
@@ -45,11 +45,7 @@ class ConversationRecipientAdapter @Inject constructor(
         return QkViewHolder(view).apply {
             view.setOnClickListener {
                 val recipient = getItem(adapterPosition) ?: return@setOnClickListener
-                if (recipient.contact == null) {
-                    navigator.addContact(recipient.address)
-                } else {
-                    view.avatar.callOnClick()
-                }
+                clicks.onNext(recipient.id)
             }
         }
     }

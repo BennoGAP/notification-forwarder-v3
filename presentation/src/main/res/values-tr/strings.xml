@@ -39,6 +39,7 @@
     <string name="main_menu_archive">Arşiv</string>
     <string name="main_menu_unarchive">Arşivden çıkar</string>
     <string name="main_menu_delete">Sil</string>
+    <string name="main_menu_add_contact">Kişilere ekle</string>
     <string name="main_menu_pin">Sabitle</string>
     <string name="main_menu_unpin">Sabitlemeyi kaldır</string>
     <string name="main_menu_read">Okundu olarak işaretle</string>
@@ -46,6 +47,7 @@
     <string name="main_menu_block">Engelle</string>
     <string name="main_syncing">İletiler eşitleniyor.. </string>
     <string name="main_sender_you">Sen: %s</string>
+    <string name="main_draft">Taslak: %s</string>
     <string name="main_message_results_title">Mesajlardaki sonuçlar</string>
     <string name="main_message_results">%d mesaj</string>
     <string name="inbox_empty_text">Konuşmalarınız burada görünür</string>
@@ -172,6 +174,7 @@
     <string name="scheduled_options_title">Zamanlanmış mesaj</string>
     <string-array name="scheduled_options">
         <item>Şimdi gönder</item>
+        <item>Metni kopyala</item>
         <item>Sil</item>
     </string-array>
     <string name="settings_category_appearance">Görünüm</string>
@@ -216,6 +219,7 @@
     <string name="settings_delivery_title">İletim raporları</string>
     <string name="settings_delivery_summary">Mesajınızın sorunsuz gönderildiğinin onayını alın</string>
     <string name="settings_signature_title">İmza</string>
+    <string name="settings_signature_summary">Mesajlarınızın sonuna bir imza ekleyin</string>
     <string name="settings_unicode_title">Şeritli aksanlar</string>
     <string name="settings_unicode_summary">Giden SMS mesajlarından aksanlı karakterleri kaldırın</string>
     <string name="settings_mobile_title">Sadece cep telefonu numaraları</string>

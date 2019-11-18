@@ -25,9 +25,6 @@ import android.content.BroadcastReceiver
 import androidx.core.provider.FontRequest
 import androidx.emoji.text.EmojiCompat
 import androidx.emoji.text.FontRequestEmojiCompatConfig
-import dagger.android.*
-import io.realm.Realm
-import io.realm.RealmConfiguration
 import org.groebl.sms.R
 import org.groebl.sms.common.util.CrashlyticsTree
 import org.groebl.sms.common.util.FileLoggingTree
@@ -35,10 +32,18 @@ import org.groebl.sms.feature.bluetooth.common.BluetoothDatabase
 import org.groebl.sms.injection.AppComponentManager
 import org.groebl.sms.injection.appComponent
 import org.groebl.sms.manager.AnalyticsManager
+import org.groebl.sms.migration.QkMigration
 import org.groebl.sms.migration.QkRealmMigration
 import org.groebl.sms.util.NightModeManager
 import com.uber.rxdogtag.RxDogTag
 import com.uber.rxdogtag.autodispose.AutoDisposeConfigurer
+import dagger.android.AndroidInjector
+import dagger.android.DispatchingAndroidInjector
+import dagger.android.HasActivityInjector
+import dagger.android.HasBroadcastReceiverInjector
+import dagger.android.HasServiceInjector
+import io.realm.Realm
+import io.realm.RealmConfiguration
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -47,11 +52,12 @@ import javax.inject.Inject
 class QKApplication : Application(), HasActivityInjector, HasBroadcastReceiverInjector, HasServiceInjector {
 
     /**
-     * Inject this so that it is forced to initialize
+     * Inject these so that they are forced to initialize
      */
     @Suppress("unused")
     @Inject lateinit var analyticsManager: AnalyticsManager
-//    @Inject lateinit var mFirebaseAnalytics: FirebaseAnalytics
+    @Suppress("unused")
+    @Inject lateinit var qkMigration: QkMigration
 
 
     @Inject lateinit var dispatchingActivityInjector: DispatchingAndroidInjector<Activity>

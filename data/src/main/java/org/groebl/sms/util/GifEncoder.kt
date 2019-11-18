@@ -39,9 +39,9 @@ import java.nio.ByteBuffer
  * Based on Glide's ReEncodingGifResourceEncoder
  */
 class GifEncoder internal constructor(
-        private val context: Context,
-        private val bitmapPool: BitmapPool,
-        private val factory: Factory = Factory()
+    private val context: Context,
+    private val bitmapPool: BitmapPool,
+    private val factory: Factory = Factory()
 ) {
 
     private val provider = GifBitmapProvider(bitmapPool)
@@ -86,10 +86,15 @@ class GifEncoder internal constructor(
         return decoder
     }
 
-    private fun getTransformedFrame(currentFrame: Bitmap?, transformation: Transformation<Bitmap>, drawable: GifDrawable): Resource<Bitmap> {
+    private fun getTransformedFrame(
+        currentFrame: Bitmap?,
+        transformation: Transformation<Bitmap>,
+        drawable: GifDrawable
+    ): Resource<Bitmap> {
         // TODO: what if current frame is null?
         val bitmapResource = factory.buildFrameResource(currentFrame!!, bitmapPool)
-        val transformedResource = transformation.transform(context, bitmapResource, drawable.intrinsicWidth, drawable.intrinsicHeight)
+        val transformedResource = transformation.transform(
+                context, bitmapResource, drawable.intrinsicWidth, drawable.intrinsicHeight)
         if (bitmapResource != transformedResource) {
             bitmapResource.recycle()
         }

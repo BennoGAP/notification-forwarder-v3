@@ -18,13 +18,11 @@
  */
 package org.groebl.sms.feature.compose.part
 
-import android.content.ContentUris
 import android.content.Context
 import android.view.Gravity
 import android.view.View
 import android.widget.FrameLayout
 import org.groebl.sms.R
-import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.util.Colors
 import org.groebl.sms.common.util.extensions.resolveThemeColor
 import org.groebl.sms.common.util.extensions.setBackgroundTint
@@ -32,7 +30,6 @@ import org.groebl.sms.common.util.extensions.setTint
 import org.groebl.sms.extensions.isVCard
 import org.groebl.sms.extensions.mapNotNull
 import org.groebl.sms.feature.compose.BubbleUtils
-import org.groebl.sms.mapper.CursorToPartImpl
 import org.groebl.sms.model.Message
 import org.groebl.sms.model.MmsPart
 import ezvcard.Ezvcard
@@ -40,31 +37,28 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.mms_vcard_list_item.view.*
+import javax.inject.Inject
 
-class VCardBinder(
-        private val context: Context,
-        private val navigator: Navigator,
-        private val theme: Colors.Theme
-) : PartBinder {
+class VCardBinder @Inject constructor(colors: Colors, private val context: Context) : PartBinder() {
 
     override val partLayout = R.layout.mms_vcard_list_item
+    override var theme = colors.theme()
 
     override fun canBindPart(part: MmsPart) = part.isVCard()
 
     override fun bindPart(
-            view: View,
-            part: MmsPart,
-            message: Message,
-            canGroupWithPrevious: Boolean,
-            canGroupWithNext: Boolean
+        view: View,
+        part: MmsPart,
+        message: Message,
+        canGroupWithPrevious: Boolean,
+        canGroupWithNext: Boolean
     ) {
-        val uri = ContentUris.withAppendedId(CursorToPartImpl.CONTENT_URI, part.id)
-        val bubble = BubbleUtils.getBubble(canGroupWithPrevious, canGroupWithNext, message.isMe())
+        BubbleUtils.getBubble(false, canGroupWithPrevious, canGroupWithNext, message.isMe())
+                .let(view.vCardBackground::setBackgroundResource)
 
-        view.setOnClickListener { navigator.saveVcard(uri) }
-        view.vCardBackground.setBackgroundResource(bubble)
+        view.setOnClickListener { clicks.onNext(part.id) }
 
-        Observable.just(uri)
+        Observable.just(part.getUri())
                 .map(context.contentResolver::openInputStream)
                 .mapNotNull { inputStream -> inputStream.use { Ezvcard.parse(it).first() } }
                 .subscribeOn(Schedulers.computation())

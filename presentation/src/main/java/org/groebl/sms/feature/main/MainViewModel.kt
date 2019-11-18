@@ -19,6 +19,27 @@
 package org.groebl.sms.feature.main
 
 import androidx.recyclerview.widget.ItemTouchHelper
+import org.groebl.sms.R
+import org.groebl.sms.common.Navigator
+import org.groebl.sms.common.base.QkViewModel
+import org.groebl.sms.extensions.mapNotNull
+import org.groebl.sms.interactor.DeleteConversations
+import org.groebl.sms.interactor.MarkAllSeen
+import org.groebl.sms.interactor.MarkArchived
+import org.groebl.sms.interactor.MarkPinned
+import org.groebl.sms.interactor.MarkRead
+import org.groebl.sms.interactor.MarkUnarchived
+import org.groebl.sms.interactor.MarkUnpinned
+import org.groebl.sms.interactor.MarkUnread
+import org.groebl.sms.interactor.MigratePreferences
+import org.groebl.sms.interactor.SyncMessages
+import org.groebl.sms.listener.ContactAddedListener
+import org.groebl.sms.manager.PermissionManager
+import org.groebl.sms.manager.RatingManager
+import org.groebl.sms.model.SyncLog
+import org.groebl.sms.repository.ConversationRepository
+import org.groebl.sms.repository.SyncRepository
+import org.groebl.sms.util.Preferences
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -26,17 +47,7 @@ import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.withLatestFrom
 import io.reactivex.schedulers.Schedulers
 import io.realm.Realm
-import org.groebl.sms.R
-import org.groebl.sms.common.Navigator
-import org.groebl.sms.common.base.QkViewModel
-import org.groebl.sms.interactor.*
-//import org.groebl.sms.manager.ChangelogManager
-import org.groebl.sms.manager.PermissionManager
-import org.groebl.sms.manager.RatingManager
-import org.groebl.sms.model.SyncLog
-import org.groebl.sms.repository.ConversationRepository
-import org.groebl.sms.repository.SyncRepository
-import org.groebl.sms.util.Preferences
+import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -44,7 +55,7 @@ class MainViewModel @Inject constructor(
         markAllSeen: MarkAllSeen,
         migratePreferences: MigratePreferences,
         syncRepository: SyncRepository,
-//        private val changelogManager: ChangelogManager,
+    	private val contactAddedListener: ContactAddedListener,
         private val conversationRepo: ConversationRepository,
         private val deleteConversations: DeleteConversations,
         private val markArchived: MarkArchived,
@@ -98,11 +109,10 @@ class MainViewModel @Inject constructor(
         super.bindView(view)
 
         when {
-            !permissionManager.isDefaultSms() -> navigator.showDefaultSmsDialog()
+            !permissionManager.isDefaultSms() -> view.requestDefaultSms()
             !permissionManager.hasReadSms() || !permissionManager.hasContacts() -> view.requestPermissions()
         }
 
-        // If the default SMS state or permission states change, update the ViewState
         val permissions = view.activityResumedIntent
                 .observeOn(Schedulers.io())
                 .map { Triple(permissionManager.isDefaultSms(), permissionManager.hasReadSms(), permissionManager.hasContacts()) }
@@ -237,10 +247,24 @@ class MainViewModel @Inject constructor(
 
         view.optionsItemIntent
                 .filter { itemId -> itemId == R.id.delete }
-                .filter { permissionManager.isDefaultSms().also { if (!it) navigator.showDefaultSmsDialog() } }
+                .filter { permissionManager.isDefaultSms().also { if (!it) view.requestDefaultSms() } }
                 .withLatestFrom(view.conversationsSelectedIntent) { _, conversations ->
                     view.showDeleteDialog(conversations)
                 }
+                .autoDisposable(view.scope())
+                .subscribe()
+
+        view.optionsItemIntent
+                .filter { itemId -> itemId == R.id.add }
+                .withLatestFrom(view.conversationsSelectedIntent) { _, conversations -> conversations }
+                .doOnNext { view.clearSelection() }
+                .filter { conversations -> conversations.size == 1 }
+                .map { conversations -> conversations.first() }
+                .mapNotNull(conversationRepo::getConversation)
+                .map { conversation -> conversation.recipients }
+                .mapNotNull { recipients -> recipients[0]?.address?.takeIf { recipients.size == 1 } }
+                .doOnNext(navigator::addContact)
+                .flatMap(contactAddedListener::listen)
                 .autoDisposable(view.scope())
                 .subscribe()
 
@@ -264,7 +288,7 @@ class MainViewModel @Inject constructor(
 
         view.optionsItemIntent
                 .filter { itemId -> itemId == R.id.read }
-                .filter { permissionManager.isDefaultSms().also { if (!it) navigator.showDefaultSmsDialog() } }
+                .filter { permissionManager.isDefaultSms().also { if (!it) view.requestDefaultSms() } }
                 .withLatestFrom(view.conversationsSelectedIntent) { _, conversations ->
                     markRead.execute(conversations)
                     view.clearSelection()
@@ -274,7 +298,7 @@ class MainViewModel @Inject constructor(
 
         view.optionsItemIntent
                 .filter { itemId -> itemId == R.id.unread }
-                .filter { permissionManager.isDefaultSms().also { if (!it) navigator.showDefaultSmsDialog() } }
+                .filter { permissionManager.isDefaultSms().also { if (!it) view.requestDefaultSms() } }
                 .withLatestFrom(view.conversationsSelectedIntent) { _, conversations ->
                     markUnread.execute(conversations)
                     view.clearSelection()
@@ -310,22 +334,24 @@ class MainViewModel @Inject constructor(
 
         view.conversationsSelectedIntent
                 .withLatestFrom(state) { selection, state ->
-                    val pin = selection
-                            .mapNotNull(conversationRepo::getConversation)
-                            .sumBy { if (it.pinned) -1 else 1 } >= 0
-                    val read = selection
-                            .mapNotNull(conversationRepo::getConversation)
-                            .sumBy { if (it.read) -1 else 1 } >= 0
+                    val conversations = selection.mapNotNull(conversationRepo::getConversation)
+                    val add = conversations.firstOrNull()
+                            ?.takeIf { conversations.size == 1 }
+                            ?.takeIf { conversation -> conversation.recipients.size == 1 }
+                            ?.recipients?.first()
+                            ?.takeIf { recipient -> recipient.contact == null } != null
+                    val pin = conversations.sumBy { if (it.pinned) -1 else 1 } >= 0
+                    val read = conversations.sumBy { if (!it.unread) -1 else 1 } >= 0
                     val selected = selection.size
 
                     when (state.page) {
                         is Inbox -> {
-                            val page = state.page.copy(markPinned = pin, markRead = read, selected = selected)
-                            newState { copy(page = page.copy(markRead = read, selected = selected)) }
+                            val page = state.page.copy(addContact = add, markPinned = pin, markRead = read, selected = selected)
+                            newState { copy(page = page) }
                         }
 
                         is Archived -> {
-                            val page = state.page.copy(markPinned = pin, markRead = read, selected = selected)
+                            val page = state.page.copy(addContact = add, markPinned = pin, markRead = read, selected = selected)
                             newState { copy(page = page) }
                         }
                     }
@@ -362,14 +388,13 @@ class MainViewModel @Inject constructor(
         view.snackbarButtonIntent
                 .withLatestFrom(state) { _, state ->
                     when {
-                        !state.defaultSms -> navigator.showDefaultSmsDialog()
+                        !state.defaultSms -> view.requestDefaultSms()
                         !state.smsPermission -> view.requestPermissions()
                         !state.contactPermission -> view.requestPermissions()
                     }
                 }
                 .autoDisposable(view.scope())
                 .subscribe()
-
     }
 
 }

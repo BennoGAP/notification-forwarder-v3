@@ -24,7 +24,6 @@ import android.util.AttributeSet
 import androidx.appcompat.widget.SwitchCompat
 import org.groebl.sms.R
 import org.groebl.sms.common.util.Colors
-import org.groebl.sms.common.util.extensions.getColorCompat
 import org.groebl.sms.common.util.extensions.resolveThemeColor
 import org.groebl.sms.common.util.extensions.withAlpha
 import org.groebl.sms.injection.appComponent

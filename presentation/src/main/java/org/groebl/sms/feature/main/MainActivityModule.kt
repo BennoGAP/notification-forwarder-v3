@@ -19,12 +19,12 @@
 package org.groebl.sms.feature.main
 
 import androidx.lifecycle.ViewModel
+import org.groebl.sms.injection.ViewModelKey
+import org.groebl.sms.injection.scope.ActivityScope
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoMap
 import io.reactivex.disposables.CompositeDisposable
-import org.groebl.sms.injection.ViewModelKey
-import org.groebl.sms.injection.scope.ActivityScope
 
 @Module
 class MainActivityModule {

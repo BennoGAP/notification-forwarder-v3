@@ -41,6 +41,19 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.widget.textChanges
+import org.groebl.sms.R
+import org.groebl.sms.common.Navigator
+import org.groebl.sms.common.base.QkThemedActivity
+import org.groebl.sms.common.util.DateFormatter
+import org.groebl.sms.common.util.extensions.autoScrollToStart
+import org.groebl.sms.common.util.extensions.resolveThemeColor
+import org.groebl.sms.common.util.extensions.scrapViews
+import org.groebl.sms.common.util.extensions.setBackgroundTint
+import org.groebl.sms.common.util.extensions.setTint
+import org.groebl.sms.common.util.extensions.setVisible
+import org.groebl.sms.common.util.extensions.showKeyboard
+import org.groebl.sms.model.Attachment
+import org.groebl.sms.model.Contact
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import dagger.android.AndroidInjection
@@ -48,13 +61,6 @@ import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import kotlinx.android.synthetic.main.compose_activity.*
-import org.groebl.sms.R
-import org.groebl.sms.common.base.QkThemedActivity
-import org.groebl.sms.common.util.DateFormatter
-import org.groebl.sms.common.util.extensions.*
-import org.groebl.sms.model.Attachment
-import org.groebl.sms.model.Contact
-import org.groebl.sms.model.Message
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -72,6 +78,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     @Inject lateinit var contactsAdapter: ContactAdapter
     @Inject lateinit var dateFormatter: DateFormatter
     @Inject lateinit var messageAdapter: MessagesAdapter
+    @Inject lateinit var navigator: Navigator
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
     override val activityVisibleIntent: Subject<Boolean> = PublishSubject.create()
@@ -83,9 +90,10 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     override val menuReadyIntent: Observable<Unit> = menu.map { Unit }
     override val optionsItemIntent: Subject<Int> = PublishSubject.create()
     override val sendAsGroupIntent by lazy { sendAsGroupBackground.clicks() }
-    override val messageClickIntent: Subject<Message> by lazy { messageAdapter.clicks }
+    override val messageClickIntent: Subject<Long> by lazy { messageAdapter.clicks }
+    override val messagePartClickIntent: Subject<Long> by lazy { messageAdapter.partClicks }
     override val messagesSelectedIntent by lazy { messageAdapter.selectionChanges }
-    override val cancelSendingIntent: Subject<Message> by lazy { messageAdapter.cancelSending }
+    override val cancelSendingIntent: Subject<Long> by lazy { messageAdapter.cancelSending }
     override val attachmentDeletedIntent: Subject<Attachment> by lazy { attachmentAdapter.attachmentDeleted }
     override val textChangedIntent by lazy { message.textChanges() }
     override val attachIntent by lazy { Observable.merge(attach.clicks(), attachingBackground.clicks()) }
@@ -241,6 +249,10 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
                 .setMessage(details)
                 .setCancelable(true)
                 .show()
+    }
+
+    override fun requestDefaultSms() {
+        navigator.showDefaultSmsDialog(this)
     }
 
     override fun requestStoragePermission() {

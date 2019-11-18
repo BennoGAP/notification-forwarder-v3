@@ -16,20 +16,22 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.groebl.sms.feature.blocking
+package org.groebl.sms.manager
 
-import androidx.lifecycle.ViewModel
-import org.groebl.sms.injection.ViewModelKey
-import dagger.Module
-import dagger.Provides
-import dagger.multibindings.IntoMap
+import javax.inject.Inject
+import javax.inject.Singleton
 
-@Module
-class BlockingActivityModule {
+@Singleton
+class ActiveConversationManagerImpl @Inject constructor() : ActiveConversationManager {
 
-    @Provides
-    @IntoMap
-    @ViewModelKey(BlockingViewModel::class)
-    fun provideBlockingViewModel(viewModel: BlockingViewModel): ViewModel = viewModel
+    private var threadId: Long? = null
+
+    override fun setActiveConversation(threadId: Long?) {
+        this.threadId = threadId
+    }
+
+    override fun getActiveConversation(): Long? {
+        return threadId
+    }
 
 }

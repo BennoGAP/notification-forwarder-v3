@@ -33,9 +33,10 @@ import javax.inject.Singleton
 
 @Singleton
 class NightModeManager @Inject constructor(
-        private val context: Context,
-        private val prefs: Preferences,
-        private val widgetManager: WidgetManager) {
+    private val context: Context,
+    private val prefs: Preferences,
+    private val widgetManager: WidgetManager
+) {
 
     fun updateCurrentTheme() {
         when (prefs.nightMode.get()) {
@@ -109,8 +110,18 @@ class NightModeManager @Inject constructor(
 
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         if (prefs.nightMode.get() == Preferences.NIGHT_MODE_AUTO) {
-            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, dayCalendar.timeInMillis, AlarmManager.INTERVAL_DAY, dayIntent)
-            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, nightCalendar.timeInMillis, AlarmManager.INTERVAL_DAY, nightIntent)
+            alarmManager.setInexactRepeating(
+                    AlarmManager.RTC_WAKEUP,
+                    dayCalendar.timeInMillis,
+                    AlarmManager.INTERVAL_DAY,
+                    dayIntent
+            )
+            alarmManager.setInexactRepeating(
+                    AlarmManager.RTC_WAKEUP,
+                    nightCalendar.timeInMillis,
+                    AlarmManager.INTERVAL_DAY,
+                    nightIntent
+            )
         } else {
             alarmManager.cancel(dayIntent)
             alarmManager.cancel(nightIntent)

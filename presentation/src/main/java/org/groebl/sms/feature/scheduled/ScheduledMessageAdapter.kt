@@ -19,14 +19,10 @@
 package org.groebl.sms.feature.scheduled
 
 import android.net.Uri
-import android.telephony.PhoneNumberUtils
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.subjects.PublishSubject
-import io.reactivex.subjects.Subject
-import kotlinx.android.synthetic.main.scheduled_message_list_item.view.*
 import org.groebl.sms.R
 import org.groebl.sms.common.base.QkRealmAdapter
 import org.groebl.sms.common.base.QkViewHolder
@@ -35,11 +31,16 @@ import org.groebl.sms.model.Contact
 import org.groebl.sms.model.Recipient
 import org.groebl.sms.model.ScheduledMessage
 import org.groebl.sms.repository.ContactRepository
+import org.groebl.sms.util.PhoneNumberUtils
+import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.Subject
+import kotlinx.android.synthetic.main.scheduled_message_list_item.view.*
 import javax.inject.Inject
 
 class ScheduledMessageAdapter @Inject constructor(
-        private val contactRepo: ContactRepository,
-        private val dateFormatter: DateFormatter
+    private val contactRepo: ContactRepository,
+    private val dateFormatter: DateFormatter,
+    private val phoneNumberUtils: PhoneNumberUtils
 ) : QkRealmAdapter<ScheduledMessage>() {
 
     private val contacts by lazy { contactRepo.getContacts() }
@@ -86,15 +87,19 @@ class ScheduledMessageAdapter @Inject constructor(
      * a reference to the contact.
      */
     private inner class ContactCache : HashMap<String, Contact?>() {
+
         override fun get(key: String): Contact? {
             if (super.get(key)?.isValid != true) {
                 set(key, contacts.firstOrNull { contact ->
                     contact.numbers.any {
-                        PhoneNumberUtils.compare(it.address, key)
+                        phoneNumberUtils.compare(it.address, key)
                     }
                 })
             }
+
             return super.get(key)?.takeIf { it.isValid }
         }
+
     }
+
 }

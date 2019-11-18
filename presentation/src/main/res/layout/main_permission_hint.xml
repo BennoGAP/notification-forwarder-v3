@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright (C) 2017 Moez Bhatti <moez.bhatti@gmail.com>
+  ~ Copyright (C) 2019 Moez Bhatti <moez.bhatti@gmail.com>
   ~
   ~ This file is part of QKSMS.
   ~
@@ -43,11 +43,11 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="2dp"
         android:paddingBottom="16dp"
+        android:textColor="?android:attr/textColorSecondary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/snackbarButton"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="parent"
-        android:textColor="?android:attr/textColorSecondary"
         app:textSize="secondary"
         tools:text="Make this your default SMS app" />
     <org.groebl.sms.common.widget.QkTextView

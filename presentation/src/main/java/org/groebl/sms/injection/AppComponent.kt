@@ -18,14 +18,22 @@
  */
 package org.groebl.sms.injection
 
-import dagger.Component
-import dagger.android.support.AndroidSupportInjectionModule
 import org.groebl.sms.common.QKApplication
 import org.groebl.sms.common.QkDialog
 import org.groebl.sms.common.util.QkChooserTargetService
-import org.groebl.sms.common.widget.*
+import org.groebl.sms.common.widget.AvatarView
+import org.groebl.sms.common.widget.PagerTitleView
+import org.groebl.sms.common.widget.PreferenceView
+import org.groebl.sms.common.widget.QkEditText
+import org.groebl.sms.common.widget.QkSwitch
+import org.groebl.sms.common.widget.QkTextView
+import org.groebl.sms.common.widget.RadioPreferenceView
 import org.groebl.sms.feature.backup.BackupController
 import org.groebl.sms.feature.bluetooth.BluetoothSettingsController
+import org.groebl.sms.feature.blocking.BlockingController
+import org.groebl.sms.feature.blocking.manager.BlockingManagerController
+import org.groebl.sms.feature.blocking.messages.BlockedMessagesController
+import org.groebl.sms.feature.blocking.numbers.BlockedNumbersController
 import org.groebl.sms.feature.compose.DetailedChipView
 import org.groebl.sms.feature.conversationinfo.injection.ConversationInfoComponent
 import org.groebl.sms.feature.settings.SettingsController
@@ -37,6 +45,8 @@ import org.groebl.sms.injection.android.ActivityBuilderModule
 import org.groebl.sms.injection.android.BroadcastReceiverBuilderModule
 import org.groebl.sms.injection.android.ServiceBuilderModule
 import org.groebl.sms.util.ContactImageLoader
+import dagger.Component
+import dagger.android.support.AndroidSupportInjectionModule
 import javax.inject.Singleton
 
 @Singleton
@@ -55,6 +65,10 @@ interface AppComponent {
 
     fun inject(controller: AboutController)
     fun inject(controller: BackupController)
+    fun inject(controller: BlockedMessagesController)
+    fun inject(controller: BlockedNumbersController)
+    fun inject(controller: BlockingController)
+    fun inject(controller: BlockingManagerController)
     fun inject(controller: SettingsController)
     fun inject(controller: BluetoothSettingsController)
     fun inject(controller: SwipeActionsController)
@@ -74,6 +88,7 @@ interface AppComponent {
     fun inject(view: DetailedChipView)
     fun inject(view: PagerTitleView)
     fun inject(view: PreferenceView)
+    fun inject(view: RadioPreferenceView)
     fun inject(view: QkEditText)
     fun inject(view: QkSwitch)
     fun inject(view: QkTextView)

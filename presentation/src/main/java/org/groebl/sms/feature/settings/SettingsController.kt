@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2017 Moez Bhatti <moez.bhatti@gmail.com>
+ *
+ * This file is part of QKSMS.
+ *
+ * QKSMS is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * QKSMS is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.groebl.sms.feature.settings
 
 import android.animation.ObjectAnimator
@@ -11,14 +29,8 @@ import androidx.core.view.isVisible
 import com.bluelinelabs.conductor.RouterTransaction
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.view.longClicks
-import com.uber.autodispose.android.lifecycle.scope
-import com.uber.autodispose.autoDisposable
-import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
-import io.reactivex.subjects.Subject
-import kotlinx.android.synthetic.main.settings_controller.*
-import kotlinx.android.synthetic.main.settings_switch_widget.view.*
-import kotlinx.android.synthetic.main.settings_theme_widget.*
+import org.groebl.sms.BuildConfig
+
 import org.groebl.sms.R
 import org.groebl.sms.common.MenuItem
 import org.groebl.sms.common.QkChangeHandler
@@ -36,6 +48,15 @@ import org.groebl.sms.feature.themepicker.ThemePickerController
 import org.groebl.sms.injection.appComponent
 import org.groebl.sms.repository.SyncRepository
 import org.groebl.sms.util.Preferences
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
+import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.Subject
+import kotlinx.android.synthetic.main.settings_controller.*
+import kotlinx.android.synthetic.main.settings_controller.view.*
+import kotlinx.android.synthetic.main.settings_switch_widget.view.*
+import kotlinx.android.synthetic.main.settings_theme_widget.*
 import javax.inject.Inject
 
 class SettingsController : QkController<SettingsView, SettingsState, SettingsPresenter>(), SettingsView {
@@ -133,7 +154,8 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
 
         delivery.checkbox.isChecked = state.deliveryEnabled
 
-        signature.summary = state.signature
+        signature.summary = state.signature.takeIf { it.isNotBlank() }
+                ?: context.getString(R.string.settings_signature_summary)
 
         textSize.summary = state.textSizeSummary
         textSizeDialog.adapter.selectedItem = state.textSizeId
@@ -147,6 +169,7 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
 
         when (state.syncProgress) {
             is SyncRepository.SyncProgress.Idle -> syncingProgress.isVisible = false
+
             is SyncRepository.SyncProgress.Running -> {
                 syncingProgress.isVisible = true
                 syncingProgress.max = state.syncProgress.max

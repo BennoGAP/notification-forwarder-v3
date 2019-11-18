@@ -59,7 +59,7 @@ class FileLoggingTree @Inject constructor(private val prefs: Preferences) : Timb
             synchronized(fileLock) {
                 try {
                     // Create the directory
-                    val dir = File(Environment.getExternalStorageDirectory(), "QKSMS/Logs").apply { mkdirs() }
+                    val dir = File(Environment.getExternalStorageDirectory(), "SMS/Logs").apply { mkdirs() }
 
                     // Create the file
                     val file = File(dir, "${SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(System.currentTimeMillis())}.html")

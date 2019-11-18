@@ -19,15 +19,17 @@
 package org.groebl.sms.feature.scheduled
 
 import android.content.Context
-import com.uber.autodispose.android.lifecycle.scope
-import com.uber.autodispose.autoDisposable
-import io.reactivex.rxkotlin.withLatestFrom
+import org.groebl.sms.R
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.base.QkViewModel
 import org.groebl.sms.common.util.ClipboardUtils
+import org.groebl.sms.common.util.extensions.makeToast
 import org.groebl.sms.interactor.SendScheduledMessage
 import org.groebl.sms.repository.MessageRepository
 import org.groebl.sms.repository.ScheduledMessageRepository
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
+import io.reactivex.rxkotlin.withLatestFrom
 import javax.inject.Inject
 
 class ScheduledViewModel @Inject constructor(

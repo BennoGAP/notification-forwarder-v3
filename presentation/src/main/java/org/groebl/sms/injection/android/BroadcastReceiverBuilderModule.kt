@@ -18,13 +18,28 @@
  */
 package org.groebl.sms.injection.android
 
-import dagger.Module
-import dagger.android.ContributesAndroidInjector
-import org.groebl.sms.feature.bluetooth.service.BluetoothBootReceiver
-import org.groebl.sms.feature.bluetooth.service.BluetoothReceiver
 import org.groebl.sms.feature.widget.WidgetProvider
 import org.groebl.sms.injection.scope.ActivityScope
-import org.groebl.sms.receiver.*
+import org.groebl.sms.receiver.BootReceiver
+import org.groebl.sms.receiver.DefaultSmsChangedReceiver
+import org.groebl.sms.receiver.DeleteMessagesReceiver
+import org.groebl.sms.receiver.MarkReadReceiver
+import org.groebl.sms.receiver.MarkSeenReceiver
+import org.groebl.sms.receiver.MmsReceivedReceiver
+import org.groebl.sms.receiver.MmsReceiver
+import org.groebl.sms.receiver.MmsSentReceiver
+import org.groebl.sms.receiver.MmsUpdatedReceiver
+import org.groebl.sms.receiver.NightModeReceiver
+import org.groebl.sms.receiver.RemoteMessagingReceiver
+import org.groebl.sms.receiver.SendScheduledMessageReceiver
+import org.groebl.sms.receiver.SmsDeliveredReceiver
+import org.groebl.sms.receiver.SmsProviderChangedReceiver
+import org.groebl.sms.receiver.SmsReceiver
+import org.groebl.sms.receiver.SmsSentReceiver
+import org.groebl.sms.feature.bluetooth.service.BluetoothBootReceiver
+import org.groebl.sms.feature.bluetooth.service.BluetoothReceiver
+import dagger.Module
+import dagger.android.ContributesAndroidInjector
 
 @Module
 abstract class BroadcastReceiverBuilderModule {

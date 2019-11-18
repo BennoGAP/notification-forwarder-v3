@@ -26,8 +26,8 @@ import androidx.core.view.inputmethod.InputContentInfoCompat
 sealed class Attachment {
 
     data class Image(
-            private val uri: Uri? = null,
-            private val inputContent: InputContentInfoCompat? = null
+        private val uri: Uri? = null,
+        private val inputContent: InputContentInfoCompat? = null
     ) : Attachment() {
 
         fun getUri(): Uri? {
@@ -38,12 +38,11 @@ sealed class Attachment {
             }
         }
 
-
         fun isGif(context: Context): Boolean {
             return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1 && inputContent != null) {
                 inputContent.description.hasMimeType("image/gif")
             } else {
-                context.contentResolver.getType(uri) == "image/gif"
+                uri?.let(context.contentResolver::getType) == "image/gif"
             }
         }
     }

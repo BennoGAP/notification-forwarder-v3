@@ -39,6 +39,7 @@
     <string name="main_menu_archive">จัดเก็บ</string>
     <string name="main_menu_unarchive">ยกเลิกการเก็บ</string>
     <string name="main_menu_delete">ลบ</string>
+    <string name="main_menu_add_contact">Add to contacts</string>
     <string name="main_menu_pin">ปักหมุดไว้ด้านบน</string>
     <string name="main_menu_unpin">เอาหมุดออก</string>
     <string name="main_menu_read">ทำเครื่องหมายอ่านแล้ว</string>
@@ -46,6 +47,7 @@
     <string name="main_menu_block">ปิดกั้น</string>
     <string name="main_syncing">กำลังปรับแต่งเพิ่มประสิทธิภาพฐานข้อมูล อาจใช้เวลาสักครู่&#8230;</string>
     <string name="main_sender_you">คุณ: %s</string>
+    <string name="main_draft">Draft: %s</string>
     <string name="main_message_results_title">ผลลัพธ์ในข้อความ</string>
     <string name="main_message_results">%d ข้อความ</string>
     <string name="inbox_empty_text">บทสนทนาของคุณจะปรากฏที่นี่</string>
@@ -170,6 +172,7 @@
     <string name="scheduled_options_title">Scheduled message</string>
     <string-array name="scheduled_options">
         <item>Send now</item>
+        <item>Copy text</item>
         <item>Delete</item>
     </string-array>
     <string name="settings_category_appearance">ลักษณะที่ปรากฏ</string>
@@ -214,6 +217,7 @@
     <string name="settings_delivery_title">ยืนยันการส่ง</string>
     <string name="settings_delivery_summary">ยืนยันว่า ส่งข้อความเรียบร้อยแล้ว</string>
     <string name="settings_signature_title">Signature</string>
+    <string name="settings_signature_summary">Add a signature to the end of your messages</string>
     <string name="settings_unicode_title">ลบอักษรพิเศษ accents</string>
     <string name="settings_unicode_summary">ลบอักษรพิเศษ accents ออกจากข้อความ SMS ที่กำลังจะส่งออก</string>
     <string name="settings_mobile_title">Mobile numbers only</string>
@@ -236,7 +240,7 @@
     <string name="blocking_manager_call_control_summary">Automatically filter your calls and messages in one convenient place! Community IQ™ allows you to prevent unwanted messages from community known spammers</string>
     <string name="blocking_manager_sia_summary">กรองข้อความจากหมายเลขที่ไม่พึงประสงค์ โดยใช้แอพควรตอบกลับหรือไม่</string>
     <string name="blocking_manager_copy_title">Copy blocked numbers</string>
-    <string name="blocking_manager_copy_summary">Continue to %s copy over your existing blocked numbers</string>
+    <string name="blocking_manager_copy_summary">Continue to %s and copy over your existing blocked numbers</string>
     <string name="blocked_numbers_title">Blocked numbers</string>
     <string name="blocked_numbers_empty">Your blocked numbers will appear here</string>
     <string name="blocked_numbers_add_cd">Block a new number</string>

@@ -18,15 +18,17 @@
  */
 package org.groebl.sms.util
 
+import android.content.Context
 import android.os.Build
 import android.provider.Settings
 import com.f2prateek.rx.preferences2.Preference
 import com.f2prateek.rx.preferences2.RxSharedPreferences
+import org.groebl.sms.common.util.extensions.versionCode
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class Preferences @Inject constructor(private val rxPrefs: RxSharedPreferences) {
+class Preferences @Inject constructor(context: Context, private val rxPrefs: RxSharedPreferences) {
 
     companion object {
         const val NIGHT_MODE_SYSTEM = 0
@@ -69,6 +71,10 @@ class Preferences @Inject constructor(private val rxPrefs: RxSharedPreferences) 
     // Internal
     val night = rxPrefs.getBoolean("night", false)
     val canUseSubId = rxPrefs.getBoolean("canUseSubId", true)
+    val version = rxPrefs.getInteger("version", context.versionCode)
+    val changelogVersion = rxPrefs.getInteger("changelogVersion", context.versionCode)
+    @Deprecated("This should only be accessed when migrating to @blockingManager")
+    val sia = rxPrefs.getBoolean("sia", false)
 
     // User configurable
     val nightMode = rxPrefs.getInteger("nightMode", when (Build.VERSION.SDK_INT >= 29) {
@@ -81,8 +87,6 @@ class Preferences @Inject constructor(private val rxPrefs: RxSharedPreferences) 
     val systemFont = rxPrefs.getBoolean("systemFont", false)
     val textSize = rxPrefs.getInteger("textSize", TEXT_SIZE_NORMAL)
     val blockingManager = rxPrefs.getInteger("blockingManager", BLOCKING_MANAGER_QKSMS)
-    val callControl = rxPrefs.getBoolean("callControl", false)
-    val sia = rxPrefs.getBoolean("sia", false)
     val drop = rxPrefs.getBoolean("drop", false)
     val notifAction1 = rxPrefs.getInteger("notifAction1", NOTIFICATION_ACTION_READ)
     val notifAction2 = rxPrefs.getInteger("notifAction2", NOTIFICATION_ACTION_REPLY)
@@ -99,7 +103,6 @@ class Preferences @Inject constructor(private val rxPrefs: RxSharedPreferences) 
     val mobileOnly = rxPrefs.getBoolean("mobileOnly", false)
     val mmsSize = rxPrefs.getInteger("mmsSize", 300)
     val logging = rxPrefs.getBoolean("logging", false)
-    val version = rxPrefs.getInteger("version", 0)
 
     val bluetooth_enabled = rxPrefs.getBoolean("bluetoothEnabled", false)
     val bluetooth_apps = rxPrefs.getStringSet("bluetoothApps", HashSet<String>())

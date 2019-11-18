@@ -22,12 +22,7 @@ import android.content.ContentResolver
 import android.content.ContentUris
 import android.net.Uri
 import android.provider.Telephony
-import android.telephony.PhoneNumberUtils
 import com.f2prateek.rx.preferences2.RxSharedPreferences
-import io.reactivex.subjects.BehaviorSubject
-import io.reactivex.subjects.Subject
-import io.realm.Realm
-import io.realm.Sort
 import org.groebl.sms.extensions.insertOrUpdate
 import org.groebl.sms.extensions.map
 import org.groebl.sms.manager.KeyManager
@@ -35,34 +30,36 @@ import org.groebl.sms.mapper.CursorToContact
 import org.groebl.sms.mapper.CursorToConversation
 import org.groebl.sms.mapper.CursorToMessage
 import org.groebl.sms.mapper.CursorToRecipient
-import org.groebl.sms.model.*
+import org.groebl.sms.model.Contact
+import org.groebl.sms.model.Conversation
+import org.groebl.sms.model.Message
+import org.groebl.sms.model.MmsPart
+import org.groebl.sms.model.Recipient
+import org.groebl.sms.model.SyncLog
+import org.groebl.sms.util.PhoneNumberUtils
 import org.groebl.sms.util.tryOrNull
+import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.Subject
+import io.realm.Realm
+import io.realm.Sort
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class SyncRepositoryImpl @Inject constructor(
-        private val contentResolver: ContentResolver,
-        private val conversationRepo: ConversationRepository,
-        private val cursorToConversation: CursorToConversation,
-        private val cursorToMessage: CursorToMessage,
-        private val cursorToRecipient: CursorToRecipient,
-        private val cursorToContact: CursorToContact,
-        private val keys: KeyManager,
-        private val rxPrefs: RxSharedPreferences
+    private val contentResolver: ContentResolver,
+    private val conversationRepo: ConversationRepository,
+    private val cursorToConversation: CursorToConversation,
+    private val cursorToMessage: CursorToMessage,
+    private val cursorToRecipient: CursorToRecipient,
+    private val cursorToContact: CursorToContact,
+    private val keys: KeyManager,
+    private val phoneNumberUtils: PhoneNumberUtils,
+    private val rxPrefs: RxSharedPreferences
 ) : SyncRepository {
 
-    /**
-     * Holds data that should be persisted across full syncs
-     */
-    private data class PersistedData(
-            val id: Long,
-            val archived: Boolean,
-            val blocked: Boolean,
-            val pinned: Boolean,
-            val name: String)
-
-    override val syncProgress: Subject<SyncRepository.SyncProgress> = BehaviorSubject.createDefault(SyncRepository.SyncProgress.Idle())
+    override val syncProgress: Subject<SyncRepository.SyncProgress> =
+            BehaviorSubject.createDefault(SyncRepository.SyncProgress.Idle())
 
     override fun syncMessages() {
 
@@ -73,7 +70,7 @@ class SyncRepositoryImpl @Inject constructor(
         val realm = Realm.getDefaultInstance()
         realm.beginTransaction()
 
-        var persistedData = realm.where(Conversation::class.java)
+        val persistedData = realm.copyFromRealm(realm.where(Conversation::class.java)
                 .beginGroup()
                 .equalTo("archived", true)
                 .or()
@@ -82,9 +79,14 @@ class SyncRepositoryImpl @Inject constructor(
                 .equalTo("pinned", true)
                 .or()
                 .isNotEmpty("name")
+                .or()
+                .isNotNull("blockingClient")
+                .or()
+                .isNotEmpty("blockReason")
                 .endGroup()
-                .findAll()
-                .map { PersistedData(it.id, it.archived, it.blocked, it.pinned, it.name) }
+                .findAll())
+                .associateBy { conversation -> conversation.id }
+                .toMutableMap()
 
         realm.delete(Contact::class.java)
         realm.delete(Conversation::class.java)
@@ -97,11 +99,12 @@ class SyncRepositoryImpl @Inject constructor(
         val messageCursor = cursorToMessage.getMessagesCursor()
         val conversationCursor = cursorToConversation.getConversationsCursor()
         val recipientCursor = cursorToRecipient.getRecipientCursor()
+
         val max = (messageCursor?.count ?: 0) +
                 (conversationCursor?.count ?: 0) +
                 (recipientCursor?.count ?: 0)
-        var progress = 0
 
+        var progress = 0
 
         // Sync messages
         messageCursor?.use {
@@ -116,26 +119,26 @@ class SyncRepositoryImpl @Inject constructor(
 
         // Migrate blocked conversations from 2.7.3
         val oldBlockedSenders = rxPrefs.getStringSet("pref_key_blocked_senders")
-        persistedData += oldBlockedSenders.get()
+        oldBlockedSenders.get()
                 .map { threadIdString -> threadIdString.toLong() }
-                .filter { threadId -> persistedData.none { it.id == threadId } }
-                .map { threadId -> PersistedData(threadId, false, true, false, "") }
+                .filter { threadId -> !persistedData.contains(threadId) }
+                .forEach { threadId -> persistedData[threadId] = Conversation(id = threadId, blocked = true) }
 
         // Sync conversations
         conversationCursor?.use {
-            val conversations = conversationCursor
-                    .map { cursor ->
-                        progress++
-                        syncProgress.onNext(SyncRepository.SyncProgress.Running(max, progress, false))
-                        cursorToConversation.map(cursor)
+            val conversations = conversationCursor.map { cursor ->
+                progress++
+                syncProgress.onNext(SyncRepository.SyncProgress.Running(max, progress, false))
+                cursorToConversation.map(cursor).apply {
+                    persistedData[id]?.let { persistedConversation ->
+                        archived = persistedConversation.archived
+                        blocked = persistedConversation.blocked
+                        pinned = persistedConversation.pinned
+                        name = persistedConversation.name
+                        blockingClient = persistedConversation.blockingClient
+                        blockReason = persistedConversation.blockReason
                     }
-
-            persistedData.forEach { data ->
-                val conversation = conversations.firstOrNull { conversation -> conversation.id == data.id }
-                conversation?.archived = data.archived
-                conversation?.blocked = data.blocked
-                conversation?.pinned = data.pinned
-                conversation?.name = data.name
+                }
             }
 
             realm.where(Message::class.java)
@@ -143,29 +146,25 @@ class SyncRepositoryImpl @Inject constructor(
                     .distinct("threadId")
                     .findAll()
                     .forEach { message ->
-                        val conversation = conversations.firstOrNull { conversation -> conversation.id == message.threadId }
-                        conversation?.date = message.date
-                        conversation?.snippet = message.getSummary()
-                        conversation?.me = message.isMe()
+                        val conversation = conversations.find { conversation -> conversation.id == message.threadId }
+                        conversation?.lastMessage = message
                     }
 
             realm.insertOrUpdate(conversations)
         }
 
-
         // Sync recipients
         recipientCursor?.use {
             val contacts = realm.copyToRealm(getContacts())
-            val recipients = recipientCursor
-                    .map { cursor ->
-                        progress++
-                        syncProgress.onNext(SyncRepository.SyncProgress.Running(max, progress, false))
-                        cursorToRecipient.map(cursor).apply {
-                            contact = contacts.firstOrNull { contact ->
-                                contact.numbers.any { PhoneNumberUtils.compare(address, it.address) }
-                            }
-                        }
+            val recipients = recipientCursor.map { cursor ->
+                progress++
+                syncProgress.onNext(SyncRepository.SyncProgress.Running(max, progress, false))
+                cursorToRecipient.map(cursor).apply {
+                    contact = contacts.firstOrNull { contact ->
+                        contact.numbers.any { phoneNumberUtils.compare(address, it.address) }
                     }
+                }
+            }
             realm.insertOrUpdate(recipients)
         }
 
@@ -242,7 +241,7 @@ class SyncRepositoryImpl @Inject constructor(
                 val updatedRecipients = recipients.map { recipient ->
                     recipient.apply {
                         contact = contacts.firstOrNull {
-                            it.numbers.any { PhoneNumberUtils.compare(recipient.address, it.address) }
+                            it.numbers.any { phoneNumberUtils.compare(recipient.address, it.address) }
                         }
                     }
                 }
@@ -256,7 +255,7 @@ class SyncRepositoryImpl @Inject constructor(
     override fun syncContact(address: String): Boolean {
         // See if there's a contact that matches this phone number
         var contact = getContacts().firstOrNull {
-            it.numbers.any { number -> PhoneNumberUtils.compare(number.address, address) }
+            it.numbers.any { number -> phoneNumberUtils.compare(number.address, address) }
         } ?: return false
 
         Realm.getDefaultInstance().use { realm ->
@@ -267,7 +266,11 @@ class SyncRepositoryImpl @Inject constructor(
 
                 // Update all the matching recipients with the new contact
                 val updatedRecipients = recipients
-                        .filter { recipient -> contact.numbers.any { number -> PhoneNumberUtils.compare(recipient.address, number.address) } }
+                        .filter { recipient ->
+                            contact.numbers.any { number ->
+                                phoneNumberUtils.compare(recipient.address, number.address)
+                            }
+                        }
                         .map { recipient -> recipient.apply { this.contact = contact } }
 
                 realm.insertOrUpdate(updatedRecipients)

@@ -20,7 +20,6 @@ package org.groebl.sms.util
 
 import android.content.Context
 import android.provider.ContactsContract
-import android.telephony.PhoneNumberUtils
 import com.bumptech.glide.Priority
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.Key
@@ -29,30 +28,41 @@ import com.bumptech.glide.load.data.DataFetcher
 import com.bumptech.glide.load.model.ModelLoader
 import com.bumptech.glide.load.model.ModelLoaderFactory
 import com.bumptech.glide.load.model.MultiModelLoaderFactory
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import org.groebl.sms.repository.ContactRepository
 import org.groebl.sms.repository.ContactRepositoryImpl
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import java.io.InputStream
 import java.security.MessageDigest
 
-
 class ContactImageLoader(
-        private val context: Context,
-        private val contactRepo: ContactRepository
+    private val context: Context,
+    private val contactRepo: ContactRepository,
+    private val phoneNumberUtils: PhoneNumberUtils
 ) : ModelLoader<String, InputStream> {
 
     override fun handles(model: String): Boolean {
-        return PhoneNumberUtils.isGlobalPhoneNumber(model)
+        return model.startsWith("tel:")
     }
 
-    override fun buildLoadData(model: String, width: Int, height: Int, options: Options): ModelLoader.LoadData<InputStream>? {
-        return ModelLoader.LoadData(ContactImageKey(model), ContactImageFetcher(context, contactRepo, model))
+    override fun buildLoadData(
+        model: String,
+        width: Int,
+        height: Int,
+        options: Options
+    ): ModelLoader.LoadData<InputStream>? {
+        return ModelLoader.LoadData(
+                ContactImageKey(phoneNumberUtils.normalizeNumber(model)),
+                ContactImageFetcher(context, contactRepo, model))
     }
 
-    class Factory(val context: Context, val prefs: Preferences) : ModelLoaderFactory<String, InputStream> {
+    class Factory(
+        private val context: Context,
+        private val prefs: Preferences
+    ) : ModelLoaderFactory<String, InputStream> {
+
         override fun build(multiFactory: MultiModelLoaderFactory): ContactImageLoader {
-            return ContactImageLoader(context, ContactRepositoryImpl(context, prefs))
+            return ContactImageLoader(context, ContactRepositoryImpl(context, prefs), PhoneNumberUtils(context))
         }
 
         override fun teardown() {} // nothing to do here
@@ -63,9 +73,9 @@ class ContactImageLoader(
     }
 
     class ContactImageFetcher(
-            private val context: Context,
-            private val contactRepo: ContactRepository,
-            private val address: String
+        private val context: Context,
+        private val contactRepo: ContactRepository,
+        private val address: String
     ) : DataFetcher<InputStream> {
 
         private var loadPhotoDisposable: Disposable? = null

@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2017 Moez Bhatti <moez.bhatti@gmail.com>
+ *
+ * This file is part of QKSMS.
+ *
+ * QKSMS is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * QKSMS is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.groebl.sms.listener
 
 import android.content.Context
@@ -7,7 +25,6 @@ import android.os.Handler
 import android.provider.ContactsContract
 import org.groebl.sms.repository.SyncRepository
 import io.reactivex.Observable
-import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 
@@ -17,8 +34,8 @@ import javax.inject.Inject
  * TODO: Stop listening automatically. Currently, this will only happen if the contact is added
  */
 class ContactAddedListenerImpl @Inject constructor(
-        private val context: Context,
-        private val syncRepo: SyncRepository
+    private val context: Context,
+    private val syncRepo: SyncRepository
 ) : ContactAddedListener {
 
     companion object {

@@ -19,14 +19,14 @@
 package org.groebl.sms.mapper
 
 import com.f2prateek.rx.preferences2.RxSharedPreferences
-import io.reactivex.rxkotlin.Observables
 import org.groebl.sms.manager.AnalyticsManager
 import org.groebl.sms.manager.RatingManager
+import io.reactivex.rxkotlin.Observables
 import javax.inject.Inject
 
 class RatingManagerImpl @Inject constructor(
-        rxPrefs: RxSharedPreferences,
-        private val analyticsManager: AnalyticsManager
+    rxPrefs: RxSharedPreferences,
+    private val analyticsManager: AnalyticsManager
 ) : RatingManager {
 
     companion object {
@@ -40,8 +40,8 @@ class RatingManagerImpl @Inject constructor(
     override val shouldShowRating = Observables.combineLatest(
             sessions.asObservable(),
             rated.asObservable(),
-            dismissed.asObservable()) { sessions, rated, dismissed ->
-
+            dismissed.asObservable()
+    ) { sessions, rated, dismissed ->
         sessions > RATING_THRESHOLD && !rated && !dismissed
     }
 
@@ -58,4 +58,5 @@ class RatingManagerImpl @Inject constructor(
         analyticsManager.track("Clicked Rate (Dismiss)")
         dismissed.set(true)
     }
+
 }

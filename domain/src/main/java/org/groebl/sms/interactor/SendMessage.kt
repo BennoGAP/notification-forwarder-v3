@@ -19,29 +19,29 @@
 package org.groebl.sms.interactor
 
 import android.content.Context
-import io.reactivex.Flowable
 import org.groebl.sms.compat.TelephonyCompat
 import org.groebl.sms.extensions.mapNotNull
 import org.groebl.sms.model.Attachment
 import org.groebl.sms.repository.ConversationRepository
 import org.groebl.sms.repository.MessageRepository
-import org.groebl.sms.repository.SyncRepository
+import io.reactivex.Flowable
 import javax.inject.Inject
 
 class SendMessage @Inject constructor(
-        private val context: Context,
-        private val conversationRepo: ConversationRepository,
-        private val messageRepo: MessageRepository,
-        private val syncRepo: SyncRepository
+    private val context: Context,
+    private val conversationRepo: ConversationRepository,
+    private val messageRepo: MessageRepository,
+    private val updateBadge: UpdateBadge
 ) : Interactor<SendMessage.Params>() {
 
     data class Params(
-            val subId: Int,
-            val threadId: Long,
-            val addresses: List<String>,
-            val body: String,
-            val attachments: List<Attachment> = listOf(),
-            val delay: Int = 0)
+        val subId: Int,
+        val threadId: Long,
+        val addresses: List<String>,
+        val body: String,
+        val attachments: List<Attachment> = listOf(),
+        val delay: Int = 0
+    )
 
     override fun buildObservable(params: Params): Flowable<*> = Flowable.just(Unit)
             .filter { params.addresses.isNotEmpty() }
@@ -64,5 +64,6 @@ class SendMessage @Inject constructor(
             }
             .doOnNext { threadId -> conversationRepo.updateConversations(threadId) }
             .doOnNext { threadId -> conversationRepo.markUnarchived(threadId) }
+            .flatMap { updateBadge.buildObservable(Unit) } // Update the widget
 
 }

@@ -22,6 +22,7 @@ import org.groebl.sms.model.Attachment
 import org.groebl.sms.model.Message
 import org.groebl.sms.model.MmsPart
 import io.realm.RealmResults
+import java.io.File
 
 interface MessageRepository {
 
@@ -36,6 +37,8 @@ interface MessageRepository {
     fun getPart(id: Long): MmsPart?
 
     fun getPartsForConversation(threadId: Long): RealmResults<MmsPart>
+
+    fun savePart(id: Long): File?
 
     /**
      * Retrieves the list of messages which should be shown in the notification
@@ -57,12 +60,21 @@ interface MessageRepository {
 
     fun markUnread(vararg threadIds: Long)
 
-    fun sendMessage(subId: Int, threadId: Long, addresses: List<String>, body: String, attachments: List<Attachment>, delay: Int = 0)
+    fun sendMessage(
+        subId: Int,
+        threadId: Long,
+        addresses: List<String>,
+        body: String,
+        attachments: List<Attachment>,
+        delay: Int = 0
+    )
 
     /**
      * Attempts to send the SMS message. This can be called if the message has already been persisted
      */
     fun sendSms(message: Message)
+
+    fun resendMms(message: Message)
 
     /**
      * Attempts to cancel sending the message with the given id

@@ -178,16 +178,13 @@ public class BluetoothNotificationFilter {
                     break;
 
                 case "com.skype.raider":
-                    if (ticker.equals("")) {
+                    CharSequence[] textline_skype = extras.getCharSequenceArray(Notification.EXTRA_TEXT_LINES);
+                    if (textline_skype == null) {
                         return;
                     }
 
-                    if (extras.get(Notification.EXTRA_BIG_TEXT) != null) {
-                        ticker = title + ": " + removeDirectionChars(extras.get(Notification.EXTRA_BIG_TEXT).toString());
-                    }
-
                     set_sender = "Skype";
-                    set_content = ticker;
+                    set_content = textline_skype[textline_skype.length - 1].toString();
                     break;
 
                 case "com.android.email":
@@ -324,6 +321,11 @@ public class BluetoothNotificationFilter {
 
                     set_sender = "Once";
                     set_content = ticker;
+                    break;
+
+                case "com.facebook.orca":
+                    set_sender = "Facebook";
+                    set_content = title + ": " + text;
                     break;
 
                 case "com.whatsapp":

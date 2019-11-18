@@ -182,6 +182,12 @@ class MainActivity : QkThemedActivity(), MainView {
             return
         }
 
+        val addContact = when (state.page) {
+            is Inbox -> state.page.addContact
+            is Archived -> state.page.addContact
+            else -> false
+        }
+
         val markPinned = when (state.page) {
             is Inbox -> state.page.markPinned
             is Archived -> state.page.markPinned
@@ -206,6 +212,7 @@ class MainActivity : QkThemedActivity(), MainView {
         toolbar.menu.findItem(R.id.archive)?.isVisible = state.page is Inbox && selectedConversations != 0
         toolbar.menu.findItem(R.id.unarchive)?.isVisible = state.page is Archived && selectedConversations != 0
         toolbar.menu.findItem(R.id.delete)?.isVisible = selectedConversations != 0
+        toolbar.menu.findItem(R.id.add)?.isVisible = addContact && selectedConversations != 0
         toolbar.menu.findItem(R.id.pin)?.isVisible = markPinned && selectedConversations != 0
         toolbar.menu.findItem(R.id.unpin)?.isVisible = !markPinned && selectedConversations != 0
         toolbar.menu.findItem(R.id.read)?.isVisible = markRead && selectedConversations != 0
@@ -309,6 +316,10 @@ class MainActivity : QkThemedActivity(), MainView {
         }
     }
 
+    override fun requestDefaultSms() {
+        navigator.showDefaultSmsDialog(this)
+    }
+
     override fun requestPermissions() {
         ActivityCompat.requestPermissions(this, arrayOf(
                 Manifest.permission.READ_SMS,
@@ -338,6 +349,10 @@ class MainActivity : QkThemedActivity(), MainView {
                 .setNegativeButton(R.string.button_cancel, null)
                 .show()
     }
+
+    //override fun showChangelog(changelog: ChangelogManager.Changelog) {
+    //    changelogDialog.show(changelog)
+    //}
 
     override fun showArchivedSnackbar() {
         Snackbar.make(drawerLayout, R.string.toast_archived, Snackbar.LENGTH_LONG).apply {

@@ -30,7 +30,14 @@ import com.android.mms.util.RateController
 import com.google.android.mms.ContentType
 import com.google.android.mms.InvalidHeaderValueException
 import com.google.android.mms.MMSPart
-import com.google.android.mms.pdu_alt.*
+import com.google.android.mms.pdu_alt.CharacterSets
+import com.google.android.mms.pdu_alt.EncodedStringValue
+import com.google.android.mms.pdu_alt.PduBody
+import com.google.android.mms.pdu_alt.PduComposer
+import com.google.android.mms.pdu_alt.PduHeaders
+import com.google.android.mms.pdu_alt.PduPart
+import com.google.android.mms.pdu_alt.PduPersister
+import com.google.android.mms.pdu_alt.SendReq
 import com.google.android.mms.smil.SmilHelper
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
@@ -76,8 +83,7 @@ class Transaction @JvmOverloads constructor(private val context: Context, settin
      *
      * @param threadId is the thread id of who to send the message to (can also be set to Transaction.NO_THREAD_ID)
      */
-    fun sendNewMessage(subId: Int, threadId: Long, addresses: List<String>, parts: List<MMSPart>, subject: String?) {
-
+    fun sendNewMessage(subId: Int, threadId: Long, addresses: List<String>, parts: List<MMSPart>, subject: String?, existingUri: Uri?) {
         RateController.init(context)
         DownloadManager.init(context)
 
@@ -88,7 +94,7 @@ class Transaction @JvmOverloads constructor(private val context: Context, settin
 
             val sendReq = buildPdu(context, addresses, subject, parts)
             val persister = PduPersister.getPduPersister(context)
-            val messageUri = persister.persist(sendReq, Uri.parse("content://mms/outbox"), true, true, null)
+            val messageUri = existingUri ?: persister.persist(sendReq, Uri.parse("content://mms/outbox"), true, true, null)
 
             val sentIntent = Intent(MMS_SENT)
             BroadcastUtils.addClassName(context, sentIntent, MMS_SENT)

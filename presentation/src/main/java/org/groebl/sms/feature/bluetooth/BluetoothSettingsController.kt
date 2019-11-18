@@ -17,7 +17,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.bluelinelabs.conductor.RouterTransaction
 import com.jakewharton.rxbinding2.view.clicks
-import com.klinker.android.send_message.Utils
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import io.reactivex.Observable
@@ -118,9 +117,9 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
             .let { bluetooth_menu_main -> Observable.merge(bluetooth_menu_main) }
 
     override fun render(state: BluetoothSettingsState) {
-        var local_bluetooth_enabled = state.bluetooth_enabled
-        var local_bluetooth_tethering = state.bluetooth_tethering
-        var local_bluetooth_whatsapp_to_contact = state.bluetooth_whatsapp_to_contact
+        var localBluetoothEnabled = state.bluetooth_enabled
+        var localBluetoothTethering = state.bluetooth_tethering
+        var localBluetoothWhatsappToContact = state.bluetooth_whatsapp_to_contact
 
         if(!state.bluetooth_enabled) {
             Thread { BluetoothHelper.deleteBluetoothMessages(context, false) }.start()
@@ -128,16 +127,18 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
         }
 
         //Forwarding enabled but not default SMS-App or has no Notification-Access
-        if(state.bluetooth_enabled and (!Utils.isDefaultSmsApp(context) or !BluetoothHelper.hasNotificationAccess(context))) {
+        if(state.bluetooth_enabled and (!BluetoothHelper.isDefaultSms(context) or !BluetoothHelper.hasNotificationAccess(context))) {
             prefs.bluetooth_enabled.set(false)
-            local_bluetooth_enabled = false
-            navigator.showBluetoothAccess()
+            localBluetoothEnabled = false
+
+            if(!BluetoothHelper.isDefaultSms(context))          { requestDefaultSms() }
+            if(!BluetoothHelper.hasNotificationAccess(context)) { showNotificationAccess() }
         }
 
         //WhatsApp-to-Contact enabled but no Contact-Permission
         if(state.bluetooth_whatsapp_to_contact && !BluetoothHelper.hasContactPermission(context)) {
             prefs.bluetooth_whatsapp_to_contact.set(false)
-            local_bluetooth_whatsapp_to_contact = false
+            localBluetoothWhatsappToContact = false
             BluetoothHelper.requestContactPermission(activity!!)
         }
 
@@ -145,16 +146,16 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
         if(state.bluetooth_tethering && Build.VERSION.SDK_INT >= 23) {
             if(!Settings.System.canWrite(context)) {
                 prefs.bluetooth_tethering.set(false)
-                local_bluetooth_tethering = false
+                localBluetoothTethering = false
 
-                val intent_write_settings = Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS)
-                intent_write_settings.data = Uri.parse("package:" + context.packageName)
-                intent_write_settings.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                val intentWriteSettings = Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS)
+                intentWriteSettings.data = Uri.parse("package:" + context.packageName)
+                intentWriteSettings.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
                 AlertDialog.Builder(activity!!)
                         .setTitle(R.string.main_permission_required)
                         .setMessage(String.format(context.getString(R.string.settings_bluetooth_tethering_dialog), context.getString(R.string.app_name)))
-                        .setPositiveButton(R.string.title_settings) { _, _ -> startActivity(Intent(intent_write_settings)) }
+                        .setPositiveButton(R.string.title_settings) { _, _ -> startActivity(Intent(intentWriteSettings)) }
                         .setNegativeButton(R.string.button_cancel, null)
                         .show()
             }
@@ -166,9 +167,9 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
 
         bluetooth_delayed_read.setVisible(state.bluetooth_save_read)
 
-        bluetooth_whatsapp_blocked_group.setVisible(local_bluetooth_whatsapp_to_contact)
-        bluetooth_whatsapp_blocked_contact.setVisible(local_bluetooth_whatsapp_to_contact)
-        bluetooth_whatsapp_hide_prefix.setVisible(local_bluetooth_whatsapp_to_contact)
+        bluetooth_whatsapp_blocked_group.setVisible(localBluetoothWhatsappToContact)
+        bluetooth_whatsapp_blocked_contact.setVisible(localBluetoothWhatsappToContact)
+        bluetooth_whatsapp_hide_prefix.setVisible(localBluetoothWhatsappToContact)
 
         bluetooth_more_divider.setVisible(state.bluetooth_only_on_connect)
         bluetooth_more_cat.setVisible(state.bluetooth_only_on_connect)
@@ -177,7 +178,7 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
 
         bluetooth_battery.setVisible(state.bluetooth_enabled)
 
-        bluetooth_enabled.checkbox.isChecked = local_bluetooth_enabled
+        bluetooth_enabled.checkbox.isChecked = localBluetoothEnabled
         bluetooth_only_on_connect.checkbox.isChecked = state.bluetooth_only_on_connect
         bluetooth_autodelete.checkbox.isChecked = state.bluetooth_autodelete
         bluetooth_save_read.checkbox.isChecked = state.bluetooth_save_read
@@ -185,10 +186,10 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
         bluetooth_emoji.checkbox.isChecked = state.bluetooth_emoji
         bluetooth_appname_as_sender_text.checkbox.isChecked = state.bluetooth_appname_as_sender_text
         bluetooth_appname_as_sender_number.checkbox.isChecked = state.bluetooth_appname_as_sender_number
-        bluetooth_whatsapp_to_contact.checkbox.isChecked = local_bluetooth_whatsapp_to_contact
+        bluetooth_whatsapp_to_contact.checkbox.isChecked = localBluetoothWhatsappToContact
         bluetooth_whatsapp_hide_prefix.checkbox.isChecked = state.bluetooth_whatsapp_hide_prefix
         bluetooth_max_vol.checkbox.isChecked = state.bluetooth_max_vol
-        bluetooth_tethering.checkbox.isChecked = local_bluetooth_tethering
+        bluetooth_tethering.checkbox.isChecked = localBluetoothTethering
 
         //Connected and Last-Connected-Device and Time available
         if (prefs.bluetooth_current_status.get() &&
@@ -226,9 +227,18 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
                 .setTitle(R.string.settings_bluetooth_battery_title)
                 .setMessage(String.format(context.getString(R.string.settings_bluetooth_battery_dialog), context.getString(R.string.app_name)))
                 .setPositiveButton(R.string.title_settings) { _, _ -> BluetoothBatteryUtils.startPowerSaverIntent(activity!!) }
-                .setNeutralButton(R.string.button_info) { _, _ -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://dontkillmyapp.com"))) }
+                .setNeutralButton(R.string.button_info) { _, _ -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(BluetoothHelper.getDontKillMyAppUrl("?app=SMS%20%26%20Notifications")))) }
                 .setNegativeButton(R.string.button_cancel, null)
                 .show()
+    }
+
+    override fun showNotificationAccess() {
+        val intent = Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS")
+        startActivity(intent)
+    }
+
+    override fun requestDefaultSms() {
+        navigator.showDefaultSmsDialog(activity!!)
     }
 
     override fun showBluetoothDonate() {
@@ -343,12 +353,10 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
     }
 
     private fun selectContact() {
-        if (Build.VERSION.SDK_INT < 23) {
-            startActivityForResult(Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI), 2)
-        } else if (ContextCompat.checkSelfPermission(activity!!, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(activity!!, arrayOf(Manifest.permission.READ_CONTACTS), 0)
-        } else {
-            startActivityForResult(Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI), 2)
+        when {
+            Build.VERSION.SDK_INT < 23 -> startActivityForResult(Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI), 2)
+            ContextCompat.checkSelfPermission(activity!!, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED -> ActivityCompat.requestPermissions(activity!!, arrayOf(Manifest.permission.READ_CONTACTS), 0)
+            else -> startActivityForResult(Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI), 2)
         }
     }
 
@@ -356,7 +364,7 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
         if (requestCode == 2 && resultCode == Activity.RESULT_OK) {
             try {
                 val uri = intentData!!.data
-                val cursor = context.contentResolver.query(uri, null, null, null, null)
+                val cursor = context.contentResolver.query(uri!!, null, null, null, null)
 
                 cursor?.use {
                     if (cursor.moveToFirst()) {

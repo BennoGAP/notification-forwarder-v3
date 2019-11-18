@@ -20,19 +20,19 @@ package org.groebl.sms.interactor
 
 import android.content.Context
 import android.net.Uri
-import io.reactivex.Flowable
-import io.reactivex.rxkotlin.toFlowable
-import io.realm.RealmList
 import org.groebl.sms.compat.TelephonyCompat
 import org.groebl.sms.extensions.mapNotNull
 import org.groebl.sms.model.Attachment
 import org.groebl.sms.repository.ScheduledMessageRepository
+import io.reactivex.Flowable
+import io.reactivex.rxkotlin.toFlowable
+import io.realm.RealmList
 import javax.inject.Inject
 
 class SendScheduledMessage @Inject constructor(
-        private val context: Context,
-        private val scheduledMessageRepo: ScheduledMessageRepository,
-        private val sendMessage: SendMessage
+    private val context: Context,
+    private val scheduledMessageRepo: ScheduledMessageRepository,
+    private val sendMessage: SendMessage
 ) : Interactor<Long>() {
 
     override fun buildObservable(params: Long): Flowable<*> {

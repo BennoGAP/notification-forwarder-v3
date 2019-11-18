@@ -19,8 +19,8 @@
 package org.groebl.sms.feature.main
 
 import android.content.Intent
-import io.reactivex.Observable
 import org.groebl.sms.common.base.QkView
+import io.reactivex.Observable
 
 interface MainView : QkView<MainState> {
 
@@ -40,6 +40,8 @@ interface MainView : QkView<MainState> {
     val swipeConversationIntent: Observable<Pair<Long, Int>>
     val undoArchiveIntent: Observable<Unit>
     val snackbarButtonIntent: Observable<Unit>
+
+    fun requestDefaultSms()
 
     fun requestPermissions()
     fun clearSearch()

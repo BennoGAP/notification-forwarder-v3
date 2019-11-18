@@ -29,18 +29,17 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import dagger.android.AndroidInjection
-import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
-import io.reactivex.subjects.Subject
-import kotlinx.android.synthetic.main.gallery_activity.*
 import org.groebl.sms.R
 import org.groebl.sms.common.base.QkActivity
 import org.groebl.sms.common.util.DateFormatter
 import org.groebl.sms.common.util.extensions.setVisible
 import org.groebl.sms.model.MmsPart
+import dagger.android.AndroidInjection
+import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.Subject
+import kotlinx.android.synthetic.main.gallery_activity.*
 import javax.inject.Inject
-
 
 class GalleryActivity : QkActivity(), GalleryView {
 
@@ -106,7 +105,6 @@ class GalleryActivity : QkActivity(), GalleryView {
     override fun requestStoragePermission() {
         ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 0)
     }
-
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.gallery, menu)

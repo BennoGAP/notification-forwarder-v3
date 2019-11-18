@@ -18,10 +18,10 @@
  */
 package org.groebl.sms.feature.settings
 
-import io.reactivex.Observable
 import org.groebl.sms.common.base.QkViewContract
 import org.groebl.sms.common.widget.PreferenceView
 import org.groebl.sms.util.Preferences
+import io.reactivex.Observable
 
 interface SettingsView : QkViewContract<SettingsState> {
     fun preferenceClicks(): Observable<PreferenceView>
