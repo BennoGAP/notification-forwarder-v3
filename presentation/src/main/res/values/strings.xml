@@ -20,7 +20,7 @@
     <string name="app_name" translatable="false">SMS &amp; Notifications</string>
     <string name="bluetooth_about_developer" translatable="false">Benno Gröbl</string>
     <string name="bluetooth_about_contact" translatable="false">android@groebl.org</string>
-    <string name="version_qksms" translatable="false">3.7.7</string>
+    <string name="version_qksms" translatable="false">3.7.8</string>
 
     <string name="button_add" tools:ignore="MissingTranslation">Add</string>
     <string name="button_no" tools:ignore="MissingTranslation">No</string>
