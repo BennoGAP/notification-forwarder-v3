@@ -72,7 +72,8 @@
 
         <LinearLayout
             android:id="@+id/backup"
-            style="@style/DrawerRow">
+            style="@style/DrawerRow"
+            android:visibility="gone">
 
             <ImageView
                 style="@style/DrawerIcon"
