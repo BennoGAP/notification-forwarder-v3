@@ -32,7 +32,7 @@ android {
         applicationId "org.groebl.sms"
         minSdkVersion 21
         targetSdkVersion 28 // Don't upgrade to 29 until we support Scoped storage
-        versionCode 3102
+        versionCode 3103
         versionName '3.1.0'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
