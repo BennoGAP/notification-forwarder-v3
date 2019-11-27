@@ -24,6 +24,10 @@ import android.content.Context
 import android.preference.PreferenceManager
 import androidx.lifecycle.ViewModelProvider
 import com.f2prateek.rx.preferences2.RxSharedPreferences
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import dagger.Module
+import dagger.Provides
 import org.groebl.sms.blocking.BlockingClient
 import org.groebl.sms.blocking.BlockingManager
 import org.groebl.sms.common.ViewModelFactory
@@ -33,54 +37,9 @@ import org.groebl.sms.feature.conversationinfo.injection.ConversationInfoCompone
 import org.groebl.sms.feature.themepicker.injection.ThemePickerComponent
 import org.groebl.sms.listener.ContactAddedListener
 import org.groebl.sms.listener.ContactAddedListenerImpl
-import org.groebl.sms.manager.ActiveConversationManager
-import org.groebl.sms.manager.ActiveConversationManagerImpl
-import org.groebl.sms.manager.AlarmManager
-import org.groebl.sms.manager.AlarmManagerImpl
-import org.groebl.sms.manager.AnalyticsManager
-import org.groebl.sms.manager.AnalyticsManagerImpl
-import org.groebl.sms.manager.ChangelogManager
-import org.groebl.sms.manager.ChangelogManagerImpl
-import org.groebl.sms.manager.KeyManager
-import org.groebl.sms.manager.KeyManagerImpl
-import org.groebl.sms.manager.NotificationManager
-import org.groebl.sms.manager.PermissionManager
-import org.groebl.sms.manager.PermissionManagerImpl
-import org.groebl.sms.manager.RatingManager
-import org.groebl.sms.manager.ShortcutManager
-import org.groebl.sms.manager.WidgetManager
-import org.groebl.sms.manager.WidgetManagerImpl
-import org.groebl.sms.mapper.CursorToContact
-import org.groebl.sms.mapper.CursorToContactImpl
-import org.groebl.sms.mapper.CursorToConversation
-import org.groebl.sms.mapper.CursorToConversationImpl
-import org.groebl.sms.mapper.CursorToMessage
-import org.groebl.sms.mapper.CursorToMessageImpl
-import org.groebl.sms.mapper.CursorToPart
-import org.groebl.sms.mapper.CursorToPartImpl
-import org.groebl.sms.mapper.CursorToRecipient
-import org.groebl.sms.mapper.CursorToRecipientImpl
-import org.groebl.sms.mapper.RatingManagerImpl
-import org.groebl.sms.repository.BackupRepository
-import org.groebl.sms.repository.BackupRepositoryImpl
-import org.groebl.sms.repository.BlockingRepository
-import org.groebl.sms.repository.BlockingRepositoryImpl
-import org.groebl.sms.repository.ContactRepository
-import org.groebl.sms.repository.ContactRepositoryImpl
-import org.groebl.sms.repository.ConversationRepository
-import org.groebl.sms.repository.ConversationRepositoryImpl
-import org.groebl.sms.repository.ImageRepository
-import org.groebl.sms.repository.ImageRepostoryImpl
-import org.groebl.sms.repository.MessageRepository
-import org.groebl.sms.repository.MessageRepositoryImpl
-import org.groebl.sms.repository.ScheduledMessageRepository
-import org.groebl.sms.repository.ScheduledMessageRepositoryImpl
-import org.groebl.sms.repository.SyncRepository
-import org.groebl.sms.repository.SyncRepositoryImpl
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import dagger.Module
-import dagger.Provides
+import org.groebl.sms.manager.*
+import org.groebl.sms.mapper.*
+import org.groebl.sms.repository.*
 import javax.inject.Singleton
 
 @Module(subcomponents = [
@@ -185,7 +144,7 @@ class AppModule(private var application: Application) {
     fun provideConversationRepository(repository: ConversationRepositoryImpl): ConversationRepository = repository
 
     @Provides
-    fun provideImageRepository(repository: ImageRepostoryImpl): ImageRepository = repository
+    fun provideImageRepository(repository: ImageRepositoryImpl): ImageRepository = repository
 
     @Provides
     fun provideMessageRepository(repository: MessageRepositoryImpl): MessageRepository = repository
