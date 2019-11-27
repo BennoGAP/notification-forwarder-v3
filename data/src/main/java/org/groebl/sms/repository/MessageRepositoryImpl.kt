@@ -38,6 +38,10 @@ import com.google.android.mms.pdu_alt.PduPersister
 import com.klinker.android.send_message.SmsManagerFactory
 import com.klinker.android.send_message.StripAccents
 import com.klinker.android.send_message.Transaction
+import io.realm.Case
+import io.realm.Realm
+import io.realm.RealmResults
+import io.realm.Sort
 import org.groebl.sms.compat.TelephonyCompat
 import org.groebl.sms.extensions.anyOf
 import org.groebl.sms.manager.ActiveConversationManager
@@ -50,13 +54,8 @@ import org.groebl.sms.receiver.SendSmsReceiver
 import org.groebl.sms.receiver.SmsDeliveredReceiver
 import org.groebl.sms.receiver.SmsSentReceiver
 import org.groebl.sms.util.ImageUtils
-import org.groebl.sms.util.PhoneNumberUtils
 import org.groebl.sms.util.Preferences
 import org.groebl.sms.util.tryOrNull
-import io.realm.Case
-import io.realm.Realm
-import io.realm.RealmResults
-import io.realm.Sort
 import timber.log.Timber
 import java.io.File
 import java.io.FileNotFoundException
@@ -71,7 +70,6 @@ class MessageRepositoryImpl @Inject constructor(
     private val context: Context,
     private val imageRepository: ImageRepository,
     private val messageIds: KeyManager,
-    private val phoneNumberUtils: PhoneNumberUtils,
     private val prefs: Preferences,
     private val syncRepository: SyncRepository
 ) : MessageRepository {
@@ -97,6 +95,7 @@ class MessageRepositoryImpl @Inject constructor(
 
     override fun getMessage(id: Long): Message? {
         return Realm.getDefaultInstance()
+                .also { realm -> realm.refresh() }
                 .where(Message::class.java)
                 .equalTo("id", id)
                 .findFirst()
