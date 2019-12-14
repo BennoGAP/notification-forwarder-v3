@@ -54,6 +54,7 @@ import org.groebl.sms.receiver.SendSmsReceiver
 import org.groebl.sms.receiver.SmsDeliveredReceiver
 import org.groebl.sms.receiver.SmsSentReceiver
 import org.groebl.sms.util.ImageUtils
+import org.groebl.sms.util.PhoneNumberUtils
 import org.groebl.sms.util.Preferences
 import org.groebl.sms.util.tryOrNull
 import timber.log.Timber
@@ -66,12 +67,13 @@ import javax.inject.Singleton
 
 @Singleton
 class MessageRepositoryImpl @Inject constructor(
-    private val activeConversationManager: ActiveConversationManager,
-    private val context: Context,
-    private val imageRepository: ImageRepository,
-    private val messageIds: KeyManager,
-    private val prefs: Preferences,
-    private val syncRepository: SyncRepository
+        private val activeConversationManager: ActiveConversationManager,
+        private val context: Context,
+        private val imageRepository: ImageRepository,
+        private val messageIds: KeyManager,
+        private val phoneNumberUtils: PhoneNumberUtils,
+        private val prefs: Preferences,
+        private val syncRepository: SyncRepository
 ) : MessageRepository {
 
     override fun getMessages(threadId: Long, query: String): RealmResults<Message> {
@@ -337,7 +339,9 @@ class MessageRepositoryImpl @Inject constructor(
                     .map { attachment -> attachment.vCard.toByteArray() }
                     .map { vCard -> MMSPart("contact", ContentType.TEXT_VCARD, vCard) }
 
-            Transaction(context).sendNewMessage(subId, threadId, addresses, parts, null, null)
+            val transaction = Transaction(context)
+            val recipients = addresses.map(phoneNumberUtils::normalizeNumber)
+            transaction.sendNewMessage(subId, threadId, recipients, parts, null, null)
         }
     }
 
