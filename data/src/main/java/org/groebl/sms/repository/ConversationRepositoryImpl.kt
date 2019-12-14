@@ -21,6 +21,10 @@ package org.groebl.sms.repository
 import android.content.ContentUris
 import android.content.Context
 import android.provider.Telephony
+import io.realm.Case
+import io.realm.Realm
+import io.realm.RealmResults
+import io.realm.Sort
 import org.groebl.sms.compat.TelephonyCompat
 import org.groebl.sms.extensions.anyOf
 import org.groebl.sms.extensions.map
@@ -28,17 +32,9 @@ import org.groebl.sms.extensions.removeAccents
 import org.groebl.sms.filter.ConversationFilter
 import org.groebl.sms.mapper.CursorToConversation
 import org.groebl.sms.mapper.CursorToRecipient
-import org.groebl.sms.model.Contact
-import org.groebl.sms.model.Conversation
-import org.groebl.sms.model.Message
-import org.groebl.sms.model.Recipient
-import org.groebl.sms.model.SearchResult
+import org.groebl.sms.model.*
 import org.groebl.sms.util.PhoneNumberUtils
 import org.groebl.sms.util.tryOrNull
-import io.realm.Case
-import io.realm.Realm
-import io.realm.RealmResults
-import io.realm.Sort
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -112,17 +108,26 @@ class ConversationRepositoryImpl @Inject constructor(
     }
 
     override fun searchConversations(query: CharSequence): List<SearchResult> {
-        val normalizedQuery = query.removeAccents()
-        val conversations = getConversationsSnapshot()
+        val realm = Realm.getDefaultInstance()
 
-        val messagesByConversation = Realm.getDefaultInstance()
+        val normalizedQuery = query.removeAccents()
+        val conversations = realm.copyFromRealm(realm
+                .where(Conversation::class.java)
+                .notEqualTo("id", 0L)
+                .isNotNull("lastMessage")
+                .equalTo("blocked", false)
+                .isNotEmpty("recipients")
+                .sort("pinned", Sort.DESCENDING, "lastMessage.date", Sort.DESCENDING)
+                .findAll())
+
+        val messagesByConversation = realm.copyFromRealm(realm
                 .where(Message::class.java)
                 .beginGroup()
                 .contains("body", normalizedQuery, Case.INSENSITIVE)
                 .or()
                 .contains("parts.text", normalizedQuery, Case.INSENSITIVE)
                 .endGroup()
-                .findAll()
+                .findAll())
                 .asSequence()
                 .groupBy { message -> message.threadId }
                 .filter { (threadId, _) -> conversations.firstOrNull { it.id == threadId } != null }
@@ -131,10 +136,11 @@ class ConversationRepositoryImpl @Inject constructor(
                 .sortedByDescending { result -> result.messages }
                 .toList()
 
+        realm.close()
+
         return conversations
                 .filter { conversation -> conversationFilter.filter(conversation, normalizedQuery) }
-                .map { conversation -> SearchResult(normalizedQuery, conversation, 0) }
-                .plus(messagesByConversation)
+                .map { conversation -> SearchResult(normalizedQuery, conversation, 0) } + messagesByConversation
     }
 
     override fun getBlockedConversations(): RealmResults<Conversation> {
