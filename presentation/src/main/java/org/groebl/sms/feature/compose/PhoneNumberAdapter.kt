@@ -20,12 +20,12 @@ package org.groebl.sms.feature.compose
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import kotlinx.android.synthetic.main.contact_list_item.view.*
 import org.groebl.sms.R
 import org.groebl.sms.common.base.QkAdapter
 import org.groebl.sms.common.base.QkViewHolder
 import org.groebl.sms.model.Contact
 import org.groebl.sms.model.PhoneNumber
-import kotlinx.android.synthetic.main.contact_list_item.view.*
 
 class PhoneNumberAdapter(
         private val numberClicked: (Contact, Int) -> Unit
@@ -49,6 +49,14 @@ class PhoneNumberAdapter(
 
         view.address.text = number.address
         view.type.text = number.type
+    }
+
+    override fun areItemsTheSame(old: PhoneNumber, new: PhoneNumber): Boolean {
+        return old.type == new.type && old.address == new.address
+    }
+
+    override fun areContentsTheSame(old: PhoneNumber, new: PhoneNumber): Boolean {
+        return old.type == new.type && old.address == new.address
     }
 
 }
