@@ -30,14 +30,7 @@ import com.android.mms.util.RateController
 import com.google.android.mms.ContentType
 import com.google.android.mms.InvalidHeaderValueException
 import com.google.android.mms.MMSPart
-import com.google.android.mms.pdu_alt.CharacterSets
-import com.google.android.mms.pdu_alt.EncodedStringValue
-import com.google.android.mms.pdu_alt.PduBody
-import com.google.android.mms.pdu_alt.PduComposer
-import com.google.android.mms.pdu_alt.PduHeaders
-import com.google.android.mms.pdu_alt.PduPart
-import com.google.android.mms.pdu_alt.PduPersister
-import com.google.android.mms.pdu_alt.SendReq
+import com.google.android.mms.pdu_alt.*
 import com.google.android.mms.smil.SmilHelper
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
@@ -94,7 +87,7 @@ class Transaction @JvmOverloads constructor(private val context: Context, settin
 
             val sendReq = buildPdu(context, addresses, subject, parts)
             val persister = PduPersister.getPduPersister(context)
-            val messageUri = existingUri ?: persister.persist(sendReq, Uri.parse("content://mms/outbox"), true, true, null)
+            val messageUri = existingUri ?: persister.persist(sendReq, Uri.parse("content://mms/outbox"), threadId, true, true, null)
 
             val sentIntent = Intent(MMS_SENT)
             BroadcastUtils.addClassName(context, sentIntent, MMS_SENT)
