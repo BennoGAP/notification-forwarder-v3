@@ -118,6 +118,12 @@ class AppModule(private var application: Application) {
     fun provideCursorToContact(mapper: CursorToContactImpl): CursorToContact = mapper
 
     @Provides
+    fun provideCursorToContactGroup(mapper: CursorToContactGroupImpl): CursorToContactGroup = mapper
+
+    @Provides
+    fun provideCursorToContactGroupMember(mapper: CursorToContactGroupMemberImpl): CursorToContactGroupMember = mapper
+
+    @Provides
     fun provideCursorToConversation(mapper: CursorToConversationImpl): CursorToConversation = mapper
 
     @Provides

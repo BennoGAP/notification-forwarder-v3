@@ -23,25 +23,17 @@ import android.content.ContentUris
 import android.net.Uri
 import android.provider.Telephony
 import com.f2prateek.rx.preferences2.RxSharedPreferences
-import org.groebl.sms.extensions.insertOrUpdate
-import org.groebl.sms.extensions.map
-import org.groebl.sms.manager.KeyManager
-import org.groebl.sms.mapper.CursorToContact
-import org.groebl.sms.mapper.CursorToConversation
-import org.groebl.sms.mapper.CursorToMessage
-import org.groebl.sms.mapper.CursorToRecipient
-import org.groebl.sms.model.Contact
-import org.groebl.sms.model.Conversation
-import org.groebl.sms.model.Message
-import org.groebl.sms.model.MmsPart
-import org.groebl.sms.model.Recipient
-import org.groebl.sms.model.SyncLog
-import org.groebl.sms.util.PhoneNumberUtils
-import org.groebl.sms.util.tryOrNull
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
 import io.realm.Realm
 import io.realm.Sort
+import org.groebl.sms.extensions.insertOrUpdate
+import org.groebl.sms.extensions.map
+import org.groebl.sms.manager.KeyManager
+import org.groebl.sms.mapper.*
+import org.groebl.sms.model.*
+import org.groebl.sms.util.PhoneNumberUtils
+import org.groebl.sms.util.tryOrNull
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -53,6 +45,8 @@ class SyncRepositoryImpl @Inject constructor(
     private val cursorToMessage: CursorToMessage,
     private val cursorToRecipient: CursorToRecipient,
     private val cursorToContact: CursorToContact,
+    private val cursorToContactGroup: CursorToContactGroup,
+    private val cursorToContactGroupMember: CursorToContactGroupMember,
     private val keys: KeyManager,
     private val phoneNumberUtils: PhoneNumberUtils,
     private val rxPrefs: RxSharedPreferences
@@ -89,6 +83,7 @@ class SyncRepositoryImpl @Inject constructor(
                 .toMutableMap()
 
         realm.delete(Contact::class.java)
+        realm.delete(ContactGroup::class.java)
         realm.delete(Conversation::class.java)
         realm.delete(Message::class.java)
         realm.delete(MmsPart::class.java)
@@ -234,19 +229,19 @@ class SyncRepositoryImpl @Inject constructor(
 
             realm.executeTransaction {
                 realm.delete(Contact::class.java)
+                realm.delete(ContactGroup::class.java)
 
                 contacts = realm.copyToRealm(contacts)
+                realm.insertOrUpdate(getContactGroups(contacts))
 
                 // Update all the recipients with the new contacts
-                val updatedRecipients = recipients.map { recipient ->
-                    recipient.apply {
-                        contact = contacts.firstOrNull {
-                            it.numbers.any { phoneNumberUtils.compare(recipient.address, it.address) }
-                        }
+                recipients.forEach { recipient ->
+                    recipient.contact = contacts.find { contact ->
+                        contact.numbers.any { phoneNumberUtils.compare(recipient.address, it.address) }
                     }
                 }
 
-                realm.insertOrUpdate(updatedRecipients)
+                realm.insertOrUpdate(recipients)
             }
 
         }
@@ -254,26 +249,24 @@ class SyncRepositoryImpl @Inject constructor(
 
     override fun syncContact(address: String): Boolean {
         // See if there's a contact that matches this phone number
-        var contact = getContacts().firstOrNull {
-            it.numbers.any { number -> phoneNumberUtils.compare(number.address, address) }
+        var contact = getContacts().find { contact ->
+            contact.numbers.any { number -> phoneNumberUtils.compare(number.address, address) }
         } ?: return false
 
         Realm.getDefaultInstance().use { realm ->
-            val recipients = realm.where(Recipient::class.java).findAll()
+            val recipients = realm.where(Recipient::class.java).findAll().filter { recipient ->
+                contact.numbers.any { number ->
+                    phoneNumberUtils.compare(recipient.address, number.address)
+                }
+            }
 
             realm.executeTransaction {
                 contact = realm.copyToRealmOrUpdate(contact)
 
                 // Update all the matching recipients with the new contact
-                val updatedRecipients = recipients
-                        .filter { recipient ->
-                            contact.numbers.any { number ->
-                                phoneNumberUtils.compare(recipient.address, number.address)
-                            }
-                        }
-                        .map { recipient -> recipient.apply { this.contact = contact } }
+                recipients.forEach { recipient -> recipient.contact = contact }
 
-                realm.insertOrUpdate(updatedRecipients)
+                realm.insertOrUpdate(recipients)
             }
         }
 
@@ -291,6 +284,24 @@ class SyncRepositoryImpl @Inject constructor(
                         numbers.addAll(allNumbers)
                     }
                 } ?: listOf()
+    }
+
+    private fun getContactGroups(contacts: List<Contact>): List<ContactGroup> {
+        val groupMembers = cursorToContactGroupMember.getGroupMembersCursor()
+                ?.map(cursorToContactGroupMember::map)
+                .orEmpty()
+
+        val groups = cursorToContactGroup.getContactGroupsCursor()
+                ?.map(cursorToContactGroup::map)
+                .orEmpty()
+
+        groups.forEach { group ->
+            group.contacts.addAll(groupMembers
+                    .filter { member -> member.groupId == group.id }
+                    .mapNotNull { member -> contacts.find { contact -> contact.lookupKey == member.lookupKey } })
+        }
+
+        return groups
     }
 
 }

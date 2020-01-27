@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Moez Bhatti <moez.bhatti@gmail.com>
+ * Copyright (C) 2019 Moez Bhatti <moez.bhatti@gmail.com>
  *
  * This file is part of QKSMS.
  *
@@ -16,16 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.groebl.sms.model
+package org.groebl.sms.mapper
 
-import io.realm.RealmList
-import io.realm.RealmObject
-import io.realm.annotations.PrimaryKey
+import android.database.Cursor
+import org.groebl.sms.model.ContactGroup
 
-open class Contact(
-        @PrimaryKey var lookupKey: String = "",
-        var numbers: RealmList<PhoneNumber> = RealmList(),
-        var name: String = "",
-        var starred: Boolean = false,
-        var lastUpdate: Long = 0
-) : RealmObject()
+interface CursorToContactGroup : Mapper<Cursor, ContactGroup> {
+
+    fun getContactGroupsCursor(): Cursor?
+
+}
