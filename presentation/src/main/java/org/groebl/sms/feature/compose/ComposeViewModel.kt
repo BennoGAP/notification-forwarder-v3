@@ -36,6 +36,8 @@ import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import io.realm.RealmList
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.rx2.awaitFirst
 import org.groebl.sms.R
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.base.QkViewModel
@@ -48,6 +50,7 @@ import org.groebl.sms.extensions.*
 import org.groebl.sms.feature.compose.editing.Chip
 import org.groebl.sms.feature.compose.editing.ComposeItem
 import org.groebl.sms.feature.compose.editing.ComposeItem.*
+import org.groebl.sms.feature.compose.editing.PhoneNumberAction
 import org.groebl.sms.filter.ContactFilter
 import org.groebl.sms.filter.ContactGroupFilter
 import org.groebl.sms.interactor.*
@@ -90,6 +93,7 @@ class ComposeViewModel @Inject constructor(
         private val prefs: Preferences,
         private val retrySending: RetrySending,
         private val sendMessage: SendMessage,
+        private val setDefaultPhoneNumber: SetDefaultPhoneNumber,
         private val subscriptionManager: SubscriptionManagerCompat,
         private val syncContacts: ContactSync
 ) : QkViewModel<ComposeView, ComposeState>(ComposeState(
@@ -293,18 +297,49 @@ class ComposeViewModel @Inject constructor(
                 .autoDisposable(view.scope())
                 .subscribe()
 
-        // Enter the first contact suggestion if the enter button is pressed, and enter contacts that are selected
+        // Listen for ComposeItems being selected, and then send them off to the number picker dialog in case
+        // the user needs to select a phone number
         view.queryEditorActionIntent
                 .filter { actionId -> actionId == EditorInfo.IME_ACTION_DONE }
                 .withLatestFrom(state) { _, state -> state }
                 .mapNotNull { state -> state.composeItems.firstOrNull() }
-                .mergeWith(view.chipSelectedIntent)
+                .mergeWith(view.composeItemPressedIntent)
+                .map { composeItem -> composeItem to false }
+                .mergeWith(view.composeItemLongPressedIntent.map { composeItem -> composeItem to true })
+                .observeOn(Schedulers.io())
+                .skipUntil(state.filter { state -> state.editingMode })
+                .takeUntil(state.filter { state -> !state.editingMode })
                 .autoDisposable(view.scope())
-                .subscribe { composeItem ->
-                    newState { copy(searching = false) }
-                    chipsReducer.onNext { chips ->
-                        chips + composeItem.getContacts().map { Chip(it.numbers.first()?.address.orEmpty(), it) }
+                .subscribe { (composeItem, force) ->
+                    val contacts = composeItem.getContacts()
+                    val newChips = contacts.map { contact ->
+                        if (contact.numbers.size == 1 || contact.getDefaultNumber() != null && !force) {
+                            val number = contact.getDefaultNumber() ?: contact.numbers[0]!!
+                            Chip(number.address, contact)
+                        } else {
+                            runBlocking {
+                                newState { copy(selectedContact = contact) }
+                                val action = view.phoneNumberActionIntent.awaitFirst()
+                                newState { copy(selectedContact = null) }
+                                val numberId = view.phoneNumberSelectedIntent.awaitFirst().value
+                                val number = contact.numbers.find { number -> number.id == numberId }
+
+                                if (action == PhoneNumberAction.CANCEL || number == null) {
+                                    return@runBlocking null
+                                }
+
+                                if (action == PhoneNumberAction.ALWAYS) {
+                                    val params = SetDefaultPhoneNumber.Params(contact.lookupKey, number.id)
+                                    setDefaultPhoneNumber.execute(params)
+                                }
+
+                                Chip(number.address, contact)
+                            } ?: return@subscribe
+                        }
                     }
+
+                    newState { copy(searching = false) }
+                    chipsReducer.onNext { chips -> chips + newChips }
                 }
 
         // Update the list of selected contacts when a new contact is selected or an existing one is deselected

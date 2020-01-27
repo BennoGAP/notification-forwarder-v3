@@ -23,6 +23,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.Subject
+import kotlinx.android.synthetic.main.contact_list_item.view.*
 import org.groebl.sms.R
 import org.groebl.sms.common.base.QkAdapter
 import org.groebl.sms.common.base.QkViewHolder
@@ -33,14 +36,12 @@ import org.groebl.sms.model.Contact
 import org.groebl.sms.model.ContactGroup
 import org.groebl.sms.model.Conversation
 import org.groebl.sms.model.Recipient
-import io.reactivex.subjects.PublishSubject
-import io.reactivex.subjects.Subject
-import kotlinx.android.synthetic.main.contact_list_item.view.*
 import javax.inject.Inject
 
 class ComposeItemAdapter @Inject constructor(private val colors: Colors) : QkAdapter<ComposeItem>() {
 
-    val itemSelected: Subject<ComposeItem> = PublishSubject.create()
+    val clicks: Subject<ComposeItem> = PublishSubject.create()
+    val longClicks: Subject<ComposeItem> = PublishSubject.create()
 
     private val numbersViewPool = RecyclerView.RecycledViewPool()
 
@@ -57,7 +58,12 @@ class ComposeItemAdapter @Inject constructor(private val colors: Colors) : QkAda
         return QkViewHolder(view).apply {
             view.setOnClickListener {
                 val item = getItem(adapterPosition)
-                itemSelected.onNext(item)
+                clicks.onNext(item)
+            }
+            view.setOnLongClickListener {
+                val item = getItem(adapterPosition)
+                longClicks.onNext(item)
+                true
             }
         }
     }

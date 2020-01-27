@@ -23,6 +23,7 @@ import org.groebl.sms.compat.SubscriptionInfoCompat
 import org.groebl.sms.feature.compose.editing.Chip
 import org.groebl.sms.feature.compose.editing.ComposeItem
 import org.groebl.sms.model.Attachment
+import org.groebl.sms.model.Contact
 import org.groebl.sms.model.Conversation
 import org.groebl.sms.model.Message
 
@@ -32,6 +33,7 @@ data class ComposeState(
         val searching: Boolean = false,
         val composeItems: List<ComposeItem> = ArrayList(),
         val selectedConversation: Long = 0,
+        val selectedContact: Contact? = null, // For phone number picker
         val selectedChips: List<Chip> = ArrayList(),
         val sendAsGroup: Boolean = true,
         val conversationtitle: String = "",
