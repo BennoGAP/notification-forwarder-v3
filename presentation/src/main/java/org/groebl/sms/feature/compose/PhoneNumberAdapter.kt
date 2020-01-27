@@ -24,12 +24,9 @@ import kotlinx.android.synthetic.main.contact_number_list_item.view.*
 import org.groebl.sms.R
 import org.groebl.sms.common.base.QkAdapter
 import org.groebl.sms.common.base.QkViewHolder
-import org.groebl.sms.model.Contact
 import org.groebl.sms.model.PhoneNumber
 
 class PhoneNumberAdapter : QkAdapter<PhoneNumber>() {
-
-    lateinit var contact: Contact
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QkViewHolder {
         val inflater = LayoutInflater.from(parent.context)
