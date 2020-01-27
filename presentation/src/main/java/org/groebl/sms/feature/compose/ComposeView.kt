@@ -22,9 +22,9 @@ import android.net.Uri
 import androidx.annotation.StringRes
 import androidx.core.view.inputmethod.InputContentInfoCompat
 import org.groebl.sms.common.base.QkView
+import org.groebl.sms.feature.compose.editing.Chip
 import org.groebl.sms.feature.compose.editing.ComposeItem
 import org.groebl.sms.model.Attachment
-import org.groebl.sms.model.Contact
 import io.reactivex.Observable
 import io.reactivex.subjects.Subject
 
@@ -35,7 +35,7 @@ interface ComposeView : QkView<ComposeState> {
     val queryBackspaceIntent: Observable<*>
     val queryEditorActionIntent: Observable<Int>
     val chipSelectedIntent: Subject<ComposeItem>
-    val chipDeletedIntent: Subject<Contact>
+    val chipDeletedIntent: Subject<Chip>
     val menuReadyIntent: Observable<Unit>
     val optionsItemIntent: Observable<Int>
     val sendAsGroupIntent: Observable<*>

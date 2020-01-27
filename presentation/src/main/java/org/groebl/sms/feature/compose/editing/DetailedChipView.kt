@@ -28,7 +28,6 @@ import org.groebl.sms.common.util.Colors
 import org.groebl.sms.common.util.extensions.setBackgroundTint
 import org.groebl.sms.common.util.extensions.setTint
 import org.groebl.sms.injection.appComponent
-import org.groebl.sms.model.Contact
 import javax.inject.Inject
 
 class DetailedChipView(context: Context) : RelativeLayout(context) {
@@ -54,10 +53,10 @@ class DetailedChipView(context: Context) : RelativeLayout(context) {
         }
     }
 
-    fun setContact(contact: Contact) {
-        avatar.setContact(contact)
-        name.text = contact.name
-        info.text = contact.numbers.joinToString(", ") { it.address }
+    fun setChip(chip: Chip) {
+        avatar.setContact(chip.contact, chip.address)
+        name.text = chip.contact?.name?.takeIf { it.isNotBlank() } ?: chip.address
+        info.text = chip.address
     }
 
     fun show() {
