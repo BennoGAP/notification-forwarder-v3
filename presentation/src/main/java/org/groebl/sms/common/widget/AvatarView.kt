@@ -23,6 +23,7 @@ import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
 import com.bumptech.glide.signature.ObjectKey
+import kotlinx.android.synthetic.main.avatar_view.view.*
 import org.groebl.sms.R
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.util.Colors
@@ -32,10 +33,11 @@ import org.groebl.sms.injection.appComponent
 import org.groebl.sms.model.Contact
 import org.groebl.sms.model.Recipient
 import org.groebl.sms.util.GlideApp
-import kotlinx.android.synthetic.main.avatar_view.view.*
 import javax.inject.Inject
 
-class AvatarView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : FrameLayout(context, attrs) {
+class AvatarView @JvmOverloads constructor(
+        context: Context, attrs: AttributeSet? = null
+) : FrameLayout(context, attrs) {
 
     @Inject lateinit var colors: Colors
     @Inject lateinit var navigator: Navigator
@@ -116,7 +118,11 @@ class AvatarView @JvmOverloads constructor(context: Context, attrs: AttributeSet
 
     private fun updateView() {
         if (name?.isNotEmpty() == true) {
-            initial.text = name?.substring(0, 1)
+            val initials = name?.split(" ").orEmpty()
+                    .filter { name -> name.isNotEmpty() }
+                    .map { name -> name[0].toString() }
+
+            initial.text = if (initials.size > 1) initials.first() + initials.last() else initials.first()
             icon.visibility = GONE
         } else {
             initial.text = null
