@@ -18,6 +18,8 @@
  */
 package org.groebl.sms.injection.android
 
+import dagger.Module
+import dagger.android.ContributesAndroidInjector
 import org.groebl.sms.feature.backup.BackupActivity
 import org.groebl.sms.feature.blocking.BlockingActivity
 import org.groebl.sms.feature.bluetooth.BluetoothSettingsActivity
@@ -29,6 +31,8 @@ import org.groebl.sms.feature.bluetooth.donate.BluetoothDonateActivity
 import org.groebl.sms.feature.bluetooth.donate.BluetoothDonateActivityModule
 import org.groebl.sms.feature.compose.ComposeActivity
 import org.groebl.sms.feature.compose.ComposeActivityModule
+import org.groebl.sms.feature.contacts.ContactsActivity
+import org.groebl.sms.feature.contacts.ContactsActivityModule
 import org.groebl.sms.feature.conversationinfo.ConversationInfoActivity
 import org.groebl.sms.feature.gallery.GalleryActivity
 import org.groebl.sms.feature.gallery.GalleryActivityModule
@@ -42,8 +46,6 @@ import org.groebl.sms.feature.scheduled.ScheduledActivity
 import org.groebl.sms.feature.scheduled.ScheduledActivityModule
 import org.groebl.sms.feature.settings.SettingsActivity
 import org.groebl.sms.injection.scope.ActivityScope
-import dagger.Module
-import dagger.android.ContributesAndroidInjector
 
 
 @Module
@@ -60,6 +62,11 @@ abstract class ActivityBuilderModule {
     @ActivityScope
     @ContributesAndroidInjector(modules = [ComposeActivityModule::class])
     abstract fun bindComposeActivity(): ComposeActivity
+
+    @ActivityScope
+    @ContributesAndroidInjector(modules = [ContactsActivityModule::class])
+    abstract fun bindContactsActivity(): ContactsActivity
+
 
     @ActivityScope
     @ContributesAndroidInjector(modules = [])
