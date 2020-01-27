@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Moez Bhatti <moez.bhatti@gmail.com>
+ * Copyright (C) 2019 Moez Bhatti <moez.bhatti@gmail.com>
  *
  * This file is part of QKSMS.
  *
@@ -16,21 +16,20 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.groebl.sms.feature.compose
+package org.groebl.sms.feature.compose.editing
 
 import android.content.Context
 import android.view.View
 import android.view.animation.AlphaAnimation
 import android.widget.RelativeLayout
+import kotlinx.android.synthetic.main.contact_chip_detailed.view.*
 import org.groebl.sms.R
 import org.groebl.sms.common.util.Colors
 import org.groebl.sms.common.util.extensions.setBackgroundTint
 import org.groebl.sms.common.util.extensions.setTint
 import org.groebl.sms.injection.appComponent
 import org.groebl.sms.model.Contact
-import kotlinx.android.synthetic.main.contact_chip_detailed.view.*
 import javax.inject.Inject
-
 
 class DetailedChipView(context: Context) : RelativeLayout(context) {
 

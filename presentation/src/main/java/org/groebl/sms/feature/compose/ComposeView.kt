@@ -22,6 +22,7 @@ import android.net.Uri
 import androidx.annotation.StringRes
 import androidx.core.view.inputmethod.InputContentInfoCompat
 import org.groebl.sms.common.base.QkView
+import org.groebl.sms.feature.compose.editing.ComposeItem
 import org.groebl.sms.model.Attachment
 import org.groebl.sms.model.Contact
 import io.reactivex.Observable

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Moez Bhatti <moez.bhatti@gmail.com>
+ * Copyright (C) 2019 Moez Bhatti <moez.bhatti@gmail.com>
  *
  * This file is part of QKSMS.
  *
@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.groebl.sms.feature.compose
+package org.groebl.sms.feature.compose.editing
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -27,6 +27,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.jakewharton.rxbinding2.widget.editorActions
 import com.jakewharton.rxbinding2.widget.textChanges
+import io.reactivex.subjects.PublishSubject
+import kotlinx.android.synthetic.main.contact_chip.view.*
 import org.groebl.sms.R
 import org.groebl.sms.common.base.QkAdapter
 import org.groebl.sms.common.base.QkViewHolder
@@ -35,8 +37,6 @@ import org.groebl.sms.common.util.extensions.resolveThemeColor
 import org.groebl.sms.common.util.extensions.showKeyboard
 import org.groebl.sms.common.widget.QkEditText
 import org.groebl.sms.model.Contact
-import io.reactivex.subjects.PublishSubject
-import kotlinx.android.synthetic.main.contact_chip.view.*
 import javax.inject.Inject
 
 class ChipsAdapter @Inject constructor(private val context: Context) : QkAdapter<Contact>() {

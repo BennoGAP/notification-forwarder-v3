@@ -52,6 +52,9 @@ import org.groebl.sms.common.util.extensions.setBackgroundTint
 import org.groebl.sms.common.util.extensions.setTint
 import org.groebl.sms.common.util.extensions.setVisible
 import org.groebl.sms.common.util.extensions.showKeyboard
+import org.groebl.sms.feature.compose.editing.ChipsAdapter
+import org.groebl.sms.feature.compose.editing.ComposeItem
+import org.groebl.sms.feature.compose.editing.ComposeItemAdapter
 import org.groebl.sms.model.Attachment
 import org.groebl.sms.model.Contact
 import com.uber.autodispose.android.lifecycle.scope

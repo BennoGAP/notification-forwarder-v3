@@ -34,7 +34,8 @@ import org.groebl.sms.common.util.extensions.makeToast
 import org.groebl.sms.compat.SubscriptionManagerCompat
 import org.groebl.sms.compat.TelephonyCompat
 import org.groebl.sms.extensions.*
-import org.groebl.sms.feature.compose.ComposeItem.*
+import org.groebl.sms.feature.compose.editing.ComposeItem
+import org.groebl.sms.feature.compose.editing.ComposeItem.*
 import org.groebl.sms.filter.ContactFilter
 import org.groebl.sms.filter.ContactGroupFilter
 import org.groebl.sms.interactor.*

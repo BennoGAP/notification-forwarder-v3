@@ -19,6 +19,7 @@
 package org.groebl.sms.feature.compose
 
 import org.groebl.sms.compat.SubscriptionInfoCompat
+import org.groebl.sms.feature.compose.editing.ComposeItem
 import org.groebl.sms.model.Attachment
 import org.groebl.sms.model.Contact
 import org.groebl.sms.model.Conversation

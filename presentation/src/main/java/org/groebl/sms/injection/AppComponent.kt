@@ -34,7 +34,7 @@ import org.groebl.sms.feature.blocking.BlockingController
 import org.groebl.sms.feature.blocking.manager.BlockingManagerController
 import org.groebl.sms.feature.blocking.messages.BlockedMessagesController
 import org.groebl.sms.feature.blocking.numbers.BlockedNumbersController
-import org.groebl.sms.feature.compose.DetailedChipView
+import org.groebl.sms.feature.compose.editing.DetailedChipView
 import org.groebl.sms.feature.conversationinfo.injection.ConversationInfoComponent
 import org.groebl.sms.feature.settings.SettingsController
 import org.groebl.sms.feature.settings.about.AboutController
