@@ -20,15 +20,17 @@ package org.groebl.sms.feature.compose
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import org.groebl.sms.R
-import org.groebl.sms.common.base.QkAdapter
-import org.groebl.sms.common.base.QkViewHolder
-import org.groebl.sms.common.util.extensions.setVisible
-import org.groebl.sms.model.Contact
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import kotlinx.android.synthetic.main.contact_list_item.view.*
+import org.groebl.sms.R
+import org.groebl.sms.common.base.QkAdapter
+import org.groebl.sms.common.base.QkViewHolder
+import org.groebl.sms.common.util.extensions.forwardTouches
+import org.groebl.sms.common.util.extensions.setVisible
+import org.groebl.sms.model.Contact
 import javax.inject.Inject
 
 class ContactAdapter @Inject constructor() : QkAdapter<Contact>() {
@@ -42,32 +44,34 @@ class ContactAdapter @Inject constructor() : QkAdapter<Contact>() {
         val view = layoutInflater.inflate(R.layout.contact_list_item, parent, false)
 
         view.addresses.setRecycledViewPool(numbersViewPool)
+        view.addresses.adapter = PhoneNumberAdapter()
+        view.addresses.forwardTouches(view)
 
         return QkViewHolder(view).apply {
-            view.primary.setOnClickListener {
+            view.setOnClickListener {
                 val contact = getItem(adapterPosition)
-                contactSelected.onNext(copyContact(contact, 0))
-            }
-
-            view.addresses.adapter = PhoneNumberAdapter { contact, index ->
-                contactSelected.onNext(copyContact(contact, index + 1))
+                contactSelected.onNext(contact)
             }
         }
     }
 
     override fun onBindViewHolder(holder: QkViewHolder, position: Int) {
+        val prevContact = if (position > 0) getItem(position - 1) else null
         val contact = getItem(position)
         val view = holder.containerView
+
+        view.index.text = if (contact.name[0].isLetter()) contact.name[0].toString() else "#"
+        view.index.isVisible = prevContact == null ||
+                (contact.name[0].isLetter() && contact.name[0] != prevContact.name[0]) ||
+                (!contact.name[0].isLetter() && prevContact.name[0].isLetter())
 
         view.avatar.setContact(contact)
         view.name.text = contact.name
         view.name.setVisible(view.name.text.isNotEmpty())
-        view.address.text = contact.numbers.firstOrNull()?.address ?: ""
-        view.type.text = contact.numbers.firstOrNull()?.type ?: ""
 
         val adapter = view.addresses.adapter as PhoneNumberAdapter
         adapter.contact = contact
-        adapter.data = contact.numbers.drop(Math.min(contact.numbers.size, 1))
+        adapter.data = contact.numbers
     }
 
     /**
@@ -78,10 +82,6 @@ class ContactAdapter @Inject constructor() : QkAdapter<Contact>() {
         lookupKey = contact.lookupKey
         name = contact.name
         numbers.add(contact.numbers[numberIndex])
-    }
-
-    override fun areItemsTheSame(old: Contact, new: Contact): Boolean {
-        return old.lookupKey == new.lookupKey
     }
 
 }

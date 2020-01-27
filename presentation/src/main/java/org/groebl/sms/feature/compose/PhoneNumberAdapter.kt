@@ -20,16 +20,14 @@ package org.groebl.sms.feature.compose
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.contact_list_item.view.*
+import kotlinx.android.synthetic.main.contact_number_list_item.view.*
 import org.groebl.sms.R
 import org.groebl.sms.common.base.QkAdapter
 import org.groebl.sms.common.base.QkViewHolder
 import org.groebl.sms.model.Contact
 import org.groebl.sms.model.PhoneNumber
 
-class PhoneNumberAdapter(
-        private val numberClicked: (Contact, Int) -> Unit
-) : QkAdapter<PhoneNumber>() {
+class PhoneNumberAdapter : QkAdapter<PhoneNumber>() {
 
     lateinit var contact: Contact
 
@@ -42,10 +40,6 @@ class PhoneNumberAdapter(
     override fun onBindViewHolder(holder: QkViewHolder, position: Int) {
         val number = getItem(position)
         val view = holder.containerView
-
-        // Setting this in onCreateViewHolder causes a crash sometimes. [contact] returns the
-        // contact from a different row, I'm not sure why
-        view.setOnClickListener { numberClicked(contact, position) }
 
         view.address.text = number.address
         view.type.text = number.type
