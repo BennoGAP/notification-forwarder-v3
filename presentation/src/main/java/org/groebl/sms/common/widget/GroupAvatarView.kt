@@ -23,11 +23,13 @@ import android.os.Build
 import android.util.AttributeSet
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
+import kotlinx.android.synthetic.main.group_avatar_view.view.*
 import org.groebl.sms.R
 import org.groebl.sms.model.Recipient
-import kotlinx.android.synthetic.main.group_avatar_view.view.*
 
-class GroupAvatarView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : ConstraintLayout(context, attrs) {
+class GroupAvatarView @JvmOverloads constructor(
+        context: Context, attrs: AttributeSet? = null
+) : ConstraintLayout(context, attrs) {
 
     var contacts: List<Recipient> = ArrayList()
         set(value) {
