@@ -18,10 +18,11 @@
  */
 package org.groebl.sms.repository
 
+import io.reactivex.Observable
+import io.realm.RealmResults
 import org.groebl.sms.model.Conversation
 import org.groebl.sms.model.Recipient
 import org.groebl.sms.model.SearchResult
-import io.realm.RealmResults
 
 interface ConversationRepository {
 
@@ -50,6 +51,8 @@ interface ConversationRepository {
      * Returns all conversations with an id in [threadIds]
      */
     fun getConversations(vararg threadIds: Long): RealmResults<Conversation>
+
+    fun getUnmanagedConversations(): Observable<List<Conversation>>
 
     fun getRecipient(recipientId: Long): Recipient?
 

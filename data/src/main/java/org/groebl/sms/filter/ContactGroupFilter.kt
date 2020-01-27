@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Moez Bhatti <moez.bhatti@gmail.com>
+ * Copyright (C) 2019 Moez Bhatti <moez.bhatti@gmail.com>
  *
  * This file is part of QKSMS.
  *
@@ -16,23 +16,17 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.groebl.sms.repository
+package org.groebl.sms.filter
 
-import android.net.Uri
-import io.reactivex.Observable
-import io.reactivex.Single
-import io.realm.RealmResults
-import org.groebl.sms.model.Contact
+import org.groebl.sms.extensions.removeAccents
 import org.groebl.sms.model.ContactGroup
+import javax.inject.Inject
 
-interface ContactRepository {
+class ContactGroupFilter @Inject constructor(private val contactFilter: ContactFilter) : Filter<ContactGroup>() {
 
-    fun findContactUri(address: String): Single<Uri>
-
-    fun getContacts(): RealmResults<Contact>
-
-    fun getUnmanagedContacts(starred: Boolean = false): Observable<List<Contact>>
-
-    fun getUnmanagedContactGroups(): Observable<List<ContactGroup>>
+    override fun filter(item: ContactGroup, query: CharSequence): Boolean {
+        return item.title.removeAccents().contains(query, true) || // Name
+                item.contacts.any { contact -> contactFilter.filter(contact, query) } // Contacts
+    }
 
 }
