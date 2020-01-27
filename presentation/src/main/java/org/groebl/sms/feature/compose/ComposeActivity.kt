@@ -41,21 +41,6 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.widget.textChanges
-import org.groebl.sms.R
-import org.groebl.sms.common.Navigator
-import org.groebl.sms.common.base.QkThemedActivity
-import org.groebl.sms.common.util.DateFormatter
-import org.groebl.sms.common.util.extensions.autoScrollToStart
-import org.groebl.sms.common.util.extensions.resolveThemeColor
-import org.groebl.sms.common.util.extensions.scrapViews
-import org.groebl.sms.common.util.extensions.setBackgroundTint
-import org.groebl.sms.common.util.extensions.setTint
-import org.groebl.sms.common.util.extensions.setVisible
-import org.groebl.sms.common.util.extensions.showKeyboard
-import org.groebl.sms.feature.compose.editing.Chip
-import org.groebl.sms.feature.compose.editing.ChipsAdapter
-import org.groebl.sms.feature.contacts.ContactsActivity
-import org.groebl.sms.model.Attachment
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import dagger.android.AndroidInjection
@@ -63,6 +48,15 @@ import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import kotlinx.android.synthetic.main.compose_activity.*
+import org.groebl.sms.R
+import org.groebl.sms.common.Navigator
+import org.groebl.sms.common.base.QkThemedActivity
+import org.groebl.sms.common.util.DateFormatter
+import org.groebl.sms.common.util.extensions.*
+import org.groebl.sms.feature.compose.editing.Chip
+import org.groebl.sms.feature.compose.editing.ChipsAdapter
+import org.groebl.sms.feature.contacts.ContactsActivity
+import org.groebl.sms.model.Attachment
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -207,10 +201,6 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         toolbar.menu.findItem(R.id.next)?.isVisible = state.selectedMessages == 0 && state.query.isNotEmpty()
         toolbar.menu.findItem(R.id.clear)?.isVisible = state.selectedMessages == 0 && state.query.isNotEmpty()
 
-        if (chipsAdapter.data.isEmpty() && state.selectedChips.isNotEmpty()) {
-            message.showKeyboard()
-        }
-
         chipsAdapter.data = state.selectedChips
 
         loading.setVisible(state.loading)
@@ -289,10 +279,17 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     }
 
     override fun showContacts(chips: List<Chip>) {
+        message.hideKeyboard()
         val serialized = HashMap(chips.associate { chip -> chip.address to chip.contact?.lookupKey })
         val intent = Intent(this, ContactsActivity::class.java)
                 .putExtra(ContactsActivity.ChipsKey, serialized)
         startActivityForResult(intent, SELECT_CONTACT_REQUEST_CODE)
+    }
+
+    override fun showKeyboard() {
+        message.postDelayed({
+            message.showKeyboard()
+        }, 200)
     }
 
     override fun requestCamera() {

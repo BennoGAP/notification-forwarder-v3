@@ -38,6 +38,8 @@ import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import kotlinx.android.synthetic.main.contacts_activity.*
+import org.groebl.sms.common.util.extensions.hideKeyboard
+import org.groebl.sms.common.util.extensions.showKeyboard
 import javax.inject.Inject
 
 class ContactsActivity : QkThemedActivity(), ContactsContract {
@@ -95,7 +97,15 @@ class ContactsActivity : QkThemedActivity(), ContactsContract {
         }
     }
 
+    override fun openKeyboard() {
+        search.postDelayed({
+            search.showKeyboard()
+        }, 200)
+    }
+
     override fun finish(result: HashMap<String, String?>) {
+        search.hideKeyboard()
+
         val intent = Intent().putExtra(ChipsKey, result)
         setResult(Activity.RESULT_OK, intent)
         finish()

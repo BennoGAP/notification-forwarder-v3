@@ -19,6 +19,15 @@
 package org.groebl.sms.feature.contacts
 
 import android.view.inputmethod.EditorInfo
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
+import io.reactivex.Observable
+import io.reactivex.rxkotlin.Observables
+import io.reactivex.rxkotlin.withLatestFrom
+import io.reactivex.schedulers.Schedulers
+import io.realm.RealmList
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.rx2.awaitFirst
 import org.groebl.sms.common.base.QkViewModel
 import org.groebl.sms.extensions.mapNotNull
 import org.groebl.sms.extensions.removeAccents
@@ -36,15 +45,6 @@ import org.groebl.sms.model.PhoneNumber
 import org.groebl.sms.repository.ContactRepository
 import org.groebl.sms.repository.ConversationRepository
 import org.groebl.sms.util.PhoneNumberUtils
-import com.uber.autodispose.android.lifecycle.scope
-import com.uber.autodispose.autoDisposable
-import io.reactivex.Observable
-import io.reactivex.rxkotlin.Observables
-import io.reactivex.rxkotlin.withLatestFrom
-import io.reactivex.schedulers.Schedulers
-import io.realm.RealmList
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.rx2.awaitFirst
 import javax.inject.Inject
 
 class ContactsViewModel @Inject constructor(
@@ -71,12 +71,19 @@ class ContactsViewModel @Inject constructor(
                 }
             }
 
+    private var shouldOpenKeyboard: Boolean = true
+
     init {
         syncContacts.execute(Unit)
     }
 
     override fun bindView(view: ContactsContract) {
         super.bindView(view)
+
+        if (shouldOpenKeyboard) {
+            view.openKeyboard()
+            shouldOpenKeyboard = false
+        }
 
         // Update the list of contact suggestions based on the query input, while also filtering out any contacts
         // that have already been selected
