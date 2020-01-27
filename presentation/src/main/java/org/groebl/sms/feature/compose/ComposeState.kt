@@ -18,19 +18,19 @@
  */
 package org.groebl.sms.feature.compose
 
+import io.realm.RealmResults
 import org.groebl.sms.compat.SubscriptionInfoCompat
 import org.groebl.sms.feature.compose.editing.ComposeItem
 import org.groebl.sms.model.Attachment
 import org.groebl.sms.model.Contact
 import org.groebl.sms.model.Conversation
 import org.groebl.sms.model.Message
-import io.realm.RealmResults
 
 data class ComposeState(
         val hasError: Boolean = false,
         val editingMode: Boolean = false,
+        val searching: Boolean = false,
         val composeItems: List<ComposeItem> = ArrayList(),
-        val contactsVisible: Boolean = false,
         val selectedConversation: Long = 0,
         val selectedContacts: List<Contact> = ArrayList(),
         val sendAsGroup: Boolean = true,

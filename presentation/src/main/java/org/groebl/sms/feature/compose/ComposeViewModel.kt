@@ -24,7 +24,18 @@ import android.net.Uri
 import android.provider.ContactsContract
 import android.telephony.SmsMessage
 import android.view.inputmethod.EditorInfo
-
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.rxkotlin.Observables
+import io.reactivex.rxkotlin.plusAssign
+import io.reactivex.rxkotlin.withLatestFrom
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.Subject
+import io.realm.RealmList
 import org.groebl.sms.R
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.base.QkViewModel
@@ -49,18 +60,6 @@ import org.groebl.sms.util.ActiveSubscriptionObservable
 import org.groebl.sms.util.PhoneNumberUtils
 import org.groebl.sms.util.Preferences
 import org.groebl.sms.util.tryOrNull
-import com.uber.autodispose.android.lifecycle.scope
-import com.uber.autodispose.autoDisposable
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.rxkotlin.Observables
-import io.reactivex.rxkotlin.plusAssign
-import io.reactivex.rxkotlin.withLatestFrom
-import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.BehaviorSubject
-import io.reactivex.subjects.PublishSubject
-import io.reactivex.subjects.Subject
-import io.realm.RealmList
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
@@ -94,6 +93,7 @@ class ComposeViewModel @Inject constructor(
         private val syncContacts: ContactSync
 ) : QkViewModel<ComposeView, ComposeState>(ComposeState(
         editingMode = threadId == 0L && address.isBlank(),
+        searching = threadId == 0L && address.isBlank(),
         selectedConversation = threadId,
         query = query)
 ) {
@@ -227,17 +227,13 @@ class ComposeViewModel @Inject constructor(
     override fun bindView(view: ComposeView) {
         super.bindView(view)
 
-        // Set the contact suggestions list to visible at all times when in editing mode and there are no contacts
-        // selected yet, and also visible while in editing mode and there is text entered in the query field
-        Observables
-                .combineLatest(view.queryChangedIntent, selectedContacts) { query, selectedContacts ->
-                    selectedContacts.isEmpty() || query.isNotEmpty()
-                }
+        // Set the contact suggestions list to visible when the add button is pressed
+        view.optionsItemIntent
+                .filter { it == R.id.add }
                 .skipUntil(state.filter { state -> state.editingMode })
                 .takeUntil(state.filter { state -> !state.editingMode })
-                .distinctUntilChanged()
                 .autoDisposable(view.scope())
-                .subscribe { contactsVisible -> newState { copy(contactsVisible = contactsVisible && editingMode) } }
+                .subscribe { newState { copy(searching = true) } }
 
         // Update the list of contact suggestions based on the query input, while also filtering out any contacts
         // that have already been selected
@@ -302,6 +298,7 @@ class ComposeViewModel @Inject constructor(
                 .withLatestFrom(state) { _, state -> state }
                 .autoDisposable(view.scope())
                 .subscribe { state ->
+                    newState { copy(searching = false) }
                     state.composeItems.firstOrNull()?.let { composeItem ->
                         contactsReducer.onNext { contacts -> contacts + composeItem.getContacts() }
                     }
@@ -313,6 +310,7 @@ class ComposeViewModel @Inject constructor(
                     contactsReducer.onNext { contacts -> contacts.filterNot { it == contact } }
                 },
                 view.chipSelectedIntent.doOnNext { composeItem ->
+                    newState { copy(searching = false) }
                     contactsReducer.onNext { contacts ->
                         contacts.toMutableList().apply { addAll(composeItem.getContacts()) }
                     }

@@ -40,6 +40,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.jakewharton.rxbinding2.view.clicks
+import com.jakewharton.rxbinding2.widget.editorActions
 import com.jakewharton.rxbinding2.widget.textChanges
 import org.groebl.sms.R
 import org.groebl.sms.common.Navigator
@@ -85,9 +86,9 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
     override val activityVisibleIntent: Subject<Boolean> = PublishSubject.create()
-    override val queryChangedIntent: Observable<CharSequence> by lazy { chipsAdapter.textChanges }
-    override val queryBackspaceIntent: Observable<*> by lazy { chipsAdapter.backspaces }
-    override val queryEditorActionIntent: Observable<Int> by lazy { chipsAdapter.actions }
+    override val queryChangedIntent: Observable<CharSequence> by lazy { search.textChanges() }
+    override val queryBackspaceIntent: Observable<*> by lazy { search.backspaces }
+    override val queryEditorActionIntent: Observable<Int> by lazy { search.editorActions() }
     override val chipSelectedIntent: Subject<ComposeItem> by lazy { contactsAdapter.itemSelected }
     override val chipDeletedIntent: Subject<Contact> by lazy { chipsAdapter.chipDeleted }
     override val menuReadyIntent: Observable<Unit> = menu.map { Unit }
@@ -189,14 +190,16 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         toolbarSubtitle.text = getString(R.string.compose_subtitle_results, state.searchSelectionPosition, state.searchResults)
 
         toolbarTitle.setVisible(!state.editingMode)
-        chips.setVisible(state.editingMode)
-        contacts.setVisible(state.contactsVisible)
-        composeBar.setVisible(!state.contactsVisible && !state.loading)
+        chips.setVisible(state.editingMode && !state.searching)
+        search.setVisible(state.editingMode && state.searching)
+        contacts.setVisible(state.editingMode && state.searching)
+        composeBar.setVisible(!state.searching && !state.loading)
 
         // Don't set the adapters unless needed
         if (state.editingMode && chips.adapter == null) chips.adapter = chipsAdapter
         if (state.editingMode && contacts.adapter == null) contacts.adapter = contactsAdapter
 
+        toolbar.menu.findItem(R.id.add)?.isVisible = state.editingMode && !state.searching
         toolbar.menu.findItem(R.id.call)?.isVisible = !state.editingMode && state.selectedMessages == 0 && state.query.isEmpty()
         toolbar.menu.findItem(R.id.info)?.isVisible = !state.editingMode && state.selectedMessages == 0 && state.query.isEmpty()
         toolbar.menu.findItem(R.id.copy)?.isVisible = !state.editingMode && state.selectedMessages == 1
