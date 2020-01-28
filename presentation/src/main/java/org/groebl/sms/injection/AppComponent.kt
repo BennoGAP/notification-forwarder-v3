@@ -44,7 +44,6 @@ import org.groebl.sms.feature.widget.WidgetAdapter
 import org.groebl.sms.injection.android.ActivityBuilderModule
 import org.groebl.sms.injection.android.BroadcastReceiverBuilderModule
 import org.groebl.sms.injection.android.ServiceBuilderModule
-import org.groebl.sms.util.ContactImageLoader
 import dagger.Component
 import dagger.android.support.AndroidSupportInjectionModule
 import javax.inject.Singleton
@@ -75,7 +74,6 @@ interface AppComponent {
 
     fun inject(dialog: QkDialog)
 
-    fun inject(fetcher: ContactImageLoader.ContactImageFetcher)
 
     fun inject(service: WidgetAdapter)
 

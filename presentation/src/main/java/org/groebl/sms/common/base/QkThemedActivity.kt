@@ -30,6 +30,12 @@ import org.groebl.sms.R
 import org.groebl.sms.common.util.Colors
 import org.groebl.sms.common.util.extensions.resolveThemeBoolean
 import org.groebl.sms.common.util.extensions.resolveThemeColor
+import org.groebl.sms.extensions.Optional
+import org.groebl.sms.extensions.asObservable
+import org.groebl.sms.extensions.mapNotNull
+import org.groebl.sms.repository.ConversationRepository
+import org.groebl.sms.repository.MessageRepository
+import org.groebl.sms.util.PhoneNumberUtils
 import org.groebl.sms.util.Preferences
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
@@ -51,6 +57,9 @@ import javax.inject.Inject
 abstract class QkThemedActivity : QkActivity() {
 
     @Inject lateinit var colors: Colors
+    @Inject lateinit var conversationRepo: ConversationRepository
+    @Inject lateinit var messageRepo: MessageRepository
+    @Inject lateinit var phoneNumberUtils: PhoneNumberUtils
     @Inject lateinit var prefs: Preferences
 
     /**
@@ -61,16 +70,36 @@ abstract class QkThemedActivity : QkActivity() {
 
     /**
      * Switch the theme if the threadId changes
+     * Set it based on the latest message in the conversation
      */
-    val theme = threadId
+    val theme: Observable<Colors.Theme> = threadId
             .distinctUntilChanged()
-            .switchMap { threadId -> colors.themeObservable(threadId) }
+            .switchMap { threadId ->
+                val conversation = conversationRepo.getConversation(threadId)
+                when {
+                    conversation == null -> Observable.just(Optional(null))
+
+                    conversation.recipients.size == 1 -> Observable.just(Optional(conversation.recipients.first()))
+
+                    else -> messageRepo.getLastIncomingMessage(conversation.id)
+                            .asObservable()
+                            .mapNotNull { messages -> messages.firstOrNull() }
+                            .distinctUntilChanged { message -> message.address }
+                            .mapNotNull { message ->
+                                conversation.recipients.find { recipient ->
+                                    phoneNumberUtils.compare(recipient.address, message.address)
+                                }
+                            }
+                            .map { recipient -> Optional(recipient) }
+                            .startWith(Optional(conversation.recipients.firstOrNull()))
+                            .distinctUntilChanged()
+                }
+            }
+            .switchMap { colors.themeObservable(it.value) }
 
     @SuppressLint("InlinedApi")
     override fun onCreate(savedInstanceState: Bundle?) {
-
         setTheme(getActivityThemeRes(prefs.black.get()))
-
         super.onCreate(savedInstanceState)
 
         // When certain preferences change, we need to recreate the activity

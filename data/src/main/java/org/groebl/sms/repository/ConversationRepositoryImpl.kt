@@ -21,13 +21,6 @@ package org.groebl.sms.repository
 import android.content.ContentUris
 import android.content.Context
 import android.provider.Telephony
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
-import io.realm.Case
-import io.realm.Realm
-import io.realm.RealmResults
-import io.realm.Sort
 import org.groebl.sms.compat.TelephonyCompat
 import org.groebl.sms.extensions.anyOf
 import org.groebl.sms.extensions.asObservable
@@ -36,9 +29,20 @@ import org.groebl.sms.extensions.removeAccents
 import org.groebl.sms.filter.ConversationFilter
 import org.groebl.sms.mapper.CursorToConversation
 import org.groebl.sms.mapper.CursorToRecipient
-import org.groebl.sms.model.*
+import org.groebl.sms.model.Contact
+import org.groebl.sms.model.Conversation
+import org.groebl.sms.model.Message
+import org.groebl.sms.model.Recipient
+import org.groebl.sms.model.SearchResult
 import org.groebl.sms.util.PhoneNumberUtils
 import org.groebl.sms.util.tryOrNull
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import io.realm.Case
+import io.realm.Realm
+import io.realm.RealmResults
+import io.realm.Sort
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -54,11 +58,18 @@ class ConversationRepositoryImpl @Inject constructor(
         return Realm.getDefaultInstance()
                 .where(Conversation::class.java)
                 .notEqualTo("id", 0L)
-                .isNotNull("lastMessage")
                 .equalTo("archived", archived)
                 .equalTo("blocked", false)
                 .isNotEmpty("recipients")
-                .sort("pinned", Sort.DESCENDING, "lastMessage.date", Sort.DESCENDING)
+                .beginGroup()
+                .isNotNull("lastMessage")
+                .or()
+                .isNotEmpty("draft")
+                .endGroup()
+                .sort(
+                        arrayOf("pinned", "draft", "lastMessage.date"),
+                        arrayOf(Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING)
+                )
                 .findAllAsync()
     }
 
@@ -67,11 +78,18 @@ class ConversationRepositoryImpl @Inject constructor(
             realm.refresh()
             realm.copyFromRealm(realm.where(Conversation::class.java)
                     .notEqualTo("id", 0L)
-                    .isNotNull("lastMessage")
                     .equalTo("archived", false)
                     .equalTo("blocked", false)
                     .isNotEmpty("recipients")
-                    .sort("pinned", Sort.DESCENDING, "lastMessage.date", Sort.DESCENDING)
+                    .beginGroup()
+                    .isNotNull("lastMessage")
+                    .or()
+                    .isNotEmpty("draft")
+                    .endGroup()
+                    .sort(
+                            arrayOf("pinned", "draft", "lastMessage.date"),
+                            arrayOf(Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING)
+                    )
                     .findAll())
         }
     }
@@ -200,6 +218,23 @@ class ConversationRepositoryImpl @Inject constructor(
                 .map { realm.copyFromRealm(it) }
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(Schedulers.io())
+    }
+
+    override fun getRecipients(): RealmResults<Recipient> {
+        val realm = Realm.getDefaultInstance()
+        return realm.where(Recipient::class.java)
+                .findAll()
+    }
+
+    override fun getUnmanagedRecipients(): Observable<List<Recipient>> {
+        val realm = Realm.getDefaultInstance()
+        return realm.where(Recipient::class.java)
+                .isNotNull("contact")
+                .findAllAsync()
+                .asObservable()
+                .filter { it.isLoaded && it.isValid }
+                .map { realm.copyFromRealm(it) }
+                .subscribeOn(AndroidSchedulers.mainThread())
     }
 
     override fun getRecipient(recipientId: Long): Recipient? {

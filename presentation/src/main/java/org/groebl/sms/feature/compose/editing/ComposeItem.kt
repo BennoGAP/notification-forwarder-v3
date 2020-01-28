@@ -18,11 +18,11 @@
  */
 package org.groebl.sms.feature.compose.editing
 
-import io.realm.RealmList
 import org.groebl.sms.model.Contact
 import org.groebl.sms.model.ContactGroup
 import org.groebl.sms.model.Conversation
 import org.groebl.sms.model.PhoneNumber
+import io.realm.RealmList
 
 sealed class ComposeItem {
 

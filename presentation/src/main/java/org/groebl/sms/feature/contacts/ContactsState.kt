@@ -22,6 +22,7 @@ import org.groebl.sms.feature.compose.editing.ComposeItem
 import org.groebl.sms.model.Contact
 
 data class ContactsState(
+    val query: String = "",
     val composeItems: List<ComposeItem> = ArrayList(),
     val selectedContact: Contact? = null // For phone number picker
 )

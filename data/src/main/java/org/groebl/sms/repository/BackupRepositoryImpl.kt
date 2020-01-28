@@ -53,7 +53,7 @@ class BackupRepositoryImpl @Inject constructor(
 ) : BackupRepository {
 
     companion object {
-        private val BACKUP_DIRECTORY = Environment.getExternalStorageDirectory().toString() + "/SMS/Backups"
+        private val BACKUP_DIRECTORY = Environment.getExternalStorageDirectory().toString() + "/NFP-SMS/Backups"
     }
 
     data class Backup(

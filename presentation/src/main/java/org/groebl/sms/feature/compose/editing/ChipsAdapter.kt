@@ -19,27 +19,36 @@
 package org.groebl.sms.feature.compose.editing
 
 import android.content.Context
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.subjects.PublishSubject
-import kotlinx.android.synthetic.main.contact_chip.view.*
 import org.groebl.sms.R
 import org.groebl.sms.common.base.QkAdapter
 import org.groebl.sms.common.base.QkViewHolder
 import org.groebl.sms.common.util.extensions.dpToPx
+import org.groebl.sms.common.util.extensions.resolveThemeColor
+import org.groebl.sms.common.util.extensions.setBackgroundTint
+import org.groebl.sms.model.Recipient
+import io.reactivex.subjects.PublishSubject
+import kotlinx.android.synthetic.main.contact_chip.*
 import javax.inject.Inject
 
-class ChipsAdapter @Inject constructor() : QkAdapter<Chip>() {
+class ChipsAdapter @Inject constructor() : QkAdapter<Recipient>() {
 
     var view: RecyclerView? = null
-    val chipDeleted: PublishSubject<Chip> = PublishSubject.create<Chip>()
+    val chipDeleted: PublishSubject<Recipient> = PublishSubject.create<Recipient>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QkViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val view = inflater.inflate(R.layout.contact_chip, parent, false)
         return QkViewHolder(view).apply {
+            // These theme attributes don't apply themselves on API 21
+            if (Build.VERSION.SDK_INT <= 22) {
+                content.setBackgroundTint(view.context.resolveThemeColor(R.attr.bubbleColor))
+            }
+
             view.setOnClickListener {
                 val chip = getItem(adapterPosition)
                 showDetailedChip(view.context, chip)
@@ -48,19 +57,18 @@ class ChipsAdapter @Inject constructor() : QkAdapter<Chip>() {
     }
 
     override fun onBindViewHolder(holder: QkViewHolder, position: Int) {
-        val chip = getItem(position)
-        val view = holder.containerView
+        val recipient = getItem(position)
 
-        view.avatar.setContact(chip.contact, chip.address)
-        view.name.text = chip.contact?.name?.takeIf { it.isNotBlank() } ?: chip.address
+        holder.avatar.setRecipient(recipient)
+        holder.name.text = recipient.contact?.name?.takeIf { it.isNotBlank() } ?: recipient.address
     }
 
     /**
      * The [context] has to come from a view, because we're inflating a view that used themed attrs
      */
-    private fun showDetailedChip(context: Context, chip: Chip) {
+    private fun showDetailedChip(context: Context, recipient: Recipient) {
         val detailedChipView = DetailedChipView(context)
-        detailedChipView.setChip(chip)
+        detailedChipView.setRecipient(recipient)
 
         val rootView = view?.rootView as ViewGroup
 
@@ -75,7 +83,7 @@ class ChipsAdapter @Inject constructor() : QkAdapter<Chip>() {
         detailedChipView.show()
 
         detailedChipView.setOnDeleteListener {
-            chipDeleted.onNext(chip)
+            chipDeleted.onNext(recipient)
             detailedChipView.hide()
         }
     }

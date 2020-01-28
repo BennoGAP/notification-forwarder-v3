@@ -25,6 +25,11 @@ import android.content.BroadcastReceiver
 import androidx.core.provider.FontRequest
 import androidx.emoji.text.EmojiCompat
 import androidx.emoji.text.FontRequestEmojiCompatConfig
+import com.uber.rxdogtag.RxDogTag
+import com.uber.rxdogtag.autodispose.AutoDisposeConfigurer
+import dagger.android.*
+import io.realm.Realm
+import io.realm.RealmConfiguration
 import org.groebl.sms.R
 import org.groebl.sms.common.util.CrashlyticsTree
 import org.groebl.sms.common.util.FileLoggingTree
@@ -35,15 +40,6 @@ import org.groebl.sms.manager.AnalyticsManager
 import org.groebl.sms.migration.QkMigration
 import org.groebl.sms.migration.QkRealmMigration
 import org.groebl.sms.util.NightModeManager
-import com.uber.rxdogtag.RxDogTag
-import com.uber.rxdogtag.autodispose.AutoDisposeConfigurer
-import dagger.android.AndroidInjector
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasActivityInjector
-import dagger.android.HasBroadcastReceiverInjector
-import dagger.android.HasServiceInjector
-import io.realm.Realm
-import io.realm.RealmConfiguration
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -59,31 +55,30 @@ class QKApplication : Application(), HasActivityInjector, HasBroadcastReceiverIn
     @Suppress("unused")
     @Inject lateinit var qkMigration: QkMigration
 
-
     @Inject lateinit var dispatchingActivityInjector: DispatchingAndroidInjector<Activity>
     @Inject lateinit var dispatchingBroadcastReceiverInjector: DispatchingAndroidInjector<BroadcastReceiver>
     @Inject lateinit var dispatchingServiceInjector: DispatchingAndroidInjector<Service>
     @Inject lateinit var fileLoggingTree: FileLoggingTree
     @Inject lateinit var nightModeManager: NightModeManager
+    @Inject lateinit var realmMigration: QkRealmMigration
 
     override fun onCreate() {
         super.onCreate()
 
+        AppComponentManager.init(this)
+        appComponent.inject(this)
+
 //        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
+
 
         Realm.init(this)
         Realm.setDefaultConfiguration(RealmConfiguration.Builder()
                 .compactOnLaunch()
-                .migration(QkRealmMigration())
-                .schemaVersion(QkRealmMigration.SCHEMA_VERSION)
+                .migration(realmMigration)
+                .schemaVersion(QkRealmMigration.SchemaVersion)
                 .build())
 
-        AppComponentManager.init(this)
-        appComponent.inject(this)
-
-        //packageManager.getInstallerPackageName(packageName)?.let { installer ->
-        //    analyticsManager.setUserProperty("Installer", installer)
-        //}
+        qkMigration.performMigration()
 
         nightModeManager.updateCurrentTheme()
 

@@ -16,13 +16,20 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.groebl.sms.manager
+package org.groebl.sms.interactor
 
-interface ChangelogManager {
+import org.groebl.sms.repository.SyncRepository
+import io.reactivex.Flowable
+import timber.log.Timber
+import javax.inject.Inject
 
-    /**
-     * Returns true if the app has benn updated since the last time this method was called
-     */
-    fun didUpdate(): Boolean
+class SyncContacts @Inject constructor(private val syncManager: SyncRepository) : Interactor<Unit>() {
+
+    override fun buildObservable(params: Unit): Flowable<Long> {
+        return Flowable.just(System.currentTimeMillis())
+                .doOnNext { syncManager.syncContacts() }
+                .map { startTime -> System.currentTimeMillis() - startTime }
+                .doOnNext { duration -> Timber.v("Completed sync in ${duration}ms") }
+    }
 
 }

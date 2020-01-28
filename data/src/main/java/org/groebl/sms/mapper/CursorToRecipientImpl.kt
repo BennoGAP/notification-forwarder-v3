@@ -26,8 +26,8 @@ import org.groebl.sms.model.Recipient
 import javax.inject.Inject
 
 class CursorToRecipientImpl @Inject constructor(
-        private val context: Context,
-        private val permissionManager: PermissionManager
+    private val context: Context,
+    private val permissionManager: PermissionManager
 ) : CursorToRecipient {
 
     companion object {
@@ -37,11 +37,10 @@ class CursorToRecipientImpl @Inject constructor(
         const val COLUMN_ADDRESS = 1
     }
 
-    override fun map(from: Cursor) = Recipient().apply {
-        id = from.getLong(COLUMN_ID)
-        address = from.getString(COLUMN_ADDRESS)
-        lastUpdate = System.currentTimeMillis()
-    }
+    override fun map(from: Cursor) = Recipient(
+            id = from.getLong(COLUMN_ID),
+            address = from.getString(COLUMN_ADDRESS),
+            lastUpdate = System.currentTimeMillis())
 
     override fun getRecipientCursor(): Cursor? {
         return when (permissionManager.hasReadSms()) {

@@ -18,23 +18,24 @@
  */
 package org.groebl.sms.feature.contacts
 
-import io.reactivex.Observable
-import io.reactivex.subjects.Subject
 import org.groebl.sms.common.base.QkView
 import org.groebl.sms.extensions.Optional
 import org.groebl.sms.feature.compose.editing.ComposeItem
 import org.groebl.sms.feature.compose.editing.PhoneNumberAction
+import io.reactivex.Observable
+import io.reactivex.subjects.Subject
 
 interface ContactsContract : QkView<ContactsState> {
 
     val queryChangedIntent: Observable<CharSequence>
-    val queryBackspaceIntent: Observable<*>
+    val queryClearedIntent: Observable<*>
     val queryEditorActionIntent: Observable<Int>
     val composeItemPressedIntent: Subject<ComposeItem>
     val composeItemLongPressedIntent: Subject<ComposeItem>
     val phoneNumberSelectedIntent: Subject<Optional<Long>>
     val phoneNumberActionIntent: Subject<PhoneNumberAction>
 
+    fun clearQuery()
     fun openKeyboard()
     fun finish(result: HashMap<String, String?>)
 

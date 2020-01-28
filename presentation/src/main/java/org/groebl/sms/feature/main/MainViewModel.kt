@@ -19,27 +19,6 @@
 package org.groebl.sms.feature.main
 
 import androidx.recyclerview.widget.ItemTouchHelper
-import org.groebl.sms.R
-import org.groebl.sms.common.Navigator
-import org.groebl.sms.common.base.QkViewModel
-import org.groebl.sms.extensions.mapNotNull
-import org.groebl.sms.interactor.DeleteConversations
-import org.groebl.sms.interactor.MarkAllSeen
-import org.groebl.sms.interactor.MarkArchived
-import org.groebl.sms.interactor.MarkPinned
-import org.groebl.sms.interactor.MarkRead
-import org.groebl.sms.interactor.MarkUnarchived
-import org.groebl.sms.interactor.MarkUnpinned
-import org.groebl.sms.interactor.MarkUnread
-import org.groebl.sms.interactor.MigratePreferences
-import org.groebl.sms.interactor.SyncMessages
-import org.groebl.sms.listener.ContactAddedListener
-import org.groebl.sms.manager.PermissionManager
-import org.groebl.sms.manager.RatingManager
-import org.groebl.sms.model.SyncLog
-import org.groebl.sms.repository.ConversationRepository
-import org.groebl.sms.repository.SyncRepository
-import org.groebl.sms.util.Preferences
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -47,15 +26,26 @@ import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.withLatestFrom
 import io.reactivex.schedulers.Schedulers
 import io.realm.Realm
-import java.util.*
+import org.groebl.sms.R
+import org.groebl.sms.common.Navigator
+import org.groebl.sms.common.base.QkViewModel
+import org.groebl.sms.extensions.mapNotNull
+import org.groebl.sms.interactor.*
+import org.groebl.sms.listener.ContactAddedListener
+import org.groebl.sms.manager.PermissionManager
+import org.groebl.sms.manager.RatingManager
+import org.groebl.sms.model.SyncLog
+import org.groebl.sms.repository.ConversationRepository
+import org.groebl.sms.repository.SyncRepository
+import org.groebl.sms.util.Preferences
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class MainViewModel @Inject constructor(
+        contactAddedListener: ContactAddedListener,
         markAllSeen: MarkAllSeen,
         migratePreferences: MigratePreferences,
         syncRepository: SyncRepository,
-    	private val contactAddedListener: ContactAddedListener,
         private val conversationRepo: ConversationRepository,
         private val deleteConversations: DeleteConversations,
         private val markArchived: MarkArchived,
@@ -68,6 +58,7 @@ class MainViewModel @Inject constructor(
         private val permissionManager: PermissionManager,
         private val prefs: Preferences,
         private val ratingManager: RatingManager,
+    private val syncContacts: SyncContacts,
         private val syncMessages: SyncMessages
 ) : QkViewModel<MainView, MainState>(MainState(page = Inbox(data = conversationRepo.getConversations()))) {
 
@@ -77,6 +68,7 @@ class MainViewModel @Inject constructor(
         disposables += markArchived
         disposables += markUnarchived
         disposables += migratePreferences
+        disposables += syncContacts
         disposables += syncMessages
 
         // Show the syncing UI
@@ -101,6 +93,14 @@ class MainViewModel @Inject constructor(
             syncMessages.execute(Unit)
         }
 
+        // Sync contacts when we detect a change
+        if (permissionManager.hasContacts()) {
+            disposables += contactAddedListener.listen()
+                    .debounce(1, TimeUnit.SECONDS)
+                    .subscribeOn(Schedulers.io())
+                    .subscribe { syncContacts.execute(Unit) }
+        }
+
         ratingManager.addSession()
         markAllSeen.execute(Unit)
     }
@@ -114,6 +114,7 @@ class MainViewModel @Inject constructor(
         }
 
         val permissions = view.activityResumedIntent
+                .filter { resumed -> resumed }
                 .observeOn(Schedulers.io())
                 .map { Triple(permissionManager.isDefaultSms(), permissionManager.hasReadSms(), permissionManager.hasContacts()) }
                 .distinctUntilChanged()
@@ -144,11 +145,6 @@ class MainViewModel @Inject constructor(
                     }
                 }
 
-        // Show changelog
-        //if (changelogManager.didUpdate()) {
-        //    view.showChangelog()
-        //}
-
         view.queryChangedIntent
                 .debounce(200, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -169,6 +165,20 @@ class MainViewModel @Inject constructor(
                 .map(conversationRepo::searchConversations)
                 .autoDisposable(view.scope())
                 .subscribe { data -> newState { copy(page = Searching(loading = false, data = data)) } }
+
+        view.activityResumedIntent
+                .filter { resumed -> !resumed }
+                .switchMap {
+                    // Take until the activity is resumed
+                    prefs.keyChanges
+                            .filter { key -> key.contains("theme") }
+                            .map { true }
+                            .mergeWith(prefs.autoColor.asObservable().skip(1))
+                            .doOnNext { view.themeChanged() }
+                            .takeUntil(view.activityResumedIntent.filter { resumed -> resumed })
+                }
+                .autoDisposable(view.scope())
+                .subscribe()
 
         view.composeIntent
                 .autoDisposable(view.scope())
@@ -264,7 +274,6 @@ class MainViewModel @Inject constructor(
                 .map { conversation -> conversation.recipients }
                 .mapNotNull { recipients -> recipients[0]?.address?.takeIf { recipients.size == 1 } }
                 .doOnNext(navigator::addContact)
-                .flatMap(contactAddedListener::listen)
                 .autoDisposable(view.scope())
                 .subscribe()
 

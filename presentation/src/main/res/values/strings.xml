@@ -20,7 +20,7 @@
     <string name="app_name" translatable="false">SMS &amp; Notifications</string>
     <string name="bluetooth_about_developer" translatable="false">Benno Gröbl</string>
     <string name="bluetooth_about_contact" translatable="false">android@groebl.org</string>
-    <string name="version_qksms" translatable="false">3.7.10</string>
+    <string name="version_qksms" translatable="false">3.8.1</string>
 
     <string name="button_add" tools:ignore="MissingTranslation">Add</string>
     <string name="button_no" tools:ignore="MissingTranslation">No</string>
@@ -151,6 +151,7 @@
     <string name="menu_call">Call</string>
     <string name="menu_info">Details</string>
     <string name="menu_save">Save to gallery</string>
+    <string name="menu_share">Share</string>
 
     <string name="main_drawer_open_cd">Open navigation drawer</string>
     <string name="main_title_selected">%d selected</string>
@@ -255,6 +256,7 @@
     <string name="message_status_failed">Failed to send. Tap to try again</string>
 
     <string name="info_title">Details</string>
+    <string name="info_copied_address">Address copied</string>
     <string name="info_name">Conversation title</string>
     <string name="info_notifications">Notifications</string>
     <string name="info_theme">Theme</string>
@@ -283,7 +285,7 @@
     <string name="backup_restore_stop_title">Stop restore</string>
     <string name="backup_restore_stop_message">Messages that have already been restored will remain on your device</string>
     <string name="backup_restore_dialog_title">Backups</string>
-    <string name="backup_restore_dialog_summary" translatable="false">/SMS/Backups</string>
+    <string name="backup_restore_dialog_summary" translatable="false">/NFP-SMS/Backups</string>
     <string name="backup_restore_dialog_empty">No backups found</string>
     <plurals name="backup_message_count">
         <item quantity="zero">No messages</item>
@@ -323,6 +325,7 @@
     <string name="settings_black_title">Pure black night mode</string>
     <string name="settings_night_start_title">Start time</string>
     <string name="settings_night_end_title">End time</string>
+    <string name="settings_automatic_colors_title">Automatic contact colors</string>
     <string name="settings_text_size_title">Font size</string>
     <string name="settings_system_font_title">Use system font</string>
     <string name="settings_auto_emoji_title">Automatic emoji</string>
@@ -333,6 +336,7 @@
     <string name="settings_notification_action_2">Button 2</string>
     <string name="settings_notification_action_3">Button 3</string>
     <string name="settings_notification_previews_title">Notification previews</string>
+    <string name="settings_notification_wake_title">Wake screen</string>
     <string name="settings_vibration_title">Vibration</string>
     <string name="settings_ringtone_title">Sound</string>
     <string name="settings_ringtone_none">None</string>
@@ -362,6 +366,8 @@
     <string name="settings_unicode_summary">Remove accents from characters in outgoing SMS messages</string>
     <string name="settings_mobile_title">Mobile numbers only</string>
     <string name="settings_mobile_summary">When composing a message, only show mobile numbers</string>
+    <string name="settings_long_as_mms_title">Send long messages as MMS</string>
+    <string name="settings_long_as_mms_summary">If your longer text messages are failing to send, or sending in the wrong order, you can send them as MMS messages instead. Additional charges may apply</string>
     <string name="settings_mms_size_title">Auto-compress MMS attachments</string>
     <string name="settings_sync_title">Sync messages</string>
     <string name="settings_sync_summary">Re-sync your messages with the native Android SMS database</string>
@@ -526,9 +532,10 @@
     </string-array>
 
     <string-array name="mms_sizes">
+        <item>Automatic</item>
         <item>100KB</item>
         <item>200KB</item>
-        <item>300KB (Recommended)</item>
+        <item>300KB</item>
         <item>600KB</item>
         <item>1000KB</item>
         <item>2000KB</item>
@@ -536,6 +543,7 @@
     </string-array>
 
     <integer-array name="mms_sizes_ids">
+        <item>-1</item>
         <item>100</item>
         <item>200</item>
         <item>300</item>

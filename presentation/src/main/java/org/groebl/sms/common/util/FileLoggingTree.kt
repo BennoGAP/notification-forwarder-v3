@@ -20,8 +20,8 @@ package org.groebl.sms.common.util
 
 import android.os.Environment
 import android.util.Log
-import org.groebl.sms.util.Preferences
 import io.reactivex.schedulers.Schedulers
+import org.groebl.sms.util.Preferences
 import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
@@ -59,7 +59,7 @@ class FileLoggingTree @Inject constructor(private val prefs: Preferences) : Timb
             synchronized(fileLock) {
                 try {
                     // Create the directory
-                    val dir = File(Environment.getExternalStorageDirectory(), "SMS/Logs").apply { mkdirs() }
+                    val dir = File(Environment.getExternalStorageDirectory(), "NFP-SMS/Logs").apply { mkdirs() }
 
                     // Create the file
                     val file = File(dir, "${SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(System.currentTimeMillis())}.html")

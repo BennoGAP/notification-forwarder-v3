@@ -19,11 +19,11 @@
 package org.groebl.sms.repository
 
 import android.net.Uri
+import org.groebl.sms.model.Contact
+import org.groebl.sms.model.ContactGroup
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.realm.RealmResults
-import org.groebl.sms.model.Contact
-import org.groebl.sms.model.ContactGroup
 
 interface ContactRepository {
 

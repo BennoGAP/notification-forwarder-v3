@@ -67,7 +67,6 @@ abstract class ActivityBuilderModule {
     @ContributesAndroidInjector(modules = [ContactsActivityModule::class])
     abstract fun bindContactsActivity(): ContactsActivity
 
-
     @ActivityScope
     @ContributesAndroidInjector(modules = [])
     abstract fun bindConversationInfoActivity(): ConversationInfoActivity

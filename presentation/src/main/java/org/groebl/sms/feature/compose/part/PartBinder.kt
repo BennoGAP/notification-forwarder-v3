@@ -18,7 +18,7 @@
  */
 package org.groebl.sms.feature.compose.part
 
-import android.view.View
+import org.groebl.sms.common.base.QkViewHolder
 import org.groebl.sms.common.util.Colors
 import org.groebl.sms.model.Message
 import org.groebl.sms.model.MmsPart
@@ -36,7 +36,7 @@ abstract class PartBinder {
     abstract fun canBindPart(part: MmsPart): Boolean
 
     abstract fun bindPart(
-        view: View,
+        holder: QkViewHolder,
         part: MmsPart,
         message: Message,
         canGroupWithPrevious: Boolean,

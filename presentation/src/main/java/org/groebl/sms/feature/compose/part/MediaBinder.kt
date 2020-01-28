@@ -19,8 +19,8 @@
 package org.groebl.sms.feature.compose.part
 
 import android.content.Context
-import android.view.View
 import org.groebl.sms.R
+import org.groebl.sms.common.base.QkViewHolder
 import org.groebl.sms.common.util.Colors
 import org.groebl.sms.common.util.extensions.setVisible
 import org.groebl.sms.common.widget.BubbleImageView
@@ -29,7 +29,7 @@ import org.groebl.sms.extensions.isVideo
 import org.groebl.sms.model.Message
 import org.groebl.sms.model.MmsPart
 import org.groebl.sms.util.GlideApp
-import kotlinx.android.synthetic.main.mms_preview_list_item.view.*
+import kotlinx.android.synthetic.main.mms_preview_list_item.*
 import javax.inject.Inject
 
 class MediaBinder @Inject constructor(colors: Colors, private val context: Context) : PartBinder() {
@@ -40,23 +40,23 @@ class MediaBinder @Inject constructor(colors: Colors, private val context: Conte
     override fun canBindPart(part: MmsPart) = part.isImage() || part.isVideo()
 
     override fun bindPart(
-        view: View,
+        holder: QkViewHolder,
         part: MmsPart,
         message: Message,
         canGroupWithPrevious: Boolean,
         canGroupWithNext: Boolean
     ) {
-        view.video.setVisible(part.isVideo())
-        view.setOnClickListener { clicks.onNext(part.id) }
+        holder.video.setVisible(part.isVideo())
+        holder.containerView.setOnClickListener { clicks.onNext(part.id) }
 
-        view.thumbnail.bubbleStyle = when {
+        holder.thumbnail.bubbleStyle = when {
             !canGroupWithPrevious && canGroupWithNext -> if (message.isMe()) BubbleImageView.Style.OUT_FIRST else BubbleImageView.Style.IN_FIRST
             canGroupWithPrevious && canGroupWithNext -> if (message.isMe()) BubbleImageView.Style.OUT_MIDDLE else BubbleImageView.Style.IN_MIDDLE
             canGroupWithPrevious && !canGroupWithNext -> if (message.isMe()) BubbleImageView.Style.OUT_LAST else BubbleImageView.Style.IN_LAST
             else -> BubbleImageView.Style.ONLY
         }
 
-        GlideApp.with(context).load(part.getUri()).fitCenter().into(view.thumbnail)
+        GlideApp.with(context).load(part.getUri()).fitCenter().into(holder.thumbnail)
     }
 
 }

@@ -75,7 +75,6 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@id/title"
-        app:layout_constraintStart_toEndOf="@id/avatars"
         app:layout_constraintTop_toBottomOf="@id/title"
         app:textSize="secondary"
         tools:text="Call Control" />

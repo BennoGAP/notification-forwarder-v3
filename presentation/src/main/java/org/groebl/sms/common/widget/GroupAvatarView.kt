@@ -24,20 +24,20 @@ import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
-import kotlinx.android.synthetic.main.group_avatar_view.view.*
 import org.groebl.sms.R
 import org.groebl.sms.common.util.extensions.getColorCompat
 import org.groebl.sms.common.util.extensions.resolveThemeColor
 import org.groebl.sms.common.util.extensions.setBackgroundTint
 import org.groebl.sms.model.Recipient
+import kotlinx.android.synthetic.main.group_avatar_view.view.*
 
 class GroupAvatarView @JvmOverloads constructor(
-        context: Context, attrs: AttributeSet? = null
+    context: Context, attrs: AttributeSet? = null
 ) : ConstraintLayout(context, attrs) {
 
-    var contacts: List<Recipient> = ArrayList()
+    var recipients: List<Recipient> = ArrayList()
         set(value) {
-            field = value
+            field = value.sortedWith(compareByDescending { contact -> contact.contact?.lookupKey })
             updateView()
         }
 
@@ -54,17 +54,18 @@ class GroupAvatarView @JvmOverloads constructor(
     }
 
     private fun updateView() {
-        avatar1Frame.setBackgroundTint(when (contacts.size > 1) {
+        avatar1Frame.setBackgroundTint(when (recipients.size > 1) {
             true -> context.resolveThemeColor(android.R.attr.windowBackground)
             false -> context.getColorCompat(android.R.color.transparent)
         })
         avatar1Frame.updateLayoutParams<LayoutParams> {
-            matchConstraintPercentWidth = if (contacts.size > 1) 0.75f else 1.0f
+            matchConstraintPercentWidth = if (recipients.size > 1) 0.75f else 1.0f
         }
-        avatar2.isVisible = contacts.size > 1
+        avatar2.isVisible = recipients.size > 1
 
-        avatar1.setContact(contacts.getOrNull(0))
-        avatar2.setContact(contacts.getOrNull(1))
+
+        recipients.getOrNull(0).run(avatar1::setRecipient)
+        recipients.getOrNull(1).run(avatar2::setRecipient)
     }
 
 }

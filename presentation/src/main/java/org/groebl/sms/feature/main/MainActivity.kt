@@ -23,6 +23,7 @@ import android.animation.ObjectAnimator
 import android.app.AlertDialog
 import android.content.Intent
 import android.content.res.ColorStateList
+import android.os.Build
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -33,7 +34,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.widget.textChanges
@@ -72,7 +72,7 @@ class MainActivity : QkThemedActivity(), MainView {
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
     override val onNewIntentIntent: Subject<Intent> = PublishSubject.create()
-    override val activityResumedIntent: Subject<Unit> = PublishSubject.create()
+    override val activityResumedIntent: Subject<Boolean> = PublishSubject.create()
     override val queryChangedIntent by lazy { toolbarSearch.textChanges() }
     override val composeIntent by lazy { compose.clicks() }
     override val drawerOpenIntent: Observable<Boolean> by lazy {
@@ -135,19 +135,19 @@ class MainActivity : QkThemedActivity(), MainView {
             homeIntent.onNext(Unit)
         }
 
-        recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        itemTouchCallback.adapter = conversationsAdapter
+        conversationsAdapter.autoScrollToStart(recyclerView)
 
         // Don't allow clicks to pass through the drawer layout
         drawer.clicks().autoDisposable(scope()).subscribe()
 
         // Set the theme color tint to the recyclerView, progressbar, and FAB
         theme
-                .doOnNext { recyclerView.scrapViews() }
                 .autoDisposable(scope())
                 .subscribe { theme ->
                     // Set the color for the drawer icons
-                    val states = arrayOf(intArrayOf(android.R.attr.state_activated),
+                    val states = arrayOf(
+                            intArrayOf(android.R.attr.state_activated),
                             intArrayOf(-android.R.attr.state_activated))
                     resolveThemeColor(android.R.attr.textColorSecondary)
                             .let { textSecondary -> ColorStateList(states, intArrayOf(theme.theme, textSecondary)) }
@@ -166,8 +166,10 @@ class MainActivity : QkThemedActivity(), MainView {
                     compose.setTint(theme.textPrimary)
                 }
 
-        itemTouchCallback.adapter = conversationsAdapter
-        conversationsAdapter.autoScrollToStart(recyclerView)
+        // These theme attributes don't apply themselves on API 21
+        if (Build.VERSION.SDK_INT <= 22) {
+            toolbarSearch.setBackgroundTint(resolveThemeColor(R.attr.bubbleColor))
+        }
 
         //Delete BT-Messages
         Thread { BluetoothHelper.deleteBluetoothMessages(this, true) }.start()
@@ -261,10 +263,11 @@ class MainActivity : QkThemedActivity(), MainView {
         inbox.isActivated = state.page is Inbox
         archived.isActivated = state.page is Archived
 
-        if (drawerLayout.isDrawerOpen(GravityCompat.START) && !state.drawerOpen) drawerLayout.closeDrawer(
-                GravityCompat.START)
-        else if (!drawerLayout.isDrawerVisible(GravityCompat.START) && state.drawerOpen) drawerLayout.openDrawer(
-                GravityCompat.START)
+        if (drawerLayout.isDrawerOpen(GravityCompat.START) && !state.drawerOpen) {
+            drawerLayout.closeDrawer(GravityCompat.START)
+        } else if (!drawerLayout.isDrawerVisible(GravityCompat.START) && state.drawerOpen) {
+            drawerLayout.openDrawer(GravityCompat.START)
+        }
 
         when (state.syncing) {
             is SyncRepository.SyncProgress.Idle -> {
@@ -303,7 +306,12 @@ class MainActivity : QkThemedActivity(), MainView {
 
     override fun onResume() {
         super.onResume()
-        activityResumedIntent.onNext(Unit)
+        activityResumedIntent.onNext(true)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        activityResumedIntent.onNext(false)
     }
 
     override fun onDestroy() {
@@ -339,6 +347,10 @@ class MainActivity : QkThemedActivity(), MainView {
         conversationsAdapter.clearSelection()
     }
 
+    override fun themeChanged() {
+        recyclerView.scrapViews()
+    }
+
     override fun showBlockingDialog(conversations: List<Long>, block: Boolean) {
         blockingDialog.show(this, conversations, block)
     }
@@ -352,10 +364,6 @@ class MainActivity : QkThemedActivity(), MainView {
                 .setNegativeButton(R.string.button_cancel, null)
                 .show()
     }
-
-    //override fun showChangelog(changelog: ChangelogManager.Changelog) {
-    //    changelogDialog.show(changelog)
-    //}
 
     override fun showArchivedSnackbar() {
         Snackbar.make(drawerLayout, R.string.toast_archived, Snackbar.LENGTH_LONG).apply {

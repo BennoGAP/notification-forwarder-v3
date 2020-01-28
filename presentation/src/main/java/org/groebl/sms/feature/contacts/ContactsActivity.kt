@@ -20,13 +20,20 @@ package org.groebl.sms.feature.contacts
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProviders
+import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.widget.editorActions
 import com.jakewharton.rxbinding2.widget.textChanges
 import org.groebl.sms.R
 import org.groebl.sms.common.ViewModelFactory
 import org.groebl.sms.common.base.QkThemedActivity
+import org.groebl.sms.common.util.extensions.hideKeyboard
+import org.groebl.sms.common.util.extensions.resolveThemeColor
+import org.groebl.sms.common.util.extensions.setBackgroundTint
+import org.groebl.sms.common.util.extensions.showKeyboard
 import org.groebl.sms.common.widget.QkDialog
 import org.groebl.sms.extensions.Optional
 import org.groebl.sms.feature.compose.editing.ComposeItem
@@ -38,13 +45,12 @@ import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import kotlinx.android.synthetic.main.contacts_activity.*
-import org.groebl.sms.common.util.extensions.hideKeyboard
-import org.groebl.sms.common.util.extensions.showKeyboard
 import javax.inject.Inject
 
 class ContactsActivity : QkThemedActivity(), ContactsContract {
 
     companion object {
+        const val SharingKey = "sharing"
         const val ChipsKey = "chips"
     }
 
@@ -53,7 +59,7 @@ class ContactsActivity : QkThemedActivity(), ContactsContract {
     @Inject lateinit var viewModelFactory: ViewModelFactory
 
     override val queryChangedIntent: Observable<CharSequence> by lazy { search.textChanges() }
-    override val queryBackspaceIntent: Observable<*> by lazy { search.backspaces }
+    override val queryClearedIntent: Observable<*> by lazy { cancel.clicks() }
     override val queryEditorActionIntent: Observable<Int> by lazy { search.editorActions() }
     override val composeItemPressedIntent: Subject<ComposeItem> by lazy { contactsAdapter.clicks }
     override val composeItemLongPressedIntent: Subject<ComposeItem> by lazy { contactsAdapter.longClicks }
@@ -81,11 +87,17 @@ class ContactsActivity : QkThemedActivity(), ContactsContract {
         showBackButton(true)
         viewModel.bindView(this)
 
-        contacts.itemAnimator = null
         contacts.adapter = contactsAdapter
+
+        // These theme attributes don't apply themselves on API 21
+        if (Build.VERSION.SDK_INT <= 22) {
+            search.setBackgroundTint(resolveThemeColor(R.attr.bubbleColor))
+        }
     }
 
     override fun render(state: ContactsState) {
+        cancel.isVisible = state.query.length > 1
+
         contactsAdapter.data = state.composeItems
 
         if (state.selectedContact != null && !phoneNumberDialog.isShowing) {
@@ -97,6 +109,10 @@ class ContactsActivity : QkThemedActivity(), ContactsContract {
         }
     }
 
+    override fun clearQuery() {
+        search.text = null
+    }
+
     override fun openKeyboard() {
         search.postDelayed({
             search.showKeyboard()
@@ -105,7 +121,6 @@ class ContactsActivity : QkThemedActivity(), ContactsContract {
 
     override fun finish(result: HashMap<String, String?>) {
         search.hideKeyboard()
-
         val intent = Intent().putExtra(ChipsKey, result)
         setResult(Activity.RESULT_OK, intent)
         finish()

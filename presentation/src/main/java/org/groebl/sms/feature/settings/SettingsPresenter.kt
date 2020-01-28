@@ -19,6 +19,9 @@
 package org.groebl.sms.feature.settings
 
 import android.content.Context
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
+import io.reactivex.rxkotlin.plusAssign
 import org.groebl.sms.R
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.base.QkPresenter
@@ -26,12 +29,10 @@ import org.groebl.sms.common.util.Colors
 import org.groebl.sms.common.util.DateFormatter
 import org.groebl.sms.common.util.extensions.makeToast
 import org.groebl.sms.interactor.SyncMessages
+import org.groebl.sms.manager.AnalyticsManager
 import org.groebl.sms.repository.SyncRepository
 import org.groebl.sms.util.NightModeManager
 import org.groebl.sms.util.Preferences
-import com.uber.autodispose.android.lifecycle.scope
-import com.uber.autodispose.autoDisposable
-import io.reactivex.rxkotlin.plusAssign
 import timber.log.Timber
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -40,6 +41,7 @@ import javax.inject.Inject
 class SettingsPresenter @Inject constructor(
         colors: Colors,
         syncRepo: SyncRepository,
+        private val analytics: AnalyticsManager,
         private val context: Context,
         private val dateFormatter: DateFormatter,
         private val navigator: Navigator,
@@ -97,6 +99,9 @@ class SettingsPresenter @Inject constructor(
                     newState { copy(textSizeSummary = textSizeLabels[textSize], textSizeId = textSize) }
                 }
 
+        disposables += prefs.autoColor.asObservable()
+                .subscribe { autoColor -> newState { copy(autoColor = autoColor) } }
+
         disposables += prefs.systemFont.asObservable()
                 .subscribe { enabled -> newState { copy(systemFontEnabled = enabled) } }
 
@@ -105,6 +110,9 @@ class SettingsPresenter @Inject constructor(
 
         disposables += prefs.mobileOnly.asObservable()
                 .subscribe { enabled -> newState { copy(mobileOnly = enabled) } }
+
+        disposables += prefs.longAsMms.asObservable()
+                .subscribe { enabled -> newState { copy(longAsMms = enabled) } }
 
         val mmsSizeLabels = context.resources.getStringArray(R.array.mms_sizes)
         val mmsSizeIds = context.resources.getIntArray(R.array.mms_sizes_ids)
@@ -161,11 +169,18 @@ class SettingsPresenter @Inject constructor(
 
                         R.id.textSize -> view.showTextSizePicker()
 
+                        R.id.autoColor -> {
+                            analytics.setUserProperty("Preference: Auto Color", !prefs.autoColor.get())
+                            prefs.autoColor.set(!prefs.autoColor.get())
+                        }
+
                         R.id.systemFont -> prefs.systemFont.set(!prefs.systemFont.get())
 
                         R.id.unicode -> prefs.unicode.set(!prefs.unicode.get())
 
                         R.id.mobileOnly -> prefs.mobileOnly.set(!prefs.mobileOnly.get())
+
+                        R.id.longAsMms -> prefs.longAsMms.set(!prefs.longAsMms.get())
 
                         R.id.mmsSize -> view.showMmsSizePicker()
 

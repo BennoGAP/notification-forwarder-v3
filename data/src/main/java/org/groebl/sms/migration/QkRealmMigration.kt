@@ -18,17 +18,23 @@
  */
 package org.groebl.sms.migration
 
-import io.realm.DynamicRealm
-import io.realm.FieldAttribute
-import io.realm.RealmMigration
-import io.realm.Sort
+import android.annotation.SuppressLint
+import io.realm.*
+import org.groebl.sms.extensions.map
+import org.groebl.sms.mapper.CursorToContactImpl
+import org.groebl.sms.util.Preferences
+import javax.inject.Inject
 
-class QkRealmMigration : RealmMigration {
+class QkRealmMigration @Inject constructor(
+    private val cursorToContact: CursorToContactImpl,
+    private val prefs: Preferences
+) : RealmMigration {
 
     companion object {
-        const val SCHEMA_VERSION: Long = 9
+        const val SchemaVersion: Long = 9
     }
 
+    @SuppressLint("ApplySharedPref")
     override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
         var version = oldVersion
 
@@ -119,18 +125,65 @@ class QkRealmMigration : RealmMigration {
         }
 
         if (version == 8L) {
+            // Delete this data since we'll need to repopulate it with its new primaryKey
+            realm.delete("PhoneNumber")
+
             realm.schema.create("ContactGroup")
                     .addField("id", Long::class.java, FieldAttribute.PRIMARY_KEY, FieldAttribute.REQUIRED)
                     .addField("title", String::class.java, FieldAttribute.REQUIRED)
                     .addRealmListField("contacts", realm.schema.get("Contact"))
 
-            realm.schema.get("Contact")
-                    ?.addField("starred", Boolean::class.java, FieldAttribute.REQUIRED)
-
             realm.schema.get("PhoneNumber")
                     ?.addField("id", Long::class.java, FieldAttribute.PRIMARY_KEY, FieldAttribute.REQUIRED)
-                    ?.addField("accountType", String::class.java, FieldAttribute.REQUIRED)
+                    ?.addField("accountType", String::class.java)
                     ?.addField("isDefault", Boolean::class.java, FieldAttribute.REQUIRED)
+
+            val phoneNumbers = cursorToContact.getContactsCursor()
+                    ?.map(cursorToContact::map)
+                    ?.distinctBy { contact -> contact.numbers.firstOrNull()?.id } // Each row has only one number
+                    ?.groupBy { contact -> contact.lookupKey }
+                    ?: mapOf()
+
+            realm.schema.get("Contact")
+                    ?.addField("starred", Boolean::class.java, FieldAttribute.REQUIRED)
+                    ?.addField("photoUri", String::class.java)
+                    ?.transform { realmContact ->
+                        val numbers = RealmList<DynamicRealmObject>()
+                        phoneNumbers[realmContact.get("lookupKey")]
+                                ?.flatMap { contact -> contact.numbers }
+                                ?.map { number ->
+                                    realm.createObject("PhoneNumber", number.id).apply {
+                                        setString("accountType", number.accountType)
+                                        setString("address", number.address)
+                                        setString("type", number.type)
+                                    }
+                                }
+                                ?.let(numbers::addAll)
+
+                        val photoUri = phoneNumbers[realmContact.get("lookupKey")]
+                                ?.firstOrNull { number -> number.photoUri != null }
+                                ?.photoUri
+
+                        realmContact.setList("numbers", numbers)
+                        realmContact.setString("photoUri", photoUri)
+                    }
+
+            // Migrate conversation themes
+            val recipients = mutableMapOf<Long, Int>() // Map of recipientId:theme
+            realm.where("Conversation").findAll().forEach { conversation ->
+                val pref = prefs.theme(conversation.getLong("id"))
+                if (pref.isSet) {
+                    conversation.getList("recipients").forEach { recipient ->
+                        recipients[recipient.getLong("id")] = pref.get()
+                    }
+
+                    pref.delete()
+                }
+            }
+
+            recipients.forEach { (recipientId, theme) ->
+                prefs.theme(recipientId).set(theme)
+            }
 
             version++
         }

@@ -19,27 +19,27 @@
 package org.groebl.sms.feature.themepicker
 
 import com.f2prateek.rx.preferences2.Preference
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
+import io.reactivex.rxkotlin.Observables
+import io.reactivex.rxkotlin.withLatestFrom
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.base.QkPresenter
 import org.groebl.sms.common.util.Colors
 import org.groebl.sms.manager.WidgetManager
 import org.groebl.sms.util.Preferences
-import com.uber.autodispose.android.lifecycle.scope
-import com.uber.autodispose.autoDisposable
-import io.reactivex.rxkotlin.Observables
-import io.reactivex.rxkotlin.withLatestFrom
 import javax.inject.Inject
 import javax.inject.Named
 
 class ThemePickerPresenter @Inject constructor(
-        prefs: Preferences,
-        @Named("threadId") private val threadId: Long,
-        private val colors: Colors,
-        private val navigator: Navigator,
-        private val widgetManager: WidgetManager
-) : QkPresenter<ThemePickerView, ThemePickerState>(ThemePickerState(threadId = threadId)) {
+    prefs: Preferences,
+    @Named("recipientId") private val recipientId: Long,
+    private val colors: Colors,
+    private val navigator: Navigator,
+    private val widgetManager: WidgetManager
+) : QkPresenter<ThemePickerView, ThemePickerState>(ThemePickerState(recipientId = recipientId)) {
 
-    private val theme: Preference<Int> = prefs.theme(threadId)
+    private val theme: Preference<Int> = prefs.theme(recipientId)
 
     override fun bindIntents(view: ThemePickerView) {
         super.bindIntents(view)
@@ -53,7 +53,7 @@ class ThemePickerPresenter @Inject constructor(
                 .autoDisposable(view.scope())
                 .subscribe { color ->
                     theme.set(color)
-                    if (threadId == 0L) {
+                    if (recipientId == 0L) {
                         widgetManager.updateTheme()
                     }
                 }
@@ -73,9 +73,14 @@ class ThemePickerPresenter @Inject constructor(
 
         // Update the theme, when apply is clicked
         view.applyHsvThemeClicks()
-                .withLatestFrom(view.hsvThemeSelected()) { _, color -> color }
+                .withLatestFrom(view.hsvThemeSelected()) { _, color ->
+                    theme.set(color)
+                    if (recipientId == 0L) {
+                        widgetManager.updateTheme()
+                    }
+                }
                 .autoDisposable(view.scope())
-                .subscribe { color -> theme.set(color); if (threadId == 0L) { widgetManager.updateTheme() } }
+                .subscribe()
 
         // Reset the theme
         view.clearHsvThemeClicks()

@@ -18,16 +18,15 @@
  */
 package org.groebl.sms.interactor
 
-import io.reactivex.Flowable
 import org.groebl.sms.extensions.mapNotNull
 import org.groebl.sms.model.Message
 import org.groebl.sms.repository.MessageRepository
+import io.reactivex.Flowable
 import javax.inject.Inject
 
 class RetrySending @Inject constructor(private val messageRepo: MessageRepository) : Interactor<Long>() {
 
     override fun buildObservable(params: Long): Flowable<Message> {
-
         return Flowable.just(params)
                 .doOnNext(messageRepo::markSending)
                 .mapNotNull(messageRepo::getMessage)

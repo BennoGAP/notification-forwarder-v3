@@ -245,14 +245,9 @@ class Navigator @Inject constructor(
     }
 
     fun addContact(address: String) {
-        val uri = Uri.parse("tel: $address")
-        var intent = Intent(ContactsContract.Intents.SHOW_OR_CREATE_CONTACT, uri)
-
-        if (intent.resolveActivity(context.packageManager) == null) {
-            intent = Intent(Intent.ACTION_INSERT)
+        val intent = Intent(Intent.ACTION_INSERT)
                     .setType(ContactsContract.Contacts.CONTENT_TYPE)
                     .putExtra(ContactsContract.Intents.Insert.PHONE, address)
-        }
 
         startActivityExternal(intent)
     }
@@ -274,6 +269,17 @@ class Navigator @Inject constructor(
         startActivityExternal(intent)
     }
 
+    fun shareFile(file: File) {
+        val data = FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
+        val type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(file.name.split(".").last())
+        val intent = Intent(Intent.ACTION_SEND)
+                .setType(type)
+                .putExtra(Intent.EXTRA_STREAM, data)
+                .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+
+        startActivityExternal(intent)
+    }
+
     fun showNotificationSettings(threadId: Long = 0) {
         val intent = Intent(context, NotificationPrefsActivity::class.java)
         intent.putExtra("threadId", threadId)
@@ -288,8 +294,8 @@ class Navigator @Inject constructor(
 
             val channelId = notificationManager.buildNotificationChannelId(threadId)
             val intent = Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS)
-            intent.putExtra(Settings.EXTRA_CHANNEL_ID, channelId)
-            intent.putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
+                    .putExtra(Settings.EXTRA_CHANNEL_ID, channelId)
+                    .putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
             startActivity(intent)
         }
     }

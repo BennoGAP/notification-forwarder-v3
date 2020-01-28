@@ -23,17 +23,29 @@ import android.content.ContentUris
 import android.net.Uri
 import android.provider.Telephony
 import com.f2prateek.rx.preferences2.RxSharedPreferences
+import org.groebl.sms.extensions.insertOrUpdate
+import org.groebl.sms.extensions.map
+import org.groebl.sms.manager.KeyManager
+import org.groebl.sms.mapper.CursorToContact
+import org.groebl.sms.mapper.CursorToContactGroup
+import org.groebl.sms.mapper.CursorToContactGroupMember
+import org.groebl.sms.mapper.CursorToConversation
+import org.groebl.sms.mapper.CursorToMessage
+import org.groebl.sms.mapper.CursorToRecipient
+import org.groebl.sms.model.Contact
+import org.groebl.sms.model.ContactGroup
+import org.groebl.sms.model.Conversation
+import org.groebl.sms.model.Message
+import org.groebl.sms.model.MmsPart
+import org.groebl.sms.model.PhoneNumber
+import org.groebl.sms.model.Recipient
+import org.groebl.sms.model.SyncLog
+import org.groebl.sms.util.PhoneNumberUtils
+import org.groebl.sms.util.tryOrNull
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
 import io.realm.Realm
 import io.realm.Sort
-import org.groebl.sms.extensions.insertOrUpdate
-import org.groebl.sms.extensions.map
-import org.groebl.sms.manager.KeyManager
-import org.groebl.sms.mapper.*
-import org.groebl.sms.model.*
-import org.groebl.sms.util.PhoneNumberUtils
-import org.groebl.sms.util.tryOrNull
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -53,7 +65,7 @@ class SyncRepositoryImpl @Inject constructor(
 ) : SyncRepository {
 
     override val syncProgress: Subject<SyncRepository.SyncProgress> =
-            BehaviorSubject.createDefault(SyncRepository.SyncProgress.Idle())
+            BehaviorSubject.createDefault(SyncRepository.SyncProgress.Idle)
 
     override fun syncMessages() {
 
@@ -173,7 +185,7 @@ class SyncRepositoryImpl @Inject constructor(
         // Only delete this after the sync has successfully completed
         oldBlockedSenders.delete()
 
-        syncProgress.onNext(SyncRepository.SyncProgress.Idle())
+        syncProgress.onNext(SyncRepository.SyncProgress.Idle)
     }
 
     override fun syncMessage(uri: Uri): Message? {
@@ -247,32 +259,6 @@ class SyncRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun syncContact(address: String): Boolean {
-        // See if there's a contact that matches this phone number
-        var contact = getContacts().find { contact ->
-            contact.numbers.any { number -> phoneNumberUtils.compare(number.address, address) }
-        } ?: return false
-
-        Realm.getDefaultInstance().use { realm ->
-            val recipients = realm.where(Recipient::class.java).findAll().filter { recipient ->
-                contact.numbers.any { number ->
-                    phoneNumberUtils.compare(recipient.address, number.address)
-                }
-            }
-
-            realm.executeTransaction {
-                contact = realm.copyToRealmOrUpdate(contact)
-
-                // Update all the matching recipients with the new contact
-                recipients.forEach { recipient -> recipient.contact = contact }
-
-                realm.insertOrUpdate(recipients)
-            }
-        }
-
-        return true
-    }
-
     private fun getContacts(): List<Contact> {
         val defaultNumberIds = Realm.getDefaultInstance().use { realm ->
             realm.where(PhoneNumber::class.java)
@@ -302,6 +288,7 @@ class SyncRepositoryImpl @Inject constructor(
                                     uniqueNumbers += number
                                 }
                             }
+
                     contacts.value.first().apply {
                         numbers.clear()
                         numbers.addAll(uniqueNumbers)

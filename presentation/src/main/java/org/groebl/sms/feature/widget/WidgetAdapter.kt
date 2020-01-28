@@ -40,6 +40,7 @@ import org.groebl.sms.model.PhoneNumber
 import org.groebl.sms.repository.ConversationRepository
 import org.groebl.sms.util.GlideApp
 import org.groebl.sms.util.Preferences
+import org.groebl.sms.util.tryOrNull
 import javax.inject.Inject
 
 class WidgetAdapter(intent: Intent) : RemoteViewsService.RemoteViewsFactory {
@@ -130,30 +131,29 @@ class WidgetAdapter(intent: Intent) : RemoteViewsService.RemoteViewsFactory {
         }
 
         remoteViews.setImageViewBitmap(R.id.photo, null)
-        contact?.numbers?.firstOrNull()?.address?.let { address ->
-            val futureGet = GlideApp.with(context)
-                    .asBitmap()
-                    .load("tel:$address")
-                    .submit(48.dpToPx(context), 48.dpToPx(context))
-
-            try {
-                remoteViews.setImageViewBitmap(R.id.photo, futureGet.get())
-            } catch (e: Exception) {
-            }
-        }
+        val futureGet = GlideApp.with(context)
+                .asBitmap()
+                .load(contact?.photoUri)
+                .submit(48.dpToPx(context), 48.dpToPx(context))
+        tryOrNull(false) { remoteViews.setImageViewBitmap(R.id.photo, futureGet.get()) }
 
         // Name
         remoteViews.setTextColor(R.id.name, textPrimary)
         remoteViews.setTextViewText(R.id.name, boldText(conversation.getTitle(), conversation.unread))
 
         // Date
-        val timestamp = dateFormatter.getConversationTimestamp(conversation.date)
+        val timestamp = conversation.date.takeIf { it > 0 }?.let(dateFormatter::getConversationTimestamp)
         remoteViews.setTextColor(R.id.date, if (conversation.unread) textPrimary else textTertiary)
         remoteViews.setTextViewText(R.id.date, boldText(timestamp, conversation.unread))
 
         // Snippet
+        val snippet = when {
+            conversation.draft.isNotEmpty() -> context.getString(R.string.main_draft, conversation.draft)
+            conversation.me -> context.getString(R.string.main_sender_you, conversation.snippet)
+            else -> conversation.snippet
+        }
         remoteViews.setTextColor(R.id.snippet, if (conversation.unread) textPrimary else textTertiary)
-        remoteViews.setTextViewText(R.id.snippet, boldText(conversation.snippet, conversation.unread))
+        remoteViews.setTextViewText(R.id.snippet, boldText(snippet, conversation.unread))
 
         // Launch conversation on click
         val clickIntent = Intent().putExtra("threadId", conversation.id)

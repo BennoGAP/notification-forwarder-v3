@@ -24,12 +24,12 @@ import android.view.Gravity
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.widget.LinearLayoutCompat
-import kotlinx.android.synthetic.main.preference_view.view.*
 import org.groebl.sms.R
 import org.groebl.sms.common.util.extensions.resolveThemeAttribute
 import org.groebl.sms.common.util.extensions.resolveThemeColorStateList
 import org.groebl.sms.common.util.extensions.setVisible
 import org.groebl.sms.injection.appComponent
+import kotlinx.android.synthetic.main.preference_view.view.*
 
 class PreferenceView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null

@@ -22,80 +22,51 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
-import com.bumptech.glide.signature.ObjectKey
-import kotlinx.android.synthetic.main.avatar_view.view.*
 import org.groebl.sms.R
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.util.Colors
 import org.groebl.sms.common.util.extensions.setBackgroundTint
 import org.groebl.sms.common.util.extensions.setTint
 import org.groebl.sms.injection.appComponent
-import org.groebl.sms.model.Contact
 import org.groebl.sms.model.Recipient
 import org.groebl.sms.util.GlideApp
+import kotlinx.android.synthetic.main.avatar_view.view.*
 import javax.inject.Inject
 
 class AvatarView @JvmOverloads constructor(
-        context: Context, attrs: AttributeSet? = null
+    context: Context, attrs: AttributeSet? = null
 ) : FrameLayout(context, attrs) {
 
     @Inject lateinit var colors: Colors
     @Inject lateinit var navigator: Navigator
 
-    /**
-     * This value can be changes if we should use the theme from a particular conversation
-     */
-    var threadId: Long = 0
-        set(value) {
-            if (field == value) return
-            field = value
-            applyTheme(value)
-        }
-
     private var lookupKey: String? = null
     private var name: String? = null
-    private var address: String? = null
+    private var photoUri: String? = null
     private var lastUpdated: Long? = null
+    private var theme: Colors.Theme
 
     init {
         if (!isInEditMode) {
             appComponent.inject(this)
         }
 
-        View.inflate(context, R.layout.avatar_view, this)
+        theme = colors.theme()
 
+        View.inflate(context, R.layout.avatar_view, this)
         setBackgroundResource(R.drawable.circle)
         clipToOutline = true
     }
 
     /**
-     * If the [recipient] has a contact: use the contact's avatar, but keep the address.
-     * Use the recipient address otherwise.
-     */
-    fun setContact(recipient: Recipient?) {
-        // If the recipient has a contact, just use that and return
-        recipient?.contact?.let { contact ->
-            setContact(contact, recipient.address)
-            return
-        }
-
-        lookupKey = null
-        name = null
-        address = recipient?.address
-        lastUpdated = 0
-        updateView()
-    }
-
-    /**
      * Use the [contact] information to display the avatar.
-     * A specific [contactAddress] can be specified (useful when the contact has several addresses).
      */
-    fun setContact(contact: Contact?, contactAddress: String? = null) {
-        lookupKey = contact?.lookupKey
-        name = contact?.name
-        // If a contactAddress has been given, we use it. Use the contact address otherwise.
-        address = contactAddress?.takeIf { it.isNotEmpty() } ?: contact?.numbers?.firstOrNull()?.address
-        lastUpdated = contact?.lastUpdate
+    fun setRecipient(recipient: Recipient?) {
+        lookupKey = recipient?.contact?.lookupKey
+        name = recipient?.contact?.name
+        photoUri = recipient?.contact?.photoUri
+        lastUpdated = recipient?.contact?.lastUpdate
+        theme = colors.theme(recipient)
         updateView()
     }
 
@@ -103,20 +74,16 @@ class AvatarView @JvmOverloads constructor(
         super.onFinishInflate()
 
         if (!isInEditMode) {
-            applyTheme(threadId)
             updateView()
         }
     }
 
-    fun applyTheme(threadId: Long) {
-        colors.theme(threadId).run {
-            setBackgroundTint(theme)
-            initial.setTextColor(textPrimary)
-            icon.setTint(textPrimary)
-        }
-    }
-
     private fun updateView() {
+        // Apply theme
+        setBackgroundTint(theme.theme)
+        initial.setTextColor(theme.textPrimary)
+        icon.setTint(theme.textPrimary)
+
         if (name?.isNotEmpty() == true) {
             val initials = name?.split(" ").orEmpty()
                     .filter { name -> name.isNotEmpty() }
@@ -130,10 +97,9 @@ class AvatarView @JvmOverloads constructor(
         }
 
         photo.setImageDrawable(null)
-        address?.let { address ->
+        photoUri?.let { photoUri ->
             GlideApp.with(photo)
-                    .load("tel:$address")
-                    .signature(ObjectKey(lastUpdated ?: 0L))
+                    .load(photoUri)
                     .into(photo)
         }
     }

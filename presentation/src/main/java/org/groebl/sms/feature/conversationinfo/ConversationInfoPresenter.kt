@@ -18,22 +18,28 @@
  */
 package org.groebl.sms.feature.conversationinfo
 
+import android.content.Context
 import androidx.lifecycle.Lifecycle
+import org.groebl.sms.R
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.base.QkPresenter
+import org.groebl.sms.common.util.ClipboardUtils
+import org.groebl.sms.common.util.extensions.makeToast
 import org.groebl.sms.extensions.asObservable
 import org.groebl.sms.extensions.mapNotNull
+import org.groebl.sms.feature.conversationinfo.ConversationInfoItem.ConversationInfoMedia
+import org.groebl.sms.feature.conversationinfo.ConversationInfoItem.ConversationInfoRecipient
 import org.groebl.sms.interactor.DeleteConversations
 import org.groebl.sms.interactor.MarkArchived
 import org.groebl.sms.interactor.MarkUnarchived
-import org.groebl.sms.listener.ContactAddedListener
 import org.groebl.sms.manager.PermissionManager
 import org.groebl.sms.model.Conversation
 import org.groebl.sms.repository.ConversationRepository
 import org.groebl.sms.repository.MessageRepository
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
-import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.rxkotlin.Observables
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.withLatestFrom
 import io.reactivex.subjects.BehaviorSubject
@@ -44,7 +50,7 @@ import javax.inject.Named
 class ConversationInfoPresenter @Inject constructor(
     @Named("threadId") threadId: Long,
     messageRepo: MessageRepository,
-    private val contactAddedListener: ContactAddedListener,
+    private val context: Context,
     private val conversationRepo: ConversationRepository,
     private val deleteConversations: DeleteConversations,
     private val markArchived: MarkArchived,
@@ -52,7 +58,7 @@ class ConversationInfoPresenter @Inject constructor(
     private val navigator: Navigator,
     private val permissionManager: PermissionManager
 ) : QkPresenter<ConversationInfoView, ConversationInfoState>(
-        ConversationInfoState(threadId = threadId, media = messageRepo.getPartsForConversation(threadId))
+        ConversationInfoState(threadId = threadId)
 ) {
 
     private val conversation: Subject<Conversation> = BehaviorSubject.create()
@@ -74,29 +80,29 @@ class ConversationInfoPresenter @Inject constructor(
         disposables += markUnarchived
         disposables += deleteConversations
 
-        // Update the recipients whenever they change
-        disposables += conversation
-                .map { conversation -> conversation.recipients }
-                .distinctUntilChanged()
-                .subscribe { recipients -> newState { copy(recipients = recipients) } }
+        disposables += Observables
+                .combineLatest(
+                        conversation,
+                        messageRepo.getPartsForConversation(threadId).asObservable()
+                ) { conversation, parts ->
+                    val data = mutableListOf<ConversationInfoItem>()
 
-        // Update conversation title whenever it changes
-        disposables += conversation
-                .map { conversation -> conversation.name }
-                .distinctUntilChanged()
-                .subscribe { name -> newState { copy(name = name) } }
+                    // If some data was deleted, this isn't the place to handle it
+                    if (!conversation.isLoaded || !conversation.isValid || !parts.isLoaded || !parts.isValid) {
+                        return@combineLatest
+                    }
 
-        // Update the view's archived state whenever it changes
-        disposables += conversation
-                .map { conversation -> conversation.archived }
-                .distinctUntilChanged()
-                .subscribe { archived -> newState { copy(archived = archived) } }
+                    data += conversation.recipients.map(::ConversationInfoRecipient)
+                    data += ConversationInfoItem.ConversationInfoSettings(
+                            name = conversation.name,
+                            recipients = conversation.recipients,
+                            archived = conversation.archived,
+                            blocked = conversation.blocked)
+                    data += parts.map(::ConversationInfoMedia)
 
-        // Update the view's blocked state whenever it changes
-        disposables += conversation
-                .map { conversation -> conversation.blocked }
-                .distinctUntilChanged()
-                .subscribe { blocked -> newState { copy(blocked = blocked) } }
+                    newState { copy(data = data) }
+                }
+                .subscribe()
     }
 
     override fun bindIntents(view: ConversationInfoView) {
@@ -105,19 +111,28 @@ class ConversationInfoPresenter @Inject constructor(
         // Add or display the contact
         view.recipientClicks()
                 .mapNotNull(conversationRepo::getRecipient)
-                .flatMap { recipient ->
-                    val lookupKey = recipient.contact?.lookupKey
-                    if (lookupKey != null) {
-                        navigator.showContact(lookupKey)
-                        Observable.empty<Unit>()
-                    } else {
-                        // Allow the user to add the contact, then listen for changes
-                        navigator.addContact(recipient.address)
-                        contactAddedListener.listen(recipient.address)
-                    }
+                .doOnNext { recipient ->
+                    recipient.contact?.lookupKey?.let(navigator::showContact)
+                            ?: navigator.addContact(recipient.address)
                 }
                 .autoDisposable(view.scope(Lifecycle.Event.ON_DESTROY)) // ... this should be the default
                 .subscribe()
+
+        // Copy phone number
+        view.recipientLongClicks()
+                .mapNotNull(conversationRepo::getRecipient)
+                .map { recipient -> recipient.address }
+                .observeOn(AndroidSchedulers.mainThread())
+                .autoDisposable(view.scope())
+                .subscribe { address ->
+                    ClipboardUtils.copy(context, address)
+                    context.makeToast(R.string.info_copied_address)
+                }
+
+        // Show the theme settings for the conversation
+        view.themeClicks()
+                .autoDisposable(view.scope())
+                .subscribe(view::showThemePicker)
 
         // Show the conversation title dialog
         view.nameClicks()
@@ -139,12 +154,6 @@ class ConversationInfoPresenter @Inject constructor(
                 .withLatestFrom(conversation) { _, conversation -> conversation }
                 .autoDisposable(view.scope())
                 .subscribe { conversation -> navigator.showNotificationSettings(conversation.id) }
-
-        // Show the theme settings for the conversation
-        view.themeClicks()
-                .withLatestFrom(conversation) { _, conversation -> conversation }
-                .autoDisposable(view.scope())
-                .subscribe { conversation -> view.showThemePicker(conversation.id) }
 
         // Toggle the archived state of the conversation
         view.archiveClicks()
@@ -174,6 +183,11 @@ class ConversationInfoPresenter @Inject constructor(
                 .withLatestFrom(conversation) { _, conversation -> conversation }
                 .autoDisposable(view.scope())
                 .subscribe { conversation -> deleteConversations.execute(listOf(conversation.id)) }
+
+        // Media
+        view.mediaClicks()
+                .autoDisposable(view.scope())
+                .subscribe(navigator::showMedia)
     }
 
 }

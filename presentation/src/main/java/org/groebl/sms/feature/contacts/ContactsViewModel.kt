@@ -19,6 +19,22 @@
 package org.groebl.sms.feature.contacts
 
 import android.view.inputmethod.EditorInfo
+import org.groebl.sms.common.base.QkViewModel
+import org.groebl.sms.extensions.mapNotNull
+import org.groebl.sms.extensions.removeAccents
+import org.groebl.sms.feature.compose.editing.ComposeItem
+import org.groebl.sms.feature.compose.editing.PhoneNumberAction
+import org.groebl.sms.filter.ContactFilter
+import org.groebl.sms.filter.ContactGroupFilter
+import org.groebl.sms.interactor.SetDefaultPhoneNumber
+import org.groebl.sms.model.Contact
+import org.groebl.sms.model.ContactGroup
+import org.groebl.sms.model.Conversation
+import org.groebl.sms.model.PhoneNumber
+import org.groebl.sms.model.Recipient
+import org.groebl.sms.repository.ContactRepository
+import org.groebl.sms.repository.ConversationRepository
+import org.groebl.sms.util.PhoneNumberUtils
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import io.reactivex.Observable
@@ -28,28 +44,11 @@ import io.reactivex.schedulers.Schedulers
 import io.realm.RealmList
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.rx2.awaitFirst
-import org.groebl.sms.common.base.QkViewModel
-import org.groebl.sms.extensions.mapNotNull
-import org.groebl.sms.extensions.removeAccents
-import org.groebl.sms.feature.compose.editing.Chip
-import org.groebl.sms.feature.compose.editing.ComposeItem
-import org.groebl.sms.feature.compose.editing.PhoneNumberAction
-import org.groebl.sms.filter.ContactFilter
-import org.groebl.sms.filter.ContactGroupFilter
-import org.groebl.sms.interactor.ContactSync
-import org.groebl.sms.interactor.SetDefaultPhoneNumber
-import org.groebl.sms.model.Contact
-import org.groebl.sms.model.ContactGroup
-import org.groebl.sms.model.Conversation
-import org.groebl.sms.model.PhoneNumber
-import org.groebl.sms.repository.ContactRepository
-import org.groebl.sms.repository.ConversationRepository
-import org.groebl.sms.util.PhoneNumberUtils
 import javax.inject.Inject
 
 class ContactsViewModel @Inject constructor(
+    sharing: Boolean,
     serializedChips: HashMap<String, String?>,
-    syncContacts: ContactSync,
     private val contactFilter: ContactFilter,
     private val contactGroupFilter: ContactGroupFilter,
     private val contactsRepo: ContactRepository,
@@ -60,22 +59,20 @@ class ContactsViewModel @Inject constructor(
 
     private val contactGroups: Observable<List<ContactGroup>> by lazy { contactsRepo.getUnmanagedContactGroups() }
     private val contacts: Observable<List<Contact>> by lazy { contactsRepo.getUnmanagedContacts() }
-    private val recents: Observable<List<Conversation>> by lazy { conversationRepo.getUnmanagedConversations() }
+    private val recents: Observable<List<Conversation>> by lazy {
+        if (sharing) conversationRepo.getUnmanagedConversations() else Observable.just(listOf())
+    }
     private val starredContacts: Observable<List<Contact>> by lazy { contactsRepo.getUnmanagedContacts(true) }
 
     private val selectedChips = Observable.just(serializedChips)
             .observeOn(Schedulers.io())
             .map { hashmap ->
                 hashmap.map { (address, lookupKey) ->
-                    Chip(address, lookupKey?.let(contactsRepo::getUnmanagedContact))
+                    Recipient(address = address, contact = lookupKey?.let(contactsRepo::getUnmanagedContact))
                 }
             }
 
     private var shouldOpenKeyboard: Boolean = true
-
-    init {
-        syncContacts.execute(Unit)
-    }
 
     override fun bindView(view: ContactsContract) {
         super.bindView(view)
@@ -84,6 +81,16 @@ class ContactsViewModel @Inject constructor(
             view.openKeyboard()
             shouldOpenKeyboard = false
         }
+
+        // Update the state's query, so we know if we should show the cancel button
+        view.queryChangedIntent
+                .autoDisposable(view.scope())
+                .subscribe { query -> newState { copy(query = query.toString()) } }
+
+        // Clear the query
+        view.queryClearedIntent
+                .autoDisposable(view.scope())
+                .subscribe { view.clearQuery() }
 
         // Update the list of contact suggestions based on the query input, while also filtering out any contacts
         // that have already been selected
@@ -174,11 +181,10 @@ class ContactsViewModel @Inject constructor(
                 .observeOn(Schedulers.io())
                 .autoDisposable(view.scope())
                 .subscribe { (composeItem, force) ->
-                    val contacts = composeItem.getContacts()
-                    val newChips = contacts.map { contact ->
+                    view.finish(HashMap(composeItem.getContacts().associate { contact ->
                         if (contact.numbers.size == 1 || contact.getDefaultNumber() != null && !force) {
-                            val number = contact.getDefaultNumber() ?: contact.numbers[0]!!
-                            Chip(number.address, contact)
+                            val address = contact.getDefaultNumber()?.address ?: contact.numbers[0]!!.address
+                            address to contact.lookupKey
                         } else {
                             runBlocking {
                                 newState { copy(selectedContact = contact) }
@@ -196,12 +202,10 @@ class ContactsViewModel @Inject constructor(
                                     setDefaultPhoneNumber.execute(params)
                                 }
 
-                                Chip(number.address, contact)
+                                number.address to contact.lookupKey
                             } ?: return@subscribe
                         }
-                    }
-
-                    view.finish(HashMap(newChips.associate { chip -> chip.address to chip.contact?.lookupKey }))
+                    }))
                 }
     }
 

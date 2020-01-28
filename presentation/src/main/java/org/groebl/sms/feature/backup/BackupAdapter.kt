@@ -22,19 +22,19 @@ import android.content.Context
 import android.text.format.Formatter
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.Subject
+import kotlinx.android.synthetic.main.backup_list_item.*
 import org.groebl.sms.R
 import org.groebl.sms.common.base.FlowableAdapter
 import org.groebl.sms.common.base.QkViewHolder
 import org.groebl.sms.common.util.DateFormatter
 import org.groebl.sms.model.BackupFile
-import io.reactivex.subjects.PublishSubject
-import io.reactivex.subjects.Subject
-import kotlinx.android.synthetic.main.backup_list_item.view.*
 import javax.inject.Inject
 
 class BackupAdapter @Inject constructor(
-        private val context: Context,
-        private val dateFormatter: DateFormatter
+    private val context: Context,
+    private val dateFormatter: DateFormatter
 ) : FlowableAdapter<BackupFile>() {
 
     val backupSelected: Subject<BackupFile> = PublishSubject.create()
@@ -50,13 +50,12 @@ class BackupAdapter @Inject constructor(
 
     override fun onBindViewHolder(holder: QkViewHolder, position: Int) {
         val backup = getItem(position)
-        val view = holder.containerView
 
         val count = backup.messages
 
-        view.title.text = dateFormatter.getDetailedTimestamp(backup.date)
-        view.messages.text = context.resources.getQuantityString(R.plurals.backup_message_count, count, count)
-        view.size.text = Formatter.formatFileSize(context, backup.size)
+        holder.title.text = dateFormatter.getDetailedTimestamp(backup.date)
+        holder.messages.text = context.resources.getQuantityString(R.plurals.backup_message_count, count, count)
+        holder.size.text = Formatter.formatFileSize(context, backup.size)
     }
 
 }

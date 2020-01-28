@@ -25,7 +25,7 @@ import io.reactivex.Observable
 interface MainView : QkView<MainState> {
 
     val onNewIntentIntent: Observable<Intent>
-    val activityResumedIntent: Observable<*>
+    val activityResumedIntent: Observable<Boolean>
     val queryChangedIntent: Observable<CharSequence>
     val composeIntent: Observable<Unit>
     val drawerOpenIntent: Observable<Boolean>
@@ -46,6 +46,7 @@ interface MainView : QkView<MainState> {
     fun requestPermissions()
     fun clearSearch()
     fun clearSelection()
+    fun themeChanged()
     fun showBlockingDialog(conversations: List<Long>, block: Boolean)
     fun showDeleteDialog(conversations: List<Long>)
     fun showArchivedSnackbar()

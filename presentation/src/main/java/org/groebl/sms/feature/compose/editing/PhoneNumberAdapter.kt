@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Moez Bhatti <moez.bhatti@gmail.com>
+ * Copyright (C) 2017 Moez Bhatti <moez.bhatti@gmail.com>
  *
  * This file is part of QKSMS.
  *
@@ -20,11 +20,11 @@ package org.groebl.sms.feature.compose.editing
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.contact_number_list_item.view.*
 import org.groebl.sms.R
 import org.groebl.sms.common.base.QkAdapter
 import org.groebl.sms.common.base.QkViewHolder
 import org.groebl.sms.model.PhoneNumber
+import kotlinx.android.synthetic.main.contact_number_list_item.*
 
 class PhoneNumberAdapter : QkAdapter<PhoneNumber>() {
 
@@ -36,10 +36,9 @@ class PhoneNumberAdapter : QkAdapter<PhoneNumber>() {
 
     override fun onBindViewHolder(holder: QkViewHolder, position: Int) {
         val number = getItem(position)
-        val view = holder.containerView
 
-        view.address.text = number.address
-        view.type.text = number.type
+        holder.address.text = number.address
+        holder.type.text = number.type
     }
 
     override fun areItemsTheSame(old: PhoneNumber, new: PhoneNumber): Boolean {

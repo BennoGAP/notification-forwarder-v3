@@ -19,18 +19,19 @@
 package org.groebl.sms.feature.compose
 
 import android.net.Uri
+import androidx.annotation.StringRes
 import androidx.core.view.inputmethod.InputContentInfoCompat
+import org.groebl.sms.common.base.QkView
+import org.groebl.sms.model.Attachment
+import org.groebl.sms.model.Recipient
 import io.reactivex.Observable
 import io.reactivex.subjects.Subject
-import org.groebl.sms.common.base.QkView
-import org.groebl.sms.feature.compose.editing.Chip
-import org.groebl.sms.model.Attachment
 
 interface ComposeView : QkView<ComposeState> {
 
     val activityVisibleIntent: Observable<Boolean>
     val chipsSelectedIntent: Subject<HashMap<String, String?>>
-    val chipDeletedIntent: Subject<Chip>
+    val chipDeletedIntent: Subject<Recipient>
     val menuReadyIntent: Observable<Unit>
     val optionsItemIntent: Observable<Int>
     val sendAsGroupIntent: Observable<*>
@@ -59,7 +60,8 @@ interface ComposeView : QkView<ComposeState> {
     fun requestDefaultSms()
     fun requestStoragePermission()
     fun requestSmsPermission()
-    fun showContacts(chips: List<Chip>)
+    fun showContacts(sharing: Boolean, chips: List<Recipient>)
+    fun themeChanged()
     fun showKeyboard()
     fun requestCamera()
     fun requestGallery()

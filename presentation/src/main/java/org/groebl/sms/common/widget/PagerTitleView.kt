@@ -29,7 +29,9 @@ import org.groebl.sms.R
 import org.groebl.sms.common.util.Colors
 import org.groebl.sms.common.util.extensions.forEach
 import org.groebl.sms.common.util.extensions.resolveThemeColor
+import org.groebl.sms.extensions.Optional
 import org.groebl.sms.injection.appComponent
+import org.groebl.sms.repository.ConversationRepository
 import com.uber.autodispose.android.ViewScopeProvider
 import com.uber.autodispose.autoDisposable
 import io.reactivex.subjects.BehaviorSubject
@@ -40,8 +42,9 @@ import javax.inject.Inject
 class PagerTitleView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : LinearLayout(context, attrs) {
 
     @Inject lateinit var colors: Colors
+    @Inject lateinit var conversationRepo: ConversationRepository
 
-    private val threadId: Subject<Long> = BehaviorSubject.create()
+    private val recipientId: Subject<Long> = BehaviorSubject.create()
 
     var pager: ViewPager? = null
         set(value) {
@@ -55,8 +58,8 @@ class PagerTitleView @JvmOverloads constructor(context: Context, attrs: Attribut
         if (!isInEditMode) appComponent.inject(this)
     }
 
-    fun setThreadId(id: Long) {
-        threadId.onNext(id)
+    fun setRecipientId(id: Long) {
+        recipientId.onNext(id)
     }
 
     private fun recreate() {
@@ -90,9 +93,10 @@ class PagerTitleView @JvmOverloads constructor(context: Context, attrs: Attribut
                 intArrayOf(android.R.attr.state_activated),
                 intArrayOf(-android.R.attr.state_activated))
 
-        threadId
+        recipientId
                 .distinctUntilChanged()
-                .switchMap { threadId -> colors.themeObservable(threadId) }
+                .map { recipientId -> Optional(conversationRepo.getRecipient(recipientId)) }
+                .switchMap { recipient -> colors.themeObservable(recipient.value) }
                 .map { theme ->
                     val textSecondary = context.resolveThemeColor(android.R.attr.textColorSecondary)
                     ColorStateList(states, intArrayOf(theme.theme, textSecondary))

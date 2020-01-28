@@ -19,31 +19,45 @@
 package org.groebl.sms.feature.compose.editing
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.subjects.PublishSubject
-import io.reactivex.subjects.Subject
-import kotlinx.android.synthetic.main.contact_list_item.view.*
 import org.groebl.sms.R
 import org.groebl.sms.common.base.QkAdapter
 import org.groebl.sms.common.base.QkViewHolder
 import org.groebl.sms.common.util.Colors
 import org.groebl.sms.common.util.extensions.forwardTouches
 import org.groebl.sms.common.util.extensions.setTint
+import org.groebl.sms.extensions.associateByNotNull
 import org.groebl.sms.model.Contact
 import org.groebl.sms.model.ContactGroup
 import org.groebl.sms.model.Conversation
 import org.groebl.sms.model.Recipient
+import org.groebl.sms.repository.ConversationRepository
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.plusAssign
+import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.Subject
+import kotlinx.android.synthetic.main.contact_list_item.*
+import kotlinx.android.synthetic.main.contact_list_item.view.*
 import javax.inject.Inject
 
-class ComposeItemAdapter @Inject constructor(private val colors: Colors) : QkAdapter<ComposeItem>() {
+class ComposeItemAdapter @Inject constructor(
+    private val colors: Colors,
+    private val conversationRepo: ConversationRepository
+) : QkAdapter<ComposeItem>() {
 
     val clicks: Subject<ComposeItem> = PublishSubject.create()
     val longClicks: Subject<ComposeItem> = PublishSubject.create()
 
     private val numbersViewPool = RecyclerView.RecycledViewPool()
+    private val disposables = CompositeDisposable()
+
+    var recipients: Map<String, Recipient> = mapOf()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QkViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -71,103 +85,126 @@ class ComposeItemAdapter @Inject constructor(private val colors: Colors) : QkAda
     override fun onBindViewHolder(holder: QkViewHolder, position: Int) {
         val prevItem = if (position > 0) getItem(position - 1) else null
         val item = getItem(position)
-        val view = holder.containerView
 
         when (item) {
-            is ComposeItem.New -> bindNew(view, item.value)
-            is ComposeItem.Recent -> bindRecent(view, item.value, prevItem)
-            is ComposeItem.Starred -> bindStarred(view, item.value, prevItem)
-            is ComposeItem.Person -> bindPerson(view, item.value, prevItem)
-            is ComposeItem.Group -> bindGroup(view, item.value, prevItem)
+            is ComposeItem.New -> bindNew(holder, item.value)
+            is ComposeItem.Recent -> bindRecent(holder, item.value, prevItem)
+            is ComposeItem.Starred -> bindStarred(holder, item.value, prevItem)
+            is ComposeItem.Person -> bindPerson(holder, item.value, prevItem)
+            is ComposeItem.Group -> bindGroup(holder, item.value, prevItem)
         }
     }
 
-    private fun bindNew(view: View, contact: Contact) {
-        view.index.isVisible = false
+    private fun bindNew(holder: QkViewHolder, contact: Contact) {
+        holder.index.isVisible = false
 
-        view.icon.isVisible = false
+        holder.icon.isVisible = false
 
-        view.avatar.contacts = listOf(Recipient(contact = contact))
+        holder.avatar.recipients = listOf(createRecipient(contact))
 
-        view.title.text = contact.numbers.joinToString { it.address }
+        holder.title.text = contact.numbers.joinToString { it.address }
 
-        view.subtitle.isVisible = false
+        holder.subtitle.isVisible = false
 
-        view.numbers.isVisible = false
+        holder.numbers.isVisible = false
     }
 
-    private fun bindRecent(view: View, conversation: Conversation, prev: ComposeItem?) {
-        view.index.isVisible = false
+    private fun bindRecent(holder: QkViewHolder, conversation: Conversation, prev: ComposeItem?) {
+        holder.index.isVisible = false
 
-        view.icon.isVisible = prev !is ComposeItem.Recent
-        view.icon.setImageResource(R.drawable.ic_history_black_24dp)
+        holder.icon.isVisible = prev !is ComposeItem.Recent
+        holder.icon.setImageResource(R.drawable.ic_history_black_24dp)
 
-        view.avatar.contacts = conversation.recipients
+        holder.avatar.recipients = conversation.recipients
 
-        view.title.text = conversation.getTitle()
+        holder.title.text = conversation.getTitle()
 
-        view.subtitle.isVisible = conversation.recipients.size > 1 && conversation.name.isBlank()
-        view.subtitle.text = conversation.recipients.joinToString(", ") { recipient ->
+        holder.subtitle.isVisible = conversation.recipients.size > 1 && conversation.name.isBlank()
+        holder.subtitle.text = conversation.recipients.joinToString(", ") { recipient ->
             recipient.contact?.name ?: recipient.address
         }
 
-        view.numbers.isVisible = conversation.recipients.size == 1
-        (view.numbers.adapter as PhoneNumberAdapter).data = conversation.recipients
+        holder.numbers.isVisible = conversation.recipients.size == 1
+        (holder.numbers.adapter as PhoneNumberAdapter).data = conversation.recipients
                 .mapNotNull { recipient -> recipient.contact }
                 .flatMap { contact -> contact.numbers }
     }
 
-    private fun bindStarred(view: View, contact: Contact, prev: ComposeItem?) {
-        view.index.isVisible = false
+    private fun bindStarred(holder: QkViewHolder, contact: Contact, prev: ComposeItem?) {
+        holder.index.isVisible = false
 
-        view.icon.isVisible = prev !is ComposeItem.Starred
-        view.icon.setImageResource(R.drawable.ic_star_black_24dp)
+        holder.icon.isVisible = prev !is ComposeItem.Starred
+        holder.icon.setImageResource(R.drawable.ic_star_black_24dp)
 
-        view.avatar.contacts = listOf(Recipient(contact = contact))
+        holder.avatar.recipients = listOf(createRecipient(contact))
 
-        view.title.text = contact.name
+        holder.title.text = contact.name
 
-        view.subtitle.isVisible = false
+        holder.subtitle.isVisible = false
 
-        view.numbers.isVisible = true
-        (view.numbers.adapter as PhoneNumberAdapter).data = contact.numbers
+        holder.numbers.isVisible = true
+        (holder.numbers.adapter as PhoneNumberAdapter).data = contact.numbers
     }
 
-    private fun bindGroup(view: View, group: ContactGroup, prev: ComposeItem?) {
-        view.index.isVisible = false
+    private fun bindGroup(holder: QkViewHolder, group: ContactGroup, prev: ComposeItem?) {
+        holder.index.isVisible = false
 
-        view.icon.isVisible = prev !is ComposeItem.Group
-        view.icon.setImageResource(R.drawable.ic_people_black_24dp)
+        holder.icon.isVisible = prev !is ComposeItem.Group
+        holder.icon.setImageResource(R.drawable.ic_people_black_24dp)
 
-        view.avatar.contacts = group.contacts.map { contact -> Recipient(contact = contact) }
+        holder.avatar.recipients = group.contacts.map(::createRecipient)
 
-        view.title.text = group.title
+        holder.title.text = group.title
 
-        view.subtitle.isVisible = true
-        view.subtitle.text = group.contacts.joinToString(", ") { it.name }
+        holder.subtitle.isVisible = true
+        holder.subtitle.text = group.contacts.joinToString(", ") { it.name }
 
-        view.numbers.isVisible = false
+        holder.numbers.isVisible = false
     }
 
-    private fun bindPerson(view: View, contact: Contact, prev: ComposeItem?) {
-        view.index.isVisible = true
-        view.index.text = if (contact.name.getOrNull(0)?.isLetter() == true) contact.name[0].toString() else "#"
-        view.index.isVisible = prev !is ComposeItem.Person ||
+    private fun bindPerson(holder: QkViewHolder, contact: Contact, prev: ComposeItem?) {
+        holder.index.isVisible = true
+        holder.index.text = if (contact.name.getOrNull(0)?.isLetter() == true) contact.name[0].toString() else "#"
+        holder.index.isVisible = prev !is ComposeItem.Person ||
                 (contact.name[0].isLetter() && !contact.name[0].equals(prev.value.name[0], ignoreCase = true)) ||
                 (!contact.name[0].isLetter() && prev.value.name[0].isLetter())
 
-        view.icon.isVisible = false
+        holder.icon.isVisible = false
 
-        view.avatar.contacts = listOf(Recipient(contact = contact))
+        holder.avatar.recipients = listOf(createRecipient(contact))
 
-        view.title.text = contact.name
+        holder.title.text = contact.name
 
-        view.subtitle.isVisible = false
+        holder.subtitle.isVisible = false
 
-        view.numbers.isVisible = true
-        (view.numbers.adapter as PhoneNumberAdapter).data = contact.numbers
+        holder.numbers.isVisible = true
+        (holder.numbers.adapter as PhoneNumberAdapter).data = contact.numbers
     }
 
-    override fun areContentsTheSame(old: ComposeItem, new: ComposeItem): Boolean = false
+    private fun createRecipient(contact: Contact): Recipient {
+        return recipients[contact.lookupKey] ?: Recipient(
+            address = contact.numbers.firstOrNull()?.address ?: "",
+            contact = contact)
+    }
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        disposables += conversationRepo.getUnmanagedRecipients()
+                .map { recipients -> recipients.associateByNotNull { recipient -> recipient.contact?.lookupKey } }
+                .subscribe { recipients -> this@ComposeItemAdapter.recipients = recipients }
+    }
+
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        disposables.clear()
+    }
+
+    override fun areItemsTheSame(old: ComposeItem, new: ComposeItem): Boolean {
+        val oldIds = old.getContacts().map { contact -> contact.lookupKey }
+        val newIds = new.getContacts().map { contact -> contact.lookupKey }
+        return oldIds == newIds
+    }
+
+    override fun areContentsTheSame(old: ComposeItem, new: ComposeItem): Boolean {
+        return false
+    }
 
 }

@@ -24,6 +24,12 @@ import android.provider.BaseColumns
 import android.provider.ContactsContract
 import android.provider.ContactsContract.CommonDataKinds.Email
 import android.provider.ContactsContract.CommonDataKinds.Phone
+import org.groebl.sms.extensions.asFlowable
+import org.groebl.sms.extensions.asObservable
+import org.groebl.sms.extensions.mapNotNull
+import org.groebl.sms.model.Contact
+import org.groebl.sms.model.ContactGroup
+import org.groebl.sms.util.Preferences
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -31,12 +37,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.realm.Realm
 import io.realm.RealmResults
-import org.groebl.sms.extensions.asFlowable
-import org.groebl.sms.extensions.asObservable
-import org.groebl.sms.extensions.mapNotNull
-import org.groebl.sms.model.Contact
-import org.groebl.sms.model.ContactGroup
-import org.groebl.sms.util.Preferences
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -97,6 +97,7 @@ class ContactRepositoryImpl @Inject constructor(
         if (starred) {
             query = query.equalTo("starred", true)
         }
+
         return query
                 .findAllAsync()
                 .asObservable()
@@ -160,4 +161,5 @@ class ContactRepositoryImpl @Inject constructor(
             }
         }
     }
+
 }

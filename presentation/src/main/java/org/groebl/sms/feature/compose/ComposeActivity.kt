@@ -41,6 +41,22 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.widget.textChanges
+import org.groebl.sms.R
+import org.groebl.sms.common.Navigator
+import org.groebl.sms.common.base.QkThemedActivity
+import org.groebl.sms.common.util.DateFormatter
+import org.groebl.sms.common.util.extensions.autoScrollToStart
+import org.groebl.sms.common.util.extensions.hideKeyboard
+import org.groebl.sms.common.util.extensions.resolveThemeColor
+import org.groebl.sms.common.util.extensions.scrapViews
+import org.groebl.sms.common.util.extensions.setBackgroundTint
+import org.groebl.sms.common.util.extensions.setTint
+import org.groebl.sms.common.util.extensions.setVisible
+import org.groebl.sms.common.util.extensions.showKeyboard
+import org.groebl.sms.feature.compose.editing.ChipsAdapter
+import org.groebl.sms.feature.contacts.ContactsActivity
+import org.groebl.sms.model.Attachment
+import org.groebl.sms.model.Recipient
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import dagger.android.AndroidInjection
@@ -48,15 +64,6 @@ import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import kotlinx.android.synthetic.main.compose_activity.*
-import org.groebl.sms.R
-import org.groebl.sms.common.Navigator
-import org.groebl.sms.common.base.QkThemedActivity
-import org.groebl.sms.common.util.DateFormatter
-import org.groebl.sms.common.util.extensions.*
-import org.groebl.sms.feature.compose.editing.Chip
-import org.groebl.sms.feature.compose.editing.ChipsAdapter
-import org.groebl.sms.feature.contacts.ContactsActivity
-import org.groebl.sms.model.Attachment
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -65,10 +72,12 @@ import kotlin.collections.HashMap
 class ComposeActivity : QkThemedActivity(), ComposeView {
 
     companion object {
-        private const val SELECT_CONTACT_REQUEST_CODE = 0
-        private const val TAKE_PHOTO_REQUEST_CODE = 1
-        private const val ATTACH_PHOTO_REQUEST_CODE = 2
-        private const val ATTACH_CONTACT_REQUEST_CODE = 3
+        private const val SelectContactRequestCode = 0
+        private const val TakePhotoRequestCode = 1
+        private const val AttachPhotoRequestCode = 2
+        private const val AttachContactRequestCode = 3
+
+        private const val CameraDestinationKey = "camera_destination"
 
     }
 
@@ -81,7 +90,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
 
     override val activityVisibleIntent: Subject<Boolean> = PublishSubject.create()
     override val chipsSelectedIntent: Subject<HashMap<String, String?>> = PublishSubject.create()
-    override val chipDeletedIntent: Subject<Chip> by lazy { chipsAdapter.chipDeleted }
+    override val chipDeletedIntent: Subject<Recipient> by lazy { chipsAdapter.chipDeleted }
     override val menuReadyIntent: Observable<Unit> = menu.map { Unit }
     override val optionsItemIntent: Subject<Int> = PublishSubject.create()
     override val sendAsGroupIntent by lazy { sendAsGroupBackground.clicks() }
@@ -141,14 +150,13 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
                 .doOnNext { attach.setTint(it.textPrimary) }
                 .doOnNext { messageAdapter.theme = it }
                 .autoDisposable(scope())
-                .subscribe { messageList.scrapViews() }
+                .subscribe()
 
         window.callback = ComposeWindowCallback(window.callback, this)
 
         // These theme attributes don't apply themselves on API 21
         if (Build.VERSION.SDK_INT <= 22) {
             messageBackground.setBackgroundTint(resolveThemeColor(R.attr.bubbleColor))
-            composeBackground.setBackgroundTint(resolveThemeColor(R.attr.composeBackground))
         }
     }
 
@@ -168,7 +176,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
             return
         }
 
-        threadId.onNext(state.selectedConversation)
+        threadId.onNext(state.threadId)
 
         title = when {
             state.selectedMessages > 0 -> getString(R.string.compose_title_selected, state.selectedMessages)
@@ -192,7 +200,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
                 && state.query.isEmpty()
         toolbar.menu.findItem(R.id.info)?.isVisible = !state.editingMode && state.selectedMessages == 0
                 && state.query.isEmpty()
-        toolbar.menu.findItem(R.id.copy)?.isVisible = !state.editingMode && state.selectedMessages == 1
+        toolbar.menu.findItem(R.id.copy)?.isVisible = !state.editingMode && state.selectedMessages > 0
         toolbar.menu.findItem(R.id.share)?.isVisible = !state.editingMode && state.selectedMessages == 1
         toolbar.menu.findItem(R.id.details)?.isVisible = !state.editingMode && state.selectedMessages == 1
         toolbar.menu.findItem(R.id.delete)?.isVisible = !state.editingMode && state.selectedMessages > 0
@@ -218,7 +226,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         attachments.setVisible(state.attachments.isNotEmpty())
         attachmentAdapter.data = state.attachments
 
-        attach.animate().rotation(if (state.attaching) 45f else 0f).start()
+        attach.animate().rotation(if (state.attaching) 135f else 0f).start()
         attaching.isVisible = state.attaching
 
         counter.text = state.remaining
@@ -275,15 +283,20 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         val intent = Intent(Intent.ACTION_PICK)
                 .setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE)
 
-        startActivityForResult(Intent.createChooser(intent, null), ATTACH_CONTACT_REQUEST_CODE)
+        startActivityForResult(Intent.createChooser(intent, null), AttachContactRequestCode)
     }
 
-    override fun showContacts(chips: List<Chip>) {
+    override fun showContacts(sharing: Boolean, chips: List<Recipient>) {
         message.hideKeyboard()
         val serialized = HashMap(chips.associate { chip -> chip.address to chip.contact?.lookupKey })
         val intent = Intent(this, ContactsActivity::class.java)
+                .putExtra(ContactsActivity.SharingKey, sharing)
                 .putExtra(ContactsActivity.ChipsKey, serialized)
-        startActivityForResult(intent, SELECT_CONTACT_REQUEST_CODE)
+        startActivityForResult(intent, SelectContactRequestCode)
+    }
+
+    override fun themeChanged() {
+        messageList.scrapViews()
     }
 
     override fun showKeyboard() {
@@ -299,7 +312,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
 
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                 .putExtra(MediaStore.EXTRA_OUTPUT, cameraDestination)
-        startActivityForResult(Intent.createChooser(intent, null), TAKE_PHOTO_REQUEST_CODE)
+        startActivityForResult(Intent.createChooser(intent, null), TakePhotoRequestCode)
     }
 
     override fun requestGallery() {
@@ -309,7 +322,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
                 .putExtra(Intent.EXTRA_LOCAL_ONLY, false)
                 .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 .setType("image/*")
-        startActivityForResult(Intent.createChooser(intent, null), ATTACH_PHOTO_REQUEST_CODE)
+        startActivityForResult(Intent.createChooser(intent, null), AttachPhotoRequestCode)
     }
 
     override fun setDraft(draft: String) = message.setText(draft)
@@ -337,27 +350,37 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when {
-            requestCode == SELECT_CONTACT_REQUEST_CODE -> {
+            requestCode == SelectContactRequestCode -> {
                 chipsSelectedIntent.onNext(data?.getSerializableExtra(ContactsActivity.ChipsKey)
                         ?.let { serializable -> serializable as? HashMap<String, String?> }
                         ?: hashMapOf())
             }
-            requestCode == TAKE_PHOTO_REQUEST_CODE && resultCode == Activity.RESULT_OK -> {
+            requestCode == TakePhotoRequestCode && resultCode == Activity.RESULT_OK -> {
                 cameraDestination?.let(attachmentSelectedIntent::onNext)
             }
-            requestCode == ATTACH_PHOTO_REQUEST_CODE && resultCode == Activity.RESULT_OK -> {
+            requestCode == AttachPhotoRequestCode && resultCode == Activity.RESULT_OK -> {
                 data?.clipData?.itemCount
                         ?.let { count -> 0 until count }
                         ?.mapNotNull { i -> data.clipData?.getItemAt(i)?.uri }
                         ?.forEach(attachmentSelectedIntent::onNext)
                         ?: data?.data?.let(attachmentSelectedIntent::onNext)
             }
-            requestCode == ATTACH_CONTACT_REQUEST_CODE && resultCode == Activity.RESULT_OK -> {
+            requestCode == AttachContactRequestCode && resultCode == Activity.RESULT_OK -> {
                 data?.data?.let(contactSelectedIntent::onNext)
             }
             else -> super.onActivityResult(requestCode, resultCode, data)
         }
 
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putParcelable(CameraDestinationKey, cameraDestination)
+        super.onSaveInstanceState(outState)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+        cameraDestination = savedInstanceState?.getParcelable(CameraDestinationKey)
+        super.onRestoreInstanceState(savedInstanceState)
     }
 
     override fun onBackPressed() = backPressedIntent.onNext(Unit)
