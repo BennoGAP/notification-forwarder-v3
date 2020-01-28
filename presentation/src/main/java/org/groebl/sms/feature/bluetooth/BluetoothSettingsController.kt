@@ -31,7 +31,6 @@ import org.groebl.sms.common.util.extensions.animateLayoutChanges
 import org.groebl.sms.common.util.extensions.setVisible
 import org.groebl.sms.common.widget.PreferenceView
 import org.groebl.sms.feature.bluetooth.app.BluetoothAppActivity
-import org.groebl.sms.feature.bluetooth.common.BluetoothBatteryUtils
 import org.groebl.sms.feature.bluetooth.common.BluetoothDatabase
 import org.groebl.sms.feature.bluetooth.common.BluetoothHelper
 import org.groebl.sms.feature.bluetooth.common.BluetoothWABlocked
@@ -226,8 +225,7 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
         AlertDialog.Builder(activity!!)
                 .setTitle(R.string.settings_bluetooth_battery_title)
                 .setMessage(String.format(context.getString(R.string.settings_bluetooth_battery_dialog), context.getString(R.string.app_name)))
-                .setPositiveButton(R.string.title_settings) { _, _ -> BluetoothBatteryUtils.startPowerSaverIntent(activity!!) }
-                .setNeutralButton(R.string.button_info) { _, _ -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(BluetoothHelper.getDontKillMyAppUrl("?app=SMS%20%26%20Notifications")))) }
+                .setPositiveButton(R.string.button_info) { _, _ -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(BluetoothHelper.getDontKillMyAppUrl("?app=SMS%20%26%20Notifications")))) }
                 .setNegativeButton(R.string.button_cancel, null)
                 .show()
     }
