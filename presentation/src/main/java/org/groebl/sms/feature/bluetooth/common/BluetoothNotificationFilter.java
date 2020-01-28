@@ -423,7 +423,7 @@ public class BluetoothNotificationFilter {
 
                         //Set WhatsApp Prefix to Msg
                         if(!set_sender.equals("WhatsApp") && !mPrefs.getBoolean("bluetoothWhatsAppHidePrefix", true)) {
-                            set_content = "WhatsApp: " + set_content;
+                            set_content = "[WhatsApp] " + set_content;
                         }
 
                     } else {
@@ -460,7 +460,7 @@ public class BluetoothNotificationFilter {
                     set_sender = PhoneNumberUtils.stripSeparators("+499876" + convertKeypadLettersToDigits(set_sender));
                 }
                 else if (!mPrefs.getBoolean("bluetoothAppnameAsText", false)) {
-                    set_content = set_sender + ": " + set_content;
+                    set_content = "[" + set_sender + "] " + set_content;
                     set_sender = "+49987654321";
                 }
             }
