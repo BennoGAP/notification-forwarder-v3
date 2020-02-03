@@ -75,7 +75,7 @@ object BluetoothHelper  {
             put(Telephony.Sms.DATE_SENT, sentTime)
             put(Telephony.Sms.SEEN, true)
             put(Telephony.Sms.ERROR_CODE, errorCode)
-            if (asRead) { put(Telephony.Sms.READ, true) }
+            put(Telephony.Sms.READ, asRead)
     }
 
         context.contentResolver.insert(Telephony.Sms.Inbox.CONTENT_URI, values)
