@@ -28,8 +28,10 @@ import org.groebl.sms.extensions.Optional
 import org.groebl.sms.model.PhoneNumber
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
-import kotlinx.android.synthetic.main.phone_number_list_item.view.*
+import kotlinx.android.synthetic.main.phone_number_list_item.*
+import kotlinx.android.synthetic.main.radio_preference_view.*
 import kotlinx.android.synthetic.main.radio_preference_view.view.*
+import org.groebl.sms.common.util.extensions.forwardTouches
 import javax.inject.Inject
 
 class PhoneNumberPickerAdapter @Inject constructor(
@@ -50,6 +52,8 @@ class PhoneNumberPickerAdapter @Inject constructor(
         val inflater = LayoutInflater.from(parent.context)
         val view = inflater.inflate(R.layout.phone_number_list_item, parent, false)
         return QkViewHolder(view).apply {
+            radioButton.forwardTouches(itemView)
+
             view.setOnClickListener {
                 val phoneNumber = getItem(adapterPosition)
                 selectedItem = phoneNumber.id
@@ -59,11 +63,10 @@ class PhoneNumberPickerAdapter @Inject constructor(
 
     override fun onBindViewHolder(holder: QkViewHolder, position: Int) {
         val phoneNumber = getItem(position)
-        val view = holder.itemView
 
-        view.number.radioButton.isChecked = phoneNumber.id == selectedItem
-        view.number.titleView.text = phoneNumber.address
-        view.number.summaryView.text = when (phoneNumber.isDefault) {
+        holder.number.radioButton.isChecked = phoneNumber.id == selectedItem
+        holder.number.titleView.text = phoneNumber.address
+        holder.number.summaryView.text = when (phoneNumber.isDefault) {
             true -> context.getString(R.string.compose_number_picker_default, phoneNumber.type)
             false -> phoneNumber.type
         }
