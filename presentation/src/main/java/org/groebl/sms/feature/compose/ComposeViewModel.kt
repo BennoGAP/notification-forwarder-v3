@@ -187,6 +187,10 @@ class ComposeViewModel @Inject constructor(
                 .distinctUntilChanged()
                 .subscribe { title -> newState { copy(conversationtitle = title) } }
 
+        disposables += prefs.sendAsGroup.asObservable()
+                .distinctUntilChanged()
+                .subscribe { enabled -> newState { copy(sendAsGroup = enabled) } }
+
         disposables += attachments
                 .subscribe { attachments -> newState { copy(attachments = attachments) } }
 
@@ -405,7 +409,7 @@ class ComposeViewModel @Inject constructor(
         // Toggle the group sending mode
         view.sendAsGroupIntent
                 .autoDisposable(view.scope())
-                .subscribe { newState { copy(sendAsGroup = !sendAsGroup) } }
+                .subscribe { prefs.sendAsGroup.set(!prefs.sendAsGroup.get()) }
 
         // Scroll to search position
         searchSelection
