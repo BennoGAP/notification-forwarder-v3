@@ -220,8 +220,8 @@
         <item>Archive</item>
         <item>Delete</item>
         <item>Call</item>
-        <item>Mark as read</item>
-        <item>Mark as unread</item>
+        <item>Mark read</item>
+        <item>Mark unread</item>
     </string-array>
     <string name="settings_delivery_title">ยืนยันการส่ง</string>
     <string name="settings_delivery_summary">ยืนยันว่า ส่งข้อความเรียบร้อยแล้ว</string>
@@ -320,7 +320,7 @@
     <string name="theme_apply">ตกลง</string>
     <string-array name="notification_actions">
         <item>None</item>
-        <item>Mark as read</item>
+        <item>Mark read</item>
         <item>Reply</item>
         <item>Call</item>
         <item>Delete</item>
