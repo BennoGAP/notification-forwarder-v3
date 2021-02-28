@@ -141,6 +141,7 @@ class MainViewModel @Inject constructor(
                 .autoDisposable(view.scope())
                 .subscribe { intent ->
                     when (intent.getStringExtra("screen")) {
+                        "compose" -> navigator.showConversation(intent.getLongExtra("threadId", 0))
                         "blocking" -> navigator.showBlockedConversations()
                     }
                 }
@@ -155,6 +156,8 @@ class MainViewModel @Inject constructor(
                     query
                 }
                 .filter { query -> query.length >= 2 }
+                .map { query -> query.trim() }
+                .distinctUntilChanged()
                 .doOnNext {
                     newState {
                         val page = (page as? Searching) ?: Searching()
@@ -383,6 +386,7 @@ class MainViewModel @Inject constructor(
                     when (action) {
                         Preferences.SWIPE_ACTION_ARCHIVE -> markArchived.execute(listOf(threadId)) { view.showArchivedSnackbar() }
                         Preferences.SWIPE_ACTION_DELETE -> view.showDeleteDialog(listOf(threadId))
+                        Preferences.SWIPE_ACTION_BLOCK -> view.showBlockingDialog(listOf(threadId), true)
                         Preferences.SWIPE_ACTION_CALL -> conversationRepo.getConversation(threadId)?.recipients?.firstOrNull()?.address?.let(navigator::makePhoneCall)
                         Preferences.SWIPE_ACTION_READ -> markRead.execute(listOf(threadId))
                         Preferences.SWIPE_ACTION_UNREAD -> markUnread.execute(listOf(threadId))

@@ -30,13 +30,14 @@ import javax.inject.Singleton
 class AnalyticsManagerImpl @Inject constructor(context: Context) : AnalyticsManager {
 
     //private val amplitude: AmplitudeClient = Amplitude.getInstance().initialize(context, BuildConfig.AMPLITUDE_API_KEY)
-    //private val mixpanel: MixpanelAPI = MixpanelAPI.getInstance(context, BuildConfig.MIXPANEL_API_KEY)
 
     init {
         //amplitude.trackSessionEvents(true)
     }
 
     override fun track(event: String, vararg properties: Pair<String, Any>) {
+        println("Track: ${event}")
+
         /*
         val propertiesJson = JSONObject(properties
                 .associateBy { pair -> pair.first }
@@ -45,11 +46,7 @@ class AnalyticsManagerImpl @Inject constructor(context: Context) : AnalyticsMana
 
         amplitude.logEvent(event, propertiesJson)
 
-        synchronized(mixpanel) {
-            mixpanel.track(event, propertiesJson)
-        }
         */
-        println("Track: ${event}")
     }
 
     override fun setUserProperty(key: String, value: Any) {
@@ -57,10 +54,6 @@ class AnalyticsManagerImpl @Inject constructor(context: Context) : AnalyticsMana
 
         /*
         Timber.v("$key: $value")
-        // Set the value in Mixpanel
-        val properties = JSONObject()
-        properties.put(key, value)
-        mixpanel.registerSuperProperties(properties)
 
         // Set the value in Amplitude
         val identify = Identify()

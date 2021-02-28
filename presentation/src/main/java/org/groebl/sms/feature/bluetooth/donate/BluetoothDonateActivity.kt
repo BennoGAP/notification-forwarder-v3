@@ -6,10 +6,15 @@ import androidx.lifecycle.ViewModelProviders
 import com.jakewharton.rxbinding2.view.clicks
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.bluetooth_donate_activity.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.groebl.sms.R
 import org.groebl.sms.common.base.QkThemedActivity
-import org.groebl.sms.common.util.BillingManager
+import org.groebl.sms.common.util.extensions.makeToast
+import org.groebl.sms.manager.BillingManager
 import org.groebl.sms.common.util.extensions.setVisible
+import timber.log.Timber
 import javax.inject.Inject
 
 class BluetoothDonateActivity : QkThemedActivity(), BluetoothDonateView {
@@ -49,8 +54,16 @@ class BluetoothDonateActivity : QkThemedActivity(), BluetoothDonateView {
         }
 
     }
+
     override fun initiatePurchaseFlow(billingManager: BillingManager, sku: String) {
-        billingManager.initiatePurchaseFlow(this, sku)
+        GlobalScope.launch(Dispatchers.Main) {
+            try {
+                billingManager.initiatePurchaseFlow(this@BluetoothDonateActivity, sku)
+            } catch (e: Exception) {
+                Timber.w(e)
+                makeToast(R.string.qksms_plus_error)
+            }
+        }
     }
 
 }

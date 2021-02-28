@@ -27,7 +27,7 @@ import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.QkChangeHandler
 import org.groebl.sms.common.base.QkController
 import org.groebl.sms.common.util.extensions.scrapViews
-import org.groebl.sms.common.widget.FieldDialog
+import org.groebl.sms.common.widget.TextInputDialog
 import org.groebl.sms.feature.blocking.BlockingDialog
 import org.groebl.sms.feature.conversationinfo.injection.ConversationInfoModule
 import org.groebl.sms.feature.themepicker.ThemePickerController
@@ -49,8 +49,8 @@ class ConversationInfoController(
     @Inject lateinit var navigator: Navigator
     @Inject lateinit var adapter: ConversationInfoAdapter
 
-    private val nameDialog: FieldDialog by lazy {
-        FieldDialog(activity!!, activity!!.getString(R.string.info_name), nameChangeSubject::onNext)
+    private val nameDialog: TextInputDialog by lazy {
+        TextInputDialog(activity!!, activity!!.getString(R.string.info_name), nameChangeSubject::onNext)
     }
 
     private val nameChangeSubject: Subject<String> = PublishSubject.create()

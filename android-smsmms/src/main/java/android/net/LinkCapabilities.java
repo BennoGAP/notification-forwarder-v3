@@ -18,14 +18,13 @@ package android.net;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import timber.log.Timber;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-
-import timber.log.Timber;
 
 /**
  * A class representing the capabilities of a link

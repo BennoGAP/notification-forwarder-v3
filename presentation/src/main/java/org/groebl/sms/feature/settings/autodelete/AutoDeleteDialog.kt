@@ -16,32 +16,35 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.groebl.sms.common.widget
+package org.groebl.sms.feature.settings.autodelete
 
 import android.app.Activity
 import android.content.DialogInterface
 import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import org.groebl.sms.R
-import kotlinx.android.synthetic.main.field_dialog.view.*
+import kotlinx.android.synthetic.main.settings_auto_delete_dialog.view.*
 
-class FieldDialog(context: Activity, hint: String, listener: (String) -> Unit) : AlertDialog(context) {
+class AutoDeleteDialog(context: Activity, listener: (Int) -> Unit) : AlertDialog(context) {
 
-    private val layout = LayoutInflater.from(context).inflate(R.layout.field_dialog, null)
+    private val layout = LayoutInflater.from(context).inflate(R.layout.settings_auto_delete_dialog, null)
 
     init {
-        layout.field.hint = hint
-
         setView(layout)
+        setTitle(R.string.settings_auto_delete)
+        setMessage(context.getString(R.string.settings_auto_delete_dialog_message))
         setButton(DialogInterface.BUTTON_NEUTRAL, context.getString(R.string.button_cancel)) { _, _ -> }
-        setButton(DialogInterface.BUTTON_NEGATIVE, context.getString(R.string.button_delete)) { _, _ -> listener("") }
+        setButton(DialogInterface.BUTTON_NEGATIVE, context.getString(R.string.settings_auto_delete_never)) { _, _ -> listener(0) }
         setButton(DialogInterface.BUTTON_POSITIVE, context.getString(R.string.button_save)) { _, _ ->
-            listener(layout.field.text.toString())
+            listener(layout.field.text.toString().toIntOrNull() ?: 0)
         }
     }
 
-    fun setText(text: String): FieldDialog {
-        layout.field.setText(text)
+    fun setExpiry(days: Int): AutoDeleteDialog {
+        when (days) {
+            0 -> layout.field.text = null
+            else -> layout.field.setText(days.toString())
+        }
         return this
     }
 

@@ -46,6 +46,7 @@ import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.base.QkThemedActivity
 import org.groebl.sms.common.util.DateFormatter
 import org.groebl.sms.common.util.extensions.autoScrollToStart
+import org.groebl.sms.common.util.extensions.dismissKeyboard
 import org.groebl.sms.common.util.extensions.hideKeyboard
 import org.groebl.sms.common.util.extensions.resolveThemeColor
 import org.groebl.sms.common.util.extensions.scrapViews
@@ -216,7 +217,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         sendAsGroup.setVisible(state.editingMode && state.selectedChips.size >= 2)
         sendAsGroupSwitch.isChecked = state.sendAsGroup
 
-        messageList.setVisible(!state.editingMode || state.sendAsGroup)
+        messageList.setVisible(!state.editingMode || state.sendAsGroup || state.selectedChips.size == 1)
         messageAdapter.data = state.messages
         messageAdapter.highlight = state.searchSelectionId
 
@@ -234,7 +235,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
 
         sim.setVisible(state.subscription != null)
         sim.contentDescription = getString(R.string.compose_sim_cd, state.subscription?.displayName)
-        simIndex.text = "${state.subscription?.simSlotIndex?.plus(1)}"
+        simIndex.text = state.subscription?.simSlotIndex?.plus(1)?.toString()
 
         send.isEnabled = state.canSend
         send.imageAlpha = if (state.canSend) 255 else 128
@@ -277,6 +278,9 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
             }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), DateFormat.is24HourFormat(this))
                     .show()
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show()
+
+        // On some devices, the keyboard can cover the date picker
+        message.hideKeyboard()
     }
 
     override fun requestContact() {
@@ -325,7 +329,10 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         startActivityForResult(Intent.createChooser(intent, null), AttachPhotoRequestCode)
     }
 
-    override fun setDraft(draft: String) = message.setText(draft)
+    override fun setDraft(draft: String) {
+        message.setText(draft)
+        message.setSelection(draft.length)
+    }
 
     override fun scrollToMessage(id: Long) {
         messageAdapter.data?.second

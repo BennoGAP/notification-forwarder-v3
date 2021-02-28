@@ -15,18 +15,17 @@ import android.os.PowerManager;
 import android.provider.Telephony;
 import android.telephony.SmsManager;
 import android.text.TextUtils;
-
 import com.android.mms.MmsConfig;
 import com.klinker.android.send_message.BroadcastUtils;
 import com.klinker.android.send_message.MmsReceivedReceiver;
 import com.klinker.android.send_message.SmsManagerFactory;
 
+import timber.log.Timber;
+
 import java.io.File;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-
-import timber.log.Timber;
 
 /**
  * In order to avoid downloading duplicate MMS.

@@ -18,20 +18,27 @@
  */
 package org.groebl.sms.interactor
 
-import org.groebl.sms.repository.SyncRepository
+import org.groebl.sms.repository.ConversationRepository
+import org.groebl.sms.repository.MessageRepository
+import org.groebl.sms.util.Preferences
 import io.reactivex.Flowable
 import timber.log.Timber
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-open class ContactSync @Inject constructor(private val syncManager: SyncRepository) : Interactor<Unit>() {
+class DeleteOldMessages @Inject constructor(
+    private val conversationRepo: ConversationRepository,
+    private val messageRepo: MessageRepository,
+    private val prefs: Preferences
+) : Interactor<Unit>() {
 
-    override fun buildObservable(params: Unit): Flowable<Long> {
-        return Flowable.just(System.currentTimeMillis())
-                .doOnNext { syncManager.syncContacts() }
-                .map { startTime -> System.currentTimeMillis() - startTime }
-                .map { elapsed -> TimeUnit.MILLISECONDS.toSeconds(elapsed) }
-                .doOnNext { seconds -> Timber.v("Completed sync in $seconds seconds") }
+    override fun buildObservable(params: Unit): Flowable<*> = Flowable.fromCallable {
+        val maxAge = prefs.autoDelete.get().takeIf { it > 0 } ?: return@fromCallable
+        val counts = messageRepo.getOldMessageCounts(maxAge)
+        val threadIds = counts.keys.toLongArray()
+
+        Timber.d("Deleting ${counts.values.sum()} old messages from ${threadIds.size} conversations")
+        messageRepo.deleteOldMessages(maxAge)
+        conversationRepo.updateConversations(*threadIds)
     }
 
 }

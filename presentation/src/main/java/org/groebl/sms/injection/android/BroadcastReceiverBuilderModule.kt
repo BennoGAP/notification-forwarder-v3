@@ -20,9 +20,11 @@ package org.groebl.sms.injection.android
 
 import org.groebl.sms.feature.widget.WidgetProvider
 import org.groebl.sms.injection.scope.ActivityScope
+import org.groebl.sms.receiver.BlockThreadReceiver
 import org.groebl.sms.receiver.BootReceiver
 import org.groebl.sms.receiver.DefaultSmsChangedReceiver
 import org.groebl.sms.receiver.DeleteMessagesReceiver
+import org.groebl.sms.receiver.MarkArchivedReceiver
 import org.groebl.sms.receiver.MarkReadReceiver
 import org.groebl.sms.receiver.MarkSeenReceiver
 import org.groebl.sms.receiver.MmsReceivedReceiver
@@ -46,6 +48,10 @@ abstract class BroadcastReceiverBuilderModule {
 
     @ActivityScope
     @ContributesAndroidInjector()
+    abstract fun bindBlockThreadReceiver(): BlockThreadReceiver
+
+    @ActivityScope
+    @ContributesAndroidInjector()
     abstract fun bindBootReceiver(): BootReceiver
 
     @ActivityScope
@@ -55,6 +61,10 @@ abstract class BroadcastReceiverBuilderModule {
     @ActivityScope
     @ContributesAndroidInjector()
     abstract fun bindDeleteMessagesReceiver(): DeleteMessagesReceiver
+
+    @ActivityScope
+    @ContributesAndroidInjector
+    abstract fun bindMarkArchivedReceiver(): MarkArchivedReceiver
 
     @ActivityScope
     @ContributesAndroidInjector()

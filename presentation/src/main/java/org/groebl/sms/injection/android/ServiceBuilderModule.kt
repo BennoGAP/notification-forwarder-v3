@@ -22,11 +22,16 @@ import org.groebl.sms.feature.backup.RestoreBackupService
 import org.groebl.sms.injection.scope.ActivityScope
 import org.groebl.sms.service.HeadlessSmsSendService
 import org.groebl.sms.receiver.SendSmsReceiver
+import org.groebl.sms.service.AutoDeleteService
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
 @Module
 abstract class ServiceBuilderModule {
+
+    @ActivityScope
+    @ContributesAndroidInjector()
+    abstract fun bindAutoDeleteService(): AutoDeleteService
 
     @ActivityScope
     @ContributesAndroidInjector()

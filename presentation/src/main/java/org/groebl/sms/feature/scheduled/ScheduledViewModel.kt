@@ -25,7 +25,6 @@ import org.groebl.sms.common.base.QkViewModel
 import org.groebl.sms.common.util.ClipboardUtils
 import org.groebl.sms.common.util.extensions.makeToast
 import org.groebl.sms.interactor.SendScheduledMessage
-import org.groebl.sms.repository.MessageRepository
 import org.groebl.sms.repository.ScheduledMessageRepository
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
@@ -34,7 +33,6 @@ import javax.inject.Inject
 
 class ScheduledViewModel @Inject constructor(
         private val context: Context,
-        private val messageRepo: MessageRepository,
         private val navigator: Navigator,
         private val scheduledMessageRepo: ScheduledMessageRepository,
         private val sendScheduledMessage: SendScheduledMessage

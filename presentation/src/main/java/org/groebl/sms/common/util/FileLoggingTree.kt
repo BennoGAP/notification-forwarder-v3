@@ -20,8 +20,8 @@ package org.groebl.sms.common.util
 
 import android.os.Environment
 import android.util.Log
-import io.reactivex.schedulers.Schedulers
 import org.groebl.sms.util.Preferences
+import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
@@ -53,7 +53,7 @@ class FileLoggingTree @Inject constructor(private val prefs: Preferences) : Timb
             }
 
             // Format the log to be written to the file
-            val log = "$timestamp $priorityString/$tag: $message ${Log.getStackTraceString(t)}<br>".toByteArray()
+            val log = "$timestamp $priorityString/$tag: $message ${Log.getStackTraceString(t)}\n".toByteArray()
 
             // Ensure that only one thread is writing to the file at a time
             synchronized(fileLock) {
@@ -62,7 +62,7 @@ class FileLoggingTree @Inject constructor(private val prefs: Preferences) : Timb
                     val dir = File(Environment.getExternalStorageDirectory(), "NFP-SMS/Logs").apply { mkdirs() }
 
                     // Create the file
-                    val file = File(dir, "${SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(System.currentTimeMillis())}.html")
+                    val file = File(dir, "${SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(System.currentTimeMillis())}.log")
 
                     // Write the log to the file
                     FileOutputStream(file, true).use { fileOutputStream -> fileOutputStream.write(log) }

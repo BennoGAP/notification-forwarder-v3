@@ -31,7 +31,7 @@ import android.provider.Telephony
 import android.webkit.MimeTypeMap
 import androidx.core.content.FileProvider
 import org.groebl.sms.BuildConfig
-import org.groebl.sms.common.util.BillingManager
+import org.groebl.sms.manager.BillingManager
 import org.groebl.sms.feature.backup.BackupActivity
 import org.groebl.sms.feature.blocking.BlockingActivity
 import org.groebl.sms.feature.bluetooth.BluetoothSettingsActivity

@@ -21,8 +21,10 @@ package org.groebl.sms.feature.compose
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Vibrator
 import android.provider.ContactsContract
 import android.telephony.SmsMessage
+import androidx.core.content.getSystemService
 import org.groebl.sms.R
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.base.QkViewModel
@@ -464,7 +466,9 @@ class ComposeViewModel @Inject constructor(
                 .mapNotNull(messageRepo::getMessage)
                 .doOnNext { message -> view.setDraft(message.getText()) }
                 .autoDisposable(view.scope())
-                .subscribe { message -> cancelMessage.execute(message.id) }
+                .subscribe { message ->
+                    cancelMessage.execute(CancelDelayedMessage.Params(message.id, message.threadId))
+                }
 
         // Set the current conversation
         Observables
@@ -628,6 +632,13 @@ class ComposeViewModel @Inject constructor(
                         subIndex < subs.size - 1 -> subs[subIndex + 1]
                         else -> subs[0]
                     }
+
+                    if (subscription != null) {
+                        context.getSystemService<Vibrator>()?.vibrate(40)
+                        context.makeToast(context.getString(R.string.compose_sim_changed_toast,
+                                subscription.simSlotIndex + 1, subscription.displayName))
+                    }
+
                     newState { copy(subscription = subscription) }
                 }
                 .autoDisposable(view.scope())

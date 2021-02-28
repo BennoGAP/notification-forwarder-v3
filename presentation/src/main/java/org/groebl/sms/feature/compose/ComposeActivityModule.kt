@@ -21,6 +21,7 @@ package org.groebl.sms.feature.compose
 import android.content.Intent
 import android.net.Uri
 import androidx.lifecycle.ViewModel
+import com.google.android.mms.ContentType
 import org.groebl.sms.injection.ViewModelKey
 import org.groebl.sms.model.Attachment
 import org.groebl.sms.model.Attachments
@@ -28,6 +29,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoMap
 import java.net.URLDecoder
+import java.nio.charset.Charset
 import javax.inject.Named
 
 @Module
@@ -47,8 +49,9 @@ class ComposeActivityModule {
         return activity.intent
                 ?.decodedDataString()
                 ?.substringAfter(':') // Remove scheme
-                ?.replaceAfter("?", "") // Remove query
-                ?.split(",")
+                ?.substringBefore("?") // Remove query
+                ?.split(",", ";")
+                ?.filter { number -> number.isNotEmpty() }
                 ?: listOf()
     }
 
@@ -61,7 +64,6 @@ class ComposeActivityModule {
         }
 
         return subject + (activity.intent.extras?.getString(Intent.EXTRA_TEXT)
-
                 ?: activity.intent.extras?.getString("sms_body")
                 ?: activity.intent?.decodedDataString()
                         ?.substringAfter('?') // Query string
@@ -74,10 +76,25 @@ class ComposeActivityModule {
     @Provides
     @Named("attachments")
     fun provideSharedAttachments(activity: ComposeActivity): Attachments {
-        val sharedImages = mutableListOf<Uri>()
-        activity.intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM)?.run(sharedImages::add)
-        activity.intent.getParcelableArrayListExtra<Uri>(Intent.EXTRA_STREAM)?.run(sharedImages::addAll)
-        return Attachments(sharedImages.map { Attachment.Image(it) })
+        val uris = mutableListOf<Uri>()
+        activity.intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM)?.run(uris::add)
+        activity.intent.getParcelableArrayListExtra<Uri>(Intent.EXTRA_STREAM)?.run(uris::addAll)
+        return Attachments(uris.mapNotNull { uri ->
+            val mimeType = activity.contentResolver.getType(uri)
+            when {
+                ContentType.isImageType(mimeType) -> {
+                    Attachment.Image(uri)
+                }
+
+                ContentType.TEXT_VCARD.equals(mimeType, true) -> {
+                    val inputStream = activity.contentResolver.openInputStream(uri)
+                    val text = inputStream?.reader(Charset.forName("utf-8"))?.readText()
+                    text?.let(Attachment::Contact)
+                }
+
+                else -> null
+            }
+        })
     }
 
     @Provides
@@ -89,7 +106,7 @@ class ComposeActivityModule {
     private fun Intent.decodedDataString(): String? {
         val data = data?.toString()
         if (data?.contains('%') == true) {
-           return URLDecoder.decode(data, "UTF-8")
+            return URLDecoder.decode(data, "UTF-8")
         }
         return data
     }

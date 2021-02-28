@@ -30,6 +30,9 @@ import com.uber.rxdogtag.autodispose.AutoDisposeConfigurer
 import dagger.android.*
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.groebl.sms.R
 import org.groebl.sms.common.util.CrashlyticsTree
 import org.groebl.sms.common.util.FileLoggingTree
@@ -37,6 +40,7 @@ import org.groebl.sms.feature.bluetooth.common.BluetoothDatabase
 import org.groebl.sms.injection.AppComponentManager
 import org.groebl.sms.injection.appComponent
 import org.groebl.sms.manager.AnalyticsManager
+import org.groebl.sms.manager.BillingManager
 import org.groebl.sms.migration.QkMigration
 import org.groebl.sms.migration.QkRealmMigration
 import org.groebl.sms.util.NightModeManager
@@ -55,6 +59,7 @@ class QKApplication : Application(), HasActivityInjector, HasBroadcastReceiverIn
     @Suppress("unused")
     @Inject lateinit var qkMigration: QkMigration
 
+    @Inject lateinit var billingManager: BillingManager
     @Inject lateinit var dispatchingActivityInjector: DispatchingAndroidInjector<Activity>
     @Inject lateinit var dispatchingBroadcastReceiverInjector: DispatchingAndroidInjector<BroadcastReceiver>
     @Inject lateinit var dispatchingServiceInjector: DispatchingAndroidInjector<Service>
@@ -68,7 +73,6 @@ class QKApplication : Application(), HasActivityInjector, HasBroadcastReceiverIn
         AppComponentManager.init(this)
         appComponent.inject(this)
 
-//        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
 
 
         Realm.init(this)
@@ -79,6 +83,11 @@ class QKApplication : Application(), HasActivityInjector, HasBroadcastReceiverIn
                 .build())
 
         qkMigration.performMigration()
+
+        GlobalScope.launch(Dispatchers.IO) {
+            billingManager.checkForPurchases()
+            billingManager.queryProducts()
+        }
 
         nightModeManager.updateCurrentTheme()
 

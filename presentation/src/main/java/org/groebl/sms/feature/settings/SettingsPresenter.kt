@@ -19,20 +19,26 @@
 package org.groebl.sms.feature.settings
 
 import android.content.Context
-import com.uber.autodispose.android.lifecycle.scope
-import com.uber.autodispose.autoDisposable
-import io.reactivex.rxkotlin.plusAssign
 import org.groebl.sms.R
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.base.QkPresenter
 import org.groebl.sms.common.util.Colors
 import org.groebl.sms.common.util.DateFormatter
 import org.groebl.sms.common.util.extensions.makeToast
+import org.groebl.sms.interactor.DeleteOldMessages
 import org.groebl.sms.interactor.SyncMessages
 import org.groebl.sms.manager.AnalyticsManager
+import org.groebl.sms.repository.MessageRepository
 import org.groebl.sms.repository.SyncRepository
+import org.groebl.sms.service.AutoDeleteService
 import org.groebl.sms.util.NightModeManager
 import org.groebl.sms.util.Preferences
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
+import io.reactivex.rxkotlin.plusAssign
+import io.reactivex.rxkotlin.withLatestFrom
+import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -44,6 +50,8 @@ class SettingsPresenter @Inject constructor(
         private val analytics: AnalyticsManager,
         private val context: Context,
         private val dateFormatter: DateFormatter,
+        private val deleteOldMessages: DeleteOldMessages,
+        private val messageRepo: MessageRepository,
         private val navigator: Navigator,
         private val nightModeManager: NightModeManager,
         private val prefs: Preferences,
@@ -110,6 +118,9 @@ class SettingsPresenter @Inject constructor(
 
         disposables += prefs.mobileOnly.asObservable()
                 .subscribe { enabled -> newState { copy(mobileOnly = enabled) } }
+
+        disposables += prefs.autoDelete.asObservable()
+                .subscribe { autoDelete -> newState { copy(autoDelete = autoDelete) } }
 
         disposables += prefs.longAsMms.asObservable()
                 .subscribe { enabled -> newState { copy(longAsMms = enabled) } }
@@ -180,6 +191,8 @@ class SettingsPresenter @Inject constructor(
 
                         R.id.mobileOnly -> prefs.mobileOnly.set(!prefs.mobileOnly.get())
 
+                        R.id.autoDelete -> view.showAutoDeleteDialog(prefs.autoDelete.get())
+
                         R.id.longAsMms -> prefs.longAsMms.set(!prefs.longAsMms.get())
 
                         R.id.mmsSize -> view.showMmsSizePicker()
@@ -224,8 +237,35 @@ class SettingsPresenter @Inject constructor(
                 .autoDisposable(view.scope())
                 .subscribe{ prefs.sendDelay.set(it) }
 
-        view.signatureSet()
+        view.signatureChanged()
                 .doOnNext(prefs.signature::set)
+                .autoDisposable(view.scope())
+                .subscribe()
+
+        view.autoDeleteChanged()
+                .observeOn(Schedulers.io())
+                .filter { maxAge ->
+                    if (maxAge == 0) {
+                        return@filter true
+                    }
+
+                    val counts = messageRepo.getOldMessageCounts(maxAge)
+                    if (counts.values.sum() == 0) {
+                        return@filter true
+                    }
+
+                    runBlocking { view.showAutoDeleteWarningDialog(counts.values.sum()) }
+                }
+                .doOnNext { maxAge ->
+                    when (maxAge == 0) {
+                        true -> AutoDeleteService.cancelJob(context)
+                        false -> {
+                            AutoDeleteService.scheduleJob(context)
+                            deleteOldMessages.execute(Unit)
+                        }
+                    }
+                }
+                .doOnNext(prefs.autoDelete::set)
                 .autoDisposable(view.scope())
                 .subscribe()
 

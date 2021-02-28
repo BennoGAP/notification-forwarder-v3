@@ -16,13 +16,25 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.groebl.sms.repository
+package org.groebl.sms.receiver
 
-import android.graphics.Bitmap
-import android.net.Uri
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import org.groebl.sms.interactor.MarkArchived
+import dagger.android.AndroidInjection
+import javax.inject.Inject
 
-interface ImageRepository {
+class MarkArchivedReceiver : BroadcastReceiver() {
 
-    fun loadImage(uri: Uri, width: Int, height: Int): Bitmap?
+    @Inject lateinit var markArchived: MarkArchived
+
+    override fun onReceive(context: Context, intent: Intent) {
+        AndroidInjection.inject(this, context)
+
+        val pendingResult = goAsync()
+        val threadId = intent.getLongExtra("threadId", 0)
+        markArchived.execute(listOf(threadId)) { pendingResult.finish() }
+    }
 
 }

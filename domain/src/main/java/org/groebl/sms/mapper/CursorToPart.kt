@@ -23,6 +23,6 @@ import org.groebl.sms.model.MmsPart
 
 interface CursorToPart : Mapper<Cursor, MmsPart> {
 
-    fun getPartsCursor(messageId: Long): Cursor?
+    fun getPartsCursor(messageId: Long? = null): Cursor?
 
 }

@@ -6,7 +6,7 @@ import io.reactivex.Observable
 import io.reactivex.rxkotlin.plusAssign
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.base.QkViewModel
-import org.groebl.sms.common.util.BillingManager
+import org.groebl.sms.manager.BillingManager
 import org.groebl.sms.manager.AnalyticsManager
 import javax.inject.Inject
 
