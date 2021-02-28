@@ -328,6 +328,11 @@ public class BluetoothNotificationFilter {
                     set_content = title + ": " + text;
                     break;
 
+                case "com.microsoft.teams":
+                    set_sender = "Teams";
+                    set_content = title + ": " + text;
+                    break;
+
                 case "com.whatsapp":
                     if (sbn.getTag() != null) { return; }
 
