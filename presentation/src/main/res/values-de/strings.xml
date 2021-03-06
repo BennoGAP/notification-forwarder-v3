@@ -159,7 +159,7 @@
   <string name="main_menu_block">Blockieren</string>
   <string name="main_syncing">Synchronisiere Nachrichten&#8230;</string>
   <string name="main_sender_you">Du: %s</string>
-    <string name="main_draft">Entwurf</string>
+  <string name="main_draft">Entwurf</string>
   <string name="main_message_results_title">Ergebnisse in Nachrichten</string>
   <string name="main_message_results">%d Nachrichten</string>
   <string name="inbox_empty_text">Deine Unterhaltungen werden hier angezeigt</string>
@@ -167,11 +167,11 @@
   <string name="archived_empty_text">Archivierte Unterhaltungen werden hier angezeigt</string>
   <string name="main_fab_cd">Neue Unterhaltung starten</string>
   <string name="main_default_sms_title">Liebe es wieder, SMS zu schreiben</string>
-    <string name="main_default_sms_message">QKSMS als Standard-SMS-App festlegen</string>
+  <string name="main_default_sms_message">QKSMS als Standard-SMS-App festlegen</string>
   <string name="main_default_sms_change">Ändern</string>
   <string name="main_permission_required">Berechtigung erforderlich</string>
-    <string name="main_permission_sms">QKSMS benötigt die Berechtigung zum Senden und Anzeigen von SMS-Nachrichten</string>
-    <string name="main_permission_contacts">QKSMS benötigt die Berechtigung zum Zugreifen auf die Kontakte</string>
+  <string name="main_permission_sms">QKSMS benötigt die Berechtigung zum Senden und Anzeigen von SMS-Nachrichten</string>
+  <string name="main_permission_contacts">QKSMS benötigt die Berechtigung zum Zugreifen auf die Kontakte</string>
   <string name="main_permission_allow">Zulassen</string>
   <string name="drawer_inbox">Posteingang</string>
   <string name="drawer_archived">Archiviert</string>
@@ -242,7 +242,7 @@
   <string name="message_status_delivered">Zugestellt %s</string>
   <string name="message_status_failed">Fehler beim Senden. Tippen, um es erneut zu versuchen</string>
   <string name="info_title">Details</string>
-    <string name="info_copied_address">Adresse kopiert</string>
+  <string name="info_copied_address">Adresse kopiert</string>
   <string name="info_name">Unterhaltungstitel</string>
   <string name="info_notifications">Benachrichtigungen</string>
   <string name="info_theme">Erscheinungsbild</string>
@@ -304,7 +304,7 @@
   <string name="settings_black_title">Rein schwarzer Nachtmodus</string>
   <string name="settings_night_start_title">Anfang</string>
   <string name="settings_night_end_title">Ende</string>
-    <string name="settings_automatic_colors_title">Automatische Kontaktfarben</string>
+  <string name="settings_automatic_colors_title">Automatische Kontaktfarben</string>
   <string name="settings_text_size_title">Schriftgröße</string>
   <string name="settings_system_font_title">Systemschriftart verwenden</string>
   <string name="settings_auto_emoji_title">Automatische Emoji</string>
@@ -315,7 +315,7 @@
   <string name="settings_notification_action_2">Taste 2</string>
   <string name="settings_notification_action_3">Taste 3</string>
   <string name="settings_notification_previews_title">Benachrichtigungsvorschau</string>
-    <string name="settings_notification_wake_title">Bildschirm aufwecken</string>
+  <string name="settings_notification_wake_title">Bildschirm aufwecken</string>
   <string name="settings_vibration_title">Vibration</string>
   <string name="settings_ringtone_title">Ton</string>
   <string name="settings_ringtone_none">Keine</string>
@@ -333,7 +333,7 @@
     <item>Keine</item>
     <item>Archivieren</item>
     <item>Löschen</item>
-        <item>Blockieren</item>
+    <item>Blockieren</item>
     <item>Anrufen</item>
     <item>Als gelesen markieren</item>
     <item>Als ungelesen markieren</item>
@@ -346,18 +346,18 @@
   <string name="settings_unicode_summary">Akzente aus Zeichen in ausgehenden SMS-Nachrichten entfernen</string>
   <string name="settings_mobile_title">Nur Mobilfunknummern</string>
   <string name="settings_mobile_summary">Beim Verfassen einer Nachricht nur Mobilfunknummern anzeigen</string>
-    <string name="settings_auto_delete">Alte Nachrichten automatisch löschen</string>
-    <string name="settings_auto_delete_dialog_message">Nachrichten werden nach der angegebenen Anzahl von Tagen gelöscht</string>
-    <string name="settings_auto_delete_dialog_hint">Anzahl der Tage</string>
-    <string name="settings_auto_delete_never">Niemals</string>
-    <string name="settings_auto_delete_warning">Alte Nachrichten automatisch löschen?</string>
-    <string name="settings_auto_delete_warning_message">Wenn Sie fortfahren, werden jetzt %1$d Nachrichten gelöscht</string>
-    <plurals name="settings_auto_delete_summary">
-        <item quantity="one">Nach 1 Tag</item>
-        <item quantity="other">Nach %d Tagen</item>
-    </plurals>
-    <string name="settings_long_as_mms_title">Lange Nachrichten als MMS senden</string>
-    <string name="settings_long_as_mms_summary">Wenn Ihre längeren Textnachrichten nicht gesendet oder in der falsche Reihenfolge gesendet werden, können Sie sie stattdessen als MMS-Nachrichten senden. Dafür können zusätzliche Gebühren anfallen.</string>
+  <string name="settings_auto_delete">Alte Nachrichten automatisch löschen</string>
+  <string name="settings_auto_delete_dialog_message">Nachrichten werden nach der angegebenen Anzahl von Tagen gelöscht</string>
+  <string name="settings_auto_delete_dialog_hint">Anzahl der Tage</string>
+  <string name="settings_auto_delete_never">Niemals</string>
+  <string name="settings_auto_delete_warning">Alte Nachrichten automatisch löschen?</string>
+  <string name="settings_auto_delete_warning_message">Wenn Sie fortfahren, werden jetzt %1$d Nachrichten gelöscht</string>
+  <plurals name="settings_auto_delete_summary">
+    <item quantity="one">Nach 1 Tag</item>
+    <item quantity="other">Nach %d Tagen</item>
+  </plurals>
+  <string name="settings_long_as_mms_title">Lange Nachrichten als MMS senden</string>
+  <string name="settings_long_as_mms_summary">Wenn Ihre längeren Textnachrichten nicht gesendet oder in der falsche Reihenfolge gesendet werden, können Sie sie stattdessen als MMS-Nachrichten senden. Dafür können zusätzliche Gebühren anfallen.</string>
   <string name="settings_mms_size_title">MMS-Anhänge automatisch komprimieren</string>
   <string name="settings_sync_title">Nachrichten synchronisieren</string>
   <string name="settings_sync_summary">Nachrichten mit der Android SMS-Datenbank abgleichen</string>
@@ -388,12 +388,12 @@
   <string name="blocking_block_title">Blockieren</string>
   <string name="blocking_unblock_title">Freigeben</string>
   <plurals name="blocking_block_external">
-        <item quantity="one">Wechseln zu %s und diese Nummer blockieren</item>
-        <item quantity="other">Wechseln zu %s und diese Nummern blockieren</item>
+    <item quantity="one">Wechseln zu %s und diese Nummer blockieren</item>
+    <item quantity="other">Wechseln zu %s und diese Nummern blockieren</item>
   </plurals>
   <plurals name="blocking_unblock_external">
-        <item quantity="one">Wechseln zu %s und diese Nummer erlauben</item>
-        <item quantity="other">Wechseln zu %s und diese Nummern erlauben</item>
+    <item quantity="one">Wechseln zu %s und diese Nummer erlauben</item>
+    <item quantity="other">Wechseln zu %s und diese Nummern erlauben</item>
   </plurals>
   <string name="about_title">Über</string>
   <string name="about_version_title">Version</string>
@@ -448,15 +448,15 @@
   <string name="theme_apply">Übernehmen</string>
   <string-array name="notification_actions">
     <item>Nichts</item>
-        <item>Archiv</item>
-        <item>Löschen</item>
-        <item>Blockieren</item>
-        <item>Anrufen</item>
-        <item>Als gelesen markieren</item>
-        <item>Antwort</item>
+    <item>Archiv</item>
+    <item>Löschen</item>
+    <item>Blockieren</item>
+    <item>Anrufen</item>
+    <item>Als gelesen markieren</item>
+    <item>Antwort</item>
   </string-array>
-    <string name="button_yes">Ja</string>
-    <string name="button_continue">Fortsetzen</string>
+  <string name="button_yes">Ja</string>
+  <string name="button_continue">Fortsetzen</string>
   <string name="button_cancel">Abbrechen</string>
   <string name="button_delete">Löschen</string>
   <string name="button_save">Speichern</string>
@@ -476,7 +476,7 @@
   <string-array name="night_modes">
     <item>System</item>
     <item>Deaktiviert</item>
-        <item>Immer an</item>
+    <item>Immer an</item>
     <item>Automatisch</item>
   </string-array>
   <string-array name="notification_preview_options">
@@ -492,15 +492,15 @@
   </string-array>
   <string-array name="delayed_sending_labels">
     <item>Keine Verzögerung</item>
-        <item>3 Sekunden</item>
-        <item>5 Sekunden</item>
-        <item>10 Sekunden</item>
+    <item>3 Sekunden</item>
+    <item>5 Sekunden</item>
+    <item>10 Sekunden</item>
   </string-array>
   <string-array name="mms_sizes">
-        <item>Automatisch</item>
+    <item>Automatisch</item>
     <item>100KB</item>
     <item>200KB</item>
-        <item>300KB</item>
+    <item>300KB</item>
     <item>600KB</item>
     <item>1000KB</item>
     <item>2000KB</item>
