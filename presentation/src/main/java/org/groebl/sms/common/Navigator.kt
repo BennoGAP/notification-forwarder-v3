@@ -166,11 +166,6 @@ class Navigator @Inject constructor(
         startActivityExternal(intent)
     }
 
-    fun showChangelog() {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/moezbhatti/qksms/releases"))
-        startActivityExternal(intent)
-    }
-
     fun showLicense() {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/moezbhatti/qksms/blob/master/LICENSE"))
         startActivityExternal(intent)

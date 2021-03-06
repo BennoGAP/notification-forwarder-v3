@@ -40,8 +40,6 @@ class AboutPresenter @Inject constructor(
 
                         R.id.source -> navigator.showSourceCode()
 
-                        R.id.changelog -> navigator.showChangelog()
-
                         R.id.bluetooth_contact -> navigator.showSupport()
 
                         R.id.license -> navigator.showLicense()

@@ -94,20 +94,6 @@
             app:title="@string/about_source_title" />
 
         <org.groebl.sms.common.widget.PreferenceView
-            android:id="@+id/changelog"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:summary="@string/about_changelog"
-            app:title="@string/about_changelog_title" />
-
-        <org.groebl.sms.common.widget.PreferenceView
-            android:id="@+id/contact"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:summary="@string/about_contact"
-            app:title="@string/about_contact_title" />
-
-        <org.groebl.sms.common.widget.PreferenceView
             android:id="@+id/license"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
