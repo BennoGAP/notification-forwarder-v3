@@ -19,6 +19,8 @@ import org.groebl.sms.BuildConfig;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import timber.log.Timber;
+
 public class BluetoothNotificationFilter {
 
     private static boolean isPhoneNumber(String name) {
@@ -135,20 +137,6 @@ public class BluetoothNotificationFilter {
 
 
             switch(pack) {
-                case "org.telegram.messenger":
-                    if (!ticker.equals("")) {
-                        return;
-                    }
-
-                    CharSequence[] textline_telegram = extras.getCharSequenceArray(Notification.EXTRA_TEXT_LINES);
-                    if (textline_telegram != null) {
-                        return;
-                    }
-
-                    set_sender = "Telegram";
-                    set_content = title + ": " + text;
-                    break;
-
                 case "org.thunderdog.challegram":
                     if (ticker.equals("")) {
                         return;
@@ -313,16 +301,6 @@ public class BluetoothNotificationFilter {
                     set_content = text;
                     break;
 
-                case "com.once.android":
-                    CharSequence[] textline_newest = extras.getCharSequenceArray(Notification.EXTRA_TEXT_LINES);
-                    if (textline_newest != null) {
-                        ticker = textline_newest[textline_newest.length - 1].toString();
-                    }
-
-                    set_sender = "Once";
-                    set_content = ticker;
-                    break;
-
                 case "com.facebook.orca":
                     set_sender = "Facebook";
                     set_content = title + ": " + text;
@@ -331,6 +309,136 @@ public class BluetoothNotificationFilter {
                 case "com.microsoft.teams":
                     set_sender = "Teams";
                     set_content = title + ": " + text;
+                    break;
+
+                //Signal
+                case "org.thoughtcrime.securesms":
+                    CharSequence[] textline_signal = extras.getCharSequenceArray(Notification.EXTRA_TEXT_LINES);
+
+                    if(textline_signal != null) {
+                        return;
+                    }
+
+
+                    if (mPrefs.getBoolean("bluetoothSignalToContact", true)) {
+                        String SG_grp = "";
+                        String SG_name = "";
+                        String SG_text = "";
+
+                        if(ticker.startsWith(title + ": ") || ticker.equals("")) {
+                            SG_name = title;
+                            SG_text = text;
+
+                            set_sender = "Signal";
+                            set_content = SG_name + ": " + SG_text;
+                        } else if (ticker.contains(": ") && title.contains(": ")) {
+                            SG_name = ticker.substring(0, ticker.indexOf(": " + text));
+                            SG_text = text;
+                            SG_grp = title.substring(0, title.indexOf(": " + SG_name));
+
+                            set_sender = "Signal";
+                            set_content = SG_name + " @ " + SG_grp + ": " + SG_text;
+                        }
+
+                        //\u2068 ... \u2069
+                        SG_name = SG_name.replaceAll("[\\u2068\\u2069]", "");
+                        SG_grp = SG_grp.replaceAll("[\\u2068\\u2069]", "");
+                        SG_grp = EmojiParser.removeAllEmojis(SG_grp).trim();
+
+                        //Check if Message is from blocked group
+                        if (BluetoothMessengerBlocked.isMessengerBlocked(mPrefs, SG_grp, true, "Signal")) { return; }
+
+                        //Check if Message is from blocked contact
+                        if (BluetoothMessengerBlocked.isMessengerBlocked(mPrefs, SG_name, false, "Signal")) { return; }
+
+                        try {
+                            String phoneNumberSignal = BluetoothHelper.INSTANCE.findNumberFromSignalName(mContext, SG_name);
+                            if (!phoneNumberSignal.equals(""))  {
+                                set_sender = phoneNumberSignal;
+                                this.errorCode = 778;
+
+                                if (SG_grp.equals("")) {
+                                    set_content = SG_text;
+                                } else {
+                                    set_content = SG_grp + ": " + SG_text;
+                                }
+                            }
+                        } catch (Exception e) {
+                            Timber.e(e, "Signal Exception");
+                        }
+
+                        //Set Signal Prefix to Msg
+                        if(!set_sender.equals("Signal") && !mPrefs.getBoolean("bluetoothSignalHidePrefix", true)) {
+                            set_content = "[Signal] " + set_content;
+                        }
+                    } else {
+                        set_sender = "Signal";
+                        set_content = title + ": " + text;
+                    }
+                    break;
+
+                //Telegram
+                case "org.telegram.messenger":
+                    if (!ticker.equals("")) {
+                        return;
+                    }
+
+                    CharSequence[] textline_telegram = extras.getCharSequenceArray(Notification.EXTRA_TEXT_LINES);
+                    if (textline_telegram != null) {
+                        return;
+                    }
+
+                    if (mPrefs.getBoolean("bluetoothTelegramToContact", true)) {
+                        String TG_grp = "";
+                        String TG_name = "";
+                        String TG_text = "";
+
+                        if (title.contains(": ")) {
+                            TG_grp = EmojiParser.removeAllEmojis(title.substring(0, title.indexOf(": "))).trim();
+                            TG_name = title.substring(title.indexOf(": ") + 2);
+                            TG_text = text;
+
+                            set_sender = "Telegram";
+                            set_content = TG_name + " @ " + TG_grp + ": " + TG_text;
+                        } else {
+                            TG_name = title;
+                            TG_text = text;
+
+                            set_sender = "Telegram";
+                            set_content = TG_name + ": " + TG_text;
+                        }
+
+                        //Check if Message is from blocked group
+                        if (BluetoothMessengerBlocked.isMessengerBlocked(mPrefs, TG_grp, true, "Telegram")) { return; }
+
+                        //Check if Message is from blocked contact
+                        if (BluetoothMessengerBlocked.isMessengerBlocked(mPrefs, TG_name, false, "Telegram")) { return; }
+
+                        try {
+                            String phoneNumberTelegram = BluetoothHelper.INSTANCE.findNumberFromTelegramName(mContext, TG_name);
+                            if (!phoneNumberTelegram.equals("")) {
+                                set_sender = phoneNumberTelegram;
+                                this.errorCode = 778;
+
+                                if (TG_grp.equals("")) {
+                                    set_content = TG_text;
+                                } else {
+                                    set_content = TG_grp + ": " + TG_text;
+                                }
+                            }
+                        } catch (Exception e) {
+                            Timber.e(e, "Telegram Exception");
+                        }
+
+                        //Set Signal Prefix to Msg
+                        if(!set_sender.equals("Telegram") && !mPrefs.getBoolean("bluetoothTelegramHidePrefix", true)) {
+                            set_content = "[Telegram] " + set_content;
+                        }
+
+                    } else {
+                        set_sender = "Telegram";
+                        set_content = title + ": " + text;
+                    }
                     break;
 
                 case "com.whatsapp":
@@ -362,18 +470,18 @@ public class BluetoothNotificationFilter {
                             if (ticker.contains(" @ ") && text.contains(" @ ") && text.contains(": ")) {
                                 WA_name = text.substring(0, text.indexOf(" @ "));
                                 WA_grp = text.substring(text.indexOf(" @ ") + 3, text.indexOf(": "));
-                                WA_msg = text.substring(text.indexOf(": ") + 2, text.length());
+                                WA_msg = text.substring(text.indexOf(": ") + 2);
                             } else {
                                 WA_grp = "";
                                 WA_name = text.substring(0, text.indexOf(": "));
-                                WA_msg = text.substring(text.indexOf(": ") + 2, text.length());
+                                WA_msg = text.substring(text.indexOf(": ") + 2);
                             }
                         } else if (textline_whatsapp != null && !ticker.equals("")) {
                             text = removeDirectionChars(textline_whatsapp[textline_whatsapp.length - 1].toString());
                             if (ticker.endsWith(" @ " + title)) {
                                 WA_grp = title;
                                 WA_name = text.substring(0, text.indexOf(": "));
-                                WA_msg = text.substring(text.indexOf(": ") + 2, text.length());
+                                WA_msg = text.substring(text.indexOf(": ") + 2);
                             } else {
                                 WA_grp = "";
                                 WA_name = title;
@@ -386,7 +494,7 @@ public class BluetoothNotificationFilter {
                         WA_grp = EmojiParser.removeAllEmojis(WA_grp).trim();
 
                         //Check if Message is from blocked group
-                        if (BluetoothWABlocked.isWABlocked(mPrefs, WA_grp, true)) { return; }
+                        if (BluetoothMessengerBlocked.isMessengerBlocked(mPrefs, WA_grp, true, "WhatsApp")) { return; }
 
                         //Check if the Name is just a Number or a Name we can search for in the Phonebook
                         if (isPhoneNumber(WA_name)) {
@@ -394,7 +502,7 @@ public class BluetoothNotificationFilter {
                             this.errorCode = 778;
                         } else {
                             try {
-                                String phoneNumber = BluetoothHelper.INSTANCE.findWhatsAppNumberFromName(mContext, WA_name);
+                                String phoneNumber = BluetoothHelper.INSTANCE.findNumberFromWhatsAppName(mContext, WA_name);
 
                                 //Check if everything went fine, otherwise back to the roots (╯°□°）╯︵ ┻━┻
                                 if (phoneNumber.equals("")) {
@@ -406,7 +514,7 @@ public class BluetoothNotificationFilter {
                                     }
                                 } else {
                                     //Check if Message is from blocked contact
-                                    if (BluetoothWABlocked.isWABlocked(mPrefs, phoneNumber, false)) { return; }
+                                    if (BluetoothMessengerBlocked.isMessengerBlocked(mPrefs, phoneNumber, false, "WhatsApp")) { return; }
 
                                     set_sender = phoneNumber;
                                     this.errorCode = 778;

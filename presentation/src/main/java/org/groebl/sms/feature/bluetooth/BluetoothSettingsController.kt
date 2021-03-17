@@ -28,12 +28,13 @@ import org.groebl.sms.common.QkChangeHandler
 import org.groebl.sms.common.base.QkController
 import org.groebl.sms.common.util.Colors
 import org.groebl.sms.common.util.extensions.animateLayoutChanges
+import org.groebl.sms.common.util.extensions.isInstalled
 import org.groebl.sms.common.util.extensions.setVisible
 import org.groebl.sms.common.widget.PreferenceView
 import org.groebl.sms.feature.bluetooth.app.BluetoothAppActivity
 import org.groebl.sms.feature.bluetooth.common.BluetoothDatabase
 import org.groebl.sms.feature.bluetooth.common.BluetoothHelper
-import org.groebl.sms.feature.bluetooth.common.BluetoothWABlocked
+import org.groebl.sms.feature.bluetooth.common.BluetoothMessengerBlocked
 import org.groebl.sms.feature.bluetooth.device.BluetoothDeviceActivity
 import org.groebl.sms.feature.bluetooth.donate.BluetoothDonateActivity
 import org.groebl.sms.feature.settings.about.AboutController
@@ -121,14 +122,20 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
         var localBluetoothEnabled = state.bluetooth_enabled
         var localBluetoothTethering = state.bluetooth_tethering
         var localBluetoothWhatsappToContact = state.bluetooth_whatsapp_to_contact
+        var localBluetoothTelegramToContact = state.bluetooth_telegram_to_contact
+        var localBluetoothSignalToContact = state.bluetooth_signal_to_contact
 
-        if(!state.bluetooth_enabled) {
+        var localBluetoothWhatsappInstalled = context.isInstalled("com.whatsapp")
+        var localBluetoothTelegramInstalled = context.isInstalled("org.telegram.messenger")
+        var localBluetoothSignalInstalled = context.isInstalled("org.thoughtcrime.securesms")
+
+        if(!localBluetoothEnabled) {
             Thread { BluetoothHelper.deleteBluetoothMessages(context, false) }.start()
             Thread { BluetoothDatabase.deleteBluetoothDbData(context, false) }.start()
         }
 
         //Forwarding enabled but not default SMS-App or has no Notification-Access
-        if(state.bluetooth_enabled and (!BluetoothHelper.isDefaultSms(context) or !BluetoothHelper.hasNotificationAccess(context))) {
+        if(localBluetoothEnabled and (!BluetoothHelper.isDefaultSms(context) or !BluetoothHelper.hasNotificationAccess(context))) {
             prefs.bluetooth_enabled.set(false)
             localBluetoothEnabled = false
 
@@ -137,9 +144,13 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
         }
 
         //WhatsApp-to-Contact enabled but no Contact-Permission
-        if(state.bluetooth_whatsapp_to_contact && !BluetoothHelper.hasContactPermission(context)) {
+        if((state.bluetooth_whatsapp_to_contact || state.bluetooth_signal_to_contact || state.bluetooth_telegram_to_contact) && !BluetoothHelper.hasContactPermission(context)) {
             prefs.bluetooth_whatsapp_to_contact.set(false)
+            prefs.bluetooth_signal_to_contact.set(false)
+            prefs.bluetooth_telegram_to_contact.set(false)
             localBluetoothWhatsappToContact = false
+            localBluetoothSignalToContact = false
+            localBluetoothTelegramToContact = false
             BluetoothHelper.requestContactPermission(activity!!)
         }
 
@@ -162,15 +173,31 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
             }
         }
 
-        bluetooth_menu_main.setVisible(state.bluetooth_enabled)
+        bluetooth_menu_main.setVisible(localBluetoothEnabled)
         bluetooth_select_device.setVisible(state.bluetooth_only_on_connect)
         bluetooth_autodelete.setVisible(state.bluetooth_only_on_connect)
 
         bluetooth_delayed_read.setVisible(state.bluetooth_save_read)
 
-        bluetooth_whatsapp_blocked_group.setVisible(localBluetoothWhatsappToContact)
-        bluetooth_whatsapp_blocked_contact.setVisible(localBluetoothWhatsappToContact)
-        bluetooth_whatsapp_hide_prefix.setVisible(localBluetoothWhatsappToContact)
+        bluetooth_messenger_divider.setVisible(localBluetoothWhatsappInstalled || localBluetoothSignalInstalled || localBluetoothTelegramInstalled)
+
+        bluetooth_whatsapp_category.setVisible(localBluetoothWhatsappInstalled)
+        bluetooth_whatsapp_to_contact.setVisible(localBluetoothWhatsappInstalled)
+        bluetooth_whatsapp_blocked_group.setVisible(localBluetoothWhatsappToContact && localBluetoothWhatsappInstalled)
+        bluetooth_whatsapp_blocked_contact.setVisible(localBluetoothWhatsappToContact && localBluetoothWhatsappInstalled)
+        bluetooth_whatsapp_hide_prefix.setVisible(localBluetoothWhatsappToContact && localBluetoothWhatsappInstalled)
+
+        bluetooth_signal_category.setVisible(localBluetoothTelegramInstalled)
+        bluetooth_signal_to_contact.setVisible(localBluetoothSignalInstalled)
+        bluetooth_signal_blocked_group.setVisible(localBluetoothSignalToContact && localBluetoothSignalInstalled)
+        bluetooth_signal_blocked_contact.setVisible(localBluetoothSignalToContact && localBluetoothSignalInstalled)
+        bluetooth_signal_hide_prefix.setVisible(localBluetoothSignalToContact && localBluetoothSignalInstalled)
+
+        bluetooth_telegram_category.setVisible(localBluetoothTelegramInstalled)
+        bluetooth_telegram_to_contact.setVisible(localBluetoothTelegramInstalled)
+        bluetooth_telegram_blocked_group.setVisible(localBluetoothTelegramToContact && localBluetoothTelegramInstalled)
+        bluetooth_telegram_blocked_contact.setVisible(localBluetoothTelegramToContact && localBluetoothTelegramInstalled)
+        bluetooth_telegram_hide_prefix.setVisible(localBluetoothTelegramToContact && localBluetoothTelegramInstalled)
 
         bluetooth_more_divider.setVisible(state.bluetooth_only_on_connect)
         bluetooth_more_cat.setVisible(state.bluetooth_only_on_connect)
@@ -188,7 +215,11 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
         bluetooth_appname_as_sender_text.checkbox.isChecked = state.bluetooth_appname_as_sender_text
         bluetooth_appname_as_sender_number.checkbox.isChecked = state.bluetooth_appname_as_sender_number
         bluetooth_whatsapp_to_contact.checkbox.isChecked = localBluetoothWhatsappToContact
+        bluetooth_signal_to_contact.checkbox.isChecked = localBluetoothSignalToContact
+        bluetooth_telegram_to_contact.checkbox.isChecked = localBluetoothTelegramToContact
         bluetooth_whatsapp_hide_prefix.checkbox.isChecked = state.bluetooth_whatsapp_hide_prefix
+        bluetooth_signal_hide_prefix.checkbox.isChecked = state.bluetooth_signal_hide_prefix
+        bluetooth_telegram_hide_prefix.checkbox.isChecked = state.bluetooth_telegram_hide_prefix
         bluetooth_max_vol.checkbox.isChecked = state.bluetooth_max_vol
         bluetooth_tethering.checkbox.isChecked = localBluetoothTethering
 
@@ -256,7 +287,8 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
         startActivity(intent)
     }
 
-    override fun showBluetoothWhatsAppBlockedContact() {
+    override fun showBluetoothBlockedContactWhatsApp() {
+
         val arrlist = ArrayList<String>()
         for(item in prefs.bluetooth_whatsapp_blocked_contact.get()) {
             val name = BluetoothHelper.findWhatsAppNameFromNumber(context, item)
@@ -274,11 +306,11 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
                 .setItems(array) { _, which ->
                     val parts = array[which]!!.split("\n")
                     AlertDialog.Builder(activity!!)
-                            .setTitle(R.string.settings_bluetooth_block_whatsapp_unblock_confirm)
+                            .setTitle(R.string.settings_bluetooth_block_unblock_confirm)
                             .setCancelable(false)
-                            .setMessage(context.getString(R.string.settings_bluetooth_block_whatsapp_unblock_summary, parts[0]))
+                            .setMessage(context.getString(R.string.settings_bluetooth_block_unblock_summary, parts[0]))
                             .setPositiveButton(R.string.button_yes) { _, _ ->
-                                BluetoothWABlocked.setWAUnblock(context, parts[0], false)
+                                BluetoothMessengerBlocked.setMessengerUnblock(context, parts[0], false, "WhatsApp")
                                 //Toast.makeText(context, "Unblock: " + array[which], Toast.LENGTH_LONG).show()
                             }
                             .setNegativeButton(R.string.button_no) { dialog, _ -> dialog.cancel() }
@@ -286,19 +318,19 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
                 }
                 .setPositiveButton(R.string.button_add) { _, _ ->
                     AlertDialog.Builder(activity!!)
-                        .setTitle(R.string.settings_bluetooth_block_whatsapp_contact_add_title)
-                        .setMessage(R.string.settings_bluetooth_block_whatsapp_contact_ask_summary)
+                        .setTitle(context.getString(R.string.settings_bluetooth_block_contact_add_title, "WhatsApp"))
+                        .setMessage(R.string.settings_bluetooth_block_contact_ask_summary)
                         .setCancelable(false)
-                        .setPositiveButton(R.string.settings_bluetooth_block_whatsapp_phonebook) { _, _ -> selectContact() }
-                        .setNeutralButton(R.string.settings_bluetooth_block_whatsapp_manual) { _, _ ->
+                        .setPositiveButton(R.string.settings_bluetooth_block_phonebook) { _, _ -> selectContact() }
+                        .setNeutralButton(R.string.settings_bluetooth_block_manual) { _, _ ->
                             AlertDialog.Builder(activity!!)
-                                .setTitle(R.string.settings_bluetooth_block_whatsapp_contact_add_title)
+                                .setTitle(context.getString(R.string.settings_bluetooth_block_contact_add_title, "WhatsApp"))
                                 .setCancelable(false)
-                                .setMessage(R.string.settings_bluetooth_block_whatsapp_contact_add_summary)
+                                .setMessage(R.string.settings_bluetooth_block_contact_nr_add_summary)
                                 .setView(editText)
                                 .setPositiveButton(R.string.button_add) { _, _ ->
                                     if (editText.text.isNotEmpty()) {
-                                        BluetoothWABlocked.setWABlock(context, PhoneNumberUtils.stripSeparators(editText.text.toString()), false)
+                                        BluetoothMessengerBlocked.setMessengerBlock(context, PhoneNumberUtils.stripSeparators(editText.text.toString()), false, "WhatsApp")
                                         //Toast.makeText(context, "Add " + PhoneNumberUtils.stripSeparators(editText.text.toString()), Toast.LENGTH_LONG).show()
                                     }
                                 }
@@ -312,22 +344,27 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
                 .show()
     }
 
-    override fun showBluetoothWhatsAppBlockedGroup() {
-        val items = prefs.bluetooth_whatsapp_blocked_group.get()
+    override fun showBluetoothBlockedContactByName(MessengerType: String) {
+        val items = when (MessengerType) {
+            "Signal" ->     { prefs.bluetooth_signal_blocked_contact.get() }
+            "Telegram" ->   { prefs.bluetooth_telegram_blocked_contact.get() }
+            else ->         { return; }
+        }
+
         val array = arrayOfNulls<String>(items.size)
         items.toHashSet().toArray(array)
 
         val editText = EditText(activity!!)
 
         AlertDialog.Builder(activity!!)
-                .setTitle(R.string.settings_bluetooth_block_whatsapp_group_title)
+                .setTitle(context.getString(R.string.settings_bluetooth_block_contact_add_title, MessengerType))
                 .setItems(array) { _, which ->
                     AlertDialog.Builder(activity!!)
-                            .setTitle(R.string.settings_bluetooth_block_whatsapp_unblock_confirm)
+                            .setTitle(R.string.settings_bluetooth_block_unblock_confirm)
                             .setCancelable(false)
-                            .setMessage(context.getString(R.string.settings_bluetooth_block_whatsapp_unblock_summary, array[which]))
+                            .setMessage(context.getString(R.string.settings_bluetooth_block_unblock_summary, array[which]))
                             .setPositiveButton(R.string.button_yes) { _, _ ->
-                                BluetoothWABlocked.setWAUnblock(context, array[which], true)
+                                BluetoothMessengerBlocked.setMessengerUnblock(context, array[which], false, MessengerType)
                                 //Toast.makeText(context, "Unblock: " + array[which], Toast.LENGTH_LONG).show()
                             }
                             .setNegativeButton(R.string.button_no) { dialog, _ -> dialog.cancel() }
@@ -335,13 +372,59 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
                 }
                 .setPositiveButton(R.string.button_add) { _, _ ->
                     AlertDialog.Builder(activity!!)
-                            .setTitle(R.string.settings_bluetooth_block_whatsapp_group_add_title)
+                            .setTitle(context.getString(R.string.settings_bluetooth_block_contact_add_title, MessengerType))
                             .setCancelable(false)
-                            .setMessage(R.string.settings_bluetooth_block_whatsapp_group_add_summary)
+                            .setMessage(R.string.settings_bluetooth_block_contact_name_add_summary)
                             .setView(editText)
                             .setPositiveButton(R.string.button_add) { _, _ ->
                                 if(editText.text.isNotEmpty()) {
-                                    BluetoothWABlocked.setWABlock(context, editText.text.toString().trim(), true)
+                                    BluetoothMessengerBlocked.setMessengerBlock(context, editText.text.toString().trim(), false, MessengerType)
+                                    //Toast.makeText(context, "Add: " + editText.text.toString(), Toast.LENGTH_LONG).show()
+                                }
+                            }
+                            .setNegativeButton(R.string.button_cancel) { dialog, _ -> dialog.cancel() }
+                            .show()
+                }
+                .setNegativeButton(R.string.button_cancel) { dialog, _ -> dialog.cancel() }
+                .show()
+    }
+
+    override fun showBluetoothBlockedGroup(MessengerType: String) {
+        val items = when (MessengerType) {
+            "WhatsApp" ->   { prefs.bluetooth_whatsapp_blocked_group.get() }
+            "Signal" ->     { prefs.bluetooth_signal_blocked_group.get() }
+            "Telegram" ->   { prefs.bluetooth_telegram_blocked_group.get() }
+            else ->         { return; }
+        }
+
+        val array = arrayOfNulls<String>(items.size)
+        items.toHashSet().toArray(array)
+
+        val editText = EditText(activity!!)
+
+        AlertDialog.Builder(activity!!)
+                .setTitle(context.getString(R.string.settings_bluetooth_block_group_title, MessengerType))
+                .setItems(array) { _, which ->
+                    AlertDialog.Builder(activity!!)
+                            .setTitle(R.string.settings_bluetooth_block_unblock_confirm)
+                            .setCancelable(false)
+                            .setMessage(context.getString(R.string.settings_bluetooth_block_unblock_summary, array[which]))
+                            .setPositiveButton(R.string.button_yes) { _, _ ->
+                                BluetoothMessengerBlocked.setMessengerUnblock(context, array[which], true, MessengerType)
+                                //Toast.makeText(context, "Unblock: " + array[which], Toast.LENGTH_LONG).show()
+                            }
+                            .setNegativeButton(R.string.button_no) { dialog, _ -> dialog.cancel() }
+                            .show()
+                }
+                .setPositiveButton(R.string.button_add) { _, _ ->
+                    AlertDialog.Builder(activity!!)
+                            .setTitle(context.getString(R.string.settings_bluetooth_block_group_add_title, MessengerType))
+                            .setCancelable(false)
+                            .setMessage(R.string.settings_bluetooth_block_group_add_summary)
+                            .setView(editText)
+                            .setPositiveButton(R.string.button_add) { _, _ ->
+                                if(editText.text.isNotEmpty()) {
+                                    BluetoothMessengerBlocked.setMessengerBlock(context, editText.text.toString().trim(), true, MessengerType)
                                     //Toast.makeText(context, "Add: " + editText.text.toString(), Toast.LENGTH_LONG).show()
                                 }
                             }
@@ -372,7 +455,7 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
                         cursorWA?.use {
                             if (cursorWA.moveToFirst()) {
                                 val split = cursorWA.getString(cursorWA.getColumnIndex(ContactsContract.RawContacts.SYNC1)).split("@")
-                                BluetoothWABlocked.setWABlock(context, "+" + split[0], false)
+                                BluetoothMessengerBlocked.setMessengerBlock(context, "+" + split[0], false, "WhatsApp")
                             } else {
                                 AlertDialog.Builder(activity!!)
                                         .setTitle(R.string.settings_bluetooth_block_whatsapp_contact_add_title)

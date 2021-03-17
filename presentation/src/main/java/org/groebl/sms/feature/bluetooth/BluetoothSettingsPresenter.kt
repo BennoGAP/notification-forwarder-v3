@@ -47,8 +47,20 @@ class BluetoothSettingsPresenter @Inject constructor(
         disposables += prefs.bluetooth_whatsapp_to_contact.asObservable()
                 .subscribe { enabled -> newState { copy(bluetooth_whatsapp_to_contact = enabled) } }
 
+        disposables += prefs.bluetooth_signal_to_contact.asObservable()
+                .subscribe { enabled -> newState { copy(bluetooth_signal_to_contact = enabled) } }
+
+        disposables += prefs.bluetooth_telegram_to_contact.asObservable()
+                .subscribe { enabled -> newState { copy(bluetooth_telegram_to_contact = enabled) } }
+
         disposables += prefs.bluetooth_whatsapp_hide_prefix.asObservable()
                 .subscribe { enabled -> newState { copy(bluetooth_whatsapp_hide_prefix = enabled) } }
+
+        disposables += prefs.bluetooth_signal_hide_prefix.asObservable()
+                .subscribe { enabled -> newState { copy(bluetooth_signal_hide_prefix = enabled) } }
+
+        disposables += prefs.bluetooth_telegram_hide_prefix.asObservable()
+                .subscribe { enabled -> newState { copy(bluetooth_telegram_hide_prefix = enabled) } }
 
         disposables += prefs.bluetooth_max_vol.asObservable()
                 .subscribe { enabled -> newState { copy(bluetooth_max_vol = enabled) } }
@@ -120,8 +132,16 @@ class BluetoothSettingsPresenter @Inject constructor(
                         }
                         R.id.bluetooth_whatsapp_to_contact -> prefs.bluetooth_whatsapp_to_contact.set(!prefs.bluetooth_whatsapp_to_contact.get())
                         R.id.bluetooth_whatsapp_hide_prefix -> prefs.bluetooth_whatsapp_hide_prefix.set(!prefs.bluetooth_whatsapp_hide_prefix.get())
-                        R.id.bluetooth_whatsapp_blocked_group -> view.showBluetoothWhatsAppBlockedGroup()
-                        R.id.bluetooth_whatsapp_blocked_contact -> view.showBluetoothWhatsAppBlockedContact()
+                        R.id.bluetooth_signal_to_contact -> prefs.bluetooth_signal_to_contact.set(!prefs.bluetooth_signal_to_contact.get())
+                        R.id.bluetooth_signal_hide_prefix -> prefs.bluetooth_signal_hide_prefix.set(!prefs.bluetooth_signal_hide_prefix.get())
+                        R.id.bluetooth_telegram_to_contact -> prefs.bluetooth_telegram_to_contact.set(!prefs.bluetooth_telegram_to_contact.get())
+                        R.id.bluetooth_telegram_hide_prefix -> prefs.bluetooth_telegram_hide_prefix.set(!prefs.bluetooth_telegram_hide_prefix.get())
+                        R.id.bluetooth_whatsapp_blocked_group -> view.showBluetoothBlockedGroup("WhatsApp")
+                        R.id.bluetooth_whatsapp_blocked_contact -> view.showBluetoothBlockedContactWhatsApp()
+                        R.id.bluetooth_signal_blocked_group -> view.showBluetoothBlockedGroup("Signal")
+                        R.id.bluetooth_signal_blocked_contact -> view.showBluetoothBlockedContactByName("Signal")
+                        R.id.bluetooth_telegram_blocked_group -> view.showBluetoothBlockedGroup("Telegram")
+                        R.id.bluetooth_telegram_blocked_contact -> view.showBluetoothBlockedContactByName("Telegram")
                         R.id.bluetooth_max_vol -> prefs.bluetooth_max_vol.set(!prefs.bluetooth_max_vol.get())
                         R.id.bluetooth_tethering -> prefs.bluetooth_tethering.set(!prefs.bluetooth_tethering.get())
 

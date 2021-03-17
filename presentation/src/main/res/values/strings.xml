@@ -33,6 +33,8 @@
     <string name="settings_category_bluetooth_general" tools:ignore="MissingTranslation">General</string>
     <string name="settings_category_bluetooth_more" tools:ignore="MissingTranslation">More settings</string>
     <string name="settings_category_bluetooth_whatsapp" tools:ignore="MissingTranslation">WhatsApp settings</string>
+    <string name="settings_category_bluetooth_telegram" tools:ignore="MissingTranslation">Telegram settings</string>
+    <string name="settings_category_bluetooth_signal" tools:ignore="MissingTranslation">Signal settings</string>
     <string name="settings_category_bluetooth_other" tools:ignore="MissingTranslation">Other settings</string>
     <string name="settings_category_bluetooth_system" tools:ignore="MissingTranslation">System settings</string>
 
@@ -63,17 +65,34 @@
     <string name="settings_bluetooth_shownumber_summary" tools:ignore="MissingTranslation">Assign a unique dummy number for every App</string>
     <string name="settings_bluetooth_max_vol_title" tools:ignore="MissingTranslation">Increase Bluetooth-Volume</string>
     <string name="settings_bluetooth_max_vol_summary" tools:ignore="MissingTranslation">Set the Bluetooth-Volume to 100% when connected to the selected Bluetooth-Device</string>
+    <string name="settings_bluetooth_block_group_title" tools:ignore="MissingTranslation">Exclude %s groups</string>
     <string name="settings_bluetooth_tethering_title" tools:ignore="MissingTranslation">Bluetooth-Tethering</string>
     <string name="settings_bluetooth_tethering_summary" tools:ignore="MissingTranslation">Enable Bluetooth-Tethering when connected to the selected Bluetooth-Device</string>
     <string name="settings_bluetooth_tethering_dialog" tools:ignore="MissingTranslation">To enable this option you need to permit %s to modify system settings</string>
     <string name="settings_bluetooth_whatsapp_to_contact_title" tools:ignore="MissingTranslation">Assign WhatsApp-Messages</string>
-    <string name="settings_bluetooth_whatsapp_to_contact_summary" tools:ignore="MissingTranslation">Show the name and number from the sender of the WhatsApp-Message</string>
+    <string name="settings_bluetooth_whatsapp_to_contact_summary" tools:ignore="MissingTranslation">Show the contact-name/-number from the sender of the WhatsApp-Message</string>
     <string name="settings_bluetooth_whatsapp_hide_prefix_title" tools:ignore="MissingTranslation">Hide WhatsApp-Prefix</string>
     <string name="settings_bluetooth_whatsapp_hide_prefix_summary" tools:ignore="MissingTranslation">Hide the \'WhatsApp\'-Prefix in front of the messages</string>
+    <string name="settings_bluetooth_signal_to_contact_title" tools:ignore="MissingTranslation">Assign Signal-Messages</string>
+    <string name="settings_bluetooth_signal_to_contact_summary" tools:ignore="MissingTranslation">Show the contact name from the sender of the Signal-Message if possible</string>
+    <string name="settings_bluetooth_signal_hide_prefix_title" tools:ignore="MissingTranslation">Hide Signal-Prefix</string>
+    <string name="settings_bluetooth_signal_hide_prefix_summary" tools:ignore="MissingTranslation">Hide the \'Signal\'-Prefix in front of the messages</string>
+    <string name="settings_bluetooth_telegram_to_contact_title" tools:ignore="MissingTranslation">Assign Telegram-Messages</string>
+    <string name="settings_bluetooth_telegram_to_contact_summary" tools:ignore="MissingTranslation">Show the contact name from the sender of the Telegram-Message if possible</string>
+    <string name="settings_bluetooth_telegram_hide_prefix_title" tools:ignore="MissingTranslation">Hide Telegram-Prefix</string>
+    <string name="settings_bluetooth_telegram_hide_prefix_summary" tools:ignore="MissingTranslation">Hide the \'Telegram\'-Prefix in front of the messages</string>
     <string name="settings_bluetooth_block_whatsapp_group_title" tools:ignore="MissingTranslation">Exclude WhatsApp groups</string>
     <string name="settings_bluetooth_block_whatsapp_group_summary" tools:ignore="MissingTranslation">WhatsApp-Messages from the following groups will not be forwarded</string>
     <string name="settings_bluetooth_block_whatsapp_contact_title" tools:ignore="MissingTranslation">Exclude WhatsApp contacts</string>
     <string name="settings_bluetooth_block_whatsapp_contact_summary" tools:ignore="MissingTranslation">WhatsApp-Messages from the following contacts will not be forwarded</string>
+    <string name="settings_bluetooth_block_signal_group_title" tools:ignore="MissingTranslation">Exclude Signal groups</string>
+    <string name="settings_bluetooth_block_signal_group_summary" tools:ignore="MissingTranslation">Signal-Messages from the following groups will not be forwarded</string>
+    <string name="settings_bluetooth_block_signal_contact_title" tools:ignore="MissingTranslation">Exclude Signal contacts</string>
+    <string name="settings_bluetooth_block_signal_contact_summary" tools:ignore="MissingTranslation">Signal-Messages from the following contacts will not be forwarded</string>
+    <string name="settings_bluetooth_block_telegram_group_title" tools:ignore="MissingTranslation">Exclude Telegram groups</string>
+    <string name="settings_bluetooth_block_telegram_group_summary" tools:ignore="MissingTranslation">Telegram-Messages from the following groups will not be forwarded</string>
+    <string name="settings_bluetooth_block_telegram_contact_title" tools:ignore="MissingTranslation">Exclude Telegram contacts</string>
+    <string name="settings_bluetooth_block_telegram_contact_summary" tools:ignore="MissingTranslation">Telegram-Messages from the following contacts will not be forwarded</string>
     <string name="settings_bluetooth_notification_access_title" tools:ignore="MissingTranslation">Notification Access</string>
     <string name="settings_bluetooth_battery_title" tools:ignore="MissingTranslation">Battery Optimization</string>
     <string name="settings_bluetooth_battery_summary" tools:ignore="MissingTranslation">If the forwarding stopped working after a time, check your autostart/power-saving options</string>
@@ -81,16 +100,18 @@
     <string name="settings_bluetooth_donate" tools:ignore="MissingTranslation">Donate</string>
     <string name="settings_bluetooth_faq_title" tools:ignore="MissingTranslation">FAQ</string>
 
-    <string name="settings_bluetooth_block_whatsapp_group_add_title" tools:ignore="MissingTranslation">Block WhatsApp-Group</string>
+    <string name="settings_bluetooth_block_group_add_title" tools:ignore="MissingTranslation">Block %s-Group</string>
+    <string name="settings_bluetooth_block_contact_add_title" tools:ignore="MissingTranslation">Block %s-Contact</string>
     <string name="settings_bluetooth_block_whatsapp_contact_add_title" tools:ignore="MissingTranslation">Block WhatsApp-Contact</string>
-    <string name="settings_bluetooth_block_whatsapp_group_add_summary" tools:ignore="MissingTranslation">Enter Group-Name to block (without Emojis)</string>
-    <string name="settings_bluetooth_block_whatsapp_contact_add_summary" tools:ignore="MissingTranslation">Enter Contact-Number to block</string>
-    <string name="settings_bluetooth_block_whatsapp_unblock_summary" tools:ignore="MissingTranslation">Remove %s from block-list?</string>
-    <string name="settings_bluetooth_block_whatsapp_unblock_confirm" tools:ignore="MissingTranslation">Confirm Unblock</string>
+    <string name="settings_bluetooth_block_group_add_summary" tools:ignore="MissingTranslation">Enter Group-Name to block (without Emojis)</string>
+    <string name="settings_bluetooth_block_contact_nr_add_summary" tools:ignore="MissingTranslation">Enter Contact-Number to block</string>
+    <string name="settings_bluetooth_block_contact_name_add_summary" tools:ignore="MissingTranslation">Enter Contact-Name to block</string>
+    <string name="settings_bluetooth_block_unblock_summary" tools:ignore="MissingTranslation">Remove %s from block-list?</string>
+    <string name="settings_bluetooth_block_unblock_confirm" tools:ignore="MissingTranslation">Confirm Unblock</string>
     <string name="settings_bluetooth_block_whatsapp_contact_no_wa" tools:ignore="MissingTranslation">Contact it not a WhatsApp-Contact</string>
-    <string name="settings_bluetooth_block_whatsapp_phonebook" tools:ignore="MissingTranslation">Phonebook</string>
-    <string name="settings_bluetooth_block_whatsapp_manual" tools:ignore="MissingTranslation">Manual</string>
-    <string name="settings_bluetooth_block_whatsapp_contact_ask_summary" tools:ignore="MissingTranslation">Select contact from phonebook or enter manual?</string>
+    <string name="settings_bluetooth_block_phonebook" tools:ignore="MissingTranslation">Phonebook</string>
+    <string name="settings_bluetooth_block_manual" tools:ignore="MissingTranslation">Manual</string>
+    <string name="settings_bluetooth_block_contact_ask_summary" tools:ignore="MissingTranslation">Select contact from phonebook or enter manual?</string>
 
     <string name="settings_bluetooth_no_devices" tools:ignore="MissingTranslation">No paired Bluetooth devices found</string>
 

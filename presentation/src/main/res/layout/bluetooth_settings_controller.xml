@@ -136,6 +136,7 @@
                 app:widget="@layout/settings_switch_widget" />
 
             <View
+                android:id="@+id/bluetooth_messenger_divider"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginBottom="8dp"
@@ -144,6 +145,7 @@
 
             <org.groebl.sms.common.widget.QkTextView
                 style="@style/PreferenceCategory"
+                android:id="@+id/bluetooth_whatsapp_category"
                 android:text="@string/settings_category_bluetooth_whatsapp" />
 
             <org.groebl.sms.common.widget.PreferenceView
@@ -179,6 +181,84 @@
                 android:layout_height="wrap_content"
                 app:summary="@string/settings_bluetooth_block_whatsapp_contact_summary"
                 app:title="@string/settings_bluetooth_block_whatsapp_contact_title"
+                app:icon="@drawable/ic_bluetooth_person_24px" />
+
+            <org.groebl.sms.common.widget.QkTextView
+                style="@style/PreferenceCategory"
+                android:id="@+id/bluetooth_signal_category"
+                android:text="@string/settings_category_bluetooth_signal" />
+
+            <org.groebl.sms.common.widget.PreferenceView
+                android:id="@+id/bluetooth_signal_to_contact"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:icon="@drawable/ic_bluetooth_signal_24px"
+                app:summary="@string/settings_bluetooth_signal_to_contact_summary"
+                app:title="@string/settings_bluetooth_signal_to_contact_title"
+                app:widget="@layout/settings_switch_widget" />
+
+            <org.groebl.sms.common.widget.PreferenceView
+                android:id="@+id/bluetooth_signal_hide_prefix"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:summary="@string/settings_bluetooth_signal_hide_prefix_summary"
+                app:title="@string/settings_bluetooth_signal_hide_prefix_title"
+                app:icon="@drawable/ic_bluetooth_list_24px"
+                app:widget="@layout/settings_switch_widget" />
+
+            <org.groebl.sms.common.widget.PreferenceView
+                android:id="@+id/bluetooth_signal_blocked_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:summary="@string/settings_bluetooth_block_signal_group_summary"
+                app:title="@string/settings_bluetooth_block_signal_group_title"
+                app:icon="@drawable/ic_bluetooth_group_24px" />
+
+            <org.groebl.sms.common.widget.PreferenceView
+                android:id="@+id/bluetooth_signal_blocked_contact"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:summary="@string/settings_bluetooth_block_signal_contact_summary"
+                app:title="@string/settings_bluetooth_block_signal_contact_title"
+                app:icon="@drawable/ic_bluetooth_person_24px" />
+
+            <org.groebl.sms.common.widget.QkTextView
+                style="@style/PreferenceCategory"
+                android:id="@+id/bluetooth_telegram_category"
+                android:text="@string/settings_category_bluetooth_telegram" />
+
+            <org.groebl.sms.common.widget.PreferenceView
+                android:id="@+id/bluetooth_telegram_to_contact"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:icon="@drawable/ic_bluetooth_telegram_24px"
+                app:summary="@string/settings_bluetooth_telegram_to_contact_summary"
+                app:title="@string/settings_bluetooth_telegram_to_contact_title"
+                app:widget="@layout/settings_switch_widget" />
+
+            <org.groebl.sms.common.widget.PreferenceView
+                android:id="@+id/bluetooth_telegram_hide_prefix"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:summary="@string/settings_bluetooth_telegram_hide_prefix_summary"
+                app:title="@string/settings_bluetooth_telegram_hide_prefix_title"
+                app:icon="@drawable/ic_bluetooth_list_24px"
+                app:widget="@layout/settings_switch_widget" />
+
+            <org.groebl.sms.common.widget.PreferenceView
+                android:id="@+id/bluetooth_telegram_blocked_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:summary="@string/settings_bluetooth_block_telegram_group_summary"
+                app:title="@string/settings_bluetooth_block_telegram_group_title"
+                app:icon="@drawable/ic_bluetooth_group_24px" />
+
+            <org.groebl.sms.common.widget.PreferenceView
+                android:id="@+id/bluetooth_telegram_blocked_contact"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:summary="@string/settings_bluetooth_block_telegram_contact_summary"
+                app:title="@string/settings_bluetooth_block_telegram_contact_title"
                 app:icon="@drawable/ic_bluetooth_person_24px" />
 
             <View

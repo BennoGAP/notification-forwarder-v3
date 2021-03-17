@@ -14,6 +14,12 @@ data class BluetoothSettingsState(
         val bluetooth_whatsapp_to_contact: Boolean = true,
         val bluetooth_whatsapp_hide_prefix: Boolean = true,
 
+        val bluetooth_telegram_to_contact: Boolean = true,
+        val bluetooth_telegram_hide_prefix: Boolean = true,
+
+        val bluetooth_signal_to_contact: Boolean = true,
+        val bluetooth_signal_hide_prefix: Boolean = true,
+
         val bluetooth_max_vol: Boolean = false,
         val bluetooth_tethering: Boolean = false
 )

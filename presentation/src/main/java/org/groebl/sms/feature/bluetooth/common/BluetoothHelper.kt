@@ -22,6 +22,7 @@ import io.realm.Sort
 import org.groebl.sms.feature.bluetooth.service.BluetoothNotificationService
 import org.groebl.sms.model.Conversation
 import org.groebl.sms.model.Message
+import timber.log.Timber
 import java.math.BigInteger
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
@@ -197,19 +198,49 @@ object BluetoothHelper  {
         }
     }
 
-    fun findWhatsAppNumberFromName(context: Context, displayname: String): String {
+    fun findNumberFromWhatsAppName(context: Context, NrDisplayName: String): String {
         var setNumber = ""
         val c = context.contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
                 arrayOf(ContactsContract.CommonDataKinds.Phone.DATA1),
-                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " = ? AND account_type = ?",
-                arrayOf(displayname, "com.whatsapp"), null)
+                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " = ? AND " + ContactsContract.RawContacts.ACCOUNT_TYPE + " = ?",
+                arrayOf(NrDisplayName, "com.whatsapp"), null)
 
         if (c != null) {
             if (c.moveToFirst())  { setNumber = c.getString(0) }
             if (!c.isClosed)      { c.close() }
         }
 
-        return setNumber
+        return setNumber.trim()
+    }
+
+    fun findNumberFromSignalName(context: Context, NrDisplayName: String): String {
+        var setNumber = ""
+        val c = context.contentResolver.query(ContactsContract.RawContacts.CONTENT_URI,
+                null,
+                ContactsContract.RawContacts.DISPLAY_NAME_PRIMARY + " = ? AND " + ContactsContract.RawContacts.ACCOUNT_TYPE + " = ?",
+                arrayOf(NrDisplayName, "org.thoughtcrime.securesms"), null)
+
+        if (c != null) {
+            if (c.moveToFirst())  { setNumber = c.getString(c.getColumnIndex(ContactsContract.RawContacts.SYNC1)) }
+            if (!c.isClosed)      { c.close() }
+        }
+
+        return setNumber.trim()
+    }
+
+    fun findNumberFromTelegramName(context: Context, NrDisplayName: String): String {
+        var setNumber = ""
+        val c = context.contentResolver.query(ContactsContract.RawContacts.CONTENT_URI,
+                null,
+                ContactsContract.RawContacts.DISPLAY_NAME_PRIMARY + " = ? AND " + ContactsContract.RawContacts.ACCOUNT_TYPE + " = ?",
+                arrayOf(NrDisplayName, "org.telegram.messenger"), null)
+
+        if (c != null) {
+            if (c.moveToFirst())  { setNumber = c.getString(c.getColumnIndex(ContactsContract.RawContacts.SYNC1)) }
+            if (!c.isClosed)      { c.close() }
+        }
+
+        return setNumber.trim()
     }
 
     fun findWhatsAppNameFromNumber(context: Context, number: String): String {

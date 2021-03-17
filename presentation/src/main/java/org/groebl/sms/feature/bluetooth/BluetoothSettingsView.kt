@@ -17,6 +17,7 @@ interface BluetoothSettingsView : QkViewContract<BluetoothSettingsState> {
 
     fun requestDefaultSms()
 
-    fun showBluetoothWhatsAppBlockedContact()
-    fun showBluetoothWhatsAppBlockedGroup()
+    fun showBluetoothBlockedContactWhatsApp()
+    fun showBluetoothBlockedContactByName(MessengerType: String)
+    fun showBluetoothBlockedGroup(MessengerType: String)
 }
