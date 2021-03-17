@@ -96,7 +96,7 @@
 
     <string name="bluetooth_alert_info_title" tools:ignore="MissingTranslation">Information</string>
     <string name="bluetooth_alert_info_defaultsms" tools:ignore="MissingTranslation">You need to set this as your default SMS-App</string>
-    <string name="bluetooth_alert_info_notifications" tools:ignore="MissingTranslation">The \"Notification Access\" has been started. If you see this message frequently, please check the power-saving options</string>
+    <string name="bluetooth_alert_info_notifications" tools:ignore="MissingTranslation">The \"Notification Access\" has been (re)started. If you see this message frequently, please check the power-saving options</string>
     <string name="bluetooth_alert_info_device" tools:ignore="MissingTranslation">You need to select at least one Bluetooth-Device or disable \"Only on Bluetooth connection\"</string>
     <string name="bluetooth_alert_info_apps" tools:ignore="MissingTranslation">You need to select at least one app on the \"Application White List\"</string>
     <string name="bluetooth_alert_info_markasread" tools:ignore="MissingTranslation">Enable \"Delayed Mark-as-Read\" is advised for this device</string>

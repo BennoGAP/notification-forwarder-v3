@@ -98,7 +98,7 @@ public class BluetoothNotificationService extends NotificationListenerService {
     @Override
     public void onNotificationRemoved(StatusBarNotification sbn) {
         super.onNotificationRemoved(sbn);
-        Log.d("SMS", "onNotificationRemoved");
+        Log.d("SMSMsg", "onNotificationRemoved");
     }
 
     public int onStartCommand(Intent intent, int flags, int startId) {

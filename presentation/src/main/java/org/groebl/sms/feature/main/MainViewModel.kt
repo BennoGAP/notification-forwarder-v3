@@ -58,7 +58,7 @@ class MainViewModel @Inject constructor(
         private val permissionManager: PermissionManager,
         private val prefs: Preferences,
         private val ratingManager: RatingManager,
-    private val syncContacts: SyncContacts,
+        private val syncContacts: SyncContacts,
         private val syncMessages: SyncMessages
 ) : QkViewModel<MainView, MainState>(MainState(page = Inbox(data = conversationRepo.getConversations()))) {
 

@@ -69,6 +69,7 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
         bluetooth_menu_main.postDelayed({ bluetooth_menu_main?.animateLayoutChanges = true }, 100)
         bluetooth_menu_full.postDelayed({ bluetooth_menu_full?.animateLayoutChanges = true }, 100)
 
+        /*
         if (prefs.bluetooth_enabled.get()) {
             val infoMsg = StringBuilder()
 
@@ -82,9 +83,9 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
             if (prefs.bluetooth_apps.get().isEmpty()) {
                 infoMsg.append("- " + context.getString(R.string.bluetooth_alert_info_apps) + "\n")
             }
-            if (prefs.bluetooth_save_read.get() && !prefs.bluetooth_delayed_read.get() && Build.MANUFACTURER.equals("samsung", ignoreCase = true) && Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-                infoMsg.append("- " + context.getString(R.string.bluetooth_alert_info_markasread) + "\n")
-            }
+            //if (prefs.bluetooth_save_read.get() && !prefs.bluetooth_delayed_read.get() && Build.MANUFACTURER.equals("samsung", ignoreCase = true) && Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+            //    infoMsg.append("- " + context.getString(R.string.bluetooth_alert_info_markasread) + "\n")
+            //}
 
             if (infoMsg.isNotEmpty()) {
                 AlertDialog.Builder(activity!!)
@@ -94,6 +95,7 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
                         .show()
             }
         }
+        */
     }
 
     override fun onAttach(view: View) {

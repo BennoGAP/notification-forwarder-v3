@@ -174,6 +174,33 @@ class MainActivity : QkThemedActivity(), MainView {
         //Delete BT-Messages
         Thread { BluetoothHelper.deleteBluetoothMessages(this, true) }.start()
         Thread { BluetoothDatabase.deleteBluetoothDbData(this, true) }.start()
+
+
+        if (prefs.bluetooth_enabled.get()) {
+            val infoMsg = StringBuilder()
+
+            if (BluetoothHelper.hasNotificationAccess(this) && !BluetoothHelper.isNotificationServiceRunning(this)) {
+                infoMsg.append("- " + this.getString(R.string.bluetooth_alert_info_notifications) + "\n")
+                BluetoothHelper.checkAndRestartNotificationListener(this)
+            }
+            if (prefs.bluetooth_only_on_connect.get() && prefs.bluetooth_devices.get().isEmpty()) {
+                infoMsg.append("- " + this.getString(R.string.bluetooth_alert_info_device) + "\n")
+            }
+            if (prefs.bluetooth_apps.get().isEmpty()) {
+                infoMsg.append("- " + this.getString(R.string.bluetooth_alert_info_apps) + "\n")
+            }
+
+            if (infoMsg.isNotEmpty()) {
+
+                AlertDialog.Builder(this)
+                    .setTitle("Information")
+                    .setMessage(infoMsg.toString().trim())
+                    .setPositiveButton(R.string.bluetooth_alert_button_ok, null)
+                    .show()
+
+            }
+        }
+
     }
 
     override fun onNewIntent(intent: Intent?) {

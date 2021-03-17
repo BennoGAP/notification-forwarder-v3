@@ -32,6 +32,7 @@ object BluetoothHelper  {
 
     fun emojiToNiceEmoji(text: String, active: Boolean): String {
         var text = text
+        /*
         text = text.replace("[\ud83d\ude42]".toRegex(), ":)")
         text = text.replace("[\ud83d\ude0a]".toRegex(), ":)")
         text = text.replace("[\ud83d\ude09]".toRegex(), ";)")
@@ -48,6 +49,7 @@ object BluetoothHelper  {
         text = text.replace("[\u2639]".toRegex(), ":(")
         text = text.replace("[\ud83d\ude10]".toRegex(), ":|")
         text = text.replace("[\ud83d\ude11]".toRegex(), ":|")
+        */
         text = text.replace("[\ud83d\udc9a]".toRegex(), "<3")
         text = text.replace("[\ud83d\udc9b]".toRegex(), "<3")
         text = text.replace("[\ud83d\udc9c]".toRegex(), "<3")
@@ -76,7 +78,7 @@ object BluetoothHelper  {
             put(Telephony.Sms.SEEN, true)
             put(Telephony.Sms.ERROR_CODE, errorCode)
             put(Telephony.Sms.READ, asRead)
-    }
+        }
 
         context.contentResolver.insert(Telephony.Sms.Inbox.CONTENT_URI, values)
     }
@@ -120,7 +122,15 @@ object BluetoothHelper  {
     fun checkAndRestartNotificationListener(context: Context) {
         if(hasNotificationAccess(context) && !isNotificationServiceRunning(context)) {
             toggleNotificationListenerService(context)
-            context.startService(Intent(context, BluetoothNotificationService::class.java))
+            try {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    context.startForegroundService(Intent(context, BluetoothNotificationService::class.java))
+                } else {
+                    context.startService(Intent(context, BluetoothNotificationService::class.java))
+                }
+            } catch (e: Exception) {
+                Timber.e(e)
+            }
         }
     }
 
@@ -182,8 +192,8 @@ object BluetoothHelper  {
 
         try {
             context.contentResolver.delete(Telephony.Sms.CONTENT_URI, "(" + Telephony.Sms.ERROR_CODE + " = ? or " + Telephony.Sms.ERROR_CODE + " = ?)" + selection, arrayOf("777", "778"))
-        } catch(e: Exception) {
-            e.printStackTrace()
+        } catch (e: Exception) {
+            Timber.e(e)
         }
     }
 
