@@ -67,7 +67,7 @@
   <string name="settings_bluetooth_tethering_summary">Aktiviert das Bluetooth-Tethering bei Verbindung mit den ausgewählten Bluetooth-Geräten</string>
   <string name="settings_bluetooth_tethering_dialog">Um diese Option zu aktivieren benötigt %s die Berechtigung zum Ändern der Systemeinstellungen</string>
   <string name="settings_bluetooth_whatsapp_to_contact_title">WhatsApp-Nachrichten zuweisen</string>
-  <string name="settings_bluetooth_whatsapp_to_contact_summary">WhatsApp-Nachrichten werden dem Absenderkontakt bzw. -nummer zugeordet</string>
+  <string name="settings_bluetooth_whatsapp_to_contact_summary">WhatsApp-Nachrichten werden dem Absenderkontakt bzw. -nummer zugeordnet</string>
   <string name="settings_bluetooth_whatsapp_hide_prefix_title">WhatsApp-Prefix verstecken</string>
   <string name="settings_bluetooth_whatsapp_hide_prefix_summary">Zeigt das vorangestellte \'WhatsApp\' bei den Nachrichten nicht an</string>
   <string name="settings_bluetooth_signal_to_contact_title">Signal-Nachrichten zuweisen</string>
