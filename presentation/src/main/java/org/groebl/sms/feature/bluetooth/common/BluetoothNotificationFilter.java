@@ -332,9 +332,16 @@ public class BluetoothNotificationFilter {
                             set_sender = "Signal";
                             set_content = SG_name + ": " + SG_text;
                         } else if (ticker.contains(": ") && title.contains(": ")) {
-                            SG_name = ticker.substring(0, ticker.indexOf(": " + text));
+                            String[] itemsList = title.split("\\u2069: \\u2068", 2);
+                            if (itemsList.length == 2) {
+                                SG_grp = itemsList[0];
+                                SG_name = itemsList[1];
+                            } else {
+                                SG_grp = title.substring(0, title.indexOf(": " + text.substring(0, 1)));
+                                SG_name = title.substring(title.indexOf(SG_grp + ": ") + 2 + SG_grp.length());
+                            }
+
                             SG_text = text;
-                            SG_grp = title.substring(0, title.indexOf(": " + SG_name));
 
                             set_sender = "Signal";
                             set_content = SG_name + " @ " + SG_grp + ": " + SG_text;
@@ -457,7 +464,7 @@ public class BluetoothNotificationFilter {
                             if (ticker.endsWith(" @ " + title) && text.contains(": ")) {
                                 WA_grp = title;
                                 WA_name = text.substring(0, text.indexOf(": "));
-                                WA_msg = text.substring(text.indexOf(": ") + 2, text.length());
+                                WA_msg = text.substring(text.indexOf(": ") + 2);
                             } else {
                                 WA_grp = "";
                                 WA_name = title;
