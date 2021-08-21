@@ -124,11 +124,11 @@ object BluetoothHelper  {
         if(hasNotificationAccess(context) && !isNotificationServiceRunning(context)) {
             toggleNotificationListenerService(context)
             try {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    context.startForegroundService(Intent(context, BluetoothNotificationService::class.java))
-                } else {
+                //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                //    context.startForegroundService(Intent(context, BluetoothNotificationService::class.java))
+                //} else {
                     context.startService(Intent(context, BluetoothNotificationService::class.java))
-                }
+                //}
             } catch (e: Exception) {
                 Timber.e(e)
             }
