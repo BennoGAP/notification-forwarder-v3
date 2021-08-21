@@ -29,17 +29,20 @@ public class BluetoothNotificationService extends NotificationListenerService {
 
     public void onCreate() {
         super.onCreate();
+        startMainService();
+    }
+
+    public void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(this.mBroadcastReceiver);
+    }
+
+    public void startMainService() {
         this.mBroadcastReceiver = new BluetoothReceiver();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("android.bluetooth.device.action.ACL_CONNECTED");
         intentFilter.addAction("android.bluetooth.device.action.ACL_DISCONNECTED");
         registerReceiver(this.mBroadcastReceiver, intentFilter);
-    }
-
-
-    public void onDestroy() {
-        super.onDestroy();
-        unregisterReceiver(this.mBroadcastReceiver);
     }
 
     @Override

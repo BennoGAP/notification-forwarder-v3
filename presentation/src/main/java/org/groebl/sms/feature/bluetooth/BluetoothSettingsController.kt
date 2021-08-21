@@ -237,6 +237,7 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
 
     override fun showNotificationAccess() {
         val intent = Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS")
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent)
     }
 
