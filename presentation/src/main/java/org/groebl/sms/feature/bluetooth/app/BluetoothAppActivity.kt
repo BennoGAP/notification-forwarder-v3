@@ -3,6 +3,7 @@ package org.groebl.sms.feature.bluetooth.app
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
 import android.os.AsyncTask
 import android.os.Bundle
 import android.os.Handler
@@ -97,7 +98,7 @@ class BluetoothAppActivity : QkThemedActivity(), BluetoothAppView {
         val packageModel = ArrayList<BluetoothAppModel>()
         val checkedApps =  prefs.bluetooth_apps.get()
         val newCheckedApps: MutableSet<String> = mutableSetOf()
-        val installedApps = packageManager.getInstalledPackages(0)
+        val installedApps = packageManager.getInstalledPackages(PackageManager.GET_META_DATA)
         var currentAppCount: Int = 0
         //val allAppCount = installedApps.count()
 
