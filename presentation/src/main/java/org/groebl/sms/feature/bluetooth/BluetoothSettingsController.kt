@@ -67,36 +67,8 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
     }
 
     override fun onViewCreated() {
-        bluetooth_menu_main.postDelayed({ bluetooth_menu_main?.animateLayoutChanges = true }, 100)
+        //bluetooth_menu_main.postDelayed({ bluetooth_menu_main?.animateLayoutChanges = true }, 100)
         bluetooth_menu_full.postDelayed({ bluetooth_menu_full?.animateLayoutChanges = true }, 100)
-
-        /*
-        if (prefs.bluetooth_enabled.get()) {
-            val infoMsg = StringBuilder()
-
-            if (BluetoothHelper.hasNotificationAccess(context) && !BluetoothHelper.isNotificationServiceRunning(context)) {
-                infoMsg.append("- " + context.getString(R.string.bluetooth_alert_info_notifications) + "\n")
-                BluetoothHelper.checkAndRestartNotificationListener(context)
-            }
-            if (prefs.bluetooth_only_on_connect.get() && prefs.bluetooth_devices.get().isEmpty()) {
-                infoMsg.append("- " + context.getString(R.string.bluetooth_alert_info_device) + "\n")
-            }
-            if (prefs.bluetooth_apps.get().isEmpty()) {
-                infoMsg.append("- " + context.getString(R.string.bluetooth_alert_info_apps) + "\n")
-            }
-            //if (prefs.bluetooth_save_read.get() && !prefs.bluetooth_delayed_read.get() && Build.MANUFACTURER.equals("samsung", ignoreCase = true) && Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-            //    infoMsg.append("- " + context.getString(R.string.bluetooth_alert_info_markasread) + "\n")
-            //}
-
-            if (infoMsg.isNotEmpty()) {
-                AlertDialog.Builder(activity!!)
-                        .setTitle("Information")
-                        .setMessage(infoMsg.toString().trim())
-                        .setPositiveButton(R.string.bluetooth_alert_button_ok, null)
-                        .show()
-            }
-        }
-        */
     }
 
     override fun onAttach(view: View) {
@@ -139,8 +111,8 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
             prefs.bluetooth_enabled.set(false)
             localBluetoothEnabled = false
 
-            if(!BluetoothHelper.isDefaultSms(context))          { requestDefaultSms() }
-            if(!BluetoothHelper.hasNotificationAccess(context)) { showNotificationAccess() }
+            //if(!BluetoothHelper.isDefaultSms(context))          { requestDefaultSms() }
+            //if(!BluetoothHelper.hasNotificationAccess(context)) { showNotificationAccess() }
         }
 
         //WhatsApp-to-Contact enabled but no Contact-Permission
