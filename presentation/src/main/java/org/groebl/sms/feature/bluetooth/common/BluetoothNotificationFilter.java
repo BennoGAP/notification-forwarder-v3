@@ -207,6 +207,7 @@ public class BluetoothNotificationFilter {
                     break;
 
                 case "com.fsck.k9":
+                case "me.bluemail.mail":
                     if (extras.get(Notification.EXTRA_BIG_TEXT) != null) {
                         ticker = title + ": " + removeDirectionChars(extras.get(Notification.EXTRA_BIG_TEXT).toString());
                     }
@@ -222,22 +223,13 @@ public class BluetoothNotificationFilter {
                 case "com.ninefolders.hd3.work.intune":
                 case "com.ninefolders.hd3.work.airwatch.gp":
                 case "com.blackberry.hub":
+                case "eu.faircode.email":
                     if (extras.get(Notification.EXTRA_BIG_TEXT) == null) {
                         return;
                     }
 
                     set_sender = "E-Mail";
                     set_content = title + ": " + extras.get(Notification.EXTRA_BIG_TEXT);
-                    break;
-
-                case "me.bluemail.mail":
-                    if (extras.get(Notification.EXTRA_BIG_TEXT) != null) {
-                        set_content = title + ": " + extras.get(Notification.EXTRA_BIG_TEXT);
-                    } else {
-                        set_content = ticker;
-                    }
-
-                    set_sender = "E-Mail";
                     break;
 
                 case "com.microsoft.office.outlook":
