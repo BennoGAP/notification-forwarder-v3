@@ -115,6 +115,7 @@ class Preferences @Inject constructor(
     val mobileOnly = rxPrefs.getBoolean("mobileOnly", false)
     val autoDelete = rxPrefs.getInteger("autoDelete", 0)
     val longAsMms = rxPrefs.getBoolean("longAsMms", false)
+    val optOut = rxPrefs.getBoolean("optOut", true)
     val mmsSize = rxPrefs.getInteger("mmsSize", 300)
     val logging = rxPrefs.getBoolean("logging", false)
 

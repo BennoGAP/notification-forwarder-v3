@@ -18,14 +18,24 @@
  */
 package org.groebl.sms.common.util
 
+import android.content.Context
+import android.content.SharedPreferences
+import android.preference.PreferenceManager
 import android.util.Log
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import timber.log.Timber
+import javax.inject.Inject
 
-class CrashlyticsTree : Timber.Tree() {
+class CrashlyticsTree @Inject constructor(
+    private val context: Context
+) : Timber.Tree()
+{
 
     override fun log(priority: Int, tag: String?, message: String?, throwable: Throwable?) {
+        val sharedPrefs: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
         val crashlytics = FirebaseCrashlytics.getInstance()
+        crashlytics.setCrashlyticsCollectionEnabled(sharedPrefs.getBoolean("optOut", true))
+
         val priorityString = when (priority) {
             Log.VERBOSE -> "V"
             Log.DEBUG -> "D"

@@ -404,6 +404,8 @@
     <string name="settings_long_as_mms_title">Send long messages as MMS</string>
     <string name="settings_long_as_mms_summary">If your longer text messages are failing to send, or sending in the wrong order, you can send them as MMS messages instead. Additional charges may apply</string>
     <string name="settings_mms_size_title">Auto-compress MMS attachments</string>
+    <string name="settings_opt_out_title" tools:ignore="MissingTranslation">Enable crash logs</string>
+    <string name="settings_opt_out_summary" tools:ignore="MissingTranslation">Send crash logs in case of an error</string>
     <string name="settings_sync_title">Sync messages</string>
     <string name="settings_sync_summary">Re-sync your messages with the native Android SMS database</string>
     <string name="settings_about_title">About QKSMS</string>

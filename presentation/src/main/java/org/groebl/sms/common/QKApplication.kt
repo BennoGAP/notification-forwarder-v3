@@ -99,7 +99,7 @@ class QKApplication : Application(), HasActivityInjector, HasBroadcastReceiverIn
 
         EmojiCompat.init(FontRequestEmojiCompatConfig(this, fontRequest))
 
-        Timber.plant(Timber.DebugTree(), CrashlyticsTree(), fileLoggingTree)
+        Timber.plant(Timber.DebugTree(), CrashlyticsTree(this), fileLoggingTree)
 
         RxDogTag.builder()
                 .configureWith(AutoDisposeConfigurer::configure)

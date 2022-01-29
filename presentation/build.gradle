@@ -186,7 +186,7 @@ dependencies {
     implementation project(':data')
     implementation project(':domain')
 
-    withAnalyticsImplementation 'com.google.firebase:firebase-crashlytics:18.0.1'
+    withAnalyticsImplementation 'com.google.firebase:firebase-crashlytics:18.2.7'
     withAnalyticsImplementation "com.android.billingclient:billing:$billing_version"
     withAnalyticsImplementation "com.android.billingclient:billing-ktx:$billing_version"
 

@@ -380,6 +380,8 @@
   <string name="settings_long_as_mms_title">Lange Nachrichten als MMS senden</string>
   <string name="settings_long_as_mms_summary">Wenn Ihre längeren Textnachrichten nicht gesendet oder in der falsche Reihenfolge gesendet werden, können Sie sie stattdessen als MMS-Nachrichten senden. Dafür können zusätzliche Gebühren anfallen.</string>
   <string name="settings_mms_size_title">MMS-Anhänge automatisch komprimieren</string>
+  <string name="settings_opt_out_title">Fehlerberichte</string>
+  <string name="settings_opt_out_summary">Fehlerberichte senden falls Fehler auftreten</string>
   <string name="settings_sync_title">Nachrichten synchronisieren</string>
   <string name="settings_sync_summary">Nachrichten mit der Android SMS-Datenbank abgleichen</string>
   <string name="settings_about_title">Über QKSMS</string>

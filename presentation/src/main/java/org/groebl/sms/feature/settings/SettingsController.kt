@@ -185,6 +185,8 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
 
         longAsMms.checkbox.isChecked = state.longAsMms
 
+        optOut.checkbox.isChecked = state.optOut
+
         mmsSize.summary = state.maxMmsSizeSummary
         mmsSizeDialog.adapter.selectedItem = state.maxMmsSizeId
 
