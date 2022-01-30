@@ -1,6 +1,7 @@
 # Built application files
 *.apk
 *.ap_
+*.aab
 
 # Files for the ART/Dalvik VM
 *.dex
@@ -47,6 +48,7 @@ captures/
 
 # Google Services (e.g. APIs or Firebase)
 google-services.json
+output.json
 
 # Freeline
 freeline.py
