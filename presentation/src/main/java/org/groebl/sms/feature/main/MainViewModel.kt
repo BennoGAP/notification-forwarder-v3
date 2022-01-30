@@ -224,7 +224,6 @@ class MainViewModel @Inject constructor(
                         NavItem.SETTINGS -> navigator.showSettings()
                         NavItem.SETTINGS_BLUETOOTH -> navigator.showBluetoothSettings()
                         NavItem.HELP -> navigator.showSupport()
-                        NavItem.INVITE -> navigator.showInvite()
                         else -> Unit
                     }
                     drawerItem

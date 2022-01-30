@@ -230,15 +230,6 @@ class Navigator @Inject constructor(
         startActivityExternal(intent)
     }
 
-    fun showInvite() {
-        analyticsManager.track("Clicked Invite")
-        Intent(Intent.ACTION_SEND)
-                .setType("text/plain")
-                .putExtra(Intent.EXTRA_TEXT, "https://android.groebl.org")
-                .let { Intent.createChooser(it, null) }
-                .let(::startActivityExternal)
-    }
-
     fun addContact(address: String) {
         val intent = Intent(Intent.ACTION_INSERT)
                     .setType(ContactsContract.Contacts.CONTENT_TYPE)

@@ -91,8 +91,7 @@ class MainActivity : QkThemedActivity(), MainView {
                 blocking.clicks().map { NavItem.BLOCKING },
                 settings.clicks().map { NavItem.SETTINGS },
                 settings_bluetooth.clicks().map { NavItem.SETTINGS_BLUETOOTH },
-                help.clicks().map { NavItem.HELP },
-                invite.clicks().map { NavItem.INVITE }))
+                help.clicks().map { NavItem.HELP }))
     }
     override val optionsItemIntent: Subject<Int> = PublishSubject.create()
     override val dismissRatingIntent by lazy { rateDismiss.clicks() }

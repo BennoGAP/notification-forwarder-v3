@@ -168,21 +168,6 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/invite"
-            style="@style/DrawerRow">
-
-            <ImageView
-                style="@style/DrawerIcon"
-                android:src="@drawable/ic_people_black_24dp"
-                android:tint="?android:attr/textColorSecondary" />
-
-            <org.groebl.sms.common.widget.QkTextView
-                style="@style/DrawerText"
-                android:text="@string/drawer_invite" />
-
-        </LinearLayout>
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/rateLayout"
             android:layout_width="match_parent"
