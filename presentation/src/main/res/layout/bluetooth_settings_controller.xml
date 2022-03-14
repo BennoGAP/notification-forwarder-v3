@@ -136,7 +136,7 @@
                 app:widget="@layout/settings_switch_widget" />
 
             <View
-                android:id="@+id/bluetooth_messenger_divider"
+                android:id="@+id/bluetooth_whatsapp_divider"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginBottom="8dp"
@@ -183,6 +183,15 @@
                 app:title="@string/settings_bluetooth_block_whatsapp_contact_title"
                 app:icon="@drawable/ic_bluetooth_person_24px" />
 
+
+            <View
+                android:id="@+id/bluetooth_signal_divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:background="?android:attr/divider" />
+
             <org.groebl.sms.common.widget.QkTextView
                 style="@style/PreferenceCategory"
                 android:id="@+id/bluetooth_signal_category"
@@ -221,6 +230,14 @@
                 app:summary="@string/settings_bluetooth_block_signal_contact_summary"
                 app:title="@string/settings_bluetooth_block_signal_contact_title"
                 app:icon="@drawable/ic_bluetooth_person_24px" />
+
+            <View
+                android:id="@+id/bluetooth_telegram_divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:background="?android:attr/divider" />
 
             <org.groebl.sms.common.widget.QkTextView
                 style="@style/PreferenceCategory"

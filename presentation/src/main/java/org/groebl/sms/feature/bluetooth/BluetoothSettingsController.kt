@@ -151,20 +151,21 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
 
         bluetooth_delayed_read.setVisible(state.bluetooth_save_read)
 
-        bluetooth_messenger_divider.setVisible(localBluetoothWhatsappInstalled || localBluetoothSignalInstalled || localBluetoothTelegramInstalled)
-
+        bluetooth_whatsapp_divider.setVisible(localBluetoothWhatsappInstalled)
         bluetooth_whatsapp_category.setVisible(localBluetoothWhatsappInstalled)
         bluetooth_whatsapp_to_contact.setVisible(localBluetoothWhatsappInstalled)
         bluetooth_whatsapp_blocked_group.setVisible(localBluetoothWhatsappToContact && localBluetoothWhatsappInstalled)
         bluetooth_whatsapp_blocked_contact.setVisible(localBluetoothWhatsappToContact && localBluetoothWhatsappInstalled)
         bluetooth_whatsapp_hide_prefix.setVisible(localBluetoothWhatsappToContact && localBluetoothWhatsappInstalled)
 
-        bluetooth_signal_category.setVisible(localBluetoothTelegramInstalled)
+        bluetooth_signal_divider.setVisible(localBluetoothSignalInstalled)
+        bluetooth_signal_category.setVisible(localBluetoothSignalInstalled)
         bluetooth_signal_to_contact.setVisible(localBluetoothSignalInstalled)
         bluetooth_signal_blocked_group.setVisible(localBluetoothSignalToContact && localBluetoothSignalInstalled)
         bluetooth_signal_blocked_contact.setVisible(localBluetoothSignalToContact && localBluetoothSignalInstalled)
         bluetooth_signal_hide_prefix.setVisible(localBluetoothSignalToContact && localBluetoothSignalInstalled)
 
+        bluetooth_telegram_divider.setVisible(localBluetoothTelegramInstalled)
         bluetooth_telegram_category.setVisible(localBluetoothTelegramInstalled)
         bluetooth_telegram_to_contact.setVisible(localBluetoothTelegramInstalled)
         bluetooth_telegram_blocked_group.setVisible(localBluetoothTelegramToContact && localBluetoothTelegramInstalled)
