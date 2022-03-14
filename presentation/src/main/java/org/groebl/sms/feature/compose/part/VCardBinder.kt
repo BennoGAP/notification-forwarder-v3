@@ -21,6 +21,7 @@ package org.groebl.sms.feature.compose.part
 import android.content.Context
 import android.view.Gravity
 import android.widget.FrameLayout
+import androidx.core.view.isVisible
 import org.groebl.sms.R
 import org.groebl.sms.common.base.QkViewHolder
 import org.groebl.sms.common.util.Colors
@@ -37,6 +38,7 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.mms_vcard_list_item.*
+import org.groebl.sms.common.util.extensions.getDisplayName
 import javax.inject.Inject
 
 class VCardBinder @Inject constructor(colors: Colors, private val context: Context) : PartBinder() {
@@ -61,9 +63,13 @@ class VCardBinder @Inject constructor(colors: Colors, private val context: Conte
         Observable.just(part.getUri())
                 .map(context.contentResolver::openInputStream)
                 .mapNotNull { inputStream -> inputStream.use { Ezvcard.parse(it).first() } }
+                .map { vcard -> vcard.getDisplayName() ?: "" }
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { vcard -> holder.name?.text = vcard.formattedName.value }
+                .subscribe { displayName ->
+                    holder.name?.text = displayName
+                    holder.name.isVisible = displayName.isNotEmpty()
+                }
 
         val params = holder.vCardBackground.layoutParams as FrameLayout.LayoutParams
         if (!message.isMe()) {
