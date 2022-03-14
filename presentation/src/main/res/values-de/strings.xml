@@ -394,8 +394,9 @@
     <string name="blocking_drop_summary">Eingehende Nachrichten von blockierten Absendern verwefen anstatt sie auszublenden</string>
   <string name="blocking_conversations">Blockierte Unterhaltungen</string>
   <string name="blocking_manager_title">Blockiermanager</string>
-  <string name="blocking_manager_qksms_title">QKSMS</string>
-  <string name="blocking_manager_qksms_summary">Integrierte Blockier-Funktion</string>
+  <string name="blocking_manager_qksms_title">Intern</string>
+  <string name="blocking_manager_qksms_summary">Integrierte Blockierfunktion</string>
+  <string name="blocking_manager_call_blocker_summary">Spam-Nachrichten und Nummern &amp; unbekannte Anrufe mit Sperrliste &amp; Zeitplan blockieren</string>
   <string name="blocking_manager_call_control_summary">Filtert automatisch Anrufe und Nachrichten an einem Ort! Community IQ™ unterbindet mit Hilfe der Community unerwünschte Nachrichten von bekannten Spammern</string>
   <string name="blocking_manager_sia_summary">Nachrichten von unerwünschten Nummern automatisch mit Hilfe der App \"Should I Answer?\" filtern</string>
   <string name="blocking_manager_copy_title">Blockierte Nummer(n) kopieren</string>
