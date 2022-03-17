@@ -172,7 +172,7 @@ class MessageRepositoryImpl @Inject constructor(
 
         val extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(part.type) ?: return null
         val date = part.messages?.first()?.date
-        val dir = File(Environment.getExternalStorageDirectory(), "NFP-SMS/Media").apply { mkdirs() }
+        val dir = File(context.getExternalFilesDir("NotificationForwarderPro"), "Media").apply { mkdirs() }
         val fileName = part.name?.takeIf { name -> name.endsWith(extension) }
                 ?: "${part.type.split("/").last()}_$date.$extension"
         var file: File

@@ -18,7 +18,7 @@
  */
 package org.groebl.sms.common.util
 
-import android.os.Environment
+import android.content.Context
 import android.util.Log
 import org.groebl.sms.util.Preferences
 import io.reactivex.schedulers.Schedulers
@@ -37,6 +37,7 @@ import javax.inject.Singleton
 class FileLoggingTree @Inject constructor(private val prefs: Preferences) : Timber.DebugTree() {
 
     private val fileLock: Boolean = false
+    private lateinit var context: Context
 
     override fun log(priority: Int, tag: String, message: String, t: Throwable?) {
         if (!prefs.logging.get()) return
@@ -59,7 +60,7 @@ class FileLoggingTree @Inject constructor(private val prefs: Preferences) : Timb
             synchronized(fileLock) {
                 try {
                     // Create the directory
-                    val dir = File(Environment.getExternalStorageDirectory(), "NFP-SMS/Logs").apply { mkdirs() }
+                    val dir = File(context.getExternalFilesDir("NotificationForwarderPro"), "Logs").apply { mkdirs() }
 
                     // Create the file
                     val file = File(dir, "${SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(System.currentTimeMillis())}.log")
