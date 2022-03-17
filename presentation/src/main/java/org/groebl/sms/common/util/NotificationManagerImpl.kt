@@ -160,7 +160,8 @@ class NotificationManagerImpl @Inject constructor(
                 }
 
                 person.setName(recipient?.getDisplayName() ?: message.address)
-                person.setIcon(GlideApp.with(context)
+                person.setIcon(
+                    Glide.with(context)
                         .asBitmap()
                         .circleCrop()
                         .load(recipient?.contact?.photoUri)
@@ -185,7 +186,7 @@ class NotificationManagerImpl @Inject constructor(
         val avatar = conversation.recipients.takeIf { it.size == 1 }
                 ?.first()?.contact?.photoUri
                 ?.let { photoUri ->
-                    GlideApp.with(context)
+                    Glide.with(context)
                             .asBitmap()
                             .circleCrop()
                             .load(photoUri)

@@ -22,6 +22,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
+import com.bumptech.glide.Glide
 import org.groebl.sms.R
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.util.Colors
@@ -29,7 +30,6 @@ import org.groebl.sms.common.util.extensions.setBackgroundTint
 import org.groebl.sms.common.util.extensions.setTint
 import org.groebl.sms.injection.appComponent
 import org.groebl.sms.model.Recipient
-import org.groebl.sms.util.GlideApp
 import kotlinx.android.synthetic.main.avatar_view.view.*
 import javax.inject.Inject
 
@@ -102,7 +102,7 @@ class AvatarView @JvmOverloads constructor(
 
         photo.setImageDrawable(null)
         photoUri?.let { photoUri ->
-            GlideApp.with(photo)
+            Glide.with(photo)
                     .load(photoUri)
                     .into(photo)
         }

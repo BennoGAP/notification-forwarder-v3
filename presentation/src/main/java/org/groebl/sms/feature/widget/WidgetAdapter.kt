@@ -29,6 +29,7 @@ import android.widget.RemoteViewsService
 import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
 import androidx.core.text.color
+import com.bumptech.glide.Glide
 import org.groebl.sms.R
 import org.groebl.sms.common.util.Colors
 import org.groebl.sms.common.util.DateFormatter
@@ -41,7 +42,6 @@ import org.groebl.sms.model.Contact
 import org.groebl.sms.model.Conversation
 import org.groebl.sms.model.PhoneNumber
 import org.groebl.sms.repository.ConversationRepository
-import org.groebl.sms.util.GlideApp
 import org.groebl.sms.util.Preferences
 import org.groebl.sms.util.tryOrNull
 import javax.inject.Inject
@@ -134,7 +134,7 @@ class WidgetAdapter(intent: Intent) : RemoteViewsService.RemoteViewsFactory {
         }
 
         remoteViews.setImageViewBitmap(R.id.photo, null)
-        val futureGet = GlideApp.with(context)
+        val futureGet = Glide.with(context)
                 .asBitmap()
                 .load(contact?.photoUri)
                 .submit(48.dpToPx(context), 48.dpToPx(context))
