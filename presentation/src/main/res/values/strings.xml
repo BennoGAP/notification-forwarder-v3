@@ -114,8 +114,10 @@
     <string name="settings_bluetooth_block_contact_ask_summary" tools:ignore="MissingTranslation">Select contact from phonebook or enter manual?</string>
 
     <string name="settings_bluetooth_no_devices" tools:ignore="MissingTranslation">No paired Bluetooth devices found</string>
+    <string name="settings_bluetooth_disabled" tools:ignore="MissingTranslation">Bluetooth is disabled</string>
 
     <string name="bluetooth_alert_info_title" tools:ignore="MissingTranslation">Information</string>
+    <string name="bluetooth_alert_info_disabled" tools:ignore="MissingTranslation">Bluetooth ist currently disabled</string>
     <string name="bluetooth_alert_info_defaultsms" tools:ignore="MissingTranslation">You need to set this as your default SMS-App</string>
     <string name="bluetooth_alert_info_notifications" tools:ignore="MissingTranslation">The \"Notification Access\" has been (re)started. If you see this message frequently, please check the power-saving options</string>
     <string name="bluetooth_alert_info_device" tools:ignore="MissingTranslation">You need to select at least one Bluetooth-Device or disable \"Only on Bluetooth connection\"</string>

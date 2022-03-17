@@ -111,8 +111,10 @@
   <string name="settings_bluetooth_block_contact_ask_summary">Kontakt aus dem Telefonbuch auswählen oder Nummer manuell eingeben?</string>
 
   <string name="settings_bluetooth_no_devices">Keine gekoppelten Bluetooth-Geräte gefunden</string>
+  <string name="settings_bluetooth_disabled">Bluetooth ist deaktiviert</string>
 
   <string name="bluetooth_alert_info_title">Information</string>
+  <string name="bluetooth_alert_info_disabled">Bluetooth ist aktuell deaktiviert</string>
   <string name="bluetooth_alert_info_defaultsms">Die App muss als Standard-SMS-App eingestellt werden</string>
   <string name="bluetooth_alert_info_notifications">Der \"Benachrichtigungszugriff\" wurde soeben (neu)gestartet. Sollte diese Meldung öfter erscheinen, bitte die Energiespareinstellungen prüfen</string>
   <string name="bluetooth_alert_info_device">Es muss noch mindestens ein Bluetooth-Gerät ausgewählt oder die Option \"Nur bei Bluetooth-Verbindung\" deaktiviert werden</string>

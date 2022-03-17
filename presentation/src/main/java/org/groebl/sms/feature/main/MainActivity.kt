@@ -21,6 +21,8 @@ package org.groebl.sms.feature.main
 import android.Manifest
 import android.animation.ObjectAnimator
 import android.app.AlertDialog
+import android.bluetooth.BluetoothManager
+import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Build
@@ -177,6 +179,7 @@ class MainActivity : QkThemedActivity(), MainView {
 
         if (prefs.bluetooth_enabled.get()) {
             val infoMsg = StringBuilder()
+            val bluetoothManager = this.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
 
             if (BluetoothHelper.hasNotificationAccess(this) && !BluetoothHelper.isNotificationServiceRunning(this)) {
                 infoMsg.append("- " + this.getString(R.string.bluetooth_alert_info_notifications) + "\n")
@@ -187,6 +190,10 @@ class MainActivity : QkThemedActivity(), MainView {
             }
             if (prefs.bluetooth_apps.get().isEmpty()) {
                 infoMsg.append("- " + this.getString(R.string.bluetooth_alert_info_apps) + "\n")
+            }
+
+            if(prefs.bluetooth_only_on_connect.get() && !bluetoothManager.adapter.isEnabled) {
+                infoMsg.append("- " + this.getString(R.string.bluetooth_alert_info_disabled) + "\n")
             }
 
             if (infoMsg.isNotEmpty()) {

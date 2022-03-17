@@ -1,6 +1,7 @@
 package org.groebl.sms.feature.bluetooth.device
 
-import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothManager
+import android.content.Context
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -38,16 +39,19 @@ class BluetoothDeviceActivity  : QkThemedActivity(), BluetoothDeviceView {
         var checkedDevices =  prefs.bluetooth_devices.get()
         var newCheckedDevices: MutableSet<String> = mutableSetOf()
         try {
-            val blAdapter: BluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
-            val pairedDevices = blAdapter.bondedDevices
-            if (pairedDevices.size > 0) {
+            val bluetoothManager = this.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
+            val pairedDevices = bluetoothManager.adapter.bondedDevices
+
+            if (!bluetoothManager.adapter.isEnabled) {
+                empty.text = getString(R.string.settings_bluetooth_disabled)
+            } else if (pairedDevices.size > 0) {
                 for (device in pairedDevices) {
                     packageModel.add(BluetoothDeviceModel(device.name, device.address, checkedDevices.contains(device.address)))
 
                     if(checkedDevices.contains(device.address)) { newCheckedDevices.add(device.address) }
                 }
 
-                packageModel.sortBy { it.deviceName.toLowerCase() }
+                packageModel.sortBy { it.deviceName.lowercase(Locale.getDefault()) }
 
                 //Only paired Devices should be saved in the prefs
                 prefs.bluetooth_devices.set(newCheckedDevices)
