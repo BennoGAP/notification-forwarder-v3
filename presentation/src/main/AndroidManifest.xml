@@ -53,7 +53,8 @@
 
         <activity
             android:name=".feature.main.MainActivity"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -64,7 +65,8 @@
         </activity>
         <activity
             android:name=".feature.compose.ComposeActivity"
-            android:parentActivityName=".feature.main.MainActivity">
+            android:parentActivityName=".feature.main.MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.MAIN" />
@@ -126,12 +128,16 @@
         <activity android:name=".feature.backup.BackupActivity" />
         <activity android:name=".feature.contacts.ContactsActivity" />
 
-        <receiver android:name=".receiver.BootReceiver">
+        <receiver
+            android:name=".receiver.BootReceiver"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".receiver.DefaultSmsChangedReceiver">
+        <receiver
+            android:name=".receiver.DefaultSmsChangedReceiver"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.provider.action.DEFAULT_SMS_PACKAGE_CHANGED" />
             </intent-filter>
@@ -139,14 +145,16 @@
         <receiver android:name=".receiver.DeleteMessagesReceiver" />
         <receiver
             android:name=".receiver.SmsReceiver"
-            android:permission="android.permission.BROADCAST_SMS">
+            android:permission="android.permission.BROADCAST_SMS"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.provider.Telephony.SMS_DELIVER" />
             </intent-filter>
         </receiver>
         <receiver
             android:name=".receiver.MmsReceiver"
-            android:permission="android.permission.BROADCAST_WAP_PUSH">
+            android:permission="android.permission.BROADCAST_WAP_PUSH"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.provider.Telephony.WAP_PUSH_DELIVER" />
                 <data android:mimeType="application/vnd.wap.mms-message" />
@@ -169,13 +177,17 @@
         <receiver android:name=".receiver.MarkReadReceiver" />
         <receiver android:name=".receiver.RemoteMessagingReceiver" />
         <receiver android:name=".receiver.NightModeReceiver" />
-        <receiver android:name=".receiver.SmsProviderChangedReceiver">
+        <receiver
+            android:name=".receiver.SmsProviderChangedReceiver"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.provider.action.EXTERNAL_PROVIDER_CHANGE" />
             </intent-filter>
         </receiver>
         <receiver android:name=".receiver.SendScheduledMessageReceiver" />
-        <receiver android:name=".feature.widget.WidgetProvider">
+        <receiver
+            android:name=".feature.widget.WidgetProvider"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="org.groebl.sms.intent.action.ACTION_NOTIFY_DATASET_CHANGED" />
@@ -186,7 +198,9 @@
                 android:resource="@xml/widget_info" />
         </receiver>
         <receiver android:name=".receiver.SendSmsReceiver" />
-        <receiver android:name=".feature.bluetooth.service.BluetoothBootReceiver">
+        <receiver
+            android:name=".feature.bluetooth.service.BluetoothBootReceiver"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
@@ -195,7 +209,8 @@
         <service
             android:name=".feature.bluetooth.service.BluetoothNotificationService"
             android:label="@string/app_name"
-            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.service.notification.NotificationListenerService" />
             </intent-filter>
@@ -226,7 +241,8 @@
         <service
             android:name=".common.util.QkChooserTargetService"
             android:label="@string/app_name"
-            android:permission="android.permission.BIND_CHOOSER_TARGET_SERVICE">
+            android:permission="android.permission.BIND_CHOOSER_TARGET_SERVICE"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.service.chooser.ChooserTargetService" />
             </intent-filter>

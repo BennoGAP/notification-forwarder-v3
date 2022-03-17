@@ -23,14 +23,14 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.3"
+    compileSdkVersion 31
+    buildToolsVersion "30.0.3"
     flavorDimensions "analytics"
 
     defaultConfig {
         applicationId "org.groebl.sms"
-        minSdkVersion 21
-        targetSdkVersion 29
+        minSdkVersion 23
+        targetSdkVersion 31
         versionCode 3324
         versionName '3.3.2.4'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -58,10 +58,6 @@ android {
         jvmTarget = "1.8"
     }
 
-    lintOptions {
-        abortOnError false
-    }
-
     productFlavors {
         withAnalytics { dimension "analytics" }
         noAnalytics { dimension "analytics" }
@@ -74,6 +70,9 @@ android {
             include 'armeabi-v7a', 'arm64-v8a'
             universalApk true
         }
+    }
+    lint {
+        abortOnError false
     }
 
 }
@@ -176,7 +175,7 @@ dependencies {
 
     implementation "com.github.chrisbanes:PhotoView:2.0.0"
     implementation "com.f2prateek.rx.preferences2:rx-preferences:$rx_preferences_version"
-    implementation "com.google.android:flexbox:0.3.1"
+    implementation "com.google.android.flexbox:flexbox:3.0.0"
     implementation "com.jakewharton.timber:timber:$timber_version"
     implementation "com.squareup.moshi:moshi-kotlin:$moshi_version"
     implementation "me.leolin:ShortcutBadger:1.1.22"
@@ -186,7 +185,7 @@ dependencies {
     implementation project(':data')
     implementation project(':domain')
 
-    withAnalyticsImplementation 'com.google.firebase:firebase-crashlytics:18.2.7'
+    withAnalyticsImplementation 'com.google.firebase:firebase-crashlytics:18.2.8'
     withAnalyticsImplementation "com.android.billingclient:billing:$billing_version"
     withAnalyticsImplementation "com.android.billingclient:billing-ktx:$billing_version"
 
