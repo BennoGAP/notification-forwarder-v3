@@ -428,7 +428,8 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
                         val cursorWA = context.contentResolver.query(ContactsContract.RawContacts.CONTENT_URI, null, ContactsContract.RawContacts.CONTACT_ID + " = ? AND " + ContactsContract.RawContacts.ACCOUNT_TYPE + " = ?", arrayOf(cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.Contacts._ID)), "com.whatsapp"), null)
                         cursorWA?.use {
                             if (cursorWA.moveToFirst()) {
-                                val split = cursorWA.getString(cursorWA.getColumnIndex(ContactsContract.RawContacts.SYNC1)).split("@")
+                                val cIndex = cursorWA.getColumnIndex(ContactsContract.RawContacts.SYNC1)
+                                val split = cursorWA.getString(cIndex).split("@")
                                 BluetoothMessengerBlocked.setMessengerBlock(context, "+" + split[0], false, "WhatsApp")
                             } else {
                                 AlertDialog.Builder(activity!!)

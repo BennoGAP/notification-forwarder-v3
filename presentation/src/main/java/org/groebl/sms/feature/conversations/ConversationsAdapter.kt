@@ -114,10 +114,18 @@ class ConversationsAdapter @Inject constructor(
             }
         }
         holder.date.text = conversation.date.takeIf { it > 0 }?.let(dateFormatter::getConversationTimestamp)
+
         holder.snippet.text = when {
-            conversation.draft.isNotEmpty() -> conversation.draft
-            conversation.me -> context.getString(R.string.main_sender_you, conversation.snippet)
-            else -> conversation.snippet
+            conversation.draft.isNotEmpty() -> conversation.draft.replace(
+                Regex("(\r\n|\r|\n)"),
+                " "
+            )
+                .replace("  ", " ")
+            conversation.me -> context.getString(
+                R.string.main_sender_you,
+                conversation.snippet?.replace(Regex("(\r\n|\r|\n)"), " ")?.replace("  ", " ")
+            )
+            else -> conversation.snippet?.replace(Regex("(\r\n|\r|\n)"), " ")?.replace("  ", " ")
         }
         holder.pinned.isVisible = conversation.pinned
         holder.unread.setTint(theme)

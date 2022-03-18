@@ -45,15 +45,7 @@ import org.groebl.sms.R
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.base.QkThemedActivity
 import org.groebl.sms.common.util.DateFormatter
-import org.groebl.sms.common.util.extensions.autoScrollToStart
-import org.groebl.sms.common.util.extensions.dismissKeyboard
-import org.groebl.sms.common.util.extensions.hideKeyboard
-import org.groebl.sms.common.util.extensions.resolveThemeColor
-import org.groebl.sms.common.util.extensions.scrapViews
-import org.groebl.sms.common.util.extensions.setBackgroundTint
-import org.groebl.sms.common.util.extensions.setTint
-import org.groebl.sms.common.util.extensions.setVisible
-import org.groebl.sms.common.util.extensions.showKeyboard
+import org.groebl.sms.common.util.extensions.*
 import org.groebl.sms.feature.compose.editing.ChipsAdapter
 import org.groebl.sms.feature.contacts.ContactsActivity
 import org.groebl.sms.model.Attachment
@@ -68,7 +60,6 @@ import kotlinx.android.synthetic.main.compose_activity.*
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
-import kotlin.collections.HashMap
 
 class ComposeActivity : QkThemedActivity(), ComposeView {
 
@@ -383,11 +374,6 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putParcelable(CameraDestinationKey, cameraDestination)
         super.onSaveInstanceState(outState)
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
-        cameraDestination = savedInstanceState?.getParcelable(CameraDestinationKey)
-        super.onRestoreInstanceState(savedInstanceState)
     }
 
     override fun onBackPressed() = backPressedIntent.onNext(Unit)

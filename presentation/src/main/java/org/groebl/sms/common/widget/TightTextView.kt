@@ -36,12 +36,15 @@ class TightTextView @JvmOverloads constructor(
         }
 
         val maxLineWidth = (0 until layout.lineCount)
-                .map(layout::getLineWidth)
-                .max() ?: 0f
+            .map(layout::getLineWidth).maxOrNull() ?: 0f
 
-        val width = Math.ceil(maxLineWidth.toDouble()).toInt() + compoundPaddingLeft + compoundPaddingRight
+//                .max() ?: 0f
+
+        val width =
+            Math.ceil(maxLineWidth.toDouble()).toInt() + compoundPaddingLeft + compoundPaddingRight
         if (width < measuredWidth) {
-            val widthSpec = MeasureSpec.makeMeasureSpec(width, MeasureSpec.getMode(widthMeasureSpec))
+            val widthSpec =
+                MeasureSpec.makeMeasureSpec(width, MeasureSpec.getMode(widthMeasureSpec))
             super.onMeasure(widthSpec, heightMeasureSpec)
         }
     }

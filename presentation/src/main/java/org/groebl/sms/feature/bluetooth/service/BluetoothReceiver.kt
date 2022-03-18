@@ -1,7 +1,7 @@
 package org.groebl.sms.feature.bluetooth.service
 
-import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
+import android.bluetooth.BluetoothManager
 import android.bluetooth.BluetoothProfile
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -28,9 +28,8 @@ class BluetoothReceiver : BroadcastReceiver() {
         val btDeviceWhitelist = mPrefs.getStringSet("bluetoothDevices", HashSet())
         val btCurrentDevice = intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
 
-
-        if (btDeviceWhitelist!!.contains(btCurrentDevice.address)) {
-            val deviceID = if (btCurrentDevice.name != null) btCurrentDevice.name else btCurrentDevice.address
+        if (btDeviceWhitelist!!.contains(btCurrentDevice?.address)) {
+            val deviceID = if (btCurrentDevice?.name != null) btCurrentDevice.name else btCurrentDevice!!.address
 
             when (intent.action) {
                 BluetoothDevice.ACTION_ACL_CONNECTED -> {
@@ -44,7 +43,9 @@ class BluetoothReceiver : BroadcastReceiver() {
                     if (mPrefs.getBoolean("bluetoothEnabled", false) && mPrefs.getBoolean("bluetoothTethering", false)) {
                         Handler(Looper.getMainLooper()).postDelayed({
                             try {
-                                val adapter = BluetoothAdapter.getDefaultAdapter()
+                                val bluetoothManager = context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
+                                val adapter = bluetoothManager.adapter
+
                                 if (adapter != null) {
                                     mProfileListener = object : BluetoothProfile.ServiceListener {
                                         var myproxy: BluetoothProfile? = null
@@ -55,11 +56,11 @@ class BluetoothReceiver : BroadcastReceiver() {
                                         }
 
                                         override fun onServiceDisconnected(profile: Int) {
-                                            BluetoothAdapter.getDefaultAdapter().closeProfileProxy(profile, myproxy)
+                                            adapter.closeProfileProxy(profile, myproxy)
                                         }
                                     }
 
-                                    adapter!!.getProfileProxy(context, mProfileListener, 5)
+                                    adapter.getProfileProxy(context, mProfileListener, 5)
                                 }
                             } catch(e: Exception) {
                                 e.printStackTrace()

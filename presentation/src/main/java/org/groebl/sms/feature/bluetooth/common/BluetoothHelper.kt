@@ -200,14 +200,21 @@ object BluetoothHelper  {
 
     fun findNumberFromWhatsAppName(context: Context, NrDisplayName: String): String {
         var setNumber = ""
-        val c = context.contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+        try {
+            val c = context.contentResolver.query(
+                ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
                 arrayOf(ContactsContract.CommonDataKinds.Phone.DATA1),
                 ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " = ? AND " + ContactsContract.RawContacts.ACCOUNT_TYPE + " = ?",
-                arrayOf(NrDisplayName, "com.whatsapp"), null)
+                arrayOf(NrDisplayName, "com.whatsapp"), null
+            )
 
-        if (c != null) {
-            if (c.moveToFirst())  { setNumber = c.getString(0) }
-            if (!c.isClosed)      { c.close() }
+            c.use { c ->
+                if ((c != null) && c.moveToFirst()) {
+                    setNumber = c.getString(0)
+                }
+            }
+        } catch(e: Exception) {
+
         }
 
         return setNumber.trim()
@@ -215,14 +222,24 @@ object BluetoothHelper  {
 
     fun findNumberFromSignalName(context: Context, NrDisplayName: String): String {
         var setNumber = ""
-        val c = context.contentResolver.query(ContactsContract.RawContacts.CONTENT_URI,
+        try {
+            val c = context.contentResolver.query(
+                ContactsContract.RawContacts.CONTENT_URI,
                 null,
                 ContactsContract.RawContacts.DISPLAY_NAME_PRIMARY + " = ? AND " + ContactsContract.RawContacts.ACCOUNT_TYPE + " = ?",
-                arrayOf(NrDisplayName, "org.thoughtcrime.securesms"), null)
+                arrayOf(NrDisplayName, "org.thoughtcrime.securesms"), null
+            )
 
-        if (c != null) {
-            if (c.moveToFirst())  { setNumber = c.getString(c.getColumnIndex(ContactsContract.RawContacts.SYNC1)) }
-            if (!c.isClosed)      { c.close() }
+            c.use { c ->
+                if ((c != null) && c.moveToFirst()) {
+                    val cIndex = c.getColumnIndex(ContactsContract.RawContacts.SYNC1)
+                    if (cIndex > 0) {
+                        setNumber = c.getString(cIndex)
+                    }
+                }
+            }
+        } catch(e: Exception) {
+
         }
 
         return setNumber.trim()
@@ -230,14 +247,24 @@ object BluetoothHelper  {
 
     fun findNumberFromTelegramName(context: Context, NrDisplayName: String): String {
         var setNumber = ""
-        val c = context.contentResolver.query(ContactsContract.RawContacts.CONTENT_URI,
+        try {
+            val c = context.contentResolver.query(
+                ContactsContract.RawContacts.CONTENT_URI,
                 null,
                 ContactsContract.RawContacts.DISPLAY_NAME_PRIMARY + " = ? AND " + ContactsContract.RawContacts.ACCOUNT_TYPE + " = ?",
-                arrayOf(NrDisplayName, "org.telegram.messenger"), null)
+                arrayOf(NrDisplayName, "org.telegram.messenger"), null
+            )
 
-        if (c != null) {
-            if (c.moveToFirst())  { setNumber = c.getString(c.getColumnIndex(ContactsContract.RawContacts.SYNC1)) }
-            if (!c.isClosed)      { c.close() }
+            c.use { c ->
+                if ((c != null) && c.moveToFirst()) {
+                    val cIndex = c.getColumnIndex(ContactsContract.RawContacts.SYNC1)
+                    if (cIndex > 0) {
+                        setNumber = c.getString(cIndex)
+                    }
+                }
+            }
+        } catch (e: Exception) {
+
         }
 
         return setNumber.trim()
@@ -253,15 +280,22 @@ object BluetoothHelper  {
         }
         PhoneNumberUtils.formatNumberToE164(PhoneNumberUtils.stripSeparators(number), country)
         */
-
-        val c = context.contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+        try {
+            val c = context.contentResolver.query(
+                ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
                 arrayOf(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME),
                 ContactsContract.CommonDataKinds.Phone.NUMBER + " = ? AND account_type = ?",
-                arrayOf(PhoneNumberUtils.stripSeparators(number), "com.whatsapp"), null)
+                arrayOf(PhoneNumberUtils.stripSeparators(number), "com.whatsapp"), null
+            )
 
-        if (c != null) {
-            if (c.moveToFirst())  { setName = c.getString(0) }
-            if (!c.isClosed)      { c.close() }
+
+            c.use { c ->
+                if ((c != null) && c.moveToFirst()) {
+                    setName = c.getString(0)
+                }
+            }
+        } catch(e: Exception) {
+
         }
 
         return setName
