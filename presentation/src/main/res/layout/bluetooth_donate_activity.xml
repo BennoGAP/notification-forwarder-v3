@@ -114,26 +114,24 @@
                     app:icon="@drawable/ic_bluetooth_donate_4"
                     app:summary="@string/bluetooth_donate_donate4_summary" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginTop="8dp"
-                    android:background="?android:attr/divider" />
-
-                <org.groebl.sms.common.widget.QkTextView
-                    style="@style/PreferenceCategory"
-                    android:text="@string/bluetooth_donate_category_other" />
-
             </LinearLayout>
 
-            <org.groebl.sms.common.widget.PreferenceView
-                android:id="@+id/donate_paypal"
+            <LinearLayout
+                android:id="@+id/layout_donate_paypal"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:summary="@string/bluetooth_donate_paypal_summary"
-                app:icon="@drawable/ic_bluetooth_donate_paypal"
-                app:title="@string/bluetooth_donate_paypal_title" />
+                android:orientation="vertical">
+
+                    <org.groebl.sms.common.widget.PreferenceView
+                        android:id="@+id/donate_paypal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:summary="@string/bluetooth_donate_paypal_summary"
+                        app:icon="@drawable/ic_bluetooth_donate_paypal"
+                        app:title="@string/bluetooth_donate_paypal_title" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
