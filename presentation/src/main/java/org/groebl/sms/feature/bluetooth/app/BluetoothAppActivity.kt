@@ -43,7 +43,7 @@ class BluetoothAppActivity : QkThemedActivity(), BluetoothAppView {
         override fun onPostExecute(result: Boolean?) {
             if(this@BluetoothAppActivity.isDestroyed) { return }
 
-            listapps.adapter = BluetoothAppAdapter(scan, prefs)
+            listapps.adapter = BluetoothAppAdapter(scan, prefs, applicationContext)
 
             //TODO - Get rid of this .. "Temporary" Workaround
             Handler(Looper.getMainLooper()).postDelayed({ when {pDialog.isShowing -> pDialog.dismiss() } }, 250)
@@ -78,7 +78,7 @@ class BluetoothAppActivity : QkThemedActivity(), BluetoothAppView {
                     }
                 }
 
-                listapps.adapter = BluetoothAppAdapter(scanFiltered, prefs)
+                listapps.adapter = BluetoothAppAdapter(scanFiltered, prefs, applicationContext)
             }
 
             override fun afterTextChanged(editable: Editable) {
@@ -107,7 +107,7 @@ class BluetoothAppActivity : QkThemedActivity(), BluetoothAppView {
             currentAppCount += 1
             //println("Load Apps: $currentAppCount / $allAppCount (${(currentAppCount*100)/allAppCount}%)")
             if(!packageManager(apps)) {
-                packageModel.add(BluetoothAppModel(apps.applicationInfo.loadLabel(packageManager).toString(), apps.packageName, apps.applicationInfo.loadIcon(packageManager)))
+                packageModel.add(BluetoothAppModel(apps.applicationInfo.loadLabel(packageManager).toString(), apps.packageName, apps.applicationInfo))
 
                 if(checkedApps.contains(apps.packageName)) { newCheckedApps.add(apps.packageName) }
             }

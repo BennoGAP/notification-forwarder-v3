@@ -1,10 +1,10 @@
 package org.groebl.sms.feature.bluetooth.app
 
-import android.graphics.drawable.Drawable
+import android.content.pm.ApplicationInfo
 
 
-class BluetoothAppModel(AppName:String = "", AppApkName:String = "", AppIcon: Drawable? = null) {
+class BluetoothAppModel(AppName:String = "", AppApkName:String = "", AppInfo: ApplicationInfo) {
     var appName = AppName
-    var appIcon = AppIcon
+    var appInfo = AppInfo
     var appApkName = AppApkName
 }
