@@ -93,13 +93,14 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
     override fun render(state: BluetoothSettingsState) {
         var localBluetoothEnabled = state.bluetooth_enabled
         var localBluetoothTethering = state.bluetooth_tethering
+        var localBluetoothOnlyOnConnect = state.bluetooth_only_on_connect
         var localBluetoothWhatsappToContact = state.bluetooth_whatsapp_to_contact
         var localBluetoothTelegramToContact = state.bluetooth_telegram_to_contact
         var localBluetoothSignalToContact = state.bluetooth_signal_to_contact
 
-        var localBluetoothWhatsappInstalled = context.isInstalled("com.whatsapp")
-        var localBluetoothTelegramInstalled = context.isInstalled("org.telegram.messenger")
-        var localBluetoothSignalInstalled = context.isInstalled("org.thoughtcrime.securesms")
+        val localBluetoothWhatsappInstalled = context.isInstalled("com.whatsapp")
+        val localBluetoothTelegramInstalled = context.isInstalled("org.telegram.messenger")
+        val localBluetoothSignalInstalled = context.isInstalled("org.thoughtcrime.securesms")
 
         if(!localBluetoothEnabled) {
             Thread { BluetoothHelper.deleteBluetoothMessages(context, false) }.start()
@@ -116,7 +117,7 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
         }
 
         //WhatsApp-to-Contact enabled but no Contact-Permission
-        if((state.bluetooth_whatsapp_to_contact || state.bluetooth_signal_to_contact || state.bluetooth_telegram_to_contact) && !BluetoothHelper.hasContactPermission(context)) {
+        if(localBluetoothEnabled && (state.bluetooth_whatsapp_to_contact || state.bluetooth_signal_to_contact || state.bluetooth_telegram_to_contact) && !BluetoothHelper.hasContactPermission(context)) {
             prefs.bluetooth_whatsapp_to_contact.set(false)
             prefs.bluetooth_signal_to_contact.set(false)
             prefs.bluetooth_telegram_to_contact.set(false)
@@ -126,8 +127,15 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
             BluetoothHelper.requestContactPermission(activity!!)
         }
 
+        //Check if permission.BLUETOOTH_CONNECT is set
+        if(localBluetoothEnabled && localBluetoothOnlyOnConnect && !BluetoothHelper.hasBluetoothPermission(context)) {
+            prefs.bluetooth_only_on_connect.set(false)
+            localBluetoothOnlyOnConnect = false
+            BluetoothHelper.requestBluetoothPermission(activity!!)
+        }
+
         //Tethering enabled but no system-write permission
-        if(state.bluetooth_tethering && Build.VERSION.SDK_INT >= 23) {
+        if(localBluetoothEnabled && state.bluetooth_tethering && Build.VERSION.SDK_INT >= 23) {
             if(!Settings.System.canWrite(context)) {
                 prefs.bluetooth_tethering.set(false)
                 localBluetoothTethering = false
@@ -146,8 +154,8 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
         }
 
         bluetooth_menu_main.setVisible(localBluetoothEnabled)
-        bluetooth_select_device.setVisible(state.bluetooth_only_on_connect)
-        bluetooth_autodelete.setVisible(state.bluetooth_only_on_connect)
+        bluetooth_select_device.setVisible(localBluetoothOnlyOnConnect)
+        bluetooth_autodelete.setVisible(localBluetoothOnlyOnConnect)
 
         bluetooth_delayed_read.setVisible(state.bluetooth_save_read)
 
@@ -172,15 +180,15 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
         bluetooth_telegram_blocked_contact.setVisible(localBluetoothTelegramToContact && localBluetoothTelegramInstalled)
         bluetooth_telegram_hide_prefix.setVisible(localBluetoothTelegramToContact && localBluetoothTelegramInstalled)
 
-        bluetooth_more_divider.setVisible(state.bluetooth_only_on_connect)
-        bluetooth_more_cat.setVisible(state.bluetooth_only_on_connect)
-        bluetooth_max_vol.setVisible(state.bluetooth_only_on_connect)
-        bluetooth_tethering.setVisible(state.bluetooth_only_on_connect)
+        bluetooth_more_divider.setVisible(localBluetoothOnlyOnConnect)
+        bluetooth_more_cat.setVisible(localBluetoothOnlyOnConnect)
+        bluetooth_max_vol.setVisible(localBluetoothOnlyOnConnect)
+        bluetooth_tethering.setVisible(localBluetoothOnlyOnConnect)
 
         bluetooth_battery.setVisible(state.bluetooth_enabled)
 
         bluetooth_enabled.checkbox.isChecked = localBluetoothEnabled
-        bluetooth_only_on_connect.checkbox.isChecked = state.bluetooth_only_on_connect
+        bluetooth_only_on_connect.checkbox.isChecked = localBluetoothOnlyOnConnect
         bluetooth_autodelete.checkbox.isChecked = state.bluetooth_autodelete
         bluetooth_save_read.checkbox.isChecked = state.bluetooth_save_read
         bluetooth_delayed_read.checkbox.isChecked = state.bluetooth_delayed_read
@@ -200,7 +208,7 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
         if (prefs.bluetooth_current_status.get() &&
             prefs.bluetooth_last_connect.get() > 0L &&
             prefs.bluetooth_last_connect_device.get() != "" &&
-            state.bluetooth_only_on_connect)
+            localBluetoothOnlyOnConnect)
         {
             bluetooth_device_status.setVisible(true)
             bluetooth_device_status.title = String.format(context.getString(R.string.settings_bluetooth_device_status_connected), prefs.bluetooth_last_connect_device.get(), SimpleDateFormat("dd.MM.yyyy HH:mm:ss", Locale.getDefault()).format(prefs.bluetooth_last_connect.get()))
@@ -209,7 +217,7 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
         else if (!prefs.bluetooth_current_status.get() &&
                     prefs.bluetooth_last_disconnect.get() > 0L &&
                     prefs.bluetooth_last_connect_device.get() != "" &&
-                    state.bluetooth_only_on_connect)
+                    localBluetoothOnlyOnConnect)
         {
             bluetooth_device_status.setVisible(true)
             bluetooth_device_status.title = String.format(context.getString(R.string.settings_bluetooth_device_status_disconnected), prefs.bluetooth_last_connect_device.get(), SimpleDateFormat("dd.MM.yyyy HH:mm:ss", Locale.getDefault()).format(prefs.bluetooth_last_disconnect.get()))

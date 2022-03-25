@@ -151,6 +151,18 @@ object BluetoothHelper  {
         ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.READ_CONTACTS), 0)
     }
 
+    fun hasBluetoothPermission(context: Context): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED
+        } else {
+            true
+        }
+    }
+
+    fun requestBluetoothPermission(activity: Activity) {
+        ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.BLUETOOTH_CONNECT), 0)
+    }
+
     fun deleteBluetoothMessages(context: Context, afterTime: Boolean) {
 
         Realm.getDefaultInstance().use { realm ->

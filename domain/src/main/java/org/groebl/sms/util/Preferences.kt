@@ -123,7 +123,7 @@ class Preferences @Inject constructor(
     val bluetooth_enabled = rxPrefs.getBoolean("bluetoothEnabled", false)
     val bluetooth_apps = rxPrefs.getStringSet("bluetoothApps", HashSet<String>())
     val bluetooth_devices = rxPrefs.getStringSet("bluetoothDevices", HashSet<String>())
-    val bluetooth_only_on_connect = rxPrefs.getBoolean("bluetoothOnlyOnConnect", true)
+    val bluetooth_only_on_connect = rxPrefs.getBoolean("bluetoothOnlyOnConnect",  Build.VERSION.SDK_INT < Build.VERSION_CODES.S)
     val bluetooth_autodelete = rxPrefs.getBoolean("bluetoothAutodelete", true)
     val bluetooth_save_read = rxPrefs.getBoolean("bluetoothSaveRead", false)
     val bluetooth_delayed_read = rxPrefs.getBoolean("bluetoothDelayedRead", false)
