@@ -1,8 +1,6 @@
 package org.groebl.sms.feature.bluetooth.service
 
-import android.bluetooth.BluetoothDevice
-import android.bluetooth.BluetoothManager
-import android.bluetooth.BluetoothProfile
+import android.bluetooth.*
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -62,26 +60,23 @@ class BluetoothReceiver : BroadcastReceiver() {
 
                                     adapter.getProfileProxy(context, mProfileListener, 5)
                                 }
-                            } catch(e: Exception) {
+                            } catch (e: Exception) {
                                 e.printStackTrace()
                             }
                         }, 1000)
                     }
 
-                    //Set Bluetooth-Volume
-                    if (mPrefs.getBoolean("bluetoothEnabled", false) && mPrefs.getBoolean("bluetoothMaxVol", false)) {
+                }
+
+                BluetoothA2dp.ACTION_CONNECTION_STATE_CHANGED -> {
+                    if (intent.getIntExtra(BluetoothA2dp.EXTRA_STATE, -1) == BluetoothA2dp.STATE_CONNECTED) {
+
                         Handler(Looper.getMainLooper()).postDelayed({
-                            //TODO - Check if connected to a BT-Audio device
-                            //Still connected?
-                            if (mPrefs.getBoolean("bluetoothCurrentStatus", false)) {
-                                try {
-                                    val mAudioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-                                    mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0)
-                                } catch (e: Exception) {
-                                    e.printStackTrace()
-                                }
+                            if (mPrefs.getBoolean("bluetoothEnabled", false) && mPrefs.getBoolean("bluetoothMaxVol", false) && mPrefs.getBoolean("bluetoothCurrentStatus", false)) {
+                                val mAudioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+                                mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0)
                             }
-                        }, 5000)
+                        }, 1000)
                     }
                 }
 
