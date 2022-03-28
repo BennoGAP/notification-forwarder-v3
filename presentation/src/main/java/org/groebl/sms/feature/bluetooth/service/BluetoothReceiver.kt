@@ -67,16 +67,40 @@ class BluetoothReceiver : BroadcastReceiver() {
                     }
 
                 }
-
+/*
                 BluetoothA2dp.ACTION_CONNECTION_STATE_CHANGED -> {
-                    if (intent.getIntExtra(BluetoothA2dp.EXTRA_STATE, -1) == BluetoothA2dp.STATE_CONNECTED) {
-
+                    val state = intent.getIntExtra(BluetoothA2dp.EXTRA_STATE, -1)
+                    if (state == BluetoothA2dp.STATE_CONNECTED) {
                         Handler(Looper.getMainLooper()).postDelayed({
                             if (mPrefs.getBoolean("bluetoothEnabled", false) && mPrefs.getBoolean("bluetoothMaxVol", false) && mPrefs.getBoolean("bluetoothCurrentStatus", false)) {
                                 val mAudioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+                                mPrefs.edit().putInt("bluetoothCurrentVol", mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC)).apply()
                                 mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0)
                             }
                         }, 1000)
+                    } else if (state == BluetoothA2dp.STATE_DISCONNECTED) {
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            if (mPrefs.getBoolean("bluetoothEnabled", false) && mPrefs.getBoolean("bluetoothMaxVol", false) && !mPrefs.getBoolean("bluetoothCurrentStatus", false)) {
+                                val mAudioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+                                mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, mPrefs.getInt("bluetoothCurrentVol", (mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)*0.5).toInt()), 0)
+                            }
+                        }, 1000)
+                    }
+                }
+*/
+                BluetoothA2dp.ACTION_PLAYING_STATE_CHANGED -> {
+                    val state = intent.getIntExtra(BluetoothA2dp.EXTRA_STATE, -1)
+                    if (state == BluetoothA2dp.STATE_PLAYING) {
+                        if (mPrefs.getBoolean("bluetoothEnabled", false) && mPrefs.getBoolean("bluetoothMaxVol", false)) {
+                            val mAudioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+                            mPrefs.edit().putInt("bluetoothCurrentVol", mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC)).apply()
+                            mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0)
+                        }
+                    } else if (state == BluetoothA2dp.STATE_NOT_PLAYING) {
+                        if (mPrefs.getBoolean("bluetoothEnabled", false) && mPrefs.getBoolean("bluetoothMaxVol", false)) {
+                            val mAudioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+                            mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, mPrefs.getInt("bluetoothCurrentVol", (mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)*0.5).toInt()), 0)
+                        }
                     }
                 }
 

@@ -137,6 +137,7 @@ class Preferences @Inject constructor(
     val bluetooth_telegram_hide_prefix = rxPrefs.getBoolean("bluetoothTelegramHidePrefix", true)
     val bluetooth_signal_hide_prefix = rxPrefs.getBoolean("bluetoothSignalHidePrefix", true)
     val bluetooth_max_vol = rxPrefs.getBoolean("bluetoothMaxVol", false)
+    val bluetooth_current_vol = rxPrefs.getInteger("bluetoothCurrentVol", 50)
     val bluetooth_tethering = rxPrefs.getBoolean("bluetoothTethering", false)
     val bluetooth_whatsapp_blocked_group = rxPrefs.getStringSet("bluetoothWhatsAppBlockedGroup", HashSet<String>())
     val bluetooth_whatsapp_blocked_contact = rxPrefs.getStringSet("bluetoothWhatsAppBlockedContact", HashSet<String>())

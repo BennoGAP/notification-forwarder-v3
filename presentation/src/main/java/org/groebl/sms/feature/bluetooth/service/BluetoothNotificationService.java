@@ -43,6 +43,7 @@ public class BluetoothNotificationService extends NotificationListenerService {
         intentFilter.addAction("android.bluetooth.device.action.ACL_CONNECTED");
         intentFilter.addAction("android.bluetooth.device.action.ACL_DISCONNECTED");
         intentFilter.addAction("android.bluetooth.a2dp.profile.action.CONNECTION_STATE_CHANGED");
+        intentFilter.addAction("android.bluetooth.a2dp.profile.action.PLAYING_STATE_CHANGED");
         registerReceiver(this.mBroadcastReceiver, intentFilter);
     }
 
