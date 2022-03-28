@@ -52,10 +52,6 @@ class BackupRepositoryImpl @Inject constructor(
     private val syncRepo: SyncRepository
 ) : BackupRepository {
 
-    companion object {
-        private val BACKUP_DIRECTORY = Environment.getExternalStorageDirectory().toString() + "/NFP-SMS/Backups"
-    }
-
     data class Backup(
         val messageCount: Int = 0,
         val messages: List<BackupMessage> = listOf()
@@ -82,6 +78,8 @@ class BackupRepositoryImpl @Inject constructor(
         val locked: Boolean,
         val subId: Int
     )
+
+    val BACKUP_DIRECTORY = File(context.getExternalFilesDir("NotificationForwarderPro"), "Backup")
 
     // Subjects to emit our progress events to
     private val backupProgress: Subject<BackupRepository.Progress> =
@@ -120,7 +118,7 @@ class BackupRepositoryImpl @Inject constructor(
 
         try {
             // Create the directory and file
-            val dir = File(BACKUP_DIRECTORY).apply { mkdirs() }
+            val dir = BACKUP_DIRECTORY.apply { mkdirs() }
             val timestamp = SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault()).format(System.currentTimeMillis())
             val file = File(dir, "backup-$timestamp.json")
 
@@ -151,8 +149,8 @@ class BackupRepositoryImpl @Inject constructor(
 
     override fun getBackupProgress(): Observable<BackupRepository.Progress> = backupProgress
 
-    override fun getBackups(): Observable<List<BackupFile>> = QkFileObserver(BACKUP_DIRECTORY).observable
-            .map { File(BACKUP_DIRECTORY).listFiles() ?: arrayOf() }
+    override fun getBackups(): Observable<List<BackupFile>> = QkFileObserver(BACKUP_DIRECTORY.toString()).observable
+            .map { BACKUP_DIRECTORY.listFiles() ?: arrayOf() }
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.computation())
             .map { files ->
