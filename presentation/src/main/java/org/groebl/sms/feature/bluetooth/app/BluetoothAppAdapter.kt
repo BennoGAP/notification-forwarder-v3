@@ -20,8 +20,10 @@ class BluetoothAppAdapter(val data: ArrayList<BluetoothAppModel>, val prefs: Pre
 
     private val allowedApps = prefs.bluetooth_apps.get().toHashSet()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BluetoothAppAdapter.CustomViewHolder {
-        return BluetoothAppAdapter.CustomViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.bluetooth_apps_list_item, parent, false))
+    private val mPm: PackageManager = context.packageManager
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
+        return CustomViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.bluetooth_apps_list_item, parent, false))
     }
 
     override fun getItemCount(): Int {
@@ -44,7 +46,7 @@ class BluetoothAppAdapter(val data: ArrayList<BluetoothAppModel>, val prefs: Pre
         holder.containerView.setOnClickListener { holder.appCheckBox.isChecked = !holder.appCheckBox.isChecked; toggleSelection(holder)  }
     }
 
-    private fun toggleSelection(holder: BluetoothAppAdapter.CustomViewHolder) {
+    private fun toggleSelection(holder: CustomViewHolder) {
         when (allowedApps.contains(holder.containerView.tag.toString())) {
             true -> { allowedApps.remove(holder.containerView.tag.toString()); holder.appIcon.colorFilter = ColorMatrixColorFilter(ColorMatrix().apply { setSaturation(0f) }); }
             false -> { allowedApps.add(holder.containerView.tag.toString()); holder.appIcon.clearColorFilter(); }

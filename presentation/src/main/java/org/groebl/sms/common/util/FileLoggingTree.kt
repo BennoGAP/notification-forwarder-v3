@@ -18,7 +18,6 @@
  */
 package org.groebl.sms.common.util
 
-import android.content.Context
 import android.util.Log
 import org.groebl.sms.util.Preferences
 import io.reactivex.schedulers.Schedulers
