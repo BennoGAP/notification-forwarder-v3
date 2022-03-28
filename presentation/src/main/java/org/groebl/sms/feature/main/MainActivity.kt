@@ -185,13 +185,15 @@ class MainActivity : QkThemedActivity(), MainView {
                 infoMsg.append("- " + this.getString(R.string.bluetooth_alert_info_notifications) + "\n")
                 BluetoothHelper.checkAndRestartNotificationListener(this)
             }
+            if (prefs.bluetooth_only_on_connect.get() && !BluetoothHelper.hasBluetoothPermission(this)) {
+                infoMsg.append("- " + this.getString(R.string.bluetooth_alert_info_bt_permission) + "\n")
+            }
             if (prefs.bluetooth_only_on_connect.get() && prefs.bluetooth_devices.get().isEmpty()) {
                 infoMsg.append("- " + this.getString(R.string.bluetooth_alert_info_device) + "\n")
             }
             if (prefs.bluetooth_apps.get().isEmpty()) {
                 infoMsg.append("- " + this.getString(R.string.bluetooth_alert_info_apps) + "\n")
             }
-
             if(prefs.bluetooth_only_on_connect.get() && !bluetoothManager.adapter.isEnabled) {
                 infoMsg.append("- " + this.getString(R.string.bluetooth_alert_info_disabled) + "\n")
             }
