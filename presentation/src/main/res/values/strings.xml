@@ -64,7 +64,7 @@
     <string name="settings_bluetooth_shownumber_title" tools:ignore="MissingTranslation">Show App-Name as unique number</string>
     <string name="settings_bluetooth_shownumber_summary" tools:ignore="MissingTranslation">Assign a unique dummy number for every App</string>
     <string name="settings_bluetooth_max_vol_title" tools:ignore="MissingTranslation">Increase Bluetooth-Volume</string>
-    <string name="settings_bluetooth_max_vol_summary" tools:ignore="MissingTranslation">Set the Bluetooth-Volume to 100% when connected to the selected Bluetooth-Device</string>
+    <string name="settings_bluetooth_max_vol_summary" tools:ignore="MissingTranslation">Set the Bluetooth-Volume to 100% when playing music over the selected Bluetooth-Devices</string>
     <string name="settings_bluetooth_block_group_title" tools:ignore="MissingTranslation">Exclude %s groups</string>
     <string name="settings_bluetooth_tethering_title" tools:ignore="MissingTranslation">Bluetooth-Tethering</string>
     <string name="settings_bluetooth_tethering_summary" tools:ignore="MissingTranslation">Enable Bluetooth-Tethering when connected to the selected Bluetooth-Device</string>

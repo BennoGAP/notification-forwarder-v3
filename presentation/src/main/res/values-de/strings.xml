@@ -61,7 +61,7 @@
   <string name="settings_bluetooth_shownumber_title">App-Name als eindeutige Nummer</string>
   <string name="settings_bluetooth_shownumber_summary">Setzt für jede App eine eigene Dummy-Absendernummer statt der generischen Dummy-Nummer</string>
   <string name="settings_bluetooth_max_vol_title">Bluetooth-Lautstärke erhöhen</string>
-  <string name="settings_bluetooth_max_vol_summary">Setzt die Bluetooth-Lautstärke auf 100% bei Verbindung mit den ausgewählten Bluetooth-Geräten</string>
+  <string name="settings_bluetooth_max_vol_summary">Setzt die Bluetooth-Lautstärke auf 100% beim abspielen von Musik auf den ausgewählten Bluetooth-Geräten</string>
   <string name="settings_bluetooth_block_group_title">%s-Gruppen blockieren</string>
   <string name="settings_bluetooth_tethering_title">Bluetooth-Tethering</string>
   <string name="settings_bluetooth_tethering_summary">Aktiviert das Bluetooth-Tethering bei Verbindung mit den ausgewählten Bluetooth-Geräten</string>
