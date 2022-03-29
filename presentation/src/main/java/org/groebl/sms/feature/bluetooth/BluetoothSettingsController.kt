@@ -9,7 +9,6 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.provider.ContactsContract
-import android.provider.Settings
 import android.telephony.PhoneNumberUtils
 import android.view.View
 import android.widget.EditText
@@ -134,6 +133,7 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
             BluetoothHelper.requestBluetoothPermission(activity!!)
         }
 
+/*
         //Tethering enabled but no system-write permission
         if(localBluetoothEnabled && state.bluetooth_tethering && Build.VERSION.SDK_INT >= 23) {
             if(!Settings.System.canWrite(context)) {
@@ -152,6 +152,7 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
                         .show()
             }
         }
+*/
 
         bluetooth_menu_main.setVisible(localBluetoothEnabled)
         bluetooth_select_device.setVisible(localBluetoothOnlyOnConnect)
