@@ -298,7 +298,7 @@
     <item quantity="one">%d Nachricht</item>
     <item quantity="other">%d Nachrichten</item>
   </plurals>
-  <string name="backup_disclaimer">Das Backup wird beim deinstallieren der App entfernt. Falls das Backup weiterhin benötigt ist die Datei zuvor manuell aus dem Verzeichnis /Android/data/org.groebl.sms/NotificationForwarderPro/Backup/ zu kopieren. Derzeit wird nur das Sichern und Wiederherstellen von SMS unterstützt. Die Unterstützung für MMS und geplante Sicherungen folgen demnächst!</string>
+  <string name="backup_disclaimer">Das Backup wird beim deinstallieren der App entfernt. Falls das Backup weiterhin benötigt muss die Datei zuvor manuell aus dem Verzeichnis /Android/data/org.groebl.sms/files/NotificationForwarderPro/Backup/ kopiert werden.\n\nDerzeit wird nur das Sichern und Wiederherstellen von SMS unterstützt. Die Unterstützung für MMS und geplante Sicherungen folgen demnächst!</string>
   <string name="backup_now">Jetzt sichern</string>
   <string name="backup_progress_parsing">Analysiere Sicherung&#8230;</string>
   <string name="backup_progress_running">%d/%d Nachrichten</string>

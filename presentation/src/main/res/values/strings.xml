@@ -311,14 +311,14 @@
     <string name="backup_restore_stop_title">Stop restore</string>
     <string name="backup_restore_stop_message">Messages that have already been restored will remain on your device</string>
     <string name="backup_restore_dialog_title">Backups</string>
-    <string name="backup_restore_dialog_summary" translatable="false">/Android/data/org.groebl.sms/NotificationForwarderPro/Backup/</string>
+    <string name="backup_restore_dialog_summary" translatable="false">/Android/data/org.groebl.sms/files/NotificationForwarderPro/Backup/</string>
     <string name="backup_restore_dialog_empty">No backups found</string>
     <plurals name="backup_message_count">
         <item quantity="zero">No messages</item>
         <item quantity="one">%d message</item>
         <item quantity="other">%d messages</item>
     </plurals>
-    <string name="backup_disclaimer">Please be aware, that the Backup will get removed when uninstalling this App. If the Backup is needed please copy the file manually from the location /Android/data/org.groebl.sms/NotificationForwarderPro/Backup/. Currently, only SMS is supported by Backup and Restore. MMS support and scheduled backups will be coming soon!</string>
+    <string name="backup_disclaimer">Please be aware, that the Backup will get removed when uninstalling this App. If the Backup is needed please copy the file manually from the location /Android/data/org.groebl.sms/files/NotificationForwarderPro/Backup/.\n\nCurrently, only SMS is supported by Backup and Restore. MMS support and scheduled backups will be coming soon!</string>
     <string name="backup_now">Backup now</string>
     <string name="backup_progress_parsing">Parsing backup…</string>
     <string name="backup_progress_running">%d/%d messages</string>
