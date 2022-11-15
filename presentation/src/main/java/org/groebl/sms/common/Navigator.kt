@@ -182,6 +182,12 @@ class Navigator @Inject constructor(
         startActivityExternal(intent)
     }
 
+    fun showWikiRegexps() {
+        val url = "https://en.wikipedia.org/wiki/Regular_expression"
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        startActivityExternal(intent)
+    }
+
     fun showRating() {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=org.groebl.sms"))
                 .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY
