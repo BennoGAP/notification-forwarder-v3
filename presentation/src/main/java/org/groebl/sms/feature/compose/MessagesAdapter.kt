@@ -39,12 +39,7 @@ import org.groebl.sms.common.base.QkViewHolder
 import org.groebl.sms.common.util.Colors
 import org.groebl.sms.common.util.DateFormatter
 import org.groebl.sms.common.util.TextViewStyler
-import org.groebl.sms.common.util.extensions.dpToPx
-import org.groebl.sms.common.util.extensions.forwardTouches
-import org.groebl.sms.common.util.extensions.setBackgroundTint
-import org.groebl.sms.common.util.extensions.setPadding
-import org.groebl.sms.common.util.extensions.setTint
-import org.groebl.sms.common.util.extensions.setVisible
+import org.groebl.sms.common.util.extensions.*
 import org.groebl.sms.compat.SubscriptionManagerCompat
 import org.groebl.sms.extensions.isSmil
 import org.groebl.sms.extensions.isText
@@ -59,8 +54,10 @@ import org.groebl.sms.util.Preferences
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import io.realm.RealmResults
+import kotlinx.android.synthetic.main.conversation_list_item.*
 import kotlinx.android.synthetic.main.message_list_item_in.*
 import kotlinx.android.synthetic.main.message_list_item_in.attachments
+import kotlinx.android.synthetic.main.message_list_item_in.avatar
 import kotlinx.android.synthetic.main.message_list_item_in.body
 import kotlinx.android.synthetic.main.message_list_item_in.sim
 import kotlinx.android.synthetic.main.message_list_item_in.simIndex
@@ -68,6 +65,7 @@ import kotlinx.android.synthetic.main.message_list_item_in.status
 import kotlinx.android.synthetic.main.message_list_item_in.timestamp
 import kotlinx.android.synthetic.main.message_list_item_in.view.*
 import kotlinx.android.synthetic.main.message_list_item_out.*
+import kotlinx.android.synthetic.main.speech_bubble_controller.*
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -112,7 +110,7 @@ class MessagesAdapter @Inject constructor(
     /**
      * Safely return the conversation, if available
      */
-    private val conversation: Conversation?
+    val conversation: Conversation?
         get() = data?.first?.takeIf { it.isValid }
 
     /**
@@ -198,23 +196,44 @@ class MessagesAdapter @Inject constructor(
 
         // Bind the cancel view
         holder.cancel?.let { cancel ->
-            val isCancellable = message.isSending() && message.date > System.currentTimeMillis()
-            cancel.setVisible(isCancellable)
-            cancel.clicks().subscribe { cancelSending.onNext(message.id) }
-            cancel.progress = 2
-
-            if (isCancellable) {
                 val delay = when (prefs.sendDelay.get()) {
                     Preferences.SEND_DELAY_SHORT -> 3000
                     Preferences.SEND_DELAY_MEDIUM -> 5000
                     Preferences.SEND_DELAY_LONG -> 10000
                     else -> 0
                 }
-                val progress = (1 - (message.date - System.currentTimeMillis()) / delay.toFloat()) * 100
+            val isCancellable = message.isSending() && (message.date + delay) > System.currentTimeMillis()// && message.date > System.currentTimeMillis()
+            cancel.setVisible(isCancellable)
+            cancel.clicks().subscribe { cancelSending.onNext(message.id) }
+            cancel.progress = 2
+
+            if (isCancellable) {
+                if (message.date > System.currentTimeMillis()) {
+                    val progress =
+                        (1 - (message.date - System.currentTimeMillis()) / delay.toFloat()) * 100
 
                 ObjectAnimator.ofInt(cancel, "progress", progress.toInt(), 100)
                         .setDuration(message.date - System.currentTimeMillis())
                         .start()
+                } else {
+                    val progress =
+                        (1 - ((message.date + delay) - System.currentTimeMillis()) / delay.toFloat()) * 100
+                    ObjectAnimator.ofInt(cancel, "progress", progress.toInt(), 100)
+                        .setDuration((message.date + delay) - System.currentTimeMillis())
+                        .start()
+                   /* val timer = object: CountDownTimer(delay.toLong(), 1000) {
+                        override fun onTick(millisUntilFinished: Long) {
+                            val progress = (1 - millisUntilFinished / delay.toFloat()) * 100
+                            ObjectAnimator.ofInt(cancel, "progress", progress.toInt(), 100)
+                                .setDuration(millisUntilFinished)
+                                .start()
+                        }
+
+                        override fun onFinish() {
+                            cancel.setVisible(false)
+                        }
+                    }.start()*/
+                }
             }
         }
 
@@ -231,8 +250,27 @@ class MessagesAdapter @Inject constructor(
         holder.timestamp.setVisible(timeSincePrevious >= BubbleUtils.TIMESTAMP_THRESHOLD
                 || message.subId != previous?.subId && subscription != null)
 
-        holder.sim.setVisible(message.subId != previous?.subId && subscription != null && subs.size > 1)
-        holder.simIndex.setVisible(message.subId != previous?.subId && subscription != null && subs.size > 1)
+        val timestampVisible = (timeSincePrevious >= BubbleUtils.TIMESTAMP_THRESHOLD
+                || message.subId != previous?.subId && subscription != null)
+        holder.sim.setVisible(timestampVisible && subscription != null && subs.size > 1) //(message.subId != previous?.subId && subscription != null && subs.size > 1)
+        holder.simIndex.setVisible(timestampVisible &&  subscription != null && subs.size > 1) //(message.subId != previous?.subId &&  subscription != null && subs.size > 1)
+
+        /*val simColor = when (subscription?.simSlotIndex?.plus(1)?.toString()) {
+            "1" -> context.getColorCompat(R.color.sim1)
+            "2" -> context.getColorCompat(R.color.sim2)
+            "3" -> context.getColorCompat(R.color.sim3)
+            "4" -> context.getColorCompat(R.color.sim4)
+            else -> context.getColorCompat(R.color.sim_other)
+        }*/
+        val simColor = when (subscription?.simSlotIndex?.plus(1)?.toString()) {
+            "1" -> colors.colorForSim(context, 1)
+            "2" -> colors.colorForSim(context, 2)
+            "3" -> colors.colorForSim(context, 3)
+            else -> colors.colorForSim(context, 1)
+        }
+        if (prefs.simColor.get()) {
+            holder.sim.setTint(simColor)
+        }
 
         // Bind the grouping
         val media = message.parts.filter { !it.isSmil() && !it.isText() }
@@ -242,9 +280,28 @@ class MessagesAdapter @Inject constructor(
         if (!message.isMe()) {
             holder.avatar.setRecipient(contactCache[message.address])
             holder.avatar.setVisible(!canGroup(message, next), View.INVISIBLE)
+           // holder.avatar.setVisible(false)
+           // holder.body.setTextColor(theme.textPrimary)
+           // holder.body.setBackgroundTint(theme.theme)
+        }
+
+        if (prefs.bubbleColorInvert.get()) {
+            if (message.isMe()) {
+                holder.body.setTextColor(theme.textPrimary)
+                holder.body.setBackgroundTint(theme.theme)
+            } else {
+                holder.body.setTextColor(holder.body.context.resolveThemeColor(android.R.attr.textColorPrimary))
+                holder.body.setBackgroundTint(holder.body.context.resolveThemeColor(R.attr.bubbleColor))
+            }
+        } else {
+            if (message.isMe()) {
+                holder.body.setTextColor(holder.body.context.resolveThemeColor(android.R.attr.textColorPrimary))
+                holder.body.setBackgroundTint(holder.body.context.resolveThemeColor(R.attr.bubbleColor))
+            } else {
 
             holder.body.setTextColor(theme.textPrimary)
             holder.body.setBackgroundTint(theme.theme)
+        }
         }
 
         // Bind the body text
@@ -281,7 +338,17 @@ class MessagesAdapter @Inject constructor(
                 emojiOnly = emojiOnly,
                 canGroupWithPrevious = canGroup(message, previous) || media.isNotEmpty(),
                 canGroupWithNext = canGroup(message, next),
-                isMe = message.isMe()))
+                isMe = message.isMe(),
+                style = prefs.bubbleStyle.get()))
+        val paddingTop = context.resources.getDimensionPixelOffset(R.dimen.bubble_padding_top)
+        val paddingBottom = context.resources.getDimensionPixelOffset(R.dimen.bubble_padding_bottom)
+        val paddingLeft = context.resources.getDimensionPixelOffset(R.dimen.bubble_padding_left)
+        val paddingRight = context.resources.getDimensionPixelOffset(R.dimen.bubble_padding_right)
+        if (prefs.bubbleStyle.get() == Preferences.BUBBLE_STYLE_IOS && message.isMe()) {
+            holder.body.setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom)
+        } else if (prefs.bubbleStyle.get() == Preferences.BUBBLE_STYLE_IOS) {
+            holder.body.setPadding(paddingRight, paddingTop, paddingLeft, paddingBottom)
+        }
 
         // Bind the attachments
         val partsAdapter = holder.attachments.adapter as PartsAdapter
