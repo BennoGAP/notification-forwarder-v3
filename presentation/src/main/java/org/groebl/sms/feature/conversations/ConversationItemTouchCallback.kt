@@ -18,6 +18,7 @@
  */
 package org.groebl.sms.feature.conversations
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -29,6 +30,7 @@ import androidx.recyclerview.widget.RecyclerView
 import org.groebl.sms.R
 import org.groebl.sms.common.util.Colors
 import org.groebl.sms.common.util.extensions.dpToPx
+import org.groebl.sms.common.util.extensions.getColorCompat
 import org.groebl.sms.util.Preferences
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.Observables
@@ -40,6 +42,7 @@ import javax.inject.Inject
 import kotlin.math.max
 import kotlin.math.min
 
+@SuppressLint("ResourceAsColor")
 class ConversationItemTouchCallback @Inject constructor(
     colors: Colors,
     disposables: CompositeDisposable,
@@ -55,6 +58,8 @@ class ConversationItemTouchCallback @Inject constructor(
     var adapter: RecyclerView.Adapter<*>? = null
 
     private val backgroundPaint = Paint()
+    private val swipeRightBackgroundPaint = Paint()
+    private val swipeLeftBackgroundPaint = Paint()
     private var rightAction = 0
     private var swipeRightIcon: Bitmap? = null
     private var leftAction = 0
@@ -65,6 +70,8 @@ class ConversationItemTouchCallback @Inject constructor(
     init {
         disposables += colors.themeObservable()
                 .doOnNext { theme -> backgroundPaint.color = theme.theme }
+                .doOnNext { theme -> swipeRightBackgroundPaint.color = context.getColorCompat(R.color.yellow) }
+                .doOnNext { theme -> swipeLeftBackgroundPaint.color = context.getColorCompat(R.color.red) }
                 .subscribeOn(Schedulers.io())
                 .subscribe()
 
@@ -104,7 +111,7 @@ class ConversationItemTouchCallback @Inject constructor(
 
             if (dX > 0) {
                 c.drawRect(itemView.left.toFloat(), itemView.top.toFloat(),
-                        dX, itemView.bottom.toFloat(), backgroundPaint)
+                        dX, itemView.bottom.toFloat(), swipeRightBackgroundPaint)
 
                 swipeRightIcon?.let { icon ->
                     val availablePx = dX.toInt() - iconLength
@@ -117,7 +124,7 @@ class ConversationItemTouchCallback @Inject constructor(
                 }
             } else if (dX < 0) {
                 c.drawRect(itemView.right.toFloat() + dX, itemView.top.toFloat(),
-                        itemView.right.toFloat(), itemView.bottom.toFloat(), backgroundPaint)
+                        itemView.right.toFloat(), itemView.bottom.toFloat(), swipeLeftBackgroundPaint)
 
                 swipeLeftIcon?.let { icon ->
                     val availablePx = -dX.toInt() - iconLength
