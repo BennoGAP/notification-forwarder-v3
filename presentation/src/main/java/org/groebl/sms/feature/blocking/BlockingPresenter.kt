@@ -69,6 +69,17 @@ class BlockingPresenter @Inject constructor(
                     }
                 }
 
+        view.blockedRegexpsIntent
+            .autoDisposable(view.scope())
+            .subscribe {
+                if (prefs.blockingManager.get() == Preferences.BLOCKING_MANAGER_QKSMS) {
+                    // TODO: This is a hack, get rid of it once we implement AndroidX navigation
+                    view.openBlockedRegexps()
+                } else {
+                    // blockingClient.openSettings()
+                }
+            }
+
         view.blockedMessagesIntent
                 .autoDisposable(view.scope())
                 .subscribe { view.openBlockedMessages() }

@@ -58,10 +58,10 @@ class BlockingDialog @Inject constructor(
             // If we can block/unblock in the external manager, then just fire that off and exit
             if (block) {
                 markBlocked.execute(MarkBlocked.Params(conversationIds, prefs.blockingManager.get(), null))
-                blockingManager.block(addresses).subscribe()
+                blockingManager.blockAddresses(addresses).subscribe()
             } else {
                 markUnblocked.execute(conversationIds)
-                blockingManager.unblock(addresses).subscribe()
+                blockingManager.unblockAddresses(addresses).subscribe()
             }
         } else if (block == allBlocked(addresses)) {
             // If all of the addresses are already in their correct state in the blocking manager, just marked the
@@ -111,10 +111,10 @@ class BlockingDialog @Inject constructor(
                 .setPositiveButton(R.string.button_continue) { _, _ ->
                     if (block) {
                         markBlocked.execute(MarkBlocked.Params(conversationIds, prefs.blockingManager.get(), null))
-                        blockingManager.block(addresses).subscribe()
+                        blockingManager.blockAddresses(addresses).subscribe()
                     } else {
                         markUnblocked.execute(conversationIds)
-                        blockingManager.unblock(addresses).subscribe()
+                        blockingManager.unblockAddresses(addresses).subscribe()
                     }
                 }
                 .setNegativeButton(R.string.button_cancel) { _, _ -> }

@@ -65,7 +65,7 @@ class CallBlockerBlockingClient @Inject constructor(
         }
     }
 
-    override fun block(addresses: List<String>): Completable = Completable.fromCallable {
+    override fun blockAddresses(addresses: List<String>): Completable = Completable.fromCallable {
         val arrayList = ArrayList<String>()
         arrayList.addAll(addresses)
         val intent = Intent("com.cuiet.blockCalls.ADD_NUMBERS")
@@ -74,7 +74,7 @@ class CallBlockerBlockingClient @Inject constructor(
         context.startActivity(intent)
     }
 
-    override fun unblock(addresses: List<String>): Completable = Completable.fromCallable {
+    override fun unblockAddresses(addresses: List<String>): Completable = Completable.fromCallable {
         val arrayList = ArrayList<String>()
         arrayList.addAll(addresses)
         val intent = Intent("com.cuiet.blockCalls.REMOVE_NUMBERS")

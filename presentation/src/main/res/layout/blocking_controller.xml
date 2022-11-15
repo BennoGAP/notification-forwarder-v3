@@ -44,7 +44,16 @@
             android:id="@+id/blockedNumbers"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:title="@string/blocked_numbers_title" />
+            app:title="@string/blocked_numbers_title"
+            app:widget="@layout/settings_chevron_widget" />
+
+        <org.groebl.sms.common.widget.PreferenceView
+            android:id="@+id/blockedRegexps"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:title="@string/blocked_regexps_title"
+            app:summary="@string/early_access"
+            app:widget="@layout/settings_chevron_widget" />
 
         <org.groebl.sms.common.widget.PreferenceView
             android:id="@+id/drop"
@@ -58,7 +67,8 @@
             android:id="@+id/blockedMessages"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:title="@string/blocked_messages_title" />
+            app:title="@string/blocked_messages_title"
+            app:widget="@layout/settings_chevron_widget" />
 
     </LinearLayout>
 
