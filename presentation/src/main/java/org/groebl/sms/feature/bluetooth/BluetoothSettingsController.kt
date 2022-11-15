@@ -29,7 +29,10 @@ import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.QkChangeHandler
 import org.groebl.sms.common.base.QkController
 import org.groebl.sms.common.util.Colors
-import org.groebl.sms.common.util.extensions.*
+import org.groebl.sms.common.util.extensions.animateLayoutChanges
+import org.groebl.sms.common.util.extensions.isInstalled
+import org.groebl.sms.common.util.extensions.resolveThemeColor
+import org.groebl.sms.common.util.extensions.setVisible
 import org.groebl.sms.common.widget.PreferenceView
 import org.groebl.sms.feature.bluetooth.app.BluetoothAppActivity
 import org.groebl.sms.feature.bluetooth.common.BluetoothDatabase
@@ -151,8 +154,13 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
             BluetoothHelper.requestBluetoothPermission(activity!!)
         }
 
-        //Tethering enabled but no system-write permission
-        if(localBluetoothEnabled && state.bluetooth_tethering) {
+        //If Android Version >= 11 -> Disable Bluetooth Tethering Option
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            prefs.bluetooth_tethering.set(false)
+            localBluetoothTethering = false
+            bluetooth_tethering.isEnabled = false
+        } //Tethering enabled but no system-write permission
+        else if(localBluetoothEnabled && localBluetoothTethering) {
             if(!Settings.System.canWrite(context)) {
                 prefs.bluetooth_tethering.set(false)
                 localBluetoothTethering = false
