@@ -18,6 +18,7 @@
  */
 package org.groebl.sms.feature.settings.swipe
 
+import android.content.Context
 import android.view.View
 import androidx.core.view.isVisible
 import com.jakewharton.rxbinding2.view.clicks
@@ -26,6 +27,7 @@ import org.groebl.sms.common.QkDialog
 import org.groebl.sms.common.base.QkController
 import org.groebl.sms.common.util.Colors
 import org.groebl.sms.common.util.extensions.animateLayoutChanges
+import org.groebl.sms.common.util.extensions.getColorCompat
 import org.groebl.sms.common.util.extensions.setBackgroundTint
 import org.groebl.sms.common.util.extensions.setTint
 import org.groebl.sms.injection.appComponent
@@ -42,6 +44,7 @@ class SwipeActionsController : QkController<SwipeActionsView, SwipeActionsState,
     @Inject override lateinit var presenter: SwipeActionsPresenter
     @Inject lateinit var actionsDialog: QkDialog
     @Inject lateinit var colors: Colors
+    @Inject lateinit var context: Context
 
     /**
      * Allows us to subscribe to [actionClicks] more than once
@@ -57,9 +60,11 @@ class SwipeActionsController : QkController<SwipeActionsView, SwipeActionsState,
 
     override fun onViewCreated() {
         colors.theme().let { theme ->
-            rightIcon.setBackgroundTint(theme.theme)
+           // rightIcon.setBackgroundTint(theme.theme)
+            rightIcon.setBackgroundTint(context.getColorCompat(R.color.yellow))
             rightIcon.setTint(theme.textPrimary)
-            leftIcon.setBackgroundTint(theme.theme)
+           // leftIcon.setBackgroundTint(theme.theme)
+            leftIcon.setBackgroundTint(context.getColorCompat(R.color.red))
             leftIcon.setTint(theme.textPrimary)
         }
 
