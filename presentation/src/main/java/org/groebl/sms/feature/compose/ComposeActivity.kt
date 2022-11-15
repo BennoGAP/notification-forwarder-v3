@@ -30,7 +30,9 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.provider.MediaStore
+import android.speech.tts.TextToSpeech
 import android.text.format.DateFormat
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
@@ -50,6 +52,7 @@ import org.groebl.sms.feature.compose.editing.ChipsAdapter
 import org.groebl.sms.feature.contacts.ContactsActivity
 import org.groebl.sms.model.Attachment
 import org.groebl.sms.model.Recipient
+import org.groebl.sms.util.Preferences
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import dagger.android.AndroidInjection
@@ -61,7 +64,12 @@ import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
-class ComposeActivity : QkThemedActivity(), ComposeView {
+import kotlin.collections.HashMap
+import kotlinx.android.synthetic.main.compose_activity.attachments
+import kotlinx.android.synthetic.main.compose_activity.sim
+import kotlinx.android.synthetic.main.compose_activity.simIndex
+
+class ComposeActivity : QkThemedActivity(), ComposeView, TextToSpeech.OnInitListener {
 
     companion object {
         private const val SelectContactRequestCode = 0
@@ -109,6 +117,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     private val viewModel by lazy { ViewModelProviders.of(this, viewModelFactory)[ComposeViewModel::class.java] }
 
     private var cameraDestination: Uri? = null
+    private var tts: TextToSpeech? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -150,6 +159,8 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         if (Build.VERSION.SDK_INT <= 22) {
             messageBackground.setBackgroundTint(resolveThemeColor(R.attr.bubbleColor))
         }
+        // Set tts info
+        tts = TextToSpeech(this, this)
     }
 
     override fun onStart() {
@@ -200,6 +211,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         toolbar.menu.findItem(R.id.previous)?.isVisible = state.selectedMessages == 0 && state.query.isNotEmpty()
         toolbar.menu.findItem(R.id.next)?.isVisible = state.selectedMessages == 0 && state.query.isNotEmpty()
         toolbar.menu.findItem(R.id.clear)?.isVisible = state.selectedMessages == 0 && state.query.isNotEmpty()
+        toolbar.menu.findItem(R.id.speech)?.isVisible = !state.editingMode && state.selectedMessages == 1
 
         chipsAdapter.data = state.selectedChips
 
@@ -240,6 +252,10 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
                 .setMessage(details)
                 .setCancelable(true)
                 .show()
+    }
+
+    override fun speechText(text: String) {
+        tts!!.speak(text, TextToSpeech.QUEUE_FLUSH, null, "")
     }
 
     override fun requestDefaultSms() {
@@ -377,5 +393,28 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     }
 
     override fun onBackPressed() = backPressedIntent.onNext(Unit)
+
+    // Text to speech
+    override fun onInit(status: Int) {
+        if (status == TextToSpeech.SUCCESS) {
+            val result = tts!!.setLanguage(Locale.getDefault())
+
+            if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                Log.e("TTS", "The default language is not supported !")
+            }
+
+        } else {
+            Log.e("TTS", "Initialization failed !")
+        }
+    }
+
+    override fun onDestroy() {
+        if (tts != null) {
+            tts!!.stop()
+            tts!!.shutdown()
+        }
+
+        super.onDestroy()
+    }
 
 }

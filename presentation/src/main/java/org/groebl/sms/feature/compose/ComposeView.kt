@@ -69,5 +69,6 @@ interface ComposeView : QkView<ComposeState> {
     fun requestContact()
     fun setDraft(draft: String)
     fun scrollToMessage(id: Long)
+    fun speechText(text: String)
 
 }
