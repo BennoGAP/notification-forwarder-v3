@@ -31,8 +31,8 @@ android {
         applicationId "org.groebl.sms"
         minSdkVersion 23
         targetSdkVersion 31
-        versionCode 3336
-        versionName '3.3.3.6'
+        versionCode 3337
+        versionName '3.3.3.7'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -185,7 +185,7 @@ dependencies {
     implementation project(':data')
     implementation project(':domain')
 
-    withAnalyticsImplementation 'com.google.firebase:firebase-crashlytics:18.2.9'
+    withAnalyticsImplementation 'com.google.firebase:firebase-crashlytics:18.3.2'
     withAnalyticsImplementation "com.android.billingclient:billing:$billing_version"
     withAnalyticsImplementation "com.android.billingclient:billing-ktx:$billing_version"
 
