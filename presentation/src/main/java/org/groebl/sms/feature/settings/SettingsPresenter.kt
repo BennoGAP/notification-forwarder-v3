@@ -85,6 +85,9 @@ class SettingsPresenter @Inject constructor(
         disposables += prefs.black.asObservable()
                 .subscribe { black -> newState { copy(black = black) } }
 
+        disposables += prefs.gray.asObservable()
+                .subscribe { gray -> newState { copy(gray = gray) } }
+
         disposables += prefs.notifications().asObservable()
                 .subscribe { enabled -> newState { copy(notificationsEnabled = enabled) } }
 
@@ -167,7 +170,29 @@ class SettingsPresenter @Inject constructor(
                             view.showEndTimePicker(date.get(Calendar.HOUR_OF_DAY), date.get(Calendar.MINUTE))
                         }
 
-                        R.id.black -> prefs.black.set(!prefs.black.get())
+                        R.id.black -> {
+                            if (prefs.black.get()) {
+                                prefs.black.set(false)
+                            }
+                            else {
+                                prefs.black.set(true)
+                                prefs.gray.set(false)
+                            }
+                        }
+
+                        R.id.gray -> {
+                            if (prefs.gray.get()) {
+                                prefs.gray.set(false)
+                            }
+                            else {
+                                prefs.gray.set(true)
+                                prefs.black.set(false)
+                            }
+                        }
+
+                        R.id.speechBubble -> view.showSpeechBubble()
+
+                        R.id.simConfigure -> view.showSimConfigure()
 
                         R.id.autoEmoji -> prefs.autoEmoji.set(!prefs.autoEmoji.get())
 

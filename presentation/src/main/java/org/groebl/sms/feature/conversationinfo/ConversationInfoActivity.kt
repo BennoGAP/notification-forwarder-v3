@@ -18,12 +18,16 @@
  */
 package org.groebl.sms.feature.conversationinfo
 
+import android.os.Build
 import android.os.Bundle
 import com.bluelinelabs.conductor.Conductor
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
 import org.groebl.sms.R
 import org.groebl.sms.common.base.QkThemedActivity
+import org.groebl.sms.common.util.extensions.getColorCompat
+import org.groebl.sms.common.util.extensions.resolveThemeColor
+import org.groebl.sms.util.Preferences
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.container_activity.*
 
@@ -35,11 +39,29 @@ class ConversationInfoActivity : QkThemedActivity() {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.container_activity)
+        toolbar.navigationIcon?.setTint(resolveThemeColor(android.R.attr.textColorSecondary))
+
+        if (!isNightMode()) {
+            val backgroundGray = getColorCompat(R.color.backgroundGray)
+            toolbar.setBackgroundColor(backgroundGray)
+            viewContainer.setBackgroundColor(backgroundGray)
+            window.navigationBarColor = backgroundGray
+            window.statusBarColor = backgroundGray
+        }
 
         router = Conductor.attachRouter(this, container, savedInstanceState)
         if (!router.hasRootController()) {
             val threadId = intent.extras?.getLong("threadId") ?: 0L
             router.setRoot(RouterTransaction.with(ConversationInfoController(threadId)))
+        }
+    }
+
+    private fun isNightMode(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            if (prefs.nightMode.get() == Preferences.NIGHT_MODE_SYSTEM) resources.configuration.isNightModeActive
+            else prefs.night.get()
+        } else {
+            prefs.night.get()
         }
     }
 

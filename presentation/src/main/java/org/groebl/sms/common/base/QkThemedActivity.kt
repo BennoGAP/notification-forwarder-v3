@@ -20,10 +20,12 @@ package org.groebl.sms.common.base
 
 import android.annotation.SuppressLint
 import android.app.ActivityManager
+import android.content.res.Configuration
 import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.iterator
 import androidx.lifecycle.Lifecycle
 import org.groebl.sms.R
@@ -99,7 +101,11 @@ abstract class QkThemedActivity : QkActivity() {
 
     @SuppressLint("InlinedApi")
     override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(getActivityThemeRes(prefs.black.get()))
+        if (!isNightModeActive()) {
+            setTheme(getActivityGrayThemeRes(prefs.gray.get()))
+        } else {
+            setTheme(getActivityThemeRes(prefs.black.get()))
+        }
         super.onCreate(savedInstanceState)
 
         // When certain preferences change, we need to recreate the activity
@@ -127,6 +133,22 @@ abstract class QkThemedActivity : QkActivity() {
         val icon = BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher)
         val taskDesc = ActivityManager.TaskDescription(getString(R.string.app_name), icon, toolbarColor)
         setTaskDescription(taskDesc)
+    }
+
+    open fun isNightModeActive(): Boolean {
+        when(AppCompatDelegate.getDefaultNightMode()) {
+            AppCompatDelegate.MODE_NIGHT_YES -> return true
+            AppCompatDelegate.MODE_NIGHT_NO -> return false
+        }
+
+        val currentNightMode: Int = (getResources().getConfiguration().uiMode
+                and Configuration.UI_MODE_NIGHT_MASK)
+        when (currentNightMode) {
+            Configuration.UI_MODE_NIGHT_NO -> return false
+            Configuration.UI_MODE_NIGHT_YES -> return true
+            Configuration.UI_MODE_NIGHT_UNDEFINED -> return false
+        }
+        return false
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -158,6 +180,11 @@ abstract class QkThemedActivity : QkActivity() {
      */
     open fun getActivityThemeRes(black: Boolean) = when {
         black -> R.style.AppTheme_Black
+        else -> R.style.AppTheme
+    }
+
+    open fun getActivityGrayThemeRes(gray: Boolean) = when {
+        gray -> R.style.AppTheme_Gray
         else -> R.style.AppTheme
     }
 

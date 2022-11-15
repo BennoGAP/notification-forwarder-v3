@@ -83,4 +83,9 @@
         <item name="bubbleColor">@color/bubbleBlack</item>
     </style>
 
+    <!-- Gray mode. No changes needed when not in light theme -->
+    <style name="AppTheme.Gray" />
+    <style name="AppThemeDialog.Gray" />
+    <style name="PopupTheme.Gray" />
+
 </resources>

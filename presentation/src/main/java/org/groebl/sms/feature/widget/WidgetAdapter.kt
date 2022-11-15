@@ -35,6 +35,7 @@ import org.groebl.sms.common.util.Colors
 import org.groebl.sms.common.util.DateFormatter
 import org.groebl.sms.common.util.extensions.dpToPx
 import org.groebl.sms.common.util.extensions.getColorCompat
+import org.groebl.sms.common.util.extensions.setBackgroundTint
 import org.groebl.sms.feature.compose.ComposeActivity
 import org.groebl.sms.feature.main.MainActivity
 import org.groebl.sms.injection.appComponent
@@ -66,11 +67,13 @@ class WidgetAdapter(intent: Intent) : RemoteViewsService.RemoteViewsFactory {
 
     private val night get() = prefs.night.get()
     private val black get() = prefs.black.get()
+    private val gray get() = prefs.gray.get()
     private val theme get() = colors.theme()
     private val background
         get() = context.getColorCompat(when {
             night && black -> R.color.black
             night && !black -> R.color.backgroundDark
+            !night && gray -> R.color.backgroundGray
             else -> R.color.white
         })
     private val textPrimary
@@ -115,7 +118,11 @@ class WidgetAdapter(intent: Intent) : RemoteViewsService.RemoteViewsFactory {
 
         // Avatar
         remoteViews.setViewVisibility(R.id.avatar, if (smallWidget) View.GONE else View.VISIBLE)
-        remoteViews.setInt(R.id.avatar, "setBackgroundColor", theme.theme)
+        if (!prefs.grayAvatar.get()) {
+            remoteViews.setInt(R.id.avatar, "setBackgroundColor", theme.theme)
+        } else {
+            remoteViews.setInt(R.id.avatar, "setBackgroundResource", R.drawable.circle)
+        }
         remoteViews.setTextColor(R.id.initial, theme.textPrimary)
         remoteViews.setInt(R.id.icon, "setColorFilter", theme.textPrimary)
         remoteViews.setInt(R.id.avatarMask, "setColorFilter", background)

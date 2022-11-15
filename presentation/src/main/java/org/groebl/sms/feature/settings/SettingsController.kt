@@ -19,12 +19,13 @@
 package org.groebl.sms.feature.settings
 
 import android.animation.ObjectAnimator
-import android.app.AlertDialog
 import android.app.TimePickerDialog
 import android.content.Context
+import android.content.res.ColorStateList
 import android.os.Build
 import android.text.format.DateFormat
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import com.bluelinelabs.conductor.RouterTransaction
 import com.jakewharton.rxbinding2.view.clicks
@@ -37,12 +38,15 @@ import org.groebl.sms.common.QkDialog
 import org.groebl.sms.common.base.QkController
 import org.groebl.sms.common.util.Colors
 import org.groebl.sms.common.util.extensions.animateLayoutChanges
+import org.groebl.sms.common.util.extensions.resolveThemeColor
 import org.groebl.sms.common.util.extensions.setBackgroundTint
 import org.groebl.sms.common.util.extensions.setVisible
 import org.groebl.sms.common.widget.PreferenceView
 import org.groebl.sms.common.widget.TextInputDialog
 import org.groebl.sms.feature.settings.about.AboutController
 import org.groebl.sms.feature.settings.autodelete.AutoDeleteDialog
+import org.groebl.sms.feature.settings.simconfigure.SimConfigureController
+import org.groebl.sms.feature.settings.speechbubble.SpeechBubbleController
 import org.groebl.sms.feature.settings.swipe.SwipeActionsController
 import org.groebl.sms.feature.themepicker.ThemePickerController
 import org.groebl.sms.injection.appComponent
@@ -60,6 +64,7 @@ import kotlinx.android.synthetic.main.settings_controller.*
 import kotlinx.android.synthetic.main.settings_controller.view.*
 import kotlinx.android.synthetic.main.settings_switch_widget.view.*
 import kotlinx.android.synthetic.main.settings_theme_widget.*
+import kotlinx.android.synthetic.main.settings_chevron_widget.view.*
 import javax.inject.Inject
 import kotlin.coroutines.resume
 
@@ -156,6 +161,8 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
 
         black.setVisible(state.nightModeId != Preferences.NIGHT_MODE_OFF)
         black.checkbox.isChecked = state.black
+        gray.setVisible(state.nightModeId != Preferences.NIGHT_MODE_ON)
+        gray.checkbox.isChecked = state.gray
 
         autoEmoji.checkbox.isChecked = state.autoEmojiEnabled
 
