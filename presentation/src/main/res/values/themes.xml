@@ -77,4 +77,27 @@
     <style name="AppThemeDialog.Black" />
     <style name="PopupTheme.Black" />
 
+    <!-- Gray theme -->
+    <style name="AppTheme.Gray">
+        <item name="android:navigationBarColor">@color/backgroundGray</item>
+        <item name="android:statusBarColor">@color/backgroundGray</item>
+        <item name="android:windowBackground">@color/backgroundGray</item>
+        <item name="bubbleColor">@color/bubbleGray</item>
+        <item name="colorPrimary">@color/backgroundGray</item>
+        <item name="colorPrimaryDark">@color/backgroundGray</item>
+        <item name="switchThumbEnabled">@color/switchThumbEnabledGray</item>
+    </style>
+
+    <style name="AppThemeDialog.Gray">
+        <item name="android:windowBackground">@color/backgroundGray</item>
+        <item name="actionBarPopupTheme">@style/PopupTheme.Gray</item>
+        <item name="colorPrimary">@color/backgroundGray</item>
+        <item name="colorPrimaryDark">@color/backgroundGray</item>
+    </style>
+
+    <style name="PopupTheme.Gray">
+        <item name="android:colorBackground">@color/backgroundGray</item>
+        <item name="bubbleColor">@color/bubbleGray</item>
+    </style>
+
 </resources>

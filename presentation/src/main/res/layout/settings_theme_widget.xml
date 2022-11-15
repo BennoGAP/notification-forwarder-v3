@@ -26,8 +26,8 @@
 
     <View
         android:id="@+id/themePreview"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
         android:layout_gravity="center"
         android:background="@drawable/circle"
         tools:backgroundTint="@color/tools_theme" />

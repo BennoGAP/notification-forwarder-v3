@@ -69,6 +69,22 @@ class Colors @Inject constructor(
             .map { res -> context.resources.obtainTypedArray(res) }
             .map { typedArray -> (0 until typedArray.length()).map(typedArray::getColorOrThrow) }
 
+    val iosColors: List<List<Int>> = listOf(
+            R.array.ios1_color,
+            R.array.ios2_color,
+            R.array.ios3_color,
+            R.array.ios4_color)
+            .map { res -> context.resources.obtainTypedArray(res) }
+            .map { typedArray -> (0 until typedArray.length()).map(typedArray::getColorOrThrow) }
+
+    val messagesColors: List<List<Int>> = listOf(
+            R.array.Messages1_color,
+            R.array.Messages2_color,
+            R.array.Messages3_color,
+            R.array.Messages4_color)
+            .map { res -> context.resources.obtainTypedArray(res) }
+            .map { typedArray -> (0 until typedArray.length()).map(typedArray::getColorOrThrow) }
+
     private val randomColors: List<Int> = context.resources.obtainTypedArray(R.array.random_colors)
             .let { typedArray -> (0 until typedArray.length()).map(typedArray::getColorOrThrow) }
 

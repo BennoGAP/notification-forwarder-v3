@@ -24,6 +24,8 @@ import io.reactivex.Observable
 interface ThemePickerView : QkViewContract<ThemePickerState> {
 
     fun themeSelected(): Observable<Int>
+    fun themeIosSelected(): Observable<Int>
+    fun themeMessagesSelected(): Observable<Int>
     fun hsvThemeSelected(): Observable<Int>
     fun clearHsvThemeClicks(): Observable<*>
     fun applyHsvThemeClicks(): Observable<*>

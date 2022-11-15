@@ -58,6 +58,31 @@ class ThemePickerPresenter @Inject constructor(
                     }
                 }
 
+        val color1 : Int = android.graphics.Color.parseColor("#ff453a")
+        val color2 : Int = android.graphics.Color.parseColor("#ff3b30")
+        val color3 : Int = android.graphics.Color.parseColor("#ff9f0a")
+        val color4 : Int = android.graphics.Color.parseColor("#ff9500")
+        val color5 : Int = android.graphics.Color.parseColor("#ffd60a")
+        val cols = listOf(color1, color2, color3, color4, color5)
+        for(col in cols)
+        view.themeIosSelected()
+                .autoDisposable(view.scope())
+                .subscribe { color ->
+                    theme.set(color)
+                    if (recipientId == 0L) {
+                        widgetManager.updateTheme()
+                    }
+                }
+
+        view.themeMessagesSelected()
+                .autoDisposable(view.scope())
+                .subscribe { color ->
+                    theme.set(color)
+                    if (recipientId == 0L) {
+                        widgetManager.updateTheme()
+                    }
+                }
+
         // Update the color of the apply button
         view.hsvThemeSelected()
                 .doOnNext { color -> newState { copy(newColor = color) } }

@@ -46,6 +46,8 @@ class ThemePickerController(
 
     @Inject lateinit var colors: Colors
     @Inject lateinit var themeAdapter: ThemeAdapter
+    @Inject lateinit var themeIosAdapter: ThemeIosAdapter
+    @Inject lateinit var themeMessagesAdapter: ThemeMessagesAdapter
     @Inject lateinit var themePagerAdapter: ThemePagerAdapter
 
     init {
@@ -59,7 +61,7 @@ class ThemePickerController(
     }
 
     override fun onViewCreated() {
-        pager.offscreenPageLimit = 1
+        pager.offscreenPageLimit = 4
         pager.adapter = themePagerAdapter
         tabs.pager = pager
 
@@ -67,6 +69,16 @@ class ThemePickerController(
 
         materialColors.layoutManager = LinearLayoutManager(activity)
         materialColors.adapter = themeAdapter
+
+        themeIosAdapter.data = colors.iosColors
+
+        iosColors.layoutManager = LinearLayoutManager(activity)
+        iosColors.adapter = themeIosAdapter
+
+        themeMessagesAdapter.data = colors.messagesColors
+
+        messagesColors.layoutManager = LinearLayoutManager(activity)
+        messagesColors.adapter = themeMessagesAdapter
     }
 
     override fun onAttach(view: View) {
@@ -74,21 +86,17 @@ class ThemePickerController(
         presenter.bindIntents(this)
         setTitle(R.string.title_theme)
         showBackButton(true)
-
-        themedActivity?.supportActionBar?.let { toolbar ->
-            ObjectAnimator.ofFloat(toolbar, "elevation", toolbar.elevation, 0f).start()
-        }
     }
 
     override fun onDetach(view: View) {
         super.onDetach(view)
-
-        themedActivity?.supportActionBar?.let { toolbar ->
-            ObjectAnimator.ofFloat(toolbar, "elevation", toolbar.elevation, 8.dpToPx(toolbar.themedContext).toFloat()).start()
-        }
     }
 
     override fun themeSelected(): Observable<Int> = themeAdapter.colorSelected
+
+    override fun themeIosSelected(): Observable<Int> = themeIosAdapter.colorSelected
+
+    override fun themeMessagesSelected(): Observable<Int> = themeMessagesAdapter.colorSelected
 
     override fun hsvThemeSelected(): Observable<Int> = picker.selectedColor
 
@@ -104,11 +112,16 @@ class ThemePickerController(
         applyGroup.setVisible(state.applyThemeVisible)
         apply.setBackgroundTint(state.newColor)
         apply.setTextColor(state.newTextColor)
+        // TODO ???
+        clear.setBackgroundTint(state.newColor)
+        clear.setTextColor(state.newTextColor)
     }
 
     override fun setCurrentTheme(color: Int) {
         picker.setColor(color)
         themeAdapter.selectedColor = color
+        themeIosAdapter.selectedColor = color
+        themeMessagesAdapter.selectedColor = color
     }
 
 }
