@@ -113,6 +113,13 @@ class SettingsPresenter @Inject constructor(
         disposables += prefs.autoColor.asObservable()
                 .subscribe { autoColor -> newState { copy(autoColor = autoColor) } }
 
+        disposables += prefs.grayAvatar.asObservable()
+                .subscribe { grayAvatar -> newState { copy(grayAvatar = grayAvatar) }
+                    widgetManager.updateTheme()}
+
+        disposables += prefs.separator.asObservable()
+                .subscribe { separator -> newState { copy(separator = separator) } }
+
         disposables += prefs.systemFont.asObservable()
                 .subscribe { enabled -> newState { copy(systemFontEnabled = enabled) } }
 
@@ -209,9 +216,26 @@ class SettingsPresenter @Inject constructor(
                         R.id.textSize -> view.showTextSizePicker()
 
                         R.id.autoColor -> {
-                            analytics.setUserProperty("Preference: Auto Color", !prefs.autoColor.get())
-                            prefs.autoColor.set(!prefs.autoColor.get())
+                            if (prefs.autoColor.get()) {
+                                prefs.autoColor.set(false)
+                            }
+                            else {
+                                prefs.autoColor.set(true)
+                                prefs.grayAvatar.set(false)
+                            }
                         }
+
+                        R.id.grayAvatar -> {
+                            if (prefs.grayAvatar.get()) {
+                                prefs.grayAvatar.set(false)
+                            }
+                            else {
+                                prefs.grayAvatar.set(true)
+                                prefs.autoColor.set(false)
+                            }
+                        }
+
+                        R.id.separator -> prefs.separator.set(!prefs.separator.get())
 
                         R.id.systemFont -> prefs.systemFont.set(!prefs.systemFont.get())
 

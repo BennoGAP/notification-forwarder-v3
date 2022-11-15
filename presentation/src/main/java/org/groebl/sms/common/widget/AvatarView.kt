@@ -30,6 +30,7 @@ import org.groebl.sms.common.util.extensions.setBackgroundTint
 import org.groebl.sms.common.util.extensions.setTint
 import org.groebl.sms.injection.appComponent
 import org.groebl.sms.model.Recipient
+import org.groebl.sms.util.Preferences
 import kotlinx.android.synthetic.main.avatar_view.view.*
 import javax.inject.Inject
 
@@ -39,6 +40,7 @@ class AvatarView @JvmOverloads constructor(
 
     @Inject lateinit var colors: Colors
     @Inject lateinit var navigator: Navigator
+    @Inject lateinit var prefs: Preferences
 
     private var lookupKey: String? = null
     private var fullName: String? = null
@@ -80,7 +82,9 @@ class AvatarView @JvmOverloads constructor(
 
     private fun updateView() {
         // Apply theme
-        setBackgroundTint(theme.theme)
+        if (!prefs.grayAvatar.get()) {
+            setBackgroundTint(theme.theme)
+        }
         initial.setTextColor(theme.textPrimary)
         icon.setTint(theme.textPrimary)
 
