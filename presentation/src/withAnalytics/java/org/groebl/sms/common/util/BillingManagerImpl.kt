@@ -21,18 +21,7 @@ package org.groebl.sms.common.util
 
 import android.app.Activity
 import android.content.Context
-import com.android.billingclient.api.AcknowledgePurchaseParams
-import com.android.billingclient.api.BillingClient
-import com.android.billingclient.api.BillingClientStateListener
-import com.android.billingclient.api.BillingFlowParams
-import com.android.billingclient.api.BillingResult
-import com.android.billingclient.api.Purchase
-import com.android.billingclient.api.PurchasesUpdatedListener
-import com.android.billingclient.api.SkuDetails
-import com.android.billingclient.api.SkuDetailsParams
-import com.android.billingclient.api.acknowledgePurchase
-import com.android.billingclient.api.queryPurchaseHistory
-import com.android.billingclient.api.querySkuDetails
+import com.android.billingclient.api.*
 import org.groebl.sms.manager.AnalyticsManager
 import org.groebl.sms.manager.BillingManager
 import io.reactivex.Observable
@@ -53,7 +42,7 @@ import javax.inject.Singleton
 class BillingManagerImpl @Inject constructor(
         context: Context,
         private val analyticsManager: AnalyticsManager
-) : BillingManager, BillingClientStateListener, PurchasesUpdatedListener {
+) : BillingManager, BillingClientStateListener, PurchasesUpdatedListener, PurchasesResponseListener {
 
     private val productsSubject: Subject<List<SkuDetails>> = BehaviorSubject.create()
     override val products: Observable<List<BillingManager.Product>> = productsSubject
@@ -67,8 +56,7 @@ class BillingManagerImpl @Inject constructor(
     override val upgradeStatus: Observable<Boolean> = purchaseListSubject
             .map { purchases ->
                 purchases
-                        .filter { it.purchaseState == Purchase.PurchaseState.PURCHASED }
-                        .any { it.sku in skus }
+                        .any { it.purchaseState == Purchase.PurchaseState.PURCHASED }
             }
             .distinctUntilChanged()
             .doOnNext { upgraded -> analyticsManager.setUserProperty("Upgraded", upgraded) }
@@ -130,11 +118,36 @@ class BillingManagerImpl @Inject constructor(
         }
     }
 
-    private suspend fun queryPurchases() {
-        val result = billingClient.queryPurchases(BillingClient.SkuType.INAPP)
-        if (result.responseCode == BillingClient.BillingResponseCode.OK) {
-            handlePurchases(result.purchasesList.orEmpty())
+    private fun queryPurchases() {
+        billingClient.queryPurchasesAsync(BillingClient.SkuType.INAPP, this)
+        //billingClient.queryPurchasesAsync(BillingClient.SkuType.SUBS, this)
+    }
+
+    override fun onQueryPurchasesResponse(result: BillingResult, purchases: MutableList<Purchase>) {
+        if(result.responseCode == BillingClient.BillingResponseCode.OK) {
+            GlobalScope.launch(Dispatchers.IO) {
+                handlePurchases(purchases)
+            }
         }
+        /*
+        Consume Purchases (ONLY FOR DEBUG)
+        purchases.forEach { purchase ->
+            val params = ConsumeParams.newBuilder()
+                .setPurchaseToken(purchase.purchaseToken)
+                .build()
+
+            billingClient.consumeAsync(params) { responseCode, purchaseToken ->
+                when (responseCode.responseCode) {
+                    BillingClient.BillingResponseCode.OK -> {
+                        Timber.i("Used OK token $purchaseToken")
+                    }
+                    else -> {
+                        Timber.i("Used Other token $purchaseToken")
+                    }
+                }
+            }
+        }
+        */
     }
 
     private suspend fun handlePurchases(purchases: List<Purchase>) = executeServiceRequest {
