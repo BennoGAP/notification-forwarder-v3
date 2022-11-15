@@ -37,4 +37,7 @@ interface BackupView : QkViewContract<BackupState> {
     fun confirmRestore()
     fun stopRestore()
 
+    fun openDirectory()
+    fun tryRestoreBackup()
+    fun tryPerformBackup()
 }

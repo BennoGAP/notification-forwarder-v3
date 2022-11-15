@@ -173,6 +173,9 @@ class BackupRepositoryImpl @Inject constructor(
         // If a backupFile or restore is already running, don't do anything
         if (isBackupOrRestoreRunning()) return
 
+        val timer = Timer()
+        timer.schedule(10000) { restoreProgress.onNext(BackupRepository.Progress.Idle()) }
+
         restoreProgress.onNext(BackupRepository.Progress.Parsing())
 
         val file = File(filePath)
@@ -192,6 +195,7 @@ class BackupRepositoryImpl @Inject constructor(
 
             // Update the progress
             restoreProgress.onNext(BackupRepository.Progress.Running(messageCount, index))
+            timer.cancel()
 
             try {
                 val values = contentValuesOf(

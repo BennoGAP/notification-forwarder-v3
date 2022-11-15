@@ -20,6 +20,7 @@ package org.groebl.sms.feature.backup
 
 import android.Manifest
 import android.app.Activity
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Typeface
 import android.view.View
@@ -28,23 +29,24 @@ import androidx.core.app.ActivityCompat
 import androidx.core.view.children
 import androidx.core.view.isVisible
 import com.jakewharton.rxbinding2.view.clicks
+import org.groebl.sms.R
+import org.groebl.sms.common.base.QkController
+import org.groebl.sms.common.util.DateFormatter
+import org.groebl.sms.common.util.extensions.*
+import org.groebl.sms.common.widget.PreferenceView
+import org.groebl.sms.injection.appComponent
+import org.groebl.sms.model.BackupFile
+import org.groebl.sms.repository.BackupRepository
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import kotlinx.android.synthetic.main.backup_controller.*
 import kotlinx.android.synthetic.main.backup_list_dialog.view.*
 import kotlinx.android.synthetic.main.preference_view.view.*
-import org.groebl.sms.R
-import org.groebl.sms.common.base.QkController
-import org.groebl.sms.common.util.DateFormatter
-import org.groebl.sms.common.util.extensions.getLabel
-import org.groebl.sms.common.util.extensions.setBackgroundTint
-import org.groebl.sms.common.util.extensions.setPositiveButton
-import org.groebl.sms.common.util.extensions.setTint
-import org.groebl.sms.common.widget.PreferenceView
-import org.groebl.sms.injection.appComponent
-import org.groebl.sms.model.BackupFile
-import org.groebl.sms.repository.BackupRepository
+import java.io.File
+import java.io.FileOutputStream
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 class BackupController : QkController<BackupView, BackupState, BackupPresenter>(), BackupView {
@@ -53,13 +55,26 @@ class BackupController : QkController<BackupView, BackupState, BackupPresenter>(
     @Inject lateinit var dateFormatter: DateFormatter
     @Inject override lateinit var presenter: BackupPresenter
 
+    private val PICK_IMPORT_SOURCE_INTENT = 11
+    private val PICK_EXPORT_SOURCE_INTENT = 22
+    private val PICK_OPEN_SOURCE_INTENT = 33
     private val activityVisibleSubject: Subject<Unit> = PublishSubject.create()
     private val confirmRestoreSubject: Subject<Unit> = PublishSubject.create()
     private val stopRestoreSubject: Subject<Unit> = PublishSubject.create()
 
     private val backupFilesDialog by lazy {
         val view = View.inflate(activity, R.layout.backup_list_dialog, null)
-                .apply { files.adapter = adapter.apply { emptyView = empty } }
+                .apply {
+                    themedActivity?.colors?.theme()?.let { theme ->
+                        select.setTextColor(theme.theme)
+                    }
+                    val directoryName = File(context.getExternalFilesDir("NotificationForwarderPro"), "Backup").toString()
+                    directory.text = directoryName
+                    files.adapter = adapter.apply { emptyView = empty }
+                    select.setOnClickListener {
+                        tryRestoreBackup()
+                    }
+                }
 
         AlertDialog.Builder(activity!!)
                 .setView(view)
@@ -187,5 +202,68 @@ class BackupController : QkController<BackupView, BackupState, BackupPresenter>(
     override fun confirmRestore() = confirmRestoreDialog.show()
 
     override fun stopRestore() = stopRestoreDialog.show()
+
+    override fun openDirectory() {
+        backupFilesDialog.cancel()
+        Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
+            addFlags(
+                Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION or
+                        Intent.FLAG_GRANT_WRITE_URI_PERMISSION or
+                        Intent.FLAG_GRANT_READ_URI_PERMISSION
+            )
+            startActivityForResult(this, PICK_OPEN_SOURCE_INTENT)
+        }
+    }
+
+    override fun tryRestoreBackup() {
+        backupFilesDialog.cancel()
+        Intent(Intent.ACTION_GET_CONTENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = "application/json"
+            startActivityForResult(this, PICK_IMPORT_SOURCE_INTENT)
+        }
+    }
+
+    override fun tryPerformBackup() {
+        val timestamp = SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault()).format(System.currentTimeMillis())
+        Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = "application/json"
+            putExtra(Intent.EXTRA_TITLE, "backup-$timestamp.json")
+            //putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri)
+            startActivityForResult(this, PICK_EXPORT_SOURCE_INTENT)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
+        super.onActivityResult(requestCode, resultCode, resultData)
+        if (requestCode == PICK_IMPORT_SOURCE_INTENT && resultCode == Activity.RESULT_OK && resultData != null && resultData.data != null) {
+            val file = resultData!!.data!!
+            val tempFile = getTempFile("NotificationForwarderPro", "backup.json")
+
+            try {
+                val inputStream = activity!!.contentResolver.openInputStream(file)
+                val out = FileOutputStream(tempFile)
+                inputStream!!.copyTo(out)
+                //activity!!.makeToast(tempFile!!.absolutePath)
+            } catch (e: Exception) {
+                activity!!.makeToast(e.toString())
+            }
+
+            RestoreBackupService.start(activity!!, tempFile!!.absolutePath)
+        }
+    }
+
+    private fun getTempFile(folderName: String, fileName: String): File? {
+        val folder = File(activity!!.cacheDir, folderName)
+        if (!folder.exists()) {
+            if (!folder.mkdir()) {
+                activity!!.makeToast(folder.mkdir().toString())
+                return null
+            }
+        }
+
+        return File(folder, fileName)
+    }
 
 }
