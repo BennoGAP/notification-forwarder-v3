@@ -32,15 +32,14 @@ import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.widget.textChanges
 import org.groebl.sms.R
 import org.groebl.sms.common.base.QkThemedActivity
-import org.groebl.sms.common.util.extensions.autoScrollToStart
-import org.groebl.sms.common.util.extensions.resolveThemeColor
-import org.groebl.sms.common.util.extensions.setBackgroundTint
-import org.groebl.sms.common.util.extensions.setVisible
+import org.groebl.sms.common.util.extensions.*
 import org.groebl.sms.feature.compose.MessagesAdapter
 import dagger.android.AndroidInjection
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import kotlinx.android.synthetic.main.qkreply_activity.*
+import kotlinx.android.synthetic.main.qkreply_activity.sim
+import kotlinx.android.synthetic.main.qkreply_activity.simIndex
 import javax.inject.Inject
 
 class QkReplyActivity : QkThemedActivity(), QkReplyView {
@@ -105,6 +104,16 @@ class QkReplyActivity : QkThemedActivity(), QkReplyView {
         sim.setVisible(state.subscription != null)
         sim.contentDescription = getString(R.string.compose_sim_cd, state.subscription?.displayName)
         simIndex.text = "${state.subscription?.simSlotIndex?.plus(1)}"
+
+        val simColor = when (state.subscription?.simSlotIndex?.plus(1)?.toString()) {
+            "1" -> colors.colorForSim(this, 1)
+            "2" -> colors.colorForSim(this, 2)
+            "3" -> colors.colorForSim(this, 3)
+            else -> colors.colorForSim(this, 1)
+        }
+        if (prefs.simColor.get()) {
+            sim.setTint(simColor)
+        }
 
         send.isEnabled = state.canSend
         send.imageAlpha = if (state.canSend) 255 else 128

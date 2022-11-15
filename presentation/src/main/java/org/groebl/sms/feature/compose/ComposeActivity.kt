@@ -236,6 +236,23 @@ class ComposeActivity : QkThemedActivity(), ComposeView, TextToSpeech.OnInitList
         counter.text = state.remaining
         counter.setVisible(counter.text.isNotBlank())
 
+        /*val simColor = when (state.subscription?.simSlotIndex?.plus(1)?.toString()) {
+            "1" -> getColorCompat(R.color.sim1)
+            "2" -> getColorCompat(R.color.sim2)
+            "3" -> getColorCompat(R.color.sim3)
+            "4" -> getColorCompat(R.color.sim4)
+            else -> getColorCompat(R.color.sim_other)
+        }*/
+        val simColor = when (state.subscription?.simSlotIndex?.plus(1)?.toString()) {
+            "1" -> colors.colorForSim(this, 1)
+            "2" -> colors.colorForSim(this, 2)
+            "3" -> colors.colorForSim(this, 3)
+            else -> colors.colorForSim(this, 1)
+        }
+        if (prefs.simColor.get()) {
+            sim.setTint(simColor)
+        }
+
         sim.setVisible(state.subscription != null)
         sim.contentDescription = getString(R.string.compose_sim_cd, state.subscription?.displayName)
         simIndex.text = state.subscription?.simSlotIndex?.plus(1)?.toString()

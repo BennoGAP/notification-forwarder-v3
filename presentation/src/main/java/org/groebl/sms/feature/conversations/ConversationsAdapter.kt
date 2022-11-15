@@ -113,6 +113,21 @@ class ConversationsAdapter @Inject constructor(
                 color(theme) { append(" " + context.getString(R.string.main_draft)) }
             }
         }
+
+        val subscription = subs.find { sub -> sub.subscriptionId == lastMessage?.subId }
+        holder.simIndex.text = subscription?.simSlotIndex?.plus(1)?.toString()
+        holder.sim.setVisible(subscription != null && subs.size > 1)
+        holder.simIndex.setVisible(subscription != null && subs.size > 1)
+        val simColor = when (subscription?.simSlotIndex?.plus(1)?.toString()) {
+            "1" -> colors.colorForSim(context, 1)
+            "2" -> colors.colorForSim(context, 2)
+            "3" -> colors.colorForSim(context, 3)
+            else -> colors.colorForSim(context, 1)
+        }
+        if (prefs.simColor.get()) {
+            holder.sim.setTint(simColor)
+        }
+
         holder.date.text = conversation.date.takeIf { it > 0 }?.let(dateFormatter::getConversationTimestamp)
 
         holder.snippet.text = when {
