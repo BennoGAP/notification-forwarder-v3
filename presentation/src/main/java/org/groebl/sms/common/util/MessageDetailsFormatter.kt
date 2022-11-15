@@ -59,7 +59,7 @@ class MessageDetailsFormatter @Inject constructor(
             }
 
             pdu?.from?.string
-                    ?.takeIf { it.isNotBlank() }
+                    ?.takeIf { it.isNotBlank() && it != "insert-address-token" }
                     ?.let { context.getString(R.string.compose_details_from, it) }
                     ?.let(builder::appendln)
 

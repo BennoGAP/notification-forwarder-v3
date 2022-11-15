@@ -76,6 +76,17 @@ class Preferences @Inject constructor(
         const val BLOCKING_MANAGER_CC = 1
         const val BLOCKING_MANAGER_SIA = 2
         const val BLOCKING_MANAGER_CB = 3
+
+        const val SIM_COLOR_BLUE = 0
+        const val SIM_COLOR_GREEN = 1
+        const val SIM_COLOR_YELLOW = 2
+        const val SIM_COLOR_RED = 3
+        const val SIM_COLOR_PURPLE = 4
+
+        const val BUBBLE_STYLE_ORIGINAL = 0
+        const val BUBBLE_STYLE_IOS = 1
+        const val BUBBLE_STYLE_SIMPLE = 2
+        const val BUBBLE_STYLE_TRIANGLE = 3
     }
 
     // Internal
@@ -96,7 +107,16 @@ class Preferences @Inject constructor(
     val nightStart = rxPrefs.getString("nightStart", "18:00")
     val nightEnd = rxPrefs.getString("nightEnd", "6:00")
     val black = rxPrefs.getBoolean("black", false)
-    val autoColor = rxPrefs.getBoolean("autoColor", true)
+    val gray = rxPrefs.getBoolean("gray", false)
+    val autoColor = rxPrefs.getBoolean("autoColor", false)
+    val grayAvatar = rxPrefs.getBoolean("grayAvatar", false)
+    val bubbleColorInvert = rxPrefs.getBoolean("bubbleColorInvert", false)
+    val bubbleStyle = rxPrefs.getInteger("bubbleStyle", BUBBLE_STYLE_ORIGINAL)
+    val simColor = rxPrefs.getBoolean("simColor", false)
+    val sim1Color = rxPrefs.getInteger("sim1Color", SIM_COLOR_BLUE)
+    val sim2Color = rxPrefs.getInteger("sim2Color", SIM_COLOR_GREEN)
+    val sim3Color = rxPrefs.getInteger("sim3Color", SIM_COLOR_YELLOW)
+    val separator = rxPrefs.getBoolean("separator", false)
     val systemFont = rxPrefs.getBoolean("systemFont", false)
     val textSize = rxPrefs.getInteger("textSize", TEXT_SIZE_NORMAL)
     val blockingManager = rxPrefs.getInteger("blockingManager", BLOCKING_MANAGER_QKSMS)
@@ -107,8 +127,8 @@ class Preferences @Inject constructor(
     val qkreply = rxPrefs.getBoolean("qkreply", Build.VERSION.SDK_INT < Build.VERSION_CODES.N)
     val qkreplyTapDismiss = rxPrefs.getBoolean("qkreplyTapDismiss", true)
     val sendDelay = rxPrefs.getInteger("sendDelay", SEND_DELAY_NONE)
-    val swipeRight = rxPrefs.getInteger("swipeRight", SWIPE_ACTION_ARCHIVE)
-    val swipeLeft = rxPrefs.getInteger("swipeLeft", SWIPE_ACTION_ARCHIVE)
+    val swipeRight = rxPrefs.getInteger("swipeRight", SWIPE_ACTION_READ) //SWIPE_ACTION_ARCHIVE
+    val swipeLeft = rxPrefs.getInteger("swipeLeft", SWIPE_ACTION_ARCHIVE) //SWIPE_ACTION_ARCHIVE
     val autoEmoji = rxPrefs.getBoolean("autoEmoji", true)
     val delivery = rxPrefs.getBoolean("delivery", true)
     val signature = rxPrefs.getString("signature", "")
@@ -120,7 +140,7 @@ class Preferences @Inject constructor(
     val mmsSize = rxPrefs.getInteger("mmsSize", 300)
     val logging = rxPrefs.getBoolean("logging", false)
 
-    val bluetooth_enabled = rxPrefs.getBoolean("bluetoothEnabled", false)
+	val bluetooth_enabled = rxPrefs.getBoolean("bluetoothEnabled", false)
     val bluetooth_apps = rxPrefs.getStringSet("bluetoothApps", HashSet<String>())
     val bluetooth_devices = rxPrefs.getStringSet("bluetoothDevices", HashSet<String>())
     val bluetooth_only_on_connect = rxPrefs.getBoolean("bluetoothOnlyOnConnect",  Build.VERSION.SDK_INT < Build.VERSION_CODES.S)
@@ -137,7 +157,7 @@ class Preferences @Inject constructor(
     val bluetooth_telegram_hide_prefix = rxPrefs.getBoolean("bluetoothTelegramHidePrefix", true)
     val bluetooth_signal_hide_prefix = rxPrefs.getBoolean("bluetoothSignalHidePrefix", true)
     val bluetooth_max_vol = rxPrefs.getBoolean("bluetoothMaxVol", false)
-    val bluetooth_current_vol = rxPrefs.getInteger("bluetoothCurrentVol", 50)
+    val bluetooth_current_vol = rxPrefs.getInteger("bluetoothCurrentVol", -1)
     val bluetooth_tethering = rxPrefs.getBoolean("bluetoothTethering", false)
     val bluetooth_whatsapp_blocked_group = rxPrefs.getStringSet("bluetoothWhatsAppBlockedGroup", HashSet<String>())
     val bluetooth_whatsapp_blocked_contact = rxPrefs.getStringSet("bluetoothWhatsAppBlockedContact", HashSet<String>())

@@ -344,7 +344,7 @@
 
     <string name="settings_category_appearance">Appearance</string>
     <string name="settings_category_general">General</string>
-    <string name="settings_category_qkreply">QK Reply</string>
+    <string name="settings_category_qkreply">Quick Reply</string>
 
     <string name="settings_theme_title">Theme</string>
     <string name="settings_night_title">Night mode</string>
@@ -366,7 +366,7 @@
     <string name="settings_vibration_title">Vibration</string>
     <string name="settings_ringtone_title">Sound</string>
     <string name="settings_ringtone_none">None</string>
-    <string name="settings_qkreply_title">QK Reply</string>
+    <string name="settings_qkreply_title">Quick Reply</string>
     <string name="settings_qkreply_summary">Popup for new messages</string>
     <string name="settings_qkreply_tap_dismiss_title">Tap to dismiss</string>
     <string name="settings_qkreply_tap_dismiss_summary">Tap outside of the popup to close it</string>
@@ -521,7 +521,7 @@
     <string name="about_changelog" translatable="false">https://github.com/moezbhatti/qksms/releases</string>
     <string name="about_contact" translatable="false">moez@qklabs.com</string>
     <string name="about_license" translatable="false">GNU General Public License v3.0</string>
-    <string name="about_copyright" translatable="false">© 2014–2019</string>
+    <string name="about_copyright" translatable="false">© 2014–2022</string>
 
     <string name="changelog_title" translatable="false">New</string>
     <string name="changelog_version" translatable="false">Version %s</string>
@@ -626,14 +626,55 @@
         <item>That\'s okay</item>
     </string-array>
 
-    <string-array name="changelog_keywords">
-        <item>Added</item>
-        <item>Improved</item>
-        <item>Fixed</item>
+    <string name="drawer_share">Share</string>
+    <string name="settings_gray_title">Gray light mode</string>
+    <string name="theme_ios" translatable="false">iOS</string>
+    <string name="theme_color_picker">Color Picker</string>
+    <string name="settings_separator_title">Use separator</string>
+    <string name="settings_signature_empty_value" translatable="false">—</string>
+    <string name="settings_gray_avatar_title">Gray contact avatars</string>
+    <string name="settings_sim_configure_title">Configure SIM cards</string>
+    <string name="settings_sim_color_title">SIM cards colored icons</string>
+    <string name="settings_sim_color_summary">Configure the color of SIM cards icons</string>
+    <string name="early_access" translatable="false">Early access!</string>
+
+    <string name="settings_delayed_title_summary">Allows you to cancel or change the message before sending</string>
+
+    <string name="blocked_regexps_title">Regex block rules</string>
+    <string name="blocked_regexps_empty">Your regexps rule will appear here</string>
+    <string name="blocked_regexps_add_cd">add a new regex rule</string>
+    <string name="blocked_regexps_dialog_title">New regex rule</string>
+    <string name="blocked_regexps_dialog_hint">Regex rule</string>
+    <string name="blocked_regexps_dialog_block">Block</string>
+    <string name="blocked_regexps_banner_title" translatable="false">Wikipedia</string>
+    <string name="blocked_regexps_banner_summary">What are regexps?</string>
+
+    <string name="compose_menu_speech">Speech text</string>
+
+    <string name="settings_speech_bubble_title">Bubble style</string>
+    <string name="settings_speech_bubble_invert_title">Invert the color of the speech bubble</string>
+    <string name="settings_speech_bubble_style_title">Speech bubble style</string>
+
+    <string-array name="settings_sim_colors">
+        <item>Blue</item>
+        <item>Green</item>
+        <item>Yellow</item>
+        <item>Red</item>
+        <item>Purple</item>
     </string-array>
-    <string-array name="changelog">
-        <item>Fixed</item>
-        <item>- Minor bugs</item>
+
+    <string-array name="settings_bubble_style">
+        <item>Original</item>
+        <item>iOS</item>
+        <item>Simple</item>
+        <item>Triangle</item>
     </string-array>
+
+    <integer-array name="settings_bubble_style_ids">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </integer-array>
 
 </resources>

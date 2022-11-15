@@ -25,18 +25,30 @@
     android:background="?attr/selectableItemBackground"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:paddingStart="12dp"
-    android:paddingTop="8dp"
+    android:paddingStart="8dp"
+    android:paddingTop="0dp"
     android:paddingEnd="16dp"
     android:paddingBottom="8dp">
+
+    <View
+        android:id="@+id/separator"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="@id/title"
+        app:layout_constraintEnd_toEndOf="@id/chevron"
+        android:background="?android:attr/divider"
+        tools:ignore="MissingConstraints" />
 
     <org.groebl.sms.common.widget.GroupAvatarView
         android:id="@+id/avatars"
         android:layout_width="56dp"
         android:layout_height="56dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="5dp"
         android:layout_gravity="top"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/unread"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0" />
 
@@ -45,6 +57,7 @@
         style="@style/TextPrimary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:layout_marginStart="12dp"
         android:layout_marginEnd="16dp"
         android:ellipsize="end"
@@ -66,7 +79,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         android:ellipsize="end"
-        android:maxLines="1"
+        android:maxLines="2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/pinned"
         app:layout_constraintStart_toStartOf="@id/title"
@@ -80,25 +93,27 @@
         android:layout_marginTop="2dp"
         android:paddingStart="4dp"
         android:src="@drawable/ic_baseline_push_pin_24"
-        android:tint="?android:attr/textColorTertiary"
-        android:visibility="gone"
-        app:layout_constraintEnd_toStartOf="@id/unread"
-        app:layout_constraintTop_toTopOf="@id/snippet"
-        tools:visibility="visible" />
-
-    <ImageView
-        android:id="@+id/unread"
-        android:layout_width="20dp"
-        android:layout_height="16sp"
-        android:paddingStart="8dp"
-        android:paddingTop="2dp"
-        android:paddingBottom="2dp"
-        android:src="@drawable/circle"
+        android:tint="?android:attr/textColorSecondary"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/snippet"
+        tools:visibility="visible"
+        android:contentDescription="pinned" />
+
+    <ImageView
+        android:id="@+id/unread"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="2dp"
+        android:src="@drawable/circle"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/avatars"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/avatars"
         tools:tint="@color/tools_theme"
-        tools:visibility="visible" />
+        tools:visibility="visible"
+        android:contentDescription="unread" />
 
     <org.groebl.sms.common.widget.QkTextView
         android:id="@+id/date"
@@ -106,9 +121,69 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
+        android:paddingEnd="5dp"
         app:layout_constraintBottom_toBottomOf="@id/title"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/sim"
         app:layout_constraintHorizontal_bias="100"
         tools:text="Oct 11" />
 
+    <ImageView
+        android:id="@+id/sim"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginEnd="2dp"
+        android:src="@drawable/ic_sim_card_black_24dp"
+        android:tint="?android:attr/textColorSecondary"
+        app:layout_constraintTop_toTopOf="@id/date"
+        app:layout_constraintBottom_toBottomOf="@id/date"
+        app:layout_constraintEnd_toStartOf="@id/chevron"
+        app:layout_constraintHorizontal_bias="100"
+        android:contentDescription="sim" />
+
+    <org.groebl.sms.common.widget.QkTextView
+        android:id="@+id/simIndex"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="2px"
+        android:textColor="?android:attr/windowBackground"
+        app:layout_constraintTop_toTopOf="@id/sim"
+        app:layout_constraintBottom_toBottomOf="@id/sim"
+        app:layout_constraintStart_toStartOf="@id/sim"
+        app:layout_constraintEnd_toEndOf="@id/sim"
+        app:textSize="tertiary"
+        tools:text="1" />
+
+    <ImageView
+        android:id="@+id/chevron"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/ic_chevron_right_black_24dp"
+        android:tint="?android:attr/textColorTertiary"
+        app:layout_constraintTop_toTopOf="@id/date"
+        app:layout_constraintBottom_toBottomOf="@id/date"
+        app:layout_constraintEnd_toEndOf="parent" />
+<!--
+    <ImageView
+        android:id="@+id/sim"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_marginEnd="2dp"
+        android:gravity="center_vertical"
+        android:src="@drawable/ic_sim_card_black_24dp"
+        android:tint="?android:attr/textColorSecondary"
+        app:layout_constraintTop_toTopOf="@id/simIndex"
+        app:layout_constraintBottom_toBottomOf="@id/simIndex"
+        app:layout_constraintEnd_toStartOf="@id/simIndex" />
+
+    <org.groebl.sms.common.widget.QkTextView
+        android:id="@+id/simIndex"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:textColor="?android:attr/textColorSecondary"
+        app:layout_constraintBottom_toBottomOf="@id/title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:textSize="tertiary"
+        tools:text="1" />
+-->
 </androidx.constraintlayout.widget.ConstraintLayout>

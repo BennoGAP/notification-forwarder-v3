@@ -61,7 +61,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import kotlinx.android.synthetic.main.settings_controller.*
-import kotlinx.android.synthetic.main.settings_controller.view.*
 import kotlinx.android.synthetic.main.settings_switch_widget.view.*
 import kotlinx.android.synthetic.main.settings_theme_widget.*
 import kotlinx.android.synthetic.main.settings_chevron_widget.view.*
@@ -124,6 +123,19 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
         presenter.bindIntents(this)
         setTitle(R.string.title_settings)
         showBackButton(true)
+
+        val states = arrayOf(
+            intArrayOf(android.R.attr.state_activated),
+            intArrayOf(-android.R.attr.state_activated))
+
+        val textTertiary = view.context.resolveThemeColor(android.R.attr.textColorTertiary)
+        val imageTintList = ColorStateList(states, intArrayOf(colors.theme().theme, textTertiary))
+
+        speechBubble.chevron.imageTintList = imageTintList
+        simConfigure.chevron.imageTintList = imageTintList
+        notifications.chevron.imageTintList = imageTintList
+        swipeActions.chevron.imageTintList = imageTintList
+        about.chevron.imageTintList = imageTintList
     }
 
     override fun preferenceClicks(): Observable<PreferenceView> = (0 until preferences.childCount)
@@ -152,12 +164,19 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
 
     override fun render(state: SettingsState) {
         themePreview.setBackgroundTint(state.theme)
-        night.summary = state.nightModeSummary
+
+        speechBubble.chevron.setImageResource(R.drawable.ic_chevron_right_black_24dp)
+        simConfigure.chevron.setImageResource(R.drawable.ic_chevron_right_black_24dp)
+        notifications.chevron.setImageResource(R.drawable.ic_chevron_right_black_24dp)
+        swipeActions.chevron.setImageResource(R.drawable.ic_chevron_right_black_24dp)
+        about.chevron.setImageResource(R.drawable.ic_chevron_right_black_24dp)
+
+        night.value = state.nightModeSummary
         nightModeDialog.adapter.selectedItem = state.nightModeId
         nightStart.setVisible(state.nightModeId == Preferences.NIGHT_MODE_AUTO)
-        nightStart.summary = state.nightStart
+        nightStart.value = state.nightStart
         nightEnd.setVisible(state.nightModeId == Preferences.NIGHT_MODE_AUTO)
-        nightEnd.summary = state.nightEnd
+        nightEnd.value = state.nightEnd
 
         black.setVisible(state.nightModeId != Preferences.NIGHT_MODE_OFF)
         black.checkbox.isChecked = state.black
@@ -166,25 +185,31 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
 
         autoEmoji.checkbox.isChecked = state.autoEmojiEnabled
 
-        delayed.summary = state.sendDelaySummary
+        delayed.value = state.sendDelaySummary
         sendDelayDialog.adapter.selectedItem = state.sendDelayId
 
         delivery.checkbox.isChecked = state.deliveryEnabled
 
-        signature.summary = state.signature.takeIf { it.isNotBlank() }
-                ?: context.getString(R.string.settings_signature_summary)
+       /* signature.summary = state.signature.takeIf { it.isNotBlank() }
+                ?: context.getString(R.string.settings_signature_summary)*/
+        signature.value = state.signature.takeIf { it.isNotBlank() }
+                ?: context.getString(R.string.settings_signature_empty_value)
 
-        textSize.summary = state.textSizeSummary
+        textSize.value = state.textSizeSummary
         textSizeDialog.adapter.selectedItem = state.textSizeId
 
         autoColor.checkbox.isChecked = state.autoColor
+
+        grayAvatar.checkbox.isChecked = state.grayAvatar
+
+        separator.checkbox.isChecked = state.separator
 
         systemFont.checkbox.isChecked = state.systemFontEnabled
 
         unicode.checkbox.isChecked = state.stripUnicodeEnabled
         mobileOnly.checkbox.isChecked = state.mobileOnly
 
-        autoDelete.summary = when (state.autoDelete) {
+        autoDelete.value = when (state.autoDelete) {
             0 -> context.getString(R.string.settings_auto_delete_never)
             else -> context.resources.getQuantityString(
                     R.plurals.settings_auto_delete_summary, state.autoDelete, state.autoDelete)
@@ -194,7 +219,7 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
 
         optOut.checkbox.isChecked = state.optOut
 
-        mmsSize.summary = state.maxMmsSizeSummary
+        mmsSize.value = state.maxMmsSizeSummary
         mmsSizeDialog.adapter.selectedItem = state.maxMmsSizeId
 
         when (state.syncProgress) {
@@ -245,6 +270,18 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
     }
 
     override fun showMmsSizePicker() = mmsSizeDialog.show(activity!!)
+
+    override fun showSpeechBubble() {
+        router.pushController(RouterTransaction.with(SpeechBubbleController())
+            .pushChangeHandler(QkChangeHandler())
+            .popChangeHandler(QkChangeHandler()))
+    }
+
+    override fun showSimConfigure() {
+        router.pushController(RouterTransaction.with(SimConfigureController())
+            .pushChangeHandler(QkChangeHandler())
+            .popChangeHandler(QkChangeHandler()))
+    }
 
     override fun showSwipeActions() {
         router.pushController(RouterTransaction.with(SwipeActionsController())

@@ -32,8 +32,8 @@ class BluetoothDeviceAdapter(val data: ArrayList<BluetoothDeviceModel>, val pref
         holder.containerView.tag = dataModel.deviceMac
         holder.deviceCheckBox.isChecked = dataModel.checked
 
-        when (dataModel.checked) {
-            false -> { holder.deviceBluetoothIcon.colorFilter = ColorMatrixColorFilter(ColorMatrix().apply { setSaturation(0f) }); }
+        if(!dataModel.checked) {
+            holder.deviceBluetoothIcon.colorFilter = ColorMatrixColorFilter(ColorMatrix().apply { setSaturation(0f) });
         }
 
         holder.deviceCheckBox.setOnClickListener { toggleSelection(holder) }

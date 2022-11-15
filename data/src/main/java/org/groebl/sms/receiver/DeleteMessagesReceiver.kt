@@ -38,7 +38,7 @@ class DeleteMessagesReceiver : BroadcastReceiver() {
         if (messageIds != null) {
             deleteMessages.execute(
                 DeleteMessages.Params(
-                    messageIds.toList(),
+                    messageIds!!.toList(),
                     threadId
                 )
             ) { pendingResult.finish() }

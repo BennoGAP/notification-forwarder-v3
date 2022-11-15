@@ -27,6 +27,51 @@
     android:orientation="vertical"
     tools:context="org.groebl.sms.feature.compose.ComposeActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        style="@style/Toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:layout_marginTop="10dp"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintHeight_max="140dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <org.groebl.sms.common.widget.QkTextView
+                android:id="@+id/toolbarTitle"
+                style="@style/ToolbarText"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                tools:text="Name" />
+
+            <org.groebl.sms.common.widget.QkTextView
+                android:id="@+id/toolbarSubtitle"
+                style="@style/ToolbarText"
+                android:textColor="?android:attr/textColorTertiary"
+                android:visibility="gone"
+                app:textSize="secondary"
+                tools:text="3 of 9 results" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/chips"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:scrollbars="vertical"
+                tools:visibility="gone" />
+
+        </LinearLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/messageList"
         android:layout_width="0dp"
@@ -206,7 +251,8 @@
         android:src="@drawable/ic_cancel_black_24dp"
         android:tint="?android:attr/textColorSecondary"
         app:layout_constraintBottom_toTopOf="@id/scheduledSeparator"
-        app:layout_constraintEnd_toEndOf="@id/messageBackground" />
+        app:layout_constraintEnd_toEndOf="@id/messageBackground"
+        android:contentDescription="cancel" />
 
     <View
         android:id="@+id/scheduledSeparator"
@@ -299,57 +345,14 @@
         android:layout_width="44dp"
         android:layout_height="44dp"
         android:layout_marginEnd="8dp"
-        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:background="@drawable/circle"
         android:contentDescription="@string/compose_send_cd"
         android:padding="10dp"
         android:src="@drawable/ic_send_black_24dp"
-        android:tint="?android:textColorSecondary"
+        tools:backgroundTint="@color/tools_theme"
+        tools:tint="@color/textPrimaryDark"
         app:layout_constraintBottom_toBottomOf="@id/messageBackground"
         app:layout_constraintEnd_toEndOf="parent" />
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        style="@style/Toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        app:layout_constrainedHeight="true"
-        app:layout_constraintHeight_max="140dp"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:orientation="vertical">
-
-            <org.groebl.sms.common.widget.QkTextView
-                android:id="@+id/toolbarTitle"
-                style="@style/ToolbarText"
-                android:layout_height="wrap_content"
-                tools:text="Moez Bhatti"
-                android:textDirection="ltr" />
-
-            <org.groebl.sms.common.widget.QkTextView
-                android:id="@+id/toolbarSubtitle"
-                style="@style/ToolbarText"
-                android:textColor="?android:attr/textColorTertiary"
-                android:visibility="gone"
-                app:textSize="secondary"
-                tools:text="3 of 9 results" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/chips"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="4dp"
-                android:scrollbars="vertical"
-                tools:visibility="gone" />
-
-        </LinearLayout>
-
-    </androidx.appcompat.widget.Toolbar>
 
     <View
         android:layout_width="match_parent"
@@ -524,9 +527,8 @@
         android:layout_marginStart="12dp"
         android:background="@drawable/circle"
         android:contentDescription="@string/compose_attach_cd"
-        android:elevation="4dp"
         android:padding="10dp"
-        android:src="@drawable/ic_add_black_24dp"
+        android:src="@drawable/ic_attachment_black_24dp"
         app:layout_constraintBottom_toBottomOf="@id/messageBackground"
         app:layout_constraintStart_toStartOf="parent"
         tools:backgroundTint="@color/tools_theme"

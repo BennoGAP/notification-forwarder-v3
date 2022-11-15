@@ -28,6 +28,7 @@ import org.groebl.sms.common.util.extensions.makeToast
 import org.groebl.sms.interactor.DeleteOldMessages
 import org.groebl.sms.interactor.SyncMessages
 import org.groebl.sms.manager.AnalyticsManager
+import org.groebl.sms.manager.WidgetManager
 import org.groebl.sms.repository.MessageRepository
 import org.groebl.sms.repository.SyncRepository
 import org.groebl.sms.service.AutoDeleteService
@@ -54,6 +55,7 @@ class SettingsPresenter @Inject constructor(
         private val messageRepo: MessageRepository,
         private val navigator: Navigator,
         private val nightModeManager: NightModeManager,
+        private val widgetManager: WidgetManager,
         private val prefs: Preferences,
         private val syncMessages: SyncMessages
 ) : QkPresenter<SettingsView, SettingsState>(SettingsState(

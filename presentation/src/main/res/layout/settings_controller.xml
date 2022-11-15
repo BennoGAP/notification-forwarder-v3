@@ -51,12 +51,24 @@
             android:layout_height="wrap_content"
             app:icon="@drawable/ic_invert_colors_black_24dp"
             app:title="@string/settings_night_title"
-            tools:summary="Automatic" />
+            tools:value="Automatic" />
+
+        <org.groebl.sms.common.widget.PreferenceView
+            android:id="@+id/gray"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/ic_invert_colors_black_24dp"
+            android:paddingStart="16dp"
+            android:visibility="gone"
+            app:title="@string/settings_gray_title"
+            app:widget="@layout/settings_switch_widget" />
 
         <org.groebl.sms.common.widget.PreferenceView
             android:id="@+id/black"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:icon="@drawable/ic_invert_colors_black_24dp"
+            android:paddingStart="16dp"
             android:visibility="gone"
             app:title="@string/settings_black_title"
             app:widget="@layout/settings_switch_widget" />
@@ -66,23 +78,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
+            app:icon="@drawable/ic_invert_colors_black_24dp"
+            android:paddingStart="16dp"
             app:title="@string/settings_night_start_title"
-            tools:summary="6:00PM" />
+            tools:value="6:00PM" />
 
         <org.groebl.sms.common.widget.PreferenceView
             android:id="@+id/nightEnd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
+            app:icon="@drawable/ic_invert_colors_black_24dp"
+            android:paddingStart="16dp"
             app:title="@string/settings_night_end_title"
-            tools:summary="9:00AM" />
-
-        <org.groebl.sms.common.widget.PreferenceView
-            android:id="@+id/textSize"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:icon="@drawable/ic_format_size_black_24dp"
-            app:title="@string/settings_text_size_title" />
+            tools:nightStart="9:00AM" />
 
         <org.groebl.sms.common.widget.PreferenceView
             android:id="@+id/autoColor"
@@ -91,6 +100,47 @@
             app:icon="@drawable/ic_person_black_24dp"
             app:title="@string/settings_automatic_colors_title"
             app:widget="@layout/settings_switch_widget" />
+
+        <org.groebl.sms.common.widget.PreferenceView
+            android:id="@+id/grayAvatar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/ic_person_black_24dp"
+            app:title="@string/settings_gray_avatar_title"
+            app:widget="@layout/settings_switch_widget" />
+
+        <org.groebl.sms.common.widget.PreferenceView
+            android:id="@+id/speechBubble"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/ic_message_black_24dp"
+            app:title="@string/settings_speech_bubble_title"
+            app:widget="@layout/settings_chevron_widget" />
+
+        <org.groebl.sms.common.widget.PreferenceView
+            android:id="@+id/simConfigure"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            app:icon="@drawable/ic_sim_card_black_24dp"
+            app:title="@string/settings_sim_configure_title"
+            app:widget="@layout/settings_chevron_widget" />
+
+        <org.groebl.sms.common.widget.PreferenceView
+            android:id="@+id/separator"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/ic_title_black_24dp"
+            app:title="@string/settings_separator_title"
+            app:widget="@layout/settings_switch_widget" />
+
+        <org.groebl.sms.common.widget.PreferenceView
+            android:id="@+id/textSize"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/ic_format_size_black_24dp"
+            app:title="@string/settings_text_size_title"
+            tools:value="Normal" />
 
         <org.groebl.sms.common.widget.PreferenceView
             android:id="@+id/systemFont"
@@ -105,6 +155,8 @@
             android:layout_height="1dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginEnd="18dp"
             android:background="?android:attr/divider" />
 
         <org.groebl.sms.common.widget.QkTextView
@@ -116,7 +168,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:icon="@drawable/ic_notifications_black_24dp"
-            app:title="@string/settings_notifications_title" />
+            app:title="@string/settings_notifications_title"
+            app:widget="@layout/settings_chevron_widget" />
 
         <org.groebl.sms.common.widget.PreferenceView
             android:id="@+id/autoEmoji"
@@ -132,7 +185,8 @@
             android:layout_height="wrap_content"
             app:icon="@drawable/ic_av_timer_black_24dp"
             app:title="@string/settings_delayed_title"
-            tools:summary="No delay" />
+            app:summary="@string/settings_delayed_title_summary"
+            tools:value="No delay" />
 
         <org.groebl.sms.common.widget.PreferenceView
             android:id="@+id/swipeActions"
@@ -141,7 +195,8 @@
             android:visibility="visible"
             app:icon="@drawable/ic_clear_all_black_24dp"
             app:summary="@string/settings_swipe_actions_summary"
-            app:title="@string/settings_swipe_actions" />
+            app:title="@string/settings_swipe_actions"
+            app:widget="@layout/settings_chevron_widget" />
 
         <org.groebl.sms.common.widget.PreferenceView
             android:id="@+id/delivery"
@@ -157,7 +212,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:icon="@drawable/ic_short_text_black_24dp"
-            app:title="@string/settings_signature_title" />
+            app:title="@string/settings_signature_title"
+            app:summary="@string/settings_signature_summary" />
 
         <org.groebl.sms.common.widget.PreferenceView
             android:id="@+id/unicode"
@@ -183,7 +239,7 @@
             android:layout_height="wrap_content"
             app:icon="@drawable/ic_baseline_history_toggle_off_24"
             app:title="@string/settings_auto_delete"
-            tools:summary="Never" />
+            tools:value="Never" />
 
         <org.groebl.sms.common.widget.PreferenceView
             android:id="@+id/longAsMms"
@@ -201,13 +257,15 @@
             android:visibility="visible"
             app:icon="@drawable/ic_photo_size_select_actual_black_24dp"
             app:title="@string/settings_mms_size_title"
-            tools:summary="100KB" />
+            tools:value="100KB" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginEnd="18dp"
             android:background="?android:attr/divider" />
 
         <org.groebl.sms.common.widget.PreferenceView
@@ -243,7 +301,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:icon="@drawable/ic_info_black_24dp"
-            app:title="@string/about_title" />
+            app:title="@string/about_title"
+            tools:summary="Version 3.0.7"
+            app:widget="@layout/settings_chevron_widget" />
 
     </LinearLayout>
 

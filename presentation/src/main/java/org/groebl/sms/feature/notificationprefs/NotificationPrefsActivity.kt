@@ -20,6 +20,7 @@ package org.groebl.sms.feature.notificationprefs
 
 import android.app.Activity
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
@@ -32,6 +33,7 @@ import org.groebl.sms.R
 import org.groebl.sms.common.QkDialog
 import org.groebl.sms.common.base.QkThemedActivity
 import org.groebl.sms.common.util.extensions.animateLayoutChanges
+import org.groebl.sms.common.util.extensions.resolveThemeColor
 import org.groebl.sms.common.util.extensions.setVisible
 import org.groebl.sms.common.widget.PreferenceView
 import com.uber.autodispose.android.lifecycle.scope
@@ -41,7 +43,10 @@ import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import kotlinx.android.synthetic.main.notification_prefs_activity.*
+import kotlinx.android.synthetic.main.notification_prefs_activity.notifications
+import kotlinx.android.synthetic.main.notification_prefs_activity.preferences
 import kotlinx.android.synthetic.main.settings_switch_widget.view.*
+import kotlinx.android.synthetic.main.settings_chevron_widget.view.*
 import javax.inject.Inject
 
 class NotificationPrefsActivity : QkThemedActivity(), NotificationPrefsView {
@@ -95,21 +100,30 @@ class NotificationPrefsActivity : QkThemedActivity(), NotificationPrefsView {
             title = state.conversationTitle
         }
 
+        val states = arrayOf(
+            intArrayOf(android.R.attr.state_activated),
+            intArrayOf(-android.R.attr.state_activated))
+        val textTertiary = resolveThemeColor(android.R.attr.textColorTertiary)
+        val imageTintList = ColorStateList(states, intArrayOf(colors.theme().theme, textTertiary))
+
+        notificationsO.chevron.imageTintList = imageTintList
+        notificationsO.chevron.setImageResource(R.drawable.ic_chevron_right_black_24dp)
+
         notifications.checkbox.isChecked = state.notificationsEnabled
-        previews.summary = state.previewSummary
+        previews.value = state.previewSummary
         previewModeDialog.adapter.selectedItem = state.previewId
         wake.checkbox.isChecked = state.wakeEnabled
         vibration.checkbox.isChecked = state.vibrationEnabled
-        ringtone.summary = state.ringtoneName
+        ringtone.value = state.ringtoneName
 
         actionsDivider.isVisible = state.threadId == 0L
         actionsTitle.isVisible = state.threadId == 0L
         action1.isVisible = state.threadId == 0L
-        action1.summary = state.action1Summary
+        action1.value = state.action1Summary
         action2.isVisible = state.threadId == 0L
-        action2.summary = state.action2Summary
+        action2.value = state.action2Summary
         action3.isVisible = state.threadId == 0L
-        action3.summary = state.action3Summary
+        action3.value = state.action3Summary
 
         qkreplyDivider.isVisible = state.threadId == 0L
         qkreplyTitle.isVisible = state.threadId == 0L

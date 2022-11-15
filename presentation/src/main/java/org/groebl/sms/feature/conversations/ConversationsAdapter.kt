@@ -35,24 +35,33 @@ import org.groebl.sms.common.util.Colors
 import org.groebl.sms.common.util.DateFormatter
 import org.groebl.sms.common.util.extensions.resolveThemeColor
 import org.groebl.sms.common.util.extensions.setTint
+import org.groebl.sms.common.util.extensions.setVisible
+import org.groebl.sms.compat.SubscriptionManagerCompat
 import org.groebl.sms.model.Conversation
 import org.groebl.sms.util.PhoneNumberUtils
+import org.groebl.sms.util.Preferences
 import kotlinx.android.synthetic.main.conversation_list_item.*
+import kotlinx.android.synthetic.main.conversation_list_item.simIndex
+import kotlinx.android.synthetic.main.conversation_list_item.sim
 import kotlinx.android.synthetic.main.conversation_list_item.view.*
 import javax.inject.Inject
 
 class ConversationsAdapter @Inject constructor(
+    subscriptionManager: SubscriptionManagerCompat,
     private val colors: Colors,
     private val context: Context,
     private val dateFormatter: DateFormatter,
     private val navigator: Navigator,
-    private val phoneNumberUtils: PhoneNumberUtils
+    private val phoneNumberUtils: PhoneNumberUtils,
+    private val prefs: Preferences
 ) : QkRealmAdapter<Conversation>() {
 
     init {
         // This is how we access the threadId for the swipe actions
         setHasStableIds(true)
     }
+
+    private val subs = subscriptionManager.activeSubscriptionInfoList
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QkViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -144,6 +153,7 @@ class ConversationsAdapter @Inject constructor(
         }
         holder.pinned.isVisible = conversation.pinned
         holder.unread.setTint(theme)
+        holder.separator.isVisible = prefs.separator.get()
     }
 
     override fun getItemId(position: Int): Long {

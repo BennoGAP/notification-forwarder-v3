@@ -37,7 +37,7 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:duplicateParentState="true"
         android:orientation="vertical"
         android:paddingLeft="24dp"
@@ -61,6 +61,31 @@
             android:layout_marginTop="2dp"
             android:duplicateParentState="true"
             tools:text="This is your default SMS app" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/valueContainerView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:duplicateParentState="true"
+        android:orientation="vertical"
+        android:paddingLeft="24dp"
+        android:paddingTop="16dp"
+        android:paddingRight="12dp"
+        android:paddingBottom="16dp"
+        android:visibility="gone">
+
+        <org.groebl.sms.common.widget.QkTextView
+            android:id="@+id/valueView"
+            style="@style/TextSecondary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:duplicateParentState="true"
+            android:gravity="right"
+            android:visibility="gone"
+            tools:text="System"/>
 
     </LinearLayout>
 

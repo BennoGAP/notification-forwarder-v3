@@ -8,6 +8,7 @@ import org.groebl.sms.R
 import org.groebl.sms.common.base.QkThemedActivity
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.container_activity.*
+import org.groebl.sms.common.util.extensions.resolveThemeColor
 
 class BluetoothSettingsActivity : QkThemedActivity() {
 
@@ -17,6 +18,8 @@ class BluetoothSettingsActivity : QkThemedActivity() {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.container_activity)
+
+        toolbar.navigationIcon?.setTint(resolveThemeColor(android.R.attr.textColorSecondary))
 
         router = Conductor.attachRouter(this, container, savedInstanceState)
         if (!router.hasRootController()) {

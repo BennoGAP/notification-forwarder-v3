@@ -74,6 +74,8 @@ class ConversationInfoController(
                 override fun getSpanSize(position: Int): Int = if (adapter.getItemViewType(position) == 2) 1 else 3
             }
         }
+        val margin = resources!!.getDimensionPixelSize(R.dimen.conversation_info_padding)
+        recyclerView.setPadding(margin, 0, margin, margin)
 
         themedActivity?.theme
                 ?.autoDisposable(scope())

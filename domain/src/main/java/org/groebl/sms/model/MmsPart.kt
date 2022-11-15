@@ -41,7 +41,7 @@ open class MmsPart : RealmObject() {
 
     fun getSummary(): String? = when {
         type == "text/plain" -> text
-        type == "text/x-vCard" -> "Contact card"
+        type == "text/x-vCard" -> "Contact"
         type.startsWith("image") -> "Photo"
         type.startsWith("video") -> "Video"
         else -> null

@@ -6,6 +6,7 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.ColorStateList
 import android.net.Uri
 import android.os.Build
 import android.provider.ContactsContract
@@ -21,15 +22,14 @@ import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.bluetooth_settings_controller.*
+import kotlinx.android.synthetic.main.settings_chevron_widget.view.*
 import kotlinx.android.synthetic.main.settings_switch_widget.view.*
 import org.groebl.sms.R
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.QkChangeHandler
 import org.groebl.sms.common.base.QkController
 import org.groebl.sms.common.util.Colors
-import org.groebl.sms.common.util.extensions.animateLayoutChanges
-import org.groebl.sms.common.util.extensions.isInstalled
-import org.groebl.sms.common.util.extensions.setVisible
+import org.groebl.sms.common.util.extensions.*
 import org.groebl.sms.common.widget.PreferenceView
 import org.groebl.sms.feature.bluetooth.app.BluetoothAppActivity
 import org.groebl.sms.feature.bluetooth.common.BluetoothDatabase
@@ -76,6 +76,18 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
         presenter.bindIntents(this)
         setTitle(R.string.title_settings_bluetooth)
         showBackButton(true)
+
+        val states = arrayOf(
+            intArrayOf(android.R.attr.state_activated),
+            intArrayOf(-android.R.attr.state_activated))
+
+        val textTertiary = view.context.resolveThemeColor(android.R.attr.textColorTertiary)
+        val imageTintList = ColorStateList(states, intArrayOf(colors.theme().theme, textTertiary))
+
+        bluetooth_allowed_apps.chevron.imageTintList = imageTintList
+        bluetooth_select_device.chevron.imageTintList = imageTintList
+        bluetooth_donate.chevron.imageTintList = imageTintList
+        bluetooth_about.chevron.imageTintList = imageTintList
     }
 
     override fun preferenceFullClicks(): Observable<PreferenceView> = (0 until bluetooth_menu_full.childCount)
@@ -91,6 +103,11 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
             .let { bluetooth_menu_main -> Observable.merge(bluetooth_menu_main) }
 
     override fun render(state: BluetoothSettingsState) {
+        bluetooth_allowed_apps.chevron.setImageResource(R.drawable.ic_chevron_right_black_24dp)
+        bluetooth_select_device.chevron.setImageResource(R.drawable.ic_chevron_right_black_24dp)
+        bluetooth_donate.chevron.setImageResource(R.drawable.ic_chevron_right_black_24dp)
+        bluetooth_about.chevron.setImageResource(R.drawable.ic_chevron_right_black_24dp)
+
         var localBluetoothEnabled = state.bluetooth_enabled
         var localBluetoothTethering = state.bluetooth_tethering
         var localBluetoothOnlyOnConnect = state.bluetooth_only_on_connect

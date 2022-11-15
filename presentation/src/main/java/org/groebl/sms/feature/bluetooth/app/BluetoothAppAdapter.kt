@@ -38,8 +38,8 @@ class BluetoothAppAdapter(val data: ArrayList<BluetoothAppModel>, val prefs: Pre
         holder.containerView.tag = dataModel.appApkName
         holder.appCheckBox.isChecked = isChecked
 
-        when (isChecked) {
-            false -> {  holder.appIcon.colorFilter = ColorMatrixColorFilter(ColorMatrix().apply { setSaturation(0f) }); }
+        if(!isChecked) {
+            holder.appIcon.colorFilter = ColorMatrixColorFilter(ColorMatrix().apply { setSaturation(0f) });
         }
 
         holder.appCheckBox.setOnClickListener { toggleSelection(holder) }

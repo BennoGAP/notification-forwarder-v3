@@ -328,7 +328,7 @@
   <string name="settings_black_title">Rein schwarzer Nachtmodus</string>
   <string name="settings_night_start_title">Anfang</string>
   <string name="settings_night_end_title">Ende</string>
-  <string name="settings_automatic_colors_title">Automatische Kontaktfarben</string>
+  <string name="settings_automatic_colors_title">Automatische Kontaktavatare</string>
   <string name="settings_text_size_title">Schriftgröße</string>
   <string name="settings_system_font_title">Systemschriftart verwenden</string>
   <string name="settings_auto_emoji_title">Automatische Emoji</string>
@@ -548,17 +548,19 @@
     <item>Das ist OK</item>
   </string-array>
 
-  <string name="changelog_title">Änderungen</string>
-  <string name="changelog_version">Version %s</string>
-  <string-array name="changelog_keywords">
-    <item>Hinzugefügt</item>
-    <item>Verbessert</item>
-    <item>Behoben</item>
-  </string-array>
-  <string-array name="changelog">
-    <item>Behoben</item>
-    <item>- Kleinere Fehler</item>
-  </string-array>
-  <string name="changelog_dismiss">Schließen</string>
+    <string name="drawer_share">Teilen</string>
+    <string name="settings_gray_title">Graumodus</string>
+    <string name="theme_color_picker">Farbwähler</string>
+    <string name="settings_separator_title">Trennzeichen verwenden</string>
+    <string name="settings_gray_avatar_title">Graue Kontaktavatare</string>
+    <string name="settings_sim_color_title">Farbige SIM-Karten-Symbole</string>
+    <string name="settings_delayed_title_summary">Ermöglicht es, die Nachricht vor dem Senden abzubrechen oder zu ändern</string>
+    <string name="compose_menu_speech">Sprachausgabe</string>
+    <string name="settings_sim_configure_title">SIM-Karten konfigurieren</string>
+    <string name="settings_sim_color_summary">Konfigurieren der Farbe der SIM-Kartensymbole</string>
+
+    <string name="settings_speech_bubble_title">Sprechblasen</string>
+    <string name="settings_speech_bubble_invert_title">Farben der Sprechblasen umkehren</string>
+    <string name="settings_speech_bubble_style_title">Sprechblasen Design</string>
 
 </resources>

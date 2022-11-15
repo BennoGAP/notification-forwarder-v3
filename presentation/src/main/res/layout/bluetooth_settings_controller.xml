@@ -69,6 +69,7 @@
                 android:layout_height="wrap_content"
                 app:summary="@string/settings_bluetooth_devices_summary"
                 app:title="@string/settings_bluetooth_devices_title"
+                app:widget="@layout/settings_chevron_widget"
                 app:icon="@drawable/ic_bluetooth_car_signal_24px" />
 
             <org.groebl.sms.common.widget.PreferenceView
@@ -77,6 +78,7 @@
                 android:layout_height="wrap_content"
                 app:summary="@string/settings_bluetooth_apps_summary"
                 app:title="@string/settings_bluetooth_apps_title"
+                app:widget="@layout/settings_chevron_widget"
                 app:icon="@drawable/ic_bluetooth_apps_24px" />
 
             <View
@@ -358,6 +360,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:icon="@drawable/ic_bluetooth_gift_24px"
+            app:widget="@layout/settings_chevron_widget"
             app:title="@string/settings_bluetooth_donate" />
 
         <org.groebl.sms.common.widget.PreferenceView
@@ -365,6 +368,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:icon="@drawable/ic_info_black_24dp"
+            app:widget="@layout/settings_chevron_widget"
             app:title="@string/about_title" />
 
     </LinearLayout>

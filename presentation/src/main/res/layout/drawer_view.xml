@@ -28,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingTop="8dp"
+        android:paddingTop="18dp"
         android:paddingBottom="8dp">
 
         <LinearLayout
@@ -174,8 +174,9 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:background="@drawable/rounded_rectangle_outline_2dp"
-            android:backgroundTint="?android:attr/divider">
+            android:background="@drawable/rounded_rectangle_2dp"
+            android:backgroundTint="?android:attr/divider"
+            tools:backgroundTint="@color/separatorLight">
 
             <ImageView
                 android:id="@+id/rateIcon"
@@ -223,9 +224,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:paddingStart="16dp"
-                android:paddingLeft="8dp"
                 android:paddingTop="16dp"
-                android:paddingRight="8dp"
                 android:paddingBottom="16dp"
                 android:text="@string/rate_dismiss"
                 android:textColor="?android:attr/textColorTertiary"
@@ -256,12 +255,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="4dp"
+                android:layout_marginEnd="8dp"
                 android:background="?attr/selectableItemBackground"
-                android:paddingLeft="8dp"
-                android:paddingTop="16dp"
-                android:paddingRight="8dp"
-                android:paddingBottom="16dp"
+                android:padding="16dp"
                 android:text="@string/rate_rate"
                 android:textColor="?android:attr/textColorSecondary"
                 android:textStyle="bold"

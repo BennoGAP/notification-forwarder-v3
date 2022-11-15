@@ -62,6 +62,23 @@ class PreferenceView @JvmOverloads constructor(
             }
         }
 
+    var value: String? = null
+        set(value) {
+            field = value
+
+
+            if (isInEditMode) {
+                findViewById<TextView>(R.id.valueView).run {
+                    text = value
+                    setVisible(value?.isNotEmpty() == true)
+                }
+            } else {
+                valueView.text = value
+                valueView.setVisible(value?.isNotEmpty() == true)
+                valueContainerView.setVisible(value?.isNotEmpty() == true)
+            }
+        }
+
     init {
         if (!isInEditMode) {
             appComponent.inject(this)
@@ -77,6 +94,7 @@ class PreferenceView @JvmOverloads constructor(
         context.obtainStyledAttributes(attrs, R.styleable.PreferenceView).run {
             title = getString(R.styleable.PreferenceView_title)
             summary = getString(R.styleable.PreferenceView_summary)
+            value = getString(R.styleable.PreferenceView_value)
 
             // If there's a custom view used for the preference's widget, inflate it
             getResourceId(R.styleable.PreferenceView_widget, -1).takeIf { it != -1 }?.let { id ->

@@ -147,8 +147,10 @@ class ComposeActivity : QkThemedActivity(), ComposeView, TextToSpeech.OnInitList
 
         theme
                 .doOnNext { loading.setTint(it.theme) }
-                .doOnNext { attach.setBackgroundTint(it.theme) }
-                .doOnNext { attach.setTint(it.textPrimary) }
+                .doOnNext { attach.setBackgroundTint(resolveThemeColor(R.attr.bubbleColor)) } //.doOnNext { attach.setBackgroundTint(it.theme) }
+                .doOnNext { attach.setTint(resolveThemeColor(android.R.attr.textColorTertiary)) } //.doOnNext { attach.setTint(it.textPrimary)
+                .doOnNext { send.setBackgroundTint(it.theme) }
+                .doOnNext { send.setTint(resolveThemeColor(android.R.attr.windowBackground)) } //.doOnNext { send.setTint(it.textPrimary) }
                 .doOnNext { messageAdapter.theme = it }
                 .autoDisposable(scope())
                 .subscribe()
@@ -230,7 +232,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView, TextToSpeech.OnInitList
         attachments.setVisible(state.attachments.isNotEmpty())
         attachmentAdapter.data = state.attachments
 
-        attach.animate().rotation(if (state.attaching) 135f else 0f).start()
+        attach.animate().rotation(if (state.attaching) 45f else 0f).start()
         attaching.isVisible = state.attaching
 
         counter.text = state.remaining
@@ -259,6 +261,15 @@ class ComposeActivity : QkThemedActivity(), ComposeView, TextToSpeech.OnInitList
 
         send.isEnabled = state.canSend
         send.imageAlpha = if (state.canSend) 255 else 128
+
+        val delay = when (prefs.sendDelay.get()) {
+            Preferences.SEND_DELAY_SHORT -> true
+            Preferences.SEND_DELAY_MEDIUM -> true
+            Preferences.SEND_DELAY_LONG -> true
+            else -> false
+        }
+        if (delay && state.canSend/* && !state.attachments.isNotEmpty() && messageAdapter.conversation?.recipients?.size!! == 1*/) send.setImageDrawable(resources.getDrawable(R.drawable.ic_send_delay_black_24dp))
+            else send.setImageDrawable(resources.getDrawable(R.drawable.ic_send_black_24dp))
     }
 
     override fun clearSelection() = messageAdapter.clearSelection()
@@ -407,6 +418,11 @@ class ComposeActivity : QkThemedActivity(), ComposeView, TextToSpeech.OnInitList
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putParcelable(CameraDestinationKey, cameraDestination)
         super.onSaveInstanceState(outState)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        cameraDestination = savedInstanceState.getParcelable(CameraDestinationKey)
+        super.onRestoreInstanceState(savedInstanceState)
     }
 
     override fun onBackPressed() = backPressedIntent.onNext(Unit)
