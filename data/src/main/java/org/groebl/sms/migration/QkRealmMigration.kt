@@ -19,6 +19,7 @@
 package org.groebl.sms.migration
 
 import android.annotation.SuppressLint
+import android.os.Build
 import org.groebl.sms.extensions.map
 import org.groebl.sms.mapper.CursorToContactImpl
 import org.groebl.sms.util.Preferences
@@ -235,6 +236,8 @@ class QkRealmMigration @Inject constructor(
         }
 
         if (version == 11L) {
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) { prefs.bluetooth_tethering.set(false) }
+
             realm.schema.create("BlockedRegex")
                 .addField("id", Long::class.java, FieldAttribute.PRIMARY_KEY, FieldAttribute.REQUIRED)
                 .addField("regex", String::class.java, FieldAttribute.REQUIRED)
