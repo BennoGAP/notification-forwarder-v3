@@ -563,4 +563,11 @@
     <string name="settings_speech_bubble_invert_title">Farben der Sprechblasen umkehren</string>
     <string name="settings_speech_bubble_style_title">Sprechblasen Design</string>
 
+    <string name="blocked_regexps_title">Regex Blockier-Regeln</string>
+    <string name="blocked_regexps_empty">Noch keine Regex Blockier-Regeln vorhanden</string>
+    <string name="blocked_regexps_add_cd">Regel erstellen</string>
+    <string name="blocked_regexps_dialog_title">Neue Regex Regel erstellen</string>
+    <string name="blocked_regexps_dialog_hint">Regel</string>
+    <string name="blocked_regexps_dialog_block">Blockieren</string>
+    <string name="blocked_regexps_banner_summary">Was sind Regex?</string>
 </resources>
