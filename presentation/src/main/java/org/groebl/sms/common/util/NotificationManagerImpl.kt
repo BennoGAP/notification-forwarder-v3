@@ -105,11 +105,11 @@ class NotificationManagerImpl @Inject constructor(
         val taskStackBuilder = TaskStackBuilder.create(context)
                 .addParentStack(ComposeActivity::class.java)
                 .addNextIntent(contentIntent)
-        val contentPI = taskStackBuilder.getPendingIntent(threadId.toInt(), PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+        val contentPI = taskStackBuilder.getPendingIntent(threadId.toInt(), PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
         val seenIntent = Intent(context, MarkSeenReceiver::class.java).putExtra("threadId", threadId)
         val seenPI = PendingIntent.getBroadcast(context, threadId.toInt(), seenIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
         // We can't store a null preference, so map it to a null Uri if the pref string is empty
         val ringtone = prefs.ringtone(threadId).get()
@@ -225,7 +225,7 @@ class NotificationManagerImpl @Inject constructor(
                         Preferences.NOTIFICATION_ACTION_ARCHIVE -> {
                             val intent = Intent(context, MarkArchivedReceiver::class.java).putExtra("threadId", threadId)
                             val pi = PendingIntent.getBroadcast(context, threadId.toInt(), intent,
-                                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+                                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
                             NotificationCompat.Action.Builder(R.drawable.ic_archive_white_24dp, actionLabels[action], pi)
                                     .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_ARCHIVE).build()
                         }
@@ -236,7 +236,7 @@ class NotificationManagerImpl @Inject constructor(
                                     .putExtra("threadId", threadId)
                                     .putExtra("messageIds", messageIds)
                             val pi = PendingIntent.getBroadcast(context, threadId.toInt(), intent,
-                                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+                                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
                             NotificationCompat.Action.Builder(R.drawable.ic_delete_white_24dp, actionLabels[action], pi)
                                     .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_DELETE).build()
                         }
@@ -244,7 +244,7 @@ class NotificationManagerImpl @Inject constructor(
                         Preferences.NOTIFICATION_ACTION_BLOCK -> {
                             val intent = Intent(context, BlockThreadReceiver::class.java).putExtra("threadId", threadId)
                             val pi = PendingIntent.getBroadcast(context, threadId.toInt(), intent,
-                                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+                                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
                             NotificationCompat.Action.Builder(R.drawable.ic_block_white_24dp, actionLabels[action], pi)
                                     .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_MUTE).build()
                         }
@@ -252,7 +252,7 @@ class NotificationManagerImpl @Inject constructor(
                         Preferences.NOTIFICATION_ACTION_READ -> {
                             val intent = Intent(context, MarkReadReceiver::class.java).putExtra("threadId", threadId)
                             val pi = PendingIntent.getBroadcast(context, threadId.toInt(), intent,
-                                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+                                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
                             NotificationCompat.Action.Builder(R.drawable.ic_check_white_24dp, actionLabels[action], pi)
                                     .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_MARK_AS_READ).build()
                         }
@@ -275,7 +275,7 @@ class NotificationManagerImpl @Inject constructor(
                             val intentAction = if (permissions.hasCalling()) Intent.ACTION_CALL else Intent.ACTION_DIAL
                             val intent = Intent(intentAction, Uri.parse("tel:$address"))
                             val pi = PendingIntent.getActivity(context, threadId.toInt(), intent,
-                                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+                                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
                             NotificationCompat.Action.Builder(R.drawable.ic_call_white_24dp, actionLabels[action], pi)
                                     .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_CALL).build()
                         }
@@ -329,7 +329,7 @@ class NotificationManagerImpl @Inject constructor(
         val taskStackBuilder = TaskStackBuilder.create(context)
             .addParentStack(ComposeActivity::class.java)
             .addNextIntent(contentIntent)
-        val contentPI = taskStackBuilder.getPendingIntent(threadId.toInt(), PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+        val contentPI = taskStackBuilder.getPendingIntent(threadId.toInt(), PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
         val notification = NotificationCompat.Builder(context, getChannelIdForNotification(threadId))
                 .setContentTitle(context.getString(R.string.notification_message_failed_title))
