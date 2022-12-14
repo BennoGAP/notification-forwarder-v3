@@ -169,7 +169,7 @@
   <string name="menu_info">Details</string>
   <string name="menu_save">In Galerie speichern</string>
   <string name="menu_share">Teilen</string>
-  <string name="main_drawer_open_cd">Öffne den Navigation Drawer</string>
+  <string name="main_drawer_open_cd">Menüleiste öffnen</string>
   <string name="main_title_selected">%d ausgewählt</string>
   <string name="main_menu_clear">Zurücksetzen</string>
   <string name="main_menu_archive">Archivieren</string>
@@ -212,8 +212,8 @@
   <string name="rate_dismiss">VERWERFEN</string>
   <string name="dialog_delete_title">Löschen</string>
   <plurals name="dialog_delete_message">
-    <item quantity="one">Bist du sicher, dass du diese Unterhaltung löschen möchtest?</item>
-    <item quantity="other">Bist du sicher, dass du %d Unterhaltungen löschen möchtest?</item>
+    <item quantity="one">Bist du sicher, dass du diese Unterhaltung löschen möchtest\?</item>
+    <item quantity="other">Bist du sicher, dass du %d Unterhaltungen löschen möchtest\?</item>
   </plurals>
   <string-array name="message_options">
     <item>Text kopieren</item>
@@ -281,7 +281,7 @@
   <string name="backup_backing_up">Sichere Nachrichten</string>
   <string name="backup_restoring">Aus Sicherung wiederherstellen</string>
   <string name="backup_last">Letzte Sicherung</string>
-  <string name="backup_loading">Lade&#8230;</string>
+  <string name="backup_loading">Wird geladen&#8230;</string>
   <string name="backup_never">Niemals</string>
   <string name="backup_restore_title">Wiederherstellen</string>
   <string name="backup_restore_summary">Sicherung auswählen</string>
@@ -313,7 +313,7 @@
   <string name="scheduled_empty_message_3">Alles Gute zum Geburtstag! Schau was für ein großartiger Freund ich bin, dass ich an deinen Geburtstag denke</string>
     <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
   <string name="scheduled_empty_message_3_timestamp">Am 23. Dezember senden </string>
-  <string name="scheduled_compose_cd">Nachricht verschieben</string>
+  <string name="scheduled_compose_cd">Nachricht planen</string>
   <string name="scheduled_options_title">Geplante Nachricht</string>
   <string-array name="scheduled_options">
     <item>Sofort senden</item>
@@ -425,7 +425,7 @@
   <string name="about_title">Über</string>
   <string name="about_version_title">Version</string>
   <string name="about_developer_title">Entwickler</string>
-  <string name="about_source_title">Quelltext</string>
+  <string name="about_source_title">Quellcode</string>
   <string name="about_changelog_title">Änderungsprotokoll</string>
   <string name="about_contact_title">Kontakt</string>
   <string name="about_license_title">Lizenz</string>
@@ -462,7 +462,7 @@
   <string name="qksms_plus_respond_summary">Eingehende Nachrichten werden mit einer voreingestellten Antwort beantwortet</string>
   <string name="qksms_plus_more_title">Mehr</string>
   <string name="qksms_plus_more_summary">QKSMS wird aktiv weiterentwickelt und Dein Erwerb wird alle zukünftigen Funktionen enthalten!</string>
-  <string name="widget_loading">Lädt&#8230;</string>
+  <string name="widget_loading">Wird geladen&#8230;</string>
   <string name="widget_more">Weitere Unterhaltungen anzeigen</string>
   <string name="qkreply_menu_read">Als gelesen markieren</string>
   <string name="qkreply_menu_call">Anrufen</string>
@@ -527,7 +527,7 @@
     <item>Automatisch</item>
     <item>100KB</item>
     <item>200KB</item>
-    <item>300KB</item>
+    <item>300KB (empfohlen)</item>
     <item>600KB</item>
     <item>1000KB</item>
     <item>2000KB</item>
