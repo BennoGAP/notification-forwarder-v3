@@ -36,7 +36,9 @@ class AutoDeleteDialog(context: Activity, listener: (Int) -> Unit) : AlertDialog
         setButton(DialogInterface.BUTTON_NEUTRAL, context.getString(R.string.button_cancel)) { _, _ -> }
         setButton(DialogInterface.BUTTON_NEGATIVE, context.getString(R.string.settings_auto_delete_never)) { _, _ -> listener(0) }
         setButton(DialogInterface.BUTTON_POSITIVE, context.getString(R.string.button_save)) { _, _ ->
-            listener(layout.field.text.toString().toIntOrNull() ?: 0)
+            if (layout.field.text.toString().trim().isNotEmpty()) {
+                listener(layout.field.text.toString().toIntOrNull() ?: 0)
+            }
         }
     }
 

@@ -81,7 +81,9 @@ class BlockedNumbersController : QkController<BlockedNumbersView, BlockedNumbers
         val dialog = AlertDialog.Builder(activity!!)
                 .setView(layout)
                 .setPositiveButton(R.string.blocked_numbers_dialog_block) { _, _ ->
-                    saveAddressSubject.onNext(layout.input.text.toString())
+                    if (layout.input.text.toString().trim().isNotEmpty()) {
+                        saveAddressSubject.onNext(layout.input.text.toString())
+                    }
                 }
                 .setNegativeButton(R.string.button_cancel) { _, _ -> }
                 .setOnDismissListener { textWatcher.dispose() }

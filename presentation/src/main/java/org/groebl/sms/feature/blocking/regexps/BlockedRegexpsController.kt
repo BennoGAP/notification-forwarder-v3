@@ -9,13 +9,11 @@ import org.groebl.sms.common.base.QkController
 import org.groebl.sms.common.util.Colors
 import org.groebl.sms.common.util.extensions.setBackgroundTint
 import org.groebl.sms.common.util.extensions.setTint
-import org.groebl.sms.feature.blocking.numbers.BlockedNumberTextWatcher
 import org.groebl.sms.injection.appComponent
-import org.groebl.sms.util.PhoneNumberUtils
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
-import kotlinx.android.synthetic.main.blocked_regexps_add_dialog.view.*
+import kotlinx.android.synthetic.main.blocked_regexps_add_dialog.view.input
 import kotlinx.android.synthetic.main.blocked_regexps_controller.*
 import javax.inject.Inject
 
@@ -64,7 +62,9 @@ class BlockedRegexpsController : QkController<BlockedRegexpsView, BlockedRegexps
         val dialog = AlertDialog.Builder(activity!!)
             .setView(layout)
             .setPositiveButton(R.string.blocked_regexps_dialog_block) { _, _ ->
-                saveRegexSubject.onNext(layout.input.text.toString())
+                if (layout.input.text.toString().trim().isNotEmpty()) {
+                    saveRegexSubject.onNext(layout.input.text.toString())
+                }
             }
             .setNegativeButton(R.string.button_cancel) { _, _ -> }
         dialog.show()
