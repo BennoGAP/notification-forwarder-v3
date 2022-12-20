@@ -263,7 +263,7 @@ class NotificationManagerImpl @Inject constructor(
                             } else {
                                 val intent = Intent(context, QkReplyActivity::class.java).putExtra("threadId", threadId)
                                 val pi = PendingIntent.getActivity(context, threadId.toInt(), intent,
-                                        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+                                        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
                                 NotificationCompat.Action
                                         .Builder(R.drawable.ic_reply_white_24dp, actionLabels[action], pi)
                                         .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_REPLY).build()

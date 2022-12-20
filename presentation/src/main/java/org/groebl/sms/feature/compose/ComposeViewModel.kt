@@ -76,7 +76,7 @@ import javax.inject.Named
 class ComposeViewModel @Inject constructor(
         @Named("query") private val query: String,
         @Named("threadId") private val threadId: Long,
-    @Named("addresses") private val addresses: List<String>,
+        @Named("addresses") private val addresses: List<String>,
         @Named("text") private val sharedText: String,
         @Named("attachments") private val sharedAttachments: Attachments,
         private val contactRepo: ContactRepository,
@@ -91,7 +91,7 @@ class ComposeViewModel @Inject constructor(
         private val messageRepo: MessageRepository,
         private val navigator: Navigator,
         private val permissionManager: PermissionManager,
-    private val phoneNumberUtils: PhoneNumberUtils,
+        private val phoneNumberUtils: PhoneNumberUtils,
         private val prefs: Preferences,
         private val retrySending: RetrySending,
         private val sendMessage: SendMessage,
