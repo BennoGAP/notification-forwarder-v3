@@ -1,7 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext.androidx_appcompat_version = '1.4.1'
+    ext.androidx_appcompat_version = '1.3.1'
     ext.androidx_constraintlayout_version = '2.1.3'
     ext.androidx_core_version = '1.1.0'
     ext.androidx_emoji_version = '1.1.0'
@@ -17,12 +17,12 @@ buildscript {
     ext.exoplayer_version = "2.13.3"
     ext.glide_version = "4.13.0"
     ext.junit_version = '4.12'
-    ext.kotlin_version = '1.7.10'
+    ext.kotlin_version = '1.7.20'
     ext.lifecycle_version = '2.2.0'
     ext.material_version = '1.5.0'
     ext.mockito_version = '2.18.3'
     ext.moshi_version = '1.8.0'
-    ext.realm_version = '+'
+    ext.realm_version = '10.13.0'
     ext.realm_adapters_version = '3.1.0'
     ext.rxandroid_version = '2.0.1'
     ext.rxdogtag_version = '0.2.0'
@@ -42,7 +42,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.1.2'
+        classpath 'com.android.tools.build:gradle:7.3.1'
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.2'
         classpath 'com.google.gms:google-services:4.3.14'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
