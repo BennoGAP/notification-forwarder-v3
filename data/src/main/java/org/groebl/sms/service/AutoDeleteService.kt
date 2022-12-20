@@ -3,11 +3,11 @@ package org.groebl.sms.service
 import android.annotation.SuppressLint
 import android.app.job.JobInfo
 import android.app.job.JobParameters
+import android.app.job.JobScheduler
 import android.app.job.JobService
 import android.content.ComponentName
 import android.content.Context
 import androidx.core.content.getSystemService
-import org.groebl.sms.common.util.extensions.jobScheduler
 import org.groebl.sms.interactor.DeleteOldMessages
 import dagger.android.AndroidInjection
 import io.reactivex.disposables.CompositeDisposable
@@ -20,6 +20,7 @@ import javax.inject.Inject
 class AutoDeleteService : JobService() {
 
     companion object {
+        private lateinit var jobScheduler: JobScheduler
         private const val JobId = 8120235
 
         @SuppressLint("MissingPermission") // Added in [presentation]'s AndroidManifest.xml
@@ -31,12 +32,13 @@ class AutoDeleteService : JobService() {
                     .setPersisted(true)
                     .build()
 
-            context.jobScheduler.schedule(periodicJob)
+            jobScheduler = context.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
+            jobScheduler.schedule(periodicJob)
         }
 
         fun cancelJob(context: Context) {
             Timber.i("Canceling job")
-            context.jobScheduler.cancel(JobId)
+            jobScheduler.cancel(JobId)
         }
     }
 

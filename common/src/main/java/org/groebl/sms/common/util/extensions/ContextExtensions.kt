@@ -86,6 +86,3 @@ fun Context.isInstalled(packageName: String): Boolean {
 
 val Context.versionCode: Int
     get() = packageManager.getPackageInfo(packageName, 0).versionCode
-
-val Context.jobScheduler: JobScheduler
-    get() = getSystemService()!!
