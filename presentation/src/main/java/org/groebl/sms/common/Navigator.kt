@@ -81,7 +81,7 @@ class Navigator @Inject constructor(
             val intent = roleManager.createRequestRoleIntent(RoleManager.ROLE_SMS)
             context.startActivityForResult(intent, 42389)
         } else {
-        val intent = Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT)
+            val intent = Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT)
             intent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME, context.packageName)
             context.startActivity(intent)
         }
