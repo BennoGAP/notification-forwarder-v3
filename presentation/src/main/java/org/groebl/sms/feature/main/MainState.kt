@@ -28,7 +28,7 @@ data class MainState(
         val page: MainPage = Inbox(),
         val drawerOpen: Boolean = false,
         val showRating: Boolean = false,
-    val syncing: SyncRepository.SyncProgress = SyncRepository.SyncProgress.Idle,
+        val syncing: SyncRepository.SyncProgress = SyncRepository.SyncProgress.Idle,
         val defaultSms: Boolean = true,
         val smsPermission: Boolean = true,
         val contactPermission: Boolean = true,

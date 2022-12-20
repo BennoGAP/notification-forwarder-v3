@@ -167,11 +167,6 @@ class MainActivity : QkThemedActivity(), MainView {
                     compose.setTint(theme.textPrimary)
                 }
 
-        // These theme attributes don't apply themselves on API 21
-        if (Build.VERSION.SDK_INT <= 22) {
-            toolbarSearch.setBackgroundTint(resolveThemeColor(R.attr.bubbleColor))
-        }
-
         //Delete BT-Messages
         Thread { BluetoothHelper.deleteBluetoothMessages(this, true) }.start()
         Thread { BluetoothDatabase.deleteBluetoothDbData(this, true) }.start()
