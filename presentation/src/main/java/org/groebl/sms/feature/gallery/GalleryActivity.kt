@@ -22,6 +22,7 @@ import android.Manifest
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
@@ -52,6 +53,7 @@ class GalleryActivity : QkActivity(), GalleryView {
     private val optionsItemSubject: Subject<Int> = PublishSubject.create()
     private val pageChangedSubject: Subject<MmsPart> = PublishSubject.create()
     private val viewModel by lazy { ViewModelProviders.of(this, viewModelFactory)[GalleryViewModel::class.java] }
+    private val permissionResultSubject: Subject<Unit> = PublishSubject.create()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_YES
@@ -102,10 +104,6 @@ class GalleryActivity : QkActivity(), GalleryView {
 
     override fun pageChanged(): Observable<MmsPart> = pageChangedSubject
 
-    override fun requestStoragePermission() {
-        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 0)
-    }
-
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.gallery, menu)
         return super.onCreateOptionsMenu(menu)
@@ -119,9 +117,28 @@ class GalleryActivity : QkActivity(), GalleryView {
         return true
     }
 
+    override fun onStart() {
+        super.onStart()
+    }
+
+    override fun onPause() {
+        super.onPause()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         pagerAdapter.destroy()
     }
+
+    override fun requestStoragePermission() {
+        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 0)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, @NonNull permissions: Array<String>, @NonNull grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        permissionResultSubject.onNext(Unit)
+    }
+
+    override fun permissionResult(): Observable<*> = permissionResultSubject
 
 }
