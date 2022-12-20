@@ -72,6 +72,7 @@ class AttachmentAdapter @Inject constructor(
 
     override fun onBindViewHolder(holder: QkViewHolder, position: Int) {
         val attachment = getItem(position)
+        val view = holder.containerView
 
         when (attachment) {
             is Attachment.Image -> Glide.with(context)

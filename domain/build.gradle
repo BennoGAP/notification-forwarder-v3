@@ -23,7 +23,7 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 33
 
     compileOptions {
         sourceCompatibility 1.8
@@ -31,9 +31,10 @@ android {
     }
 
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 31
+        minSdkVersion 23
+        targetSdkVersion 33
     }
+    namespace 'org.groebl.sms.domain'
 }
 
 dependencies {

@@ -17,9 +17,7 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
   -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="org.groebl.sms">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
@@ -275,5 +273,13 @@
         </provider>
 
     </application>
+
+    <queries>
+        <package android:name="com.cuiet.blockCalls" />
+        <package android:name="com.flexaspect.android.everycallcontrol" />
+        <package android:name="org.mistergroup.muzutozvednout" />
+        <package android:name="org.mistergroup.shouldianswer" />
+        <package android:name="org.mistergroup.shouldianswerpersonal" />
+    </queries>
 
 </manifest>

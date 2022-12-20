@@ -157,10 +157,6 @@ class ComposeActivity : QkThemedActivity(), ComposeView, TextToSpeech.OnInitList
 
         window.callback = ComposeWindowCallback(window.callback, this)
 
-        // These theme attributes don't apply themselves on API 21
-        if (Build.VERSION.SDK_INT <= 22) {
-            messageBackground.setBackgroundTint(resolveThemeColor(R.attr.bubbleColor))
-        }
         // Set tts info
         tts = TextToSpeech(this, this)
     }

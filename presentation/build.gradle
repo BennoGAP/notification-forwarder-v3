@@ -23,14 +23,13 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 31
-    buildToolsVersion "31.0.0"
+    compileSdkVersion 33
     flavorDimensions "analytics"
 
     defaultConfig {
         applicationId "org.groebl.sms"
         minSdkVersion 23
-        targetSdkVersion 31
+        targetSdkVersion 33
         versionCode 3400
         versionName '3.4.0'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -75,6 +74,7 @@ android {
     lint {
         abortOnError false
     }
+    namespace 'org.groebl.sms'
 
 }
 
