@@ -26,7 +26,6 @@ import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.widget.textChanges
@@ -52,7 +51,7 @@ class QkReplyActivity : QkThemedActivity(), QkReplyView {
     override val changeSimIntent by lazy { sim.clicks() }
     override val sendIntent by lazy { send.clicks() }
 
-    private val viewModel by lazy { ViewModelProviders.of(this, viewModelFactory)[QkReplyViewModel::class.java] }
+    private val viewModel by lazy { ViewModelProvider(this, viewModelFactory)[QkReplyViewModel::class.java] }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)

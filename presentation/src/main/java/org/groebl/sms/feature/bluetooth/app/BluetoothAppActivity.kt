@@ -11,7 +11,6 @@ import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.bluetooth_apps_activity.*
 import org.groebl.sms.BuildConfig
@@ -24,7 +23,7 @@ class BluetoothAppActivity : QkThemedActivity(), BluetoothAppView {
 
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    private val viewModel by lazy { ViewModelProviders.of(this, viewModelFactory)[BluetoothAppViewModel::class.java] }
+    private val viewModel by lazy { ViewModelProvider(this, viewModelFactory)[BluetoothAppViewModel::class.java] }
     private var scan = ArrayList<BluetoothAppModel>()
 
 

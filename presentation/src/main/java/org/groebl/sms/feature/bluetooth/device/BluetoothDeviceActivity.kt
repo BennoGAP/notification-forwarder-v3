@@ -4,7 +4,6 @@ import android.bluetooth.BluetoothManager
 import android.content.Context
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.bluetooth_devices_activity.*
 import org.groebl.sms.R
@@ -16,7 +15,7 @@ class BluetoothDeviceActivity  : QkThemedActivity(), BluetoothDeviceView {
 
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    private val viewModel by lazy { ViewModelProviders.of(this, viewModelFactory)[BluetoothDeviceViewModel::class.java] }
+    private val viewModel by lazy { ViewModelProvider(this, viewModelFactory)[BluetoothDeviceViewModel::class.java] }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)

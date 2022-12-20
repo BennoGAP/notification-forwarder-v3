@@ -22,7 +22,6 @@ import android.graphics.Typeface
 import android.os.Bundle
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import com.jakewharton.rxbinding2.view.clicks
 import org.groebl.sms.R
 import org.groebl.sms.common.QkDialog
@@ -47,7 +46,7 @@ class ScheduledActivity : QkThemedActivity(), ScheduledView {
     override val messageMenuIntent by lazy { dialog.adapter.menuItemClicks }
     override val composeIntent by lazy { compose.clicks() }
 
-    private val viewModel by lazy { ViewModelProviders.of(this, viewModelFactory)[ScheduledViewModel::class.java] }
+    private val viewModel by lazy { ViewModelProvider(this, viewModelFactory)[ScheduledViewModel::class.java] }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)

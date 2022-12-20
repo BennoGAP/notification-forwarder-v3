@@ -2,7 +2,6 @@ package org.groebl.sms.feature.bluetooth.donate
 
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import com.jakewharton.rxbinding2.view.clicks
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.bluetooth_donate_activity.*
@@ -21,7 +20,7 @@ class BluetoothDonateActivity : QkThemedActivity(), BluetoothDonateView {
 
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    private val viewModel by lazy { ViewModelProviders.of(this, viewModelFactory)[BluetoothDonateViewModel::class.java] }
+    private val viewModel by lazy { ViewModelProvider(this, viewModelFactory)[BluetoothDonateViewModel::class.java] }
 
     override val donateIntent1 by lazy { donate1.clicks() }
     override val donateIntent2 by lazy { donate2.clicks() }

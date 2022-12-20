@@ -27,7 +27,6 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import org.groebl.sms.R
@@ -52,7 +51,7 @@ class GalleryActivity : QkActivity(), GalleryView {
 
     private val optionsItemSubject: Subject<Int> = PublishSubject.create()
     private val pageChangedSubject: Subject<MmsPart> = PublishSubject.create()
-    private val viewModel by lazy { ViewModelProviders.of(this, viewModelFactory)[GalleryViewModel::class.java] }
+    private val viewModel by lazy { ViewModelProvider(this, viewModelFactory)[GalleryViewModel::class.java] }
     private val permissionResultSubject: Subject<Unit> = PublishSubject.create()
 
     override fun onCreate(savedInstanceState: Bundle?) {
