@@ -160,7 +160,9 @@ object BluetoothHelper  {
     }
 
     fun requestBluetoothPermission(activity: Activity) {
-        ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.BLUETOOTH_CONNECT), 0)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.BLUETOOTH_CONNECT), 0)
+        }
     }
 
     fun deleteBluetoothMessages(context: Context, afterTime: Boolean) {
