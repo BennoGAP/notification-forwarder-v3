@@ -19,6 +19,8 @@
 package org.groebl.sms.manager
 
 import android.Manifest
+import android.app.AlarmManager
+import android.app.NotificationManager
 import android.app.role.RoleManager
 import android.content.Context
 import android.content.pm.PackageManager
@@ -28,6 +30,8 @@ import androidx.core.content.ContextCompat
 import javax.inject.Inject
 
 class PermissionManagerImpl @Inject constructor(private val context: Context) : PermissionManager {
+
+    private val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
     override fun isDefaultSms(): Boolean {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -47,6 +51,13 @@ class PermissionManagerImpl @Inject constructor(private val context: Context) : 
 
     override fun hasContacts(): Boolean {
         return hasPermission(Manifest.permission.READ_CONTACTS)
+    }
+
+    override fun hasNotifications(): Boolean {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            return true
+        }
+        return notificationManager.areNotificationsEnabled()
     }
 
     override fun hasPhone(): Boolean {

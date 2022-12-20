@@ -144,6 +144,7 @@
   <string name="main_default_sms_message_new">Diese App als Standard-SMS-App festlegen</string>
   <string name="main_permission_sms_new">Die App benötigt die Berechtigung zum Senden und Anzeigen von SMS-Nachrichten</string>
   <string name="main_permission_contacts_new">Die App benötigt die Berechtigung zum Zugreifen auf die Kontakte</string>
+  <string name="main_permission_notifications_new">Die App benötigt die Berechtigung zum anzeigen von Benachrichtigungen</string>
   <string name="blocking_manager_qksms_title_new">Intern</string>
   <string name="blocking_manager_qksms_summary_new">Integrierte Blockier-Funktion</string>
   <string name="rate_title_new">Gefällt dir die App?</string>

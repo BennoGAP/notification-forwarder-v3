@@ -148,6 +148,7 @@
     <string name="main_default_sms_message_new" tools:ignore="MissingTranslation">Make this your default SMS app</string>
     <string name="main_permission_sms_new" tools:ignore="MissingTranslation">This App needs permission to send and view SMS messages</string>
     <string name="main_permission_contacts_new" tools:ignore="MissingTranslation">This App needs permission to view your contacts</string>
+    <string name="main_permission_notifications_new" tools:ignore="MissingTranslation">This app needs permission to display notifications</string>
     <string name="blocking_manager_qksms_title_new" tools:ignore="MissingTranslation">Intern</string>
     <string name="blocking_manager_qksms_summary_new" tools:ignore="MissingTranslation">Built-in blocking functionality</string>
     <string name="rate_title_new" tools:ignore="MissingTranslation">Enjoying this App?</string>
@@ -205,6 +206,7 @@
     <string name="main_permission_required">Permission required</string>
     <string name="main_permission_sms">QKSMS needs permission to send and view SMS messages</string>
     <string name="main_permission_contacts">QKSMS needs permission to view your contacts</string>
+    <string name="main_permission_notifications">QKSMS needs permission to display notifications</string>
     <string name="main_permission_allow">Allow</string>
     <string name="drawer_inbox">Inbox</string>
     <string name="drawer_archived">Archived</string>

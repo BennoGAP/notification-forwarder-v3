@@ -48,6 +48,7 @@ import org.groebl.sms.repository.MessageRepository
 import org.groebl.sms.util.PhoneNumberUtils
 import org.groebl.sms.util.Preferences
 import org.groebl.sms.util.tryOrNull
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -82,6 +83,11 @@ class NotificationManagerImpl @Inject constructor(
     override fun update(threadId: Long) {
         // If notifications are disabled, don't do anything
         if (!prefs.notifications(threadId).get()) {
+            return
+        }
+
+        if (!permissions.hasNotifications()) {
+            Timber.w("Cannot update notification because we don't have the notification permission")
             return
         }
 
