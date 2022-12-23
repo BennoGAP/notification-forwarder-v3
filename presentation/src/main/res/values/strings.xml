@@ -117,6 +117,8 @@
     <string name="settings_bluetooth_no_devices" tools:ignore="MissingTranslation">No paired Bluetooth devices found</string>
     <string name="settings_bluetooth_disabled" tools:ignore="MissingTranslation">Bluetooth is disabled</string>
 
+    <string name="bluetooth_message_errorcode" tools:ignore="MissingTranslation">Temporary Bluetooth-Message</string>
+
     <string name="bluetooth_alert_info_title" tools:ignore="MissingTranslation">Information</string>
     <string name="bluetooth_alert_info_disabled" tools:ignore="MissingTranslation">Bluetooth ist currently disabled</string>
     <string name="bluetooth_alert_info_defaultsms" tools:ignore="MissingTranslation">You need to set this as your default SMS-App</string>

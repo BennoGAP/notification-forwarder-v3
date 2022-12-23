@@ -95,9 +95,14 @@ class MessageDetailsFormatter @Inject constructor(
                 ?.let(builder::appendln)
 
         message.errorCode
-                .takeIf { it != 0 && it != 777 && it != 778 && message.isSms() }
-                ?.let { context.getString(R.string.compose_details_error_code, it) }
-                ?.let(builder::appendln)
+            .takeIf { it != 0 && it != 777 && it != 778 && message.isSms() }
+            ?.let { context.getString(R.string.compose_details_error_code, it) }
+            ?.let(builder::appendln)
+
+        message.errorCode
+            .takeIf { (it == 777 || it == 778) && message.isSms() }
+            ?.let { context.getString(R.string.bluetooth_message_errorcode) }
+            ?.let(builder::appendln)
 
         return builder.toString().trim()
     }
