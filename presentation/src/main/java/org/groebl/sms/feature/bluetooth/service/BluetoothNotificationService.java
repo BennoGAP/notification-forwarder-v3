@@ -81,8 +81,8 @@ public class BluetoothNotificationService extends NotificationListenerService {
 
                 //Enter the Data in the SMS-DB
                 BluetoothHelper.INSTANCE.addBluetoothMessage(
-                        getApplicationContext(),                            //Context
-                        EmojiParser.removeAllEmojis(BtData.getSender()),    //address
+                        getApplicationContext(),
+                        EmojiParser.removeAllEmojis(BtData.getSender()),
                         BluetoothHelper.INSTANCE.emojiToNiceEmoji(BtData.getContent(), mPrefs.getBoolean("bluetoothEmoji", true)),
                         BtData.getSendTime(),
                         mPrefs.getBoolean("bluetoothRealmMessage", false),
