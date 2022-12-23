@@ -137,6 +137,15 @@
                 app:icon="@drawable/ic_bluetooth_contact_phone_24px"
                 app:widget="@layout/settings_switch_widget" />
 
+            <org.groebl.sms.common.widget.PreferenceView
+                android:id="@+id/bluetooth_realm_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:summary="Show Temporary Message within the App"
+                app:title="Show Messages in App"
+                app:widget="@layout/settings_switch_widget" />
+
             <View
                 android:id="@+id/bluetooth_whatsapp_divider"
                 android:layout_width="match_parent"

@@ -228,6 +228,7 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
         bluetooth_telegram_hide_prefix.checkbox.isChecked = state.bluetooth_telegram_hide_prefix
         bluetooth_max_vol.checkbox.isChecked = state.bluetooth_max_vol
         bluetooth_tethering.checkbox.isChecked = localBluetoothTethering
+        bluetooth_realm_message.checkbox.isChecked = state.bluetooth_realm_message
 
         //Connected and Last-Connected-Device and Time available
         if (prefs.bluetooth_current_status.get() &&

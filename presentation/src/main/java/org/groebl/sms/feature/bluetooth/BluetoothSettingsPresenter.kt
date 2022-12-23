@@ -68,6 +68,9 @@ class BluetoothSettingsPresenter @Inject constructor(
         disposables += prefs.bluetooth_tethering.asObservable()
                 .subscribe { enabled -> newState { copy(bluetooth_tethering = enabled) } }
 
+        disposables += prefs.bluetooth_realm_message.asObservable()
+            .subscribe { enabled -> newState { copy(bluetooth_realm_message = enabled) } }
+
     }
 
     override fun bindIntents(view: BluetoothSettingsView) {
@@ -150,7 +153,7 @@ class BluetoothSettingsPresenter @Inject constructor(
                         R.id.bluetooth_telegram_blocked_contact -> view.showBluetoothBlockedContactByName("Telegram")
                         R.id.bluetooth_max_vol -> prefs.bluetooth_max_vol.set(!prefs.bluetooth_max_vol.get())
                         R.id.bluetooth_tethering -> prefs.bluetooth_tethering.set(!prefs.bluetooth_tethering.get())
-
+                        R.id.bluetooth_realm_message -> prefs.bluetooth_realm_message.set(!prefs.bluetooth_realm_message.get())
                     }
                 }
     }

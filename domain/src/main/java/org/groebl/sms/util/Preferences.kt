@@ -170,7 +170,7 @@ class Preferences @Inject constructor(
     val bluetooth_last_connect = rxPrefs.getLong("bluetoothLastConnect", 0L)
     val bluetooth_last_disconnect = rxPrefs.getLong("bluetoothLastDisconnect", 0L)
     val bluetooth_last_connect_device = rxPrefs.getString("bluetoothLastDevice", "")
-    val bluetooth_sync_dismiss = rxPrefs.getBoolean("bluetoothAlertSyncDismiss", false)
+    val bluetooth_realm_message = rxPrefs.getBoolean("bluetoothRealmMessage", false)
 
     init {
         // Migrate from old night mode preference to new one, now that we support android Q night mode

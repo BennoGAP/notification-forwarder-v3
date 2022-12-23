@@ -126,7 +126,6 @@
     <string name="bluetooth_alert_info_apps" tools:ignore="MissingTranslation">You need to select at least one app on the \"Application White List\"</string>
     <string name="bluetooth_alert_info_markasread" tools:ignore="MissingTranslation">Enable \"Delayed Mark-as-Read\" is advised for this device</string>
 
-    <string name="bluetooth_alert_sync_info" tools:ignore="MissingTranslation">This is just to check if the notification forwarding is working fine - there is no need to synchronize every time to get everything working. If the forwarded notifications appear in the overview now, the app is working as intended.</string>
     <string name="bluetooth_alert_button_dismiss" tools:ignore="MissingTranslation">Don\'t show again</string>
     <string name="bluetooth_alert_button_ok" tools:ignore="MissingTranslation">Okay</string>
 
