@@ -113,7 +113,7 @@ object BluetoothHelper  {
             this.body = body
             this.dateSent = sentTime
             this.seen = true
-            this.read = asRead
+            this.read = true
             this.errorCode = errorCode
             this.date = System.currentTimeMillis()
             this.subId = subId

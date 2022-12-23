@@ -142,8 +142,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                app:summary="Show Temporary Message within the App"
-                app:title="Show Messages in App"
+                app:summary="@string/settings_bluetooth_message_realm_summary"
+                app:title="@string/settings_bluetooth_message_realm_title"
                 app:widget="@layout/settings_switch_widget" />
 
             <View

@@ -70,6 +70,8 @@
     <string name="settings_bluetooth_tethering_title" tools:ignore="MissingTranslation">Bluetooth-Tethering</string>
     <string name="settings_bluetooth_tethering_summary" tools:ignore="MissingTranslation">Enable Bluetooth-Tethering when connected to the selected Bluetooth-Device (only until Android 10)</string>
     <string name="settings_bluetooth_tethering_dialog" tools:ignore="MissingTranslation">To enable this option you need to permit %s to modify system settings</string>
+    <string name="settings_bluetooth_message_realm_title" tools:ignore="MissingTranslation">Show temporary messages</string>
+    <string name="settings_bluetooth_message_realm_summary" tools:ignore="MissingTranslation">Shows the temporary messages in the Inbox of this app</string>
     <string name="settings_bluetooth_whatsapp_to_contact_title" tools:ignore="MissingTranslation">Assign WhatsApp-Messages</string>
     <string name="settings_bluetooth_whatsapp_to_contact_summary" tools:ignore="MissingTranslation">Show the contact-name/-number from the sender of the WhatsApp-Message</string>
     <string name="settings_bluetooth_whatsapp_hide_prefix_title" tools:ignore="MissingTranslation">Hide WhatsApp-Prefix</string>
