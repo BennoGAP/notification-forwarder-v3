@@ -153,7 +153,7 @@ class WidgetProvider : AppWidgetProvider() {
 
         // Conversation intent
         val startActivityIntent = Intent(context, MainActivity::class.java)
-        val startActivityPendingIntent = PendingIntent.getActivity(context, 0, startActivityIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        val startActivityPendingIntent = PendingIntent.getActivity(context, 0, startActivityIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
         remoteViews.setPendingIntentTemplate(R.id.conversations, startActivityPendingIntent)
 
         AppWidgetManager.getInstance(context).updateAppWidget(appWidgetId, remoteViews)
