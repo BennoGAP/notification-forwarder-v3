@@ -301,13 +301,4 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
                 .popChangeHandler(QkChangeHandler()))
     }
 
-    override fun showSyncInfo(prefs: Preferences) {
-        AlertDialog.Builder(activity!!)
-                .setTitle("Information")
-                .setMessage(R.string.bluetooth_alert_sync_info)
-                .setPositiveButton(R.string.bluetooth_alert_button_ok, null)
-                .setNeutralButton(R.string.bluetooth_alert_button_dismiss) { _, _ -> prefs.bluetooth_sync_dismiss.set(true) }
-                .show()
-    }
-
 }
