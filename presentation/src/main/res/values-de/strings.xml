@@ -332,7 +332,7 @@
   <string name="settings_black_title">Rein schwarzer Nachtmodus</string>
   <string name="settings_night_start_title">Anfang</string>
   <string name="settings_night_end_title">Ende</string>
-  <string name="settings_automatic_colors_title">Automatische Kontaktavatare</string>
+  <string name="settings_automatic_colors_title">Farbige Kontaktavatare</string>
   <string name="settings_text_size_title">Schriftgröße</string>
   <string name="settings_system_font_title">Systemschriftart verwenden</string>
   <string name="settings_auto_emoji_title">Automatische Emoji</string>
@@ -553,7 +553,7 @@
   </string-array>
 
     <string name="drawer_share">Teilen</string>
-    <string name="settings_gray_title">Graumodus</string>
+    <string name="settings_gray_title">Graue Farben statt Weiß</string>
     <string name="theme_color_picker">Farbwähler</string>
     <string name="settings_separator_title">Trennzeichen verwenden</string>
     <string name="settings_gray_avatar_title">Graue Kontaktavatare</string>
