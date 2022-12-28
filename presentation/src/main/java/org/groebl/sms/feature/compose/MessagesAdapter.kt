@@ -253,13 +253,6 @@ class MessagesAdapter @Inject constructor(
         holder.sim.setVisible(timestampVisible && subscription != null && subs.size > 1) //(message.subId != previous?.subId && subscription != null && subs.size > 1)
         holder.simIndex.setVisible(timestampVisible &&  subscription != null && subs.size > 1) //(message.subId != previous?.subId &&  subscription != null && subs.size > 1)
 
-        /*val simColor = when (subscription?.simSlotIndex?.plus(1)?.toString()) {
-            "1" -> context.getColorCompat(R.color.sim1)
-            "2" -> context.getColorCompat(R.color.sim2)
-            "3" -> context.getColorCompat(R.color.sim3)
-            "4" -> context.getColorCompat(R.color.sim4)
-            else -> context.getColorCompat(R.color.sim_other)
-        }*/
         val simColor = when (subscription?.simSlotIndex?.plus(1)?.toString()) {
             "1" -> colors.colorForSim(context, 1)
             "2" -> colors.colorForSim(context, 2)

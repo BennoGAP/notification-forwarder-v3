@@ -667,6 +667,7 @@
         <item>Yellow</item>
         <item>Red</item>
         <item>Purple</item>
+        <item>Magenta</item>
     </string-array>
 
     <string-array name="settings_bubble_style">

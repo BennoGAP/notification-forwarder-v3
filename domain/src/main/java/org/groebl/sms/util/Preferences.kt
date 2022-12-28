@@ -82,6 +82,7 @@ class Preferences @Inject constructor(
         const val SIM_COLOR_YELLOW = 2
         const val SIM_COLOR_RED = 3
         const val SIM_COLOR_PURPLE = 4
+        const val SIM_COLOR_MAGENTA = 5
 
         const val BUBBLE_STYLE_ORIGINAL = 0
         const val BUBBLE_STYLE_IOS = 1

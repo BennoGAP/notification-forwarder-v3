@@ -164,7 +164,8 @@ class Colors @Inject constructor(
                 Preferences.SIM_COLOR_GREEN -> context.getColorCompat(R.color.sim2)
                 Preferences.SIM_COLOR_YELLOW -> context.getColorCompat(R.color.sim3)
                 Preferences.SIM_COLOR_RED -> context.getColorCompat(R.color.sim4)
-                Preferences.SIM_COLOR_PURPLE -> context.getColorCompat(R.color.sim_other)
+                Preferences.SIM_COLOR_PURPLE -> context.getColorCompat(R.color.sim5)
+                Preferences.SIM_COLOR_MAGENTA -> context.getColorCompat(R.color.sim6)
                 else -> context.getColorCompat(R.color.sim1)
             }
         } else if (index == 2) {
@@ -173,8 +174,9 @@ class Colors @Inject constructor(
                 Preferences.SIM_COLOR_GREEN -> context.getColorCompat(R.color.sim2)
                 Preferences.SIM_COLOR_YELLOW -> context.getColorCompat(R.color.sim3)
                 Preferences.SIM_COLOR_RED -> context.getColorCompat(R.color.sim4)
-                Preferences.SIM_COLOR_PURPLE -> context.getColorCompat(R.color.sim_other)
-                else -> context.getColorCompat(R.color.sim1)
+                Preferences.SIM_COLOR_PURPLE -> context.getColorCompat(R.color.sim5)
+                Preferences.SIM_COLOR_MAGENTA -> context.getColorCompat(R.color.sim6)
+                else -> context.getColorCompat(R.color.sim2)
             }
         } else {
             when (prefs.sim3Color.get()) {
@@ -182,8 +184,9 @@ class Colors @Inject constructor(
                 Preferences.SIM_COLOR_GREEN -> context.getColorCompat(R.color.sim2)
                 Preferences.SIM_COLOR_YELLOW -> context.getColorCompat(R.color.sim3)
                 Preferences.SIM_COLOR_RED -> context.getColorCompat(R.color.sim4)
-                Preferences.SIM_COLOR_PURPLE -> context.getColorCompat(R.color.sim_other)
-                else -> context.getColorCompat(R.color.sim1)
+                Preferences.SIM_COLOR_PURPLE -> context.getColorCompat(R.color.sim5)
+                Preferences.SIM_COLOR_MAGENTA -> context.getColorCompat(R.color.sim6)
+                else -> context.getColorCompat(R.color.sim3)
             }
         }
 }

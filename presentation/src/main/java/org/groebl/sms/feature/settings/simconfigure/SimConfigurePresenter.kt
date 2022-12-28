@@ -81,7 +81,8 @@ class SimConfigurePresenter @Inject constructor(
         Preferences.SIM_COLOR_GREEN -> context.getColorCompat(R.color.sim2)
         Preferences.SIM_COLOR_YELLOW -> context.getColorCompat(R.color.sim3)
         Preferences.SIM_COLOR_RED -> context.getColorCompat(R.color.sim4)
-        Preferences.SIM_COLOR_PURPLE -> context.getColorCompat(R.color.sim_other)
+        Preferences.SIM_COLOR_PURPLE -> context.getColorCompat(R.color.sim5)
+        Preferences.SIM_COLOR_MAGENTA -> context.getColorCompat(R.color.sim6)
         else -> context.getColorCompat(R.color.sim1)
     }
 

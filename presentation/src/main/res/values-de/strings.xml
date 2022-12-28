@@ -574,4 +574,14 @@
     <string name="blocked_regexps_dialog_hint">Regel</string>
     <string name="blocked_regexps_dialog_block">Blockieren</string>
     <string name="blocked_regexps_banner_summary">Was sind Regex?</string>
+
+    <string-array name="settings_sim_colors">
+      <item>Blau</item>
+      <item>Grün</item>
+      <item>Gelb</item>
+      <item>Rot</item>
+      <item>Lila</item>
+      <item>Magenta</item>
+    </string-array>
+
 </resources>

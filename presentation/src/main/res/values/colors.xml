@@ -74,8 +74,9 @@
     <color name="sim1">#5D99FF</color>
     <color name="sim2">#06C9AF</color>
     <color name="sim3">#F1AF28</color>
-    <color name="sim4">#FF6969</color>
-    <color name="sim_other">#7E57C2</color>
+    <color name="sim4">#EE3020</color>
+    <color name="sim5">#7E57C2</color>
+    <color name="sim6">#EA0A8A</color>
 	
     <array name="random_colors">
         <item>#06C9AF</item>
