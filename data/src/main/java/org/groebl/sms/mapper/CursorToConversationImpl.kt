@@ -56,7 +56,7 @@ class CursorToConversationImpl @Inject constructor(
 
     override fun getConversationsCursor(): Cursor? {
         return when (permissionManager.hasReadSms()) {
-            true -> context.contentResolver.query(URI, PROJECTION, null, null, "date desc")
+            true -> context.contentResolver.query(URI, PROJECTION, null, null, "date asc")
             false -> null
         }
     }
