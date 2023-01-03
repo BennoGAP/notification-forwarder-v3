@@ -15,6 +15,7 @@ import android.util.SparseIntArray;
 import com.vdurmont.emoji.EmojiParser;
 
 import org.groebl.sms.BuildConfig;
+import org.groebl.sms.common.util.BluetoothPhoneNumberHelper;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -85,6 +86,8 @@ public class BluetoothNotificationFilter {
 
 
     public static class BT_Filter {
+
+        BluetoothPhoneNumberHelper btPhoneHelper = new BluetoothPhoneNumberHelper();
 
         private String sender = "";
         private String content = "";
@@ -351,7 +354,7 @@ public class BluetoothNotificationFilter {
                         if (BluetoothMessengerBlocked.isMessengerBlocked(mPrefs, SG_name, false, "Signal")) { return; }
 
                         try {
-                            String phoneNumberSignal = BluetoothHelper.INSTANCE.findNumberFromSignalName(mContext, SG_name);
+                            String phoneNumberSignal = btPhoneHelper.findNumberFromSignalName(mContext, SG_name);
                             if (!phoneNumberSignal.equals(""))  {
                                 set_sender = phoneNumberSignal;
                                 this.errorCode = 778;
@@ -414,7 +417,7 @@ public class BluetoothNotificationFilter {
                         if (BluetoothMessengerBlocked.isMessengerBlocked(mPrefs, TG_name, false, "Telegram")) { return; }
 
                         try {
-                            String phoneNumberTelegram = BluetoothHelper.INSTANCE.findNumberFromTelegramName(mContext, TG_name);
+                            String phoneNumberTelegram = btPhoneHelper.findNumberFromTelegramName(mContext, TG_name);
                             if (!phoneNumberTelegram.equals("")) {
                                 set_sender = phoneNumberTelegram;
                                 this.errorCode = 778;
@@ -501,7 +504,7 @@ public class BluetoothNotificationFilter {
                             this.errorCode = 778;
                         } else {
                             try {
-                                String phoneNumber = BluetoothHelper.INSTANCE.findNumberFromWhatsAppName(mContext, WA_name);
+                                String phoneNumber = btPhoneHelper.findNumberFromWhatsAppName(mContext, WA_name);
 
                                 //Check if everything went fine, otherwise back to the roots (╯°□°）╯︵ ┻━┻
                                 if (phoneNumber.equals("")) {

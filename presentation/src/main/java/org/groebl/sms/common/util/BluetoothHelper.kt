@@ -16,12 +16,11 @@ import android.provider.Telephony
 import android.telephony.PhoneNumberUtils
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.contentValuesOf
 import com.vdurmont.emoji.EmojiParser
 import io.realm.Realm
 import io.realm.Sort
-import org.groebl.sms.compat.TelephonyCompat
 import org.groebl.sms.feature.bluetooth.service.BluetoothNotificationService
+import org.groebl.sms.model.BluetoothForwardCache
 import org.groebl.sms.model.Conversation
 import org.groebl.sms.model.Message
 import timber.log.Timber
@@ -31,7 +30,7 @@ import java.security.NoSuchAlgorithmException
 import java.util.concurrent.TimeUnit
 
 
-object BluetoothHelper  {
+object BluetoothHelper {
 
     fun emojiToNiceEmoji(text: String, active: Boolean): String {
         var text = text
@@ -292,108 +291,6 @@ object BluetoothHelper  {
         }
     }
 
-    fun findNumberFromWhatsAppName(context: Context, NrDisplayName: String): String {
-        var setNumber = ""
-        try {
-            val c = context.contentResolver.query(
-                ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                arrayOf(ContactsContract.CommonDataKinds.Phone.DATA1),
-                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " = ? AND " + ContactsContract.RawContacts.ACCOUNT_TYPE + " = ?",
-                arrayOf(NrDisplayName, "com.whatsapp"), null
-            )
-
-            c.use { c ->
-                if ((c != null) && c.moveToFirst()) {
-                    setNumber = c.getString(0)
-                }
-            }
-        } catch(e: Exception) {
-
-        }
-
-        return setNumber.trim()
-    }
-
-    fun findNumberFromSignalName(context: Context, NrDisplayName: String): String {
-        var setNumber = ""
-        try {
-            val c = context.contentResolver.query(
-                ContactsContract.RawContacts.CONTENT_URI,
-                null,
-                ContactsContract.RawContacts.DISPLAY_NAME_PRIMARY + " = ? AND " + ContactsContract.RawContacts.ACCOUNT_TYPE + " = ?",
-                arrayOf(NrDisplayName, "org.thoughtcrime.securesms"), null
-            )
-
-            c.use { c ->
-                if ((c != null) && c.moveToFirst()) {
-                    val cIndex = c.getColumnIndex(ContactsContract.RawContacts.SYNC1)
-                    if (cIndex > 0) {
-                        setNumber = c.getString(cIndex)
-                    }
-                }
-            }
-        } catch(e: Exception) {
-
-        }
-
-        return setNumber.trim()
-    }
-
-    fun findNumberFromTelegramName(context: Context, NrDisplayName: String): String {
-        var setNumber = ""
-        try {
-            val c = context.contentResolver.query(
-                ContactsContract.RawContacts.CONTENT_URI,
-                null,
-                ContactsContract.RawContacts.DISPLAY_NAME_PRIMARY + " = ? AND " + ContactsContract.RawContacts.ACCOUNT_TYPE + " = ?",
-                arrayOf(NrDisplayName, "org.telegram.messenger"), null
-            )
-
-            c.use { c ->
-                if ((c != null) && c.moveToFirst()) {
-                    val cIndex = c.getColumnIndex(ContactsContract.RawContacts.SYNC1)
-                    if (cIndex > 0) {
-                        setNumber = c.getString(cIndex)
-                    }
-                }
-            }
-        } catch (e: Exception) {
-
-        }
-
-        return setNumber.trim()
-    }
-
-    fun findWhatsAppNameFromNumber(context: Context, number: String): String {
-        var setName = ""
-        /*
-        val country = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            context.resources.configuration.locales.get(0).country
-        } else {
-            context.resources.configuration.locale.country
-        }
-        PhoneNumberUtils.formatNumberToE164(PhoneNumberUtils.stripSeparators(number), country)
-        */
-        try {
-            val c = context.contentResolver.query(
-                ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                arrayOf(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME),
-                ContactsContract.CommonDataKinds.Phone.NUMBER + " = ? AND account_type = ?",
-                arrayOf(PhoneNumberUtils.stripSeparators(number), "com.whatsapp"), null
-            )
-
-
-            c.use { c ->
-                if ((c != null) && c.moveToFirst()) {
-                    setName = c.getString(0)
-                }
-            }
-        } catch(e: Exception) {
-
-        }
-
-        return setName
-    }
 
     fun getDontKillMyAppUrl(appName: String): String {
         return when (Build.MANUFACTURER) {
