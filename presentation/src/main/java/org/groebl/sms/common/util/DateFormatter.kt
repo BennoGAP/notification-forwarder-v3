@@ -42,6 +42,7 @@ class DateFormatter @Inject constructor(val context: Context) {
             formattedPattern = formattedPattern
                     .replace("h", "HH")
                     .replace("K", "HH")
+                    .replace("d", "dd")
                     .replace(" a".toRegex(), "")
         }
 
@@ -49,7 +50,7 @@ class DateFormatter @Inject constructor(val context: Context) {
     }
 
     fun getDetailedTimestamp(date: Long): String {
-        return getFormatter("M/d/y, h:mm:ss a").format(date)
+        return getFormatter("MM/d/y, h:mm:ss a").format(date)
     }
 
     fun getTimestamp(date: Long): String {
