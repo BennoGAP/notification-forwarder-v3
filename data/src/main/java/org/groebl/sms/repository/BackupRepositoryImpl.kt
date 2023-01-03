@@ -98,7 +98,7 @@ class BackupRepositoryImpl @Inject constructor(
         // Map all the messages into our object we'll use for the Json mapping
         val backupMessages = Realm.getDefaultInstance().use { realm ->
             // Get the messages from realm
-            val messages = realm.where(Message::class.java).sort("date").findAll().createSnapshot()
+            val messages = realm.where(Message::class.java).notEqualTo("isBluetoothMessage", true).sort("date").findAll().createSnapshot()
             messageCount = messages.size
 
             // Map the messages to the new format

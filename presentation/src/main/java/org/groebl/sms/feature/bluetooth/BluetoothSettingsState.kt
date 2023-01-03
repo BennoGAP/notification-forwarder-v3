@@ -22,5 +22,5 @@ data class BluetoothSettingsState(
 
         val bluetooth_max_vol: Boolean = false,
         val bluetooth_tethering: Boolean = false,
-        val bluetooth_realm_message: Boolean = false
+        val bluetooth_realm_hide_message: Boolean = true
 )

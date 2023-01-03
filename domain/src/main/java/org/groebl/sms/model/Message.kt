@@ -48,6 +48,7 @@ open class Message : RealmObject() {
     var read: Boolean = false
     var locked: Boolean = false
     var subId: Int = -1
+    var isBluetoothMessage: Boolean = false
 
     // SMS only
     var body: String = ""

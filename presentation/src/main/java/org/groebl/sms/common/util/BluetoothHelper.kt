@@ -1,4 +1,4 @@
-package org.groebl.sms.feature.bluetooth.common
+package org.groebl.sms.common.util
 
 import android.Manifest
 import android.app.Activity
@@ -153,24 +153,21 @@ object BluetoothHelper {
         }
     }
 
-    fun deleteBluetoothMessages(context: Context, afterTime: Boolean) {
-
+    fun deleteBluetoothMessages(context: Context, hideInRealm: Boolean = true, afterTime: Long = 0L) {
         Realm.getDefaultInstance().use { realm ->
             realm.refresh()
 
+            //Delete from Realm
             val messages = realm.where(Message::class.java)
-                    .beginGroup()
-                    .equalTo("errorCode", 777.toInt())
-                    .or()
-                    .equalTo("errorCode", 778.toInt())
-                    .endGroup()
-                    .let { if (afterTime) it.lessThanOrEqualTo("date", System.currentTimeMillis() - TimeUnit.HOURS.toMillis(6)) else it }
+                    .equalTo("isBluetoothMessage", true)
+                    .let { if (afterTime > 0L) it.lessThanOrEqualTo("date", System.currentTimeMillis() - TimeUnit.HOURS.toMillis(afterTime)) else it }
                     .findAll()
 
             val updateIds = HashSet(messages.map { it.threadId })
 
             realm.executeTransaction { messages.deleteAllFromRealm() }
 
+            //Update Realm to show latest Message in Preview
             updateIds.forEach { threadId ->
                 val conversation = realm.where(Conversation::class.java)
                         .equalTo("id", threadId)
@@ -179,6 +176,7 @@ object BluetoothHelper {
                 val message = realm.where(Message::class.java)
                         .equalTo("threadId", threadId)
                         .sort("date", Sort.DESCENDING)
+                        .let { if (hideInRealm) it.notEqualTo("isBluetoothMessage", true) else it }
                         .findFirst()
 
                 realm.executeTransaction {
@@ -186,11 +184,18 @@ object BluetoothHelper {
                 }
             }
 
+            //Delete from Cache
+            val cacheMessages = realm.where(BluetoothForwardCache::class.java)
+                .let { if (afterTime > 0L) it.lessThanOrEqualTo("date", System.currentTimeMillis() - TimeUnit.HOURS.toMillis(afterTime)) else it }
+                .findAll()
+
+            realm.executeTransaction { cacheMessages.deleteAllFromRealm() }
         }
 
+        //Delete from ContentResolver
         val selection: String = when {
-            afterTime ->    " AND date_sent <= " + (System.currentTimeMillis() - TimeUnit.HOURS.toMillis(6))
-            else ->         ""
+            (afterTime > 0L)    ->  " AND date_sent <= " + (System.currentTimeMillis() - TimeUnit.HOURS.toMillis(afterTime))
+            else                ->  ""
         }
 
         try {
@@ -217,4 +222,61 @@ object BluetoothHelper {
         }
     }
 
+    fun isBluetoothHashCached(app: String, hash: String): Boolean {
+        val realm = Realm.getDefaultInstance()
+        realm.refresh()
+
+        val count = realm.where(BluetoothForwardCache::class.java)
+            .equalTo("app", app)
+            .equalTo("hash", hash)
+            .count()
+
+        //In Database, return true
+        if (count > 0L) { return true; }
+
+        var maxValue: Long = realm.use { realm ->
+            realm.where(BluetoothForwardCache::class.java).max("id")?.toLong() ?: 0L
+        }
+
+        val bluetoothMessage = BluetoothForwardCache().apply {
+            this.app = app
+            this.hash = hash
+            this.date = System.currentTimeMillis()
+            this.id = ++maxValue
+        }
+
+        realm.executeTransaction { realm.insert(bluetoothMessage) }
+        return false
+    }
+
+    fun findWhatsAppNameFromNumber(context: Context, number: String): String {
+        var setName = ""
+        /*
+        val country = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            context.resources.configuration.locales.get(0).country
+        } else {
+            context.resources.configuration.locale.country
+        }
+        PhoneNumberUtils.formatNumberToE164(PhoneNumberUtils.stripSeparators(number), country)
+        */
+        try {
+            val c = context.contentResolver.query(
+                ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                arrayOf(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME),
+                ContactsContract.CommonDataKinds.Phone.NUMBER + " = ? AND account_type = ?",
+                arrayOf(PhoneNumberUtils.stripSeparators(number), "com.whatsapp"), null
+            )
+
+
+            c.use { c ->
+                if ((c != null) && c.moveToFirst()) {
+                    setName = c.getString(0)
+                }
+            }
+        } catch (e: Exception) {
+            Timber.w(e)
+        }
+
+        return setName
+    }
 }

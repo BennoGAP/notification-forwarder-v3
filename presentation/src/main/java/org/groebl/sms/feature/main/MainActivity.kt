@@ -55,8 +55,7 @@ import org.groebl.sms.common.androidxcompat.drawerOpen
 import org.groebl.sms.common.base.QkThemedActivity
 import org.groebl.sms.common.util.extensions.*
 import org.groebl.sms.feature.blocking.BlockingDialog
-import org.groebl.sms.feature.bluetooth.common.BluetoothDatabase
-import org.groebl.sms.feature.bluetooth.common.BluetoothHelper
+import org.groebl.sms.common.util.BluetoothHelper
 import org.groebl.sms.feature.conversations.ConversationItemTouchCallback
 import org.groebl.sms.feature.conversations.ConversationsAdapter
 import org.groebl.sms.repository.SyncRepository
@@ -167,8 +166,7 @@ class MainActivity : QkThemedActivity(), MainView {
                 }
 
         //Delete BT-Messages
-        Thread { BluetoothHelper.deleteBluetoothMessages(this, true) }.start()
-        Thread { BluetoothDatabase.deleteBluetoothDbData(this, true) }.start()
+        Thread { BluetoothHelper.deleteBluetoothMessages(this, prefs.bluetooth_realm_hide_message.get(), 6) }.start()
 
 
         if (prefs.bluetooth_enabled.get()) {

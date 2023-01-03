@@ -7,7 +7,7 @@ import io.reactivex.rxkotlin.plusAssign
 import org.groebl.sms.R
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.base.QkPresenter
-import org.groebl.sms.feature.bluetooth.common.BluetoothHelper
+import org.groebl.sms.common.util.BluetoothHelper
 import org.groebl.sms.util.Preferences
 import timber.log.Timber
 import javax.inject.Inject
@@ -68,8 +68,8 @@ class BluetoothSettingsPresenter @Inject constructor(
         disposables += prefs.bluetooth_tethering.asObservable()
                 .subscribe { enabled -> newState { copy(bluetooth_tethering = enabled) } }
 
-        disposables += prefs.bluetooth_realm_message.asObservable()
-            .subscribe { enabled -> newState { copy(bluetooth_realm_message = enabled) } }
+        disposables += prefs.bluetooth_realm_hide_message.asObservable()
+            .subscribe { enabled -> newState { copy(bluetooth_realm_hide_message = enabled) } }
 
     }
 
@@ -112,11 +112,11 @@ class BluetoothSettingsPresenter @Inject constructor(
                             prefs.bluetooth_last_connect.set(0L)
                             prefs.bluetooth_last_disconnect.set(0L)
                             prefs.bluetooth_last_connect_device.set("")
-                            Thread { BluetoothHelper.deleteBluetoothMessages(context, false) }.start()
+                            Thread { BluetoothHelper.deleteBluetoothMessages(context, prefs.bluetooth_realm_hide_message.get()) }.start()
                         }
                         R.id.bluetooth_autodelete -> {
                             prefs.bluetooth_autodelete.set(!prefs.bluetooth_autodelete.get())
-                            Thread { BluetoothHelper.deleteBluetoothMessages(context, false) }.start()
+                            Thread { BluetoothHelper.deleteBluetoothMessages(context, prefs.bluetooth_realm_hide_message.get()) }.start()
                         }
                         R.id.bluetooth_select_device -> view.showBluetoothDevices()
                         R.id.bluetooth_allowed_apps -> view.showBluetoothApps()
@@ -153,7 +153,7 @@ class BluetoothSettingsPresenter @Inject constructor(
                         R.id.bluetooth_telegram_blocked_contact -> view.showBluetoothBlockedContactByName("Telegram")
                         R.id.bluetooth_max_vol -> prefs.bluetooth_max_vol.set(!prefs.bluetooth_max_vol.get())
                         R.id.bluetooth_tethering -> prefs.bluetooth_tethering.set(!prefs.bluetooth_tethering.get())
-                        R.id.bluetooth_realm_message -> prefs.bluetooth_realm_message.set(!prefs.bluetooth_realm_message.get())
+                        R.id.bluetooth_realm_hide_message -> prefs.bluetooth_realm_hide_message.set(!prefs.bluetooth_realm_hide_message.get())
                     }
                 }
     }

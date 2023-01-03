@@ -12,7 +12,7 @@ import android.os.Handler
 import android.os.Looper
 import android.preference.PreferenceManager
 import dagger.android.AndroidInjection
-import org.groebl.sms.feature.bluetooth.common.BluetoothHelper
+import org.groebl.sms.common.util.BluetoothHelper
 import org.groebl.sms.feature.bluetooth.common.BluetoothTethering
 
 
@@ -60,10 +60,8 @@ class BluetoothReceiver : BroadcastReceiver() {
                         //}
 
                         //Delete Temporary Messages
-                        val afterTimeDelete = !(mPrefs.getBoolean("bluetoothOnlyOnConnect", true) && mPrefs.getBoolean("bluetoothAutodelete", true))
-                        Thread {
-                            BluetoothHelper.deleteBluetoothMessages(context, afterTimeDelete)
-                        }.start()
+                        val afterTimeDelete = if (mPrefs.getBoolean("bluetoothOnlyOnConnect", true) && mPrefs.getBoolean("bluetoothAutodelete", true)) 0L else 6L
+                        Thread { BluetoothHelper.deleteBluetoothMessages(context, mPrefs.getBoolean("bluetoothRealmHideMessage", true), afterTimeDelete) }.start()
                     }
 
                     //Set Temp-Status to -Disonnected-

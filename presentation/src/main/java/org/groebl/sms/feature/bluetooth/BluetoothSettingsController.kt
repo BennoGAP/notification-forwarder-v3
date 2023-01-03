@@ -35,8 +35,7 @@ import org.groebl.sms.common.util.extensions.resolveThemeColor
 import org.groebl.sms.common.util.extensions.setVisible
 import org.groebl.sms.common.widget.PreferenceView
 import org.groebl.sms.feature.bluetooth.app.BluetoothAppActivity
-import org.groebl.sms.feature.bluetooth.common.BluetoothDatabase
-import org.groebl.sms.feature.bluetooth.common.BluetoothHelper
+import org.groebl.sms.common.util.BluetoothHelper
 import org.groebl.sms.feature.bluetooth.common.BluetoothMessengerBlocked
 import org.groebl.sms.feature.bluetooth.device.BluetoothDeviceActivity
 import org.groebl.sms.feature.bluetooth.donate.BluetoothDonateActivity
@@ -52,11 +51,8 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
 
     @Inject lateinit var context: Context
     @Inject lateinit var colors: Colors
-
     @Inject lateinit var navigator: Navigator
-
     @Inject lateinit var prefs: Preferences
-
     @Inject override lateinit var presenter: BluetoothSettingsPresenter
 
     init {
@@ -123,8 +119,7 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
         val localBluetoothSignalInstalled = context.isInstalled("org.thoughtcrime.securesms")
 
         if(!localBluetoothEnabled) {
-            Thread { BluetoothHelper.deleteBluetoothMessages(context, false) }.start()
-            Thread { BluetoothDatabase.deleteBluetoothDbData(context, false) }.start()
+            Thread { BluetoothHelper.deleteBluetoothMessages(context, prefs.bluetooth_realm_hide_message.get()) }.start()
         }
 
         //Forwarding enabled but not default SMS-App or has no Notification-Access
@@ -228,7 +223,7 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
         bluetooth_telegram_hide_prefix.checkbox.isChecked = state.bluetooth_telegram_hide_prefix
         bluetooth_max_vol.checkbox.isChecked = state.bluetooth_max_vol
         bluetooth_tethering.checkbox.isChecked = localBluetoothTethering
-        bluetooth_realm_message.checkbox.isChecked = state.bluetooth_realm_message
+        bluetooth_realm_hide_message.checkbox.isChecked = state.bluetooth_realm_hide_message
 
         //Connected and Last-Connected-Device and Time available
         if (prefs.bluetooth_current_status.get() &&

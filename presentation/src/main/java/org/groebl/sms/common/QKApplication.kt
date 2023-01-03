@@ -36,7 +36,6 @@ import kotlinx.coroutines.launch
 import org.groebl.sms.R
 import org.groebl.sms.common.util.CrashlyticsTree
 import org.groebl.sms.common.util.FileLoggingTree
-import org.groebl.sms.feature.bluetooth.common.BluetoothDatabase
 import org.groebl.sms.injection.AppComponentManager
 import org.groebl.sms.injection.appComponent
 import org.groebl.sms.manager.AnalyticsManager
@@ -105,8 +104,6 @@ class QKApplication : Application(), HasActivityInjector, HasBroadcastReceiverIn
         RxDogTag.builder()
                 .configureWith(AutoDisposeConfigurer::configure)
                 .install()
-
-        BluetoothDatabase.init(this)
     }
 
     override fun activityInjector(): AndroidInjector<Activity> {

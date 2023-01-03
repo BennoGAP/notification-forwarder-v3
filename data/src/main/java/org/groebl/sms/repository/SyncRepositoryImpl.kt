@@ -146,7 +146,11 @@ class SyncRepositoryImpl @Inject constructor(
                             }
                         }
                     }
-                    realm.insertOrUpdate(message)
+
+                    when {
+                        (message.isBluetoothMessage && rxPrefs.getBoolean("bluetoothRealmHideMessage", true).get()) -> null
+                        else -> realm.insertOrUpdate(message)
+                    }
                 }
             }
         }
@@ -173,10 +177,13 @@ class SyncRepositoryImpl @Inject constructor(
                             blockingClient = persistedConversation.blockingClient
                             blockReason = persistedConversation.blockReason
                         }
+
                         lastMessage = realm.where(Message::class.java)
-                                .sort("date", Sort.DESCENDING)
-                                .equalTo("threadId", id)
-                                .findFirst()
+                            .sort("date", Sort.DESCENDING)
+                            .equalTo("threadId", id)
+                            .let { if (rxPrefs.getBoolean("bluetoothRealmHideMessage", true).get()) it.notEqualTo("isBluetoothMessage", true) else it }
+                            .findFirst()
+
                     }
                     realm.insertOrUpdate(conversation)
                 }
