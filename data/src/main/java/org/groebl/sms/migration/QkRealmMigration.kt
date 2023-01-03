@@ -37,7 +37,7 @@ class QkRealmMigration @Inject constructor(
 ) : RealmMigration {
 
     companion object {
-        const val SchemaVersion: Long = 12
+        const val SchemaVersion: Long = 13
     }
 
     @SuppressLint("ApplySharedPref")
@@ -241,6 +241,28 @@ class QkRealmMigration @Inject constructor(
             realm.schema.create("BlockedRegex")
                 .addField("id", Long::class.java, FieldAttribute.PRIMARY_KEY, FieldAttribute.REQUIRED)
                 .addField("regex", String::class.java, FieldAttribute.REQUIRED)
+
+            version++
+        }
+
+        if (version == 12L) {
+            realm.schema.get("Message")
+                ?.addField("isBluetoothMessage", Boolean::class.java)
+
+            realm.schema.create("BluetoothForwardCache")
+                .addField("id", Long::class.java, FieldAttribute.PRIMARY_KEY, FieldAttribute.REQUIRED)
+                .addField("app", String::class.java, FieldAttribute.REQUIRED)
+                .addField("hash", String::class.java, FieldAttribute.REQUIRED)
+                .addField("date", Long::class.java, FieldAttribute.REQUIRED)
+
+            realm.where("Message")
+                .beginGroup()
+                .equalTo("errorCode", 777.toInt())
+                .or()
+                .equalTo("errorCode", 778.toInt())
+                .endGroup()
+                .findAll()
+                .deleteAllFromRealm()
 
             version++
         }
