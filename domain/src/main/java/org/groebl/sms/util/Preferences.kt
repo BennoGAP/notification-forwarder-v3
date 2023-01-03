@@ -26,8 +26,10 @@ import com.f2prateek.rx.preferences2.Preference
 import com.f2prateek.rx.preferences2.RxSharedPreferences
 import org.groebl.sms.common.util.extensions.versionCode
 import io.reactivex.Observable
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.collections.HashSet
 
 @Singleton
 class Preferences @Inject constructor(
@@ -143,7 +145,7 @@ class Preferences @Inject constructor(
     val logging = rxPrefs.getBoolean("logging", false)
 
 	val bluetooth_enabled = rxPrefs.getBoolean("bluetoothEnabled", false)
-    val bluetooth_apps = rxPrefs.getStringSet("bluetoothApps", HashSet<String>())
+    val bluetooth_apps = rxPrefs.getStringSet("bluetoothApps", HashSet<String>(listOf("com.whatsapp", "org.telegram.messenger", "org.thoughtcrime.securesms", "ch.threema.app")))
     val bluetooth_devices = rxPrefs.getStringSet("bluetoothDevices", HashSet<String>())
     val bluetooth_only_on_connect = rxPrefs.getBoolean("bluetoothOnlyOnConnect",  Build.VERSION.SDK_INT < Build.VERSION_CODES.S)
     val bluetooth_autodelete = rxPrefs.getBoolean("bluetoothAutodelete", true)
