@@ -127,8 +127,6 @@
     <string name="compose_schedule_cd">جدوِل الرسالة</string>
     <string name="compose_contact_cd">إرفاق جهة اتصال</string>
     <string name="compose_contact_error">خطأ في قراءة جهة الاتصال</string>
-    <!-- Example: SIM 1 (Verizon) selected-->
-    <string name="compose_sim_changed_toast">تحديد الشريحة</string>
     <string name="compose_sim_cd">%s محددة، غيّر شريحة SIM</string>
     <string name="compose_send_cd">إرسال الرسالة</string>
     <string name="message_status_sending">الإرسال جارٍ&#8230;</string>
