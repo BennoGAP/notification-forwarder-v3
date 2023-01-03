@@ -18,6 +18,7 @@
  */
 package org.groebl.sms.repository
 
+import android.net.Uri
 import org.groebl.sms.model.Attachment
 import org.groebl.sms.model.Message
 import org.groebl.sms.model.MmsPart
@@ -40,7 +41,7 @@ interface MessageRepository {
 
     fun getPartsForConversation(threadId: Long): RealmResults<MmsPart>
 
-    fun savePart(id: Long): File?
+    fun savePart(id: Long): Uri?
 
     /**
      * Retrieves the list of messages which should be shown in the notification
