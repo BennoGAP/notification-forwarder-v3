@@ -141,7 +141,6 @@
                 android:id="@+id/bluetooth_realm_hide_message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 app:summary="@string/settings_bluetooth_message_realm_summary"
                 app:title="@string/settings_bluetooth_message_realm_title"
                 app:icon="@drawable/ic_block_white_24dp"
