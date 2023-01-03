@@ -565,6 +565,7 @@ public class BluetoothNotificationFilter {
                         }
 
                         set_content = (ticker.equals("") ? title + ": " + text : ticker);
+                        if(set_content.trim().equals(":")) { set_content = ""; }
                     }
             }
 

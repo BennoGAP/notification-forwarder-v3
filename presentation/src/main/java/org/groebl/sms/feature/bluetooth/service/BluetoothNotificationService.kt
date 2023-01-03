@@ -80,10 +80,6 @@ class BluetoothNotificationService : NotificationListenerService() {
             //Ok, now save the Msg
             if (BtData.allData()) {
 
-                //If text is empty - dont proceed
-                val bluetoothText: String = BluetoothHelper.emojiToNiceEmoji(BtData.content, mPrefs.getBoolean("bluetoothEmoji", true))
-                if (bluetoothText.trim().isEmpty()) { return }
-
                 //Check if this msg already exist
                 if (BluetoothHelper.isBluetoothHashCached(pack.toString(), BluetoothHelper.notificationHash(BtData.sender, BtData.content))) { return }
 
@@ -91,7 +87,7 @@ class BluetoothNotificationService : NotificationListenerService() {
                 val btMessageHelper = BluetoothMessageHelper()
                 btMessageHelper.addBluetoothMessage(applicationContext,
                     EmojiParser.removeAllEmojis(BtData.sender),
-                    bluetoothText,
+                    BluetoothHelper.emojiToNiceEmoji(BtData.content, mPrefs.getBoolean("bluetoothEmoji", true)),
                     BtData.sendTime,
                     mPrefs.getBoolean("bluetoothRealmHideMessage", true),
                     mPrefs.getBoolean("bluetoothSaveRead", false) && !mPrefs.getBoolean("bluetoothDelayedRead", false),
