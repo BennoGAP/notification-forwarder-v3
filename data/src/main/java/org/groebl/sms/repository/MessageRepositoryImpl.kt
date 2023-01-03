@@ -265,8 +265,8 @@ class MessageRepositoryImpl @Inject constructor(
         }
 
         val values = ContentValues()
-        values.put(Sms.SEEN, true)
-        values.put(Sms.READ, true)
+        values.put(Sms.SEEN, 1)
+        values.put(Sms.READ, 1)
 
         threadIds.forEach { threadId ->
             try {
@@ -519,8 +519,8 @@ class MessageRepositoryImpl @Inject constructor(
                 Sms.ADDRESS to address,
                 Sms.BODY to body,
                 Sms.DATE to System.currentTimeMillis(),
-                Sms.READ to true,
-                Sms.SEEN to true,
+                Sms.READ to 1,
+                Sms.SEEN to 1,
                 Sms.TYPE to Sms.MESSAGE_TYPE_OUTBOX,
                 Sms.THREAD_ID to threadId
         )
@@ -676,7 +676,7 @@ class MessageRepositoryImpl @Inject constructor(
                 val values = ContentValues()
                 values.put(Sms.STATUS, Sms.STATUS_COMPLETE)
                 values.put(Sms.DATE_SENT, System.currentTimeMillis())
-                values.put(Sms.READ, true)
+                values.put(Sms.READ, 1)
                 context.contentResolver.update(message.getUri(), values, null, null)
             }
         }
@@ -700,7 +700,7 @@ class MessageRepositoryImpl @Inject constructor(
                 val values = ContentValues()
                 values.put(Sms.STATUS, Sms.STATUS_FAILED)
                 values.put(Sms.DATE_SENT, System.currentTimeMillis())
-                values.put(Sms.READ, true)
+                values.put(Sms.READ, 1)
                 values.put(Sms.ERROR_CODE, resultCode)
                 context.contentResolver.update(message.getUri(), values, null, null)
             }
