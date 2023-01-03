@@ -139,14 +139,14 @@
             <org.groebl.sms.common.widget.QkTextView
                 android:id="@+id/qkreplyTitle"
                 style="@style/PreferenceCategory"
-                android:text="@string/settings_category_qkreply" />
+                android:text="@string/settings_category_qkreply_new" />
 
             <org.groebl.sms.common.widget.PreferenceView
                 android:id="@+id/qkreply"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:summary="@string/settings_qkreply_summary"
-                app:title="@string/settings_qkreply_title"
+                app:title="@string/settings_qkreply_title_new"
                 app:widget="@layout/settings_switch_widget" />
 
             <org.groebl.sms.common.widget.PreferenceView

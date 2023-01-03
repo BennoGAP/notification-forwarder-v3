@@ -18,15 +18,16 @@
  */
 package org.groebl.sms.interactor
 
+import android.net.Uri
 import org.groebl.sms.repository.BackupRepository
 import io.reactivex.Flowable
 import javax.inject.Inject
 
 class PerformRestore @Inject constructor(
         private val backupRepo: BackupRepository
-) : Interactor<String>() {
+) : Interactor<Uri>() {
 
-    override fun buildObservable(params: String): Flowable<*> {
+    override fun buildObservable(params: Uri): Flowable<*> {
         return Flowable.just(params)
                 .doOnNext(backupRepo::performRestore)
     }

@@ -202,6 +202,7 @@
   <string name="main_permission_required">Berechtigung erforderlich</string>
   <string name="main_permission_sms">QKSMS benötigt die Berechtigung zum Senden und Anzeigen von SMS-Nachrichten</string>
   <string name="main_permission_contacts">QKSMS benötigt die Berechtigung zum Zugreifen auf die Kontakte</string>
+  <string name="main_permission_notifications">QKSMS benötigt die Berechtigung zum anzeigen von Benachrichtigungen</string>
   <string name="main_permission_allow">Zulassen</string>
   <string name="drawer_inbox">Posteingang</string>
   <string name="drawer_archived">Archiviert</string>
@@ -264,8 +265,8 @@
   <string name="compose_schedule_cd">Plane Nachricht</string>
   <string name="compose_contact_cd">Kontakt anhängen</string>
   <string name="compose_contact_error">Fehler beim Lesen des Kontaktes</string>
-    <!-- Example: SIM 1 (Verizon) selected-->
-    <string name="compose_sim_changed_toast">SIM %1$d (%2$s) ausgewählt</string>
+  <!-- Example: SIM 1 (Verizon) selected-->
+  <string name="compose_sim_changed_toast">SIM %1$d (%2$s) ausgewählt</string>
   <string name="compose_sim_cd">%s ausgewählt, SIM-Karte ändern</string>
   <string name="compose_send_cd">Nachricht senden</string>
   <string name="message_status_sending">Wird gesendet&#8230;</string>
@@ -286,25 +287,27 @@
   <string name="backup_title">Sichern und Wiederherstellen</string>
   <string name="backup_backing_up">Sichere Nachrichten</string>
   <string name="backup_restoring">Aus Sicherung wiederherstellen</string>
-  <string name="backup_last">Letzte Sicherung</string>
   <string name="backup_loading">Wird geladen&#8230;</string>
   <string name="backup_never">Niemals</string>
+  <string name="backup_location_title">Backup Pfad</string>
+  <string name="backup_location_summary">Auswählen</string>
   <string name="backup_restore_title">Wiederherstellen</string>
   <string name="backup_restore_summary">Sicherung auswählen</string>
   <string name="backup_restore_error_plus">Bitte QKSMS+ freischalten, um die Sicherung und Wiederherstellung zu nutzen</string>
   <string name="backup_restore_error_backup">Sicherung wird durchgeführt&#8230;</string>
   <string name="backup_restore_error_restore">Wiederherstellung wird durchgeführt&#8230;</string>
   <string name="backup_restore_confirm_title">Aus einer Sicherung wiederherstellen</string>
-  <string name="backup_restore_confirm_message">Sicher, dass die Nachrichten aus dieser Sicherung wiederhergestellt werden sollen?</string>
   <string name="backup_restore_stop_title">Wiederherstellung abbrechen</string>
   <string name="backup_restore_stop_message">Nachrichten, die bereits wiederhergestellt wurden, werden auf Ihrem Gerät bleiben</string>
+  <string name="backup_select_location_rationale_title">Backup-Pfad wählen</string>
+  <string name="backup_select_location_rationale_message">Bitte einen Ordner zum Speichern wählen</string>
+  <string name="backup_details">%1$s\n%2$d Nachrichten</string>
+  <string name="backup_selected_backup_error_title">Fehler</string>
+  <string name="backup_selected_backup_error_message">Backup-Datei kann nicht gelesen werden</string>
+  <string name="backup_selected_backup_details_title">Backup Details</string>
   <string name="backup_restore_dialog_title">Sicherungen</string>
   <string name="backup_restore_dialog_empty">Keine Sicherungen gefunden</string>
-  <plurals name="backup_message_count">
-    <item quantity="one">%d Nachricht</item>
-    <item quantity="other">%d Nachrichten</item>
-  </plurals>
-  <string name="backup_disclaimer">Das Backup wird beim deinstallieren der App entfernt. Falls das Backup weiterhin benötigt wird muss die Datei zuvor manuell aus dem Verzeichnis /Android/data/org.groebl.sms/files/NotificationForwarderPro/Backup/ kopiert werden.\n\nDerzeit wird nur das Sichern und Wiederherstellen von SMS unterstützt. Die Unterstützung für MMS und geplante Sicherungen folgen demnächst!</string>
+  <string name="backup_disclaimer">Derzeit wird nur das Sichern und Wiederherstellen von SMS unterstützt. Die Unterstützung für MMS und geplante Sicherungen folgen demnächst!</string>
   <string name="backup_now">Jetzt sichern</string>
   <string name="backup_progress_parsing">Analysiere Sicherung&#8230;</string>
   <string name="backup_progress_running">%d/%d Nachrichten</string>
@@ -350,6 +353,7 @@
   <string name="settings_ringtone_title">Ton</string>
   <string name="settings_ringtone_none">Keine</string>
   <string name="settings_qkreply_title">Schnellantwort</string>
+  <string name="settings_qkreply_title_new">Schnellantwort</string>
   <string name="settings_qkreply_summary">Popup für neue Nachrichten</string>
   <string name="settings_qkreply_tap_dismiss_title">Zum Verwerfen tippen</string>
   <string name="settings_qkreply_tap_dismiss_summary">Tippe außerhalb des Popup um es zu schließen</string>
