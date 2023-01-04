@@ -118,15 +118,11 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
         val localBluetoothTelegramInstalled = context.isInstalled("org.telegram.messenger")
         val localBluetoothSignalInstalled = context.isInstalled("org.thoughtcrime.securesms")
 
-        if(!localBluetoothEnabled) {
-            Thread { BluetoothHelper.deleteBluetoothMessages(context, prefs.bluetooth_realm_hide_message.get()) }.start()
-        }
-
         //Forwarding enabled but not default SMS-App or has no Notification-Access
         if(localBluetoothEnabled and (!BluetoothHelper.isDefaultSms(context) or !BluetoothHelper.hasNotificationAccess(context))) {
             prefs.bluetooth_enabled.set(false)
             localBluetoothEnabled = false
-
+            Thread { BluetoothHelper.deleteBluetoothMessages(context, prefs.bluetooth_realm_hide_message.get()) }.start()
             //if(!BluetoothHelper.isDefaultSms(context))          { requestDefaultSms() }
             //if(!BluetoothHelper.hasNotificationAccess(context)) { showNotificationAccess() }
         }

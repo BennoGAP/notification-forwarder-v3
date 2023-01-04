@@ -91,6 +91,7 @@ class BluetoothSettingsPresenter @Inject constructor(
                                 view.showNotificationAccess()
                             } else {
                                 prefs.bluetooth_enabled.set(!prefs.bluetooth_enabled.get())
+                                Thread { BluetoothHelper.deleteBluetoothMessages(context, prefs.bluetooth_realm_hide_message.get()) }.start()
                             }
                         }
                         R.id.bluetooth_notification_access -> view.showNotificationAccess()
