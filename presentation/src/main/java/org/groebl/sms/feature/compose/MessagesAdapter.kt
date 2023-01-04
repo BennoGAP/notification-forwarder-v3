@@ -20,6 +20,7 @@ package org.groebl.sms.feature.compose
 
 import android.animation.ObjectAnimator
 import android.content.Context
+import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Build
 import android.text.Layout
@@ -243,24 +244,29 @@ class MessagesAdapter @Inject constructor(
         val subscription = subs.find { sub -> sub.subscriptionId == message.subId }
 
         holder.timestamp.text = dateFormatter.getMessageTimestamp(message.date)
-        holder.simIndex.text = subscription?.simSlotIndex?.plus(1)?.toString()
-
         holder.timestamp.setVisible(timeSincePrevious >= BubbleUtils.TIMESTAMP_THRESHOLD
                 || message.subId != previous?.subId && subscription != null)
-
         val timestampVisible = (timeSincePrevious >= BubbleUtils.TIMESTAMP_THRESHOLD
                 || message.subId != previous?.subId && subscription != null)
-        holder.sim.setVisible(timestampVisible && subscription != null && subs.size > 1) //(message.subId != previous?.subId && subscription != null && subs.size > 1)
-        holder.simIndex.setVisible(timestampVisible &&  subscription != null && subs.size > 1) //(message.subId != previous?.subId &&  subscription != null && subs.size > 1)
 
-        val simColor = when (subscription?.simSlotIndex?.plus(1)?.toString()) {
-            "1" -> colors.colorForSim(context, 1)
-            "2" -> colors.colorForSim(context, 2)
-            "3" -> colors.colorForSim(context, 3)
-            else -> colors.colorForSim(context, 1)
-        }
-        if (prefs.simColor.get()) {
-            holder.sim.setTint(simColor)
+        if(message.isBluetoothMessage && timestampVisible) {
+            holder.sim.setVisible(true)
+            holder.sim.setImageResource(R.drawable.ic_bluetooth_black_24dp)
+            holder.sim.setTint(Color.BLUE)
+        } else {
+            holder.sim.setVisible(timestampVisible && subscription != null && subs.size > 1) //(message.subId != previous?.subId && subscription != null && subs.size > 1)
+            holder.simIndex.setVisible(timestampVisible &&  subscription != null && subs.size > 1) //(message.subId != previous?.subId &&  subscription != null && subs.size > 1)
+            holder.simIndex.text = subscription?.simSlotIndex?.plus(1)?.toString()
+
+            val simColor = when (subscription?.simSlotIndex?.plus(1)?.toString()) {
+                "1" -> colors.colorForSim(context, 1)
+                "2" -> colors.colorForSim(context, 2)
+                "3" -> colors.colorForSim(context, 3)
+                else -> colors.colorForSim(context, 1)
+            }
+            if (prefs.simColor.get()) {
+                holder.sim.setTint(simColor)
+            }
         }
 
         // Bind the grouping

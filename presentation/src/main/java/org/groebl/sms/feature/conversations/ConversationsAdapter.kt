@@ -19,6 +19,7 @@
 package org.groebl.sms.feature.conversations
 
 import android.content.Context
+import android.graphics.Color
 import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -123,18 +124,24 @@ class ConversationsAdapter @Inject constructor(
             }
         }
 
-        val subscription = subs.find { sub -> sub.subscriptionId == lastMessage?.subId }
-        holder.simIndex.text = subscription?.simSlotIndex?.plus(1)?.toString()
-        holder.sim.setVisible(subscription != null && subs.size > 1)
-        holder.simIndex.setVisible(subscription != null && subs.size > 1)
-        val simColor = when (subscription?.simSlotIndex?.plus(1)?.toString()) {
-            "1" -> colors.colorForSim(context, 1)
-            "2" -> colors.colorForSim(context, 2)
-            "3" -> colors.colorForSim(context, 3)
-            else -> colors.colorForSim(context, 1)
-        }
-        if (prefs.simColor.get()) {
-            holder.sim.setTint(simColor)
+        if(lastMessage?.isBluetoothMessage!!) {
+            holder.sim.setVisible(true)
+            holder.sim.setImageResource(R.drawable.ic_bluetooth_black_24dp)
+            holder.sim.setTint(Color.BLUE)
+        } else {
+            val subscription = subs.find { sub -> sub.subscriptionId == lastMessage?.subId }
+            holder.simIndex.text = subscription?.simSlotIndex?.plus(1)?.toString()
+            holder.sim.setVisible(subscription != null && subs.size > 1)
+            holder.simIndex.setVisible(subscription != null && subs.size > 1)
+            val simColor = when (subscription?.simSlotIndex?.plus(1)?.toString()) {
+                "1" -> colors.colorForSim(context, 1)
+                "2" -> colors.colorForSim(context, 2)
+                "3" -> colors.colorForSim(context, 3)
+                else -> colors.colorForSim(context, 1)
+            }
+            if (prefs.simColor.get()) {
+                holder.sim.setTint(simColor)
+            }
         }
 
         holder.date.text = conversation.date.takeIf { it > 0 }?.let(dateFormatter::getConversationTimestamp)
