@@ -50,7 +50,7 @@ public class BluetoothNotificationService extends NotificationListenerService {
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
         super.onNotificationPosted(sbn);
-        Timber.d("onNotificationPosted: ${sbn.packageName}");
+        Timber.d("onNotificationPosted: " + sbn.getPackageName());
 
         SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
@@ -112,7 +112,7 @@ public class BluetoothNotificationService extends NotificationListenerService {
     @Override
     public void onNotificationRemoved(StatusBarNotification sbn) {
         super.onNotificationRemoved(sbn);
-        Timber.d("onNotificationRemoved: ${sbn.packageName}");
+        Timber.d("onNotificationRemoved: " + sbn.getPackageName());
     }
 
     public int onStartCommand(Intent intent, int flags, int startId) {
