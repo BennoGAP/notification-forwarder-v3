@@ -8,6 +8,7 @@ import org.groebl.sms.R
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.base.QkPresenter
 import org.groebl.sms.common.util.BluetoothHelper
+import org.groebl.sms.interactor.SyncMessages
 import org.groebl.sms.util.Preferences
 import timber.log.Timber
 import javax.inject.Inject
@@ -15,7 +16,8 @@ import javax.inject.Inject
 class BluetoothSettingsPresenter @Inject constructor(
         private val context: Context,
         private val navigator: Navigator,
-        private val prefs: Preferences
+        private val prefs: Preferences,
+        private val syncMessages: SyncMessages
 ) : QkPresenter<BluetoothSettingsView, BluetoothSettingsState>(BluetoothSettingsState()) {
 
     init {
@@ -153,7 +155,10 @@ class BluetoothSettingsPresenter @Inject constructor(
                         R.id.bluetooth_telegram_blocked_contact -> view.showBluetoothBlockedContactByName("Telegram")
                         R.id.bluetooth_max_vol -> prefs.bluetooth_max_vol.set(!prefs.bluetooth_max_vol.get())
                         R.id.bluetooth_tethering -> prefs.bluetooth_tethering.set(!prefs.bluetooth_tethering.get())
-                        R.id.bluetooth_realm_hide_message -> prefs.bluetooth_realm_hide_message.set(!prefs.bluetooth_realm_hide_message.get())
+                        R.id.bluetooth_realm_hide_message -> {
+                            prefs.bluetooth_realm_hide_message.set(!prefs.bluetooth_realm_hide_message.get())
+                            syncMessages.execute(Unit)
+                        }
                     }
                 }
     }
