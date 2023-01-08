@@ -27,10 +27,6 @@ import android.provider.Telephony
 import androidx.core.content.contentValuesOf
 import androidx.core.net.toUri
 import androidx.documentfile.provider.DocumentFile
-import org.groebl.sms.common.util.extensions.now
-import org.groebl.sms.model.BackupFile
-import org.groebl.sms.model.Message
-import org.groebl.sms.util.Preferences
 import com.squareup.moshi.Moshi
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
@@ -38,6 +34,10 @@ import io.reactivex.subjects.Subject
 import io.realm.Realm
 import okio.buffer
 import okio.source
+import org.groebl.sms.common.util.extensions.now
+import org.groebl.sms.model.BackupFile
+import org.groebl.sms.model.Message
+import org.groebl.sms.util.Preferences
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
@@ -205,6 +205,7 @@ class BackupRepositoryImpl @Inject constructor(
 
         val messageCount = backup?.messages?.size ?: 0
         var errorCount = 0
+        var skipCount = 0
 
         backup?.messages?.forEachIndexed { index, message ->
             if (stopFlag) {
@@ -235,7 +236,21 @@ class BackupRepositoryImpl @Inject constructor(
                     values.put(Telephony.Sms.SUBSCRIPTION_ID, message.subId)
                 }
 
-                context.contentResolver.insert(Telephony.Sms.CONTENT_URI, values)
+                //Check if Message already exists
+                val c = context.contentResolver.query(
+                    Telephony.Sms.CONTENT_URI,
+                    arrayOf(Telephony.Sms._ID),
+                    "(" + Telephony.Sms.TYPE + " = ? AND " + Telephony.Sms.ADDRESS + " = ? AND " + Telephony.Sms.DATE + " = ? AND " + Telephony.Sms.DATE_SENT + " = ? AND " + Telephony.Sms.BODY + " = ?)",
+                    arrayOf(message.type.toString(), message.address, message.date.toString(), message.dateSent.toString(), message.body),
+                    null);
+
+                if (c?.count!! > 0) {
+                    skipCount++
+                } else {
+                    context.contentResolver.insert(Telephony.Sms.CONTENT_URI, values)
+                }
+
+                c.close()
             } catch (e: Exception) {
                 Timber.w(e)
                 errorCount++
@@ -244,6 +259,10 @@ class BackupRepositoryImpl @Inject constructor(
 
         if (errorCount > 0) {
             Timber.w(Exception("Failed to backup $errorCount/$messageCount messages"))
+        }
+
+        if (skipCount > 0) {
+            Timber.w("Skipped $skipCount/$messageCount already existing messages")
         }
 
         // Sync the messages
