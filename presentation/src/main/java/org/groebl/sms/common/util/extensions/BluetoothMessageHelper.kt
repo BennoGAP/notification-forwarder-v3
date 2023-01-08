@@ -10,6 +10,7 @@ import org.groebl.sms.compat.TelephonyCompat
 import org.groebl.sms.model.BluetoothForwardCache
 import org.groebl.sms.model.Conversation
 import org.groebl.sms.model.Message
+import org.groebl.sms.repository.SyncRepository
 import java.math.BigInteger
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
@@ -96,9 +97,9 @@ class BluetoothMessageHelper {
         return if (active) EmojiParser.parseToAliases(text, EmojiParser.FitzpatrickAction.REMOVE) else text
     }
 
-    fun addBluetoothMessage(context: Context, address: String, body: String, sentTime: Long, hideInRealm: Boolean = true, asRead: Boolean = false, errorCode: Int, canUseSubId: Boolean = true, subId: Long = 0L) {
+    fun addBluetoothMessage(context: Context, address: String, body: String, sentTime: Long, hideInRealm: Boolean = true, asRead: Boolean = false, errorCode: Int, canUseSubId: Boolean = true, subId: Long = 0L, syncRepo: SyncRepository) {
         if(!hideInRealm) {
-            addMessageToRealmInboxAsRead(context, address, body, sentTime, asRead, errorCode, canUseSubId, subId)
+            addMessageToRealmInboxAsRead(context, address, body, sentTime, asRead, errorCode, canUseSubId, subId, syncRepo)
         } else {
             addMessageToInboxAsRead(context, address, body, sentTime, asRead, errorCode, canUseSubId, subId)
         }
@@ -126,7 +127,7 @@ class BluetoothMessageHelper {
         context.contentResolver.insert(Telephony.Sms.Inbox.CONTENT_URI, values)
     }
 
-    private fun addMessageToRealmInboxAsRead(context: Context, address: String, body: String, sentTime: Long, asRead: Boolean = false, errorCode: Int = 0, canUseSubId: Boolean = true, subId: Long = 0L) {
+    private fun addMessageToRealmInboxAsRead(context: Context, address: String, body: String, sentTime: Long, asRead: Boolean = false, errorCode: Int = 0, canUseSubId: Boolean = true, subId: Long = 0L, syncRepo: SyncRepository) {
         val realmInstance = Realm.getDefaultInstance()
 
         var managedMessage: Message? = null
@@ -194,7 +195,7 @@ class BluetoothMessageHelper {
             .findFirst()
 
         if(conversation == null) {
-            //syncRepository.syncMessage(uri!!)
+            syncRepo.syncMessage(uri!!)
             return
         } else {
             realmInstance.executeTransaction {

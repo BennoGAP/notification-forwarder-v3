@@ -11,23 +11,31 @@ import android.preference.PreferenceManager;
 import android.provider.Telephony;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
+import android.util.Log;
 
 import com.vdurmont.emoji.EmojiParser;
 
 import org.groebl.sms.common.util.extensions.BluetoothMessageHelper;
 import org.groebl.sms.feature.bluetooth.common.BluetoothNotificationFilter;
+import org.groebl.sms.repository.SyncRepository;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import timber.log.Timber;
+import javax.inject.Inject;
+
+import dagger.android.AndroidInjection;
 
 
 public class BluetoothNotificationService extends NotificationListenerService {
 
+    @Inject
+    SyncRepository syncRepo;
+
     private BroadcastReceiver mBroadcastReceiver;
 
     public void onCreate() {
+        AndroidInjection.inject(this);
         super.onCreate();
         startMainService();
     }
@@ -50,7 +58,7 @@ public class BluetoothNotificationService extends NotificationListenerService {
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
         super.onNotificationPosted(sbn);
-        Timber.d("onNotificationPosted: " + sbn.getPackageName());
+        Log.d("Notification", "onNotificationPosted: " + sbn.getPackageName());
 
         SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
@@ -90,7 +98,8 @@ public class BluetoothNotificationService extends NotificationListenerService {
                         (mPrefs.getBoolean("bluetoothSaveRead", false) && !mPrefs.getBoolean("bluetoothDelayedRead", false)),
                         BtData.getErrorCode(),
                         mPrefs.getBoolean("canUseSubId", true),
-                        1);
+                        1,
+                        syncRepo);
 
                 //Delayed Mark-as-Read
                 if (mPrefs.getBoolean("bluetoothSaveRead", false) && mPrefs.getBoolean("bluetoothDelayedRead", false)) {
@@ -112,7 +121,7 @@ public class BluetoothNotificationService extends NotificationListenerService {
     @Override
     public void onNotificationRemoved(StatusBarNotification sbn) {
         super.onNotificationRemoved(sbn);
-        Timber.d("onNotificationRemoved: " + sbn.getPackageName());
+        Log.d("Notification", "onNotificationRemoved: " + sbn.getPackageName());
     }
 
     public int onStartCommand(Intent intent, int flags, int startId) {
