@@ -113,7 +113,7 @@ class Preferences @Inject constructor(
     val nightStart = rxPrefs.getString("nightStart", "18:00")
     val nightEnd = rxPrefs.getString("nightEnd", "6:00")
     val black = rxPrefs.getBoolean("black", false)
-    val gray = rxPrefs.getBoolean("gray", false)
+    val gray = rxPrefs.getBoolean("gray", true)
     val autoColor = rxPrefs.getBoolean("autoColor", false)
     val grayAvatar = rxPrefs.getBoolean("grayAvatar", false)
     val bubbleColorInvert = rxPrefs.getBoolean("bubbleColorInvert", false)

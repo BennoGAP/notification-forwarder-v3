@@ -638,7 +638,7 @@
     </string-array>
 
     <string name="drawer_share">Share</string>
-    <string name="settings_gray_title">Gray instead of white mode</string>
+    <string name="settings_gray_title">Gray day mode</string>
     <string name="theme_ios" translatable="false">iOS</string>
     <string name="theme_color_picker">Color Picker</string>
     <string name="settings_separator_title">Use separator</string>

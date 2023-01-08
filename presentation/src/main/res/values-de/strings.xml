@@ -559,7 +559,7 @@
   </string-array>
 
     <string name="drawer_share">Teilen</string>
-    <string name="settings_gray_title">Graue Farben statt Weiß</string>
+    <string name="settings_gray_title">Grauer Tag-Modus</string>
     <string name="theme_color_picker">Farbwähler</string>
     <string name="settings_separator_title">Trennzeichen verwenden</string>
     <string name="settings_gray_avatar_title">Graue Kontaktavatare</string>

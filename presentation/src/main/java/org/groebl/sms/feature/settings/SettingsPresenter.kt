@@ -179,25 +179,9 @@ class SettingsPresenter @Inject constructor(
                             view.showEndTimePicker(date.get(Calendar.HOUR_OF_DAY), date.get(Calendar.MINUTE))
                         }
 
-                        R.id.black -> {
-                            if (prefs.black.get()) {
-                                prefs.black.set(false)
-                            }
-                            else {
-                                prefs.black.set(true)
-                                prefs.gray.set(false)
-                            }
-                        }
+                        R.id.black -> prefs.black.set(!prefs.black.get())
 
-                        R.id.gray -> {
-                            if (prefs.gray.get()) {
-                                prefs.gray.set(false)
-                            }
-                            else {
-                                prefs.gray.set(true)
-                                prefs.black.set(false)
-                            }
-                        }
+                        R.id.gray -> prefs.gray.set(!prefs.gray.get())
 
                         R.id.speechBubble -> view.showSpeechBubble()
 
