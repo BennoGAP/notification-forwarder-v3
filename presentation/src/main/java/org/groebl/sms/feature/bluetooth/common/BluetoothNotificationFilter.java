@@ -113,6 +113,19 @@ public class BluetoothNotificationFilter {
             return (!this.sender.equalsIgnoreCase("") && !this.content.equalsIgnoreCase(""));
         }
 
+        private String getAppNameLabel(Context context, String pack, String defaultName) {
+            String set_sender = "";
+            try {
+                PackageManager pm = context.getPackageManager();
+                ApplicationInfo ai = pm.getApplicationInfo(pack, 0);
+                set_sender = pm.getApplicationLabel(ai).toString();
+            } catch (PackageManager.NameNotFoundException e) {
+                set_sender = defaultName;
+            }
+            
+            return set_sender;
+        }
+        
         public void BluetoothFilter(StatusBarNotification sbn, Context mContext) {
 
             String set_sender = "";
@@ -188,7 +201,7 @@ public class BluetoothNotificationFilter {
                         String text_long_email = removeDirectionChars(extras.get(Notification.EXTRA_BIG_TEXT).toString());
 
                         if (!text_long_email.equals(text) && !title.equals("")) {
-                            set_sender = "E-Mail";
+                            set_sender = getAppNameLabel(mContext, pack, "E-Mail");
                             set_content = title + ": " + text_long_email;
                         }
                     }
@@ -203,7 +216,8 @@ public class BluetoothNotificationFilter {
                         text = removeDirectionChars(extras.get(Notification.EXTRA_BIG_TEXT).toString());
                     }
 
-                    set_sender = "E-Mail";
+                    set_sender = getAppNameLabel(mContext, pack, "E-Mail");
+
                     if (!title.equals("") && !text.equals("")) {
                         set_content = title + ": " + text;
                     }
@@ -215,7 +229,7 @@ public class BluetoothNotificationFilter {
                         ticker = title + ": " + removeDirectionChars(extras.get(Notification.EXTRA_BIG_TEXT).toString());
                     }
 
-                    set_sender = "E-Mail";
+                    set_sender = getAppNameLabel(mContext, pack, "E-Mail");
                     set_content = ticker;
                     break;
 
@@ -231,7 +245,7 @@ public class BluetoothNotificationFilter {
                         return;
                     }
 
-                    set_sender = "E-Mail";
+                    set_sender = getAppNameLabel(mContext, pack, "E-Mail");
                     set_content = title + ": " + extras.get(Notification.EXTRA_BIG_TEXT);
                     break;
 
@@ -242,7 +256,7 @@ public class BluetoothNotificationFilter {
                         text = textline_outlook[textline_outlook.length - 1].toString();
                     }
 
-                    set_sender = "E-Mail";
+                    set_sender = getAppNameLabel(mContext, pack, "E-Mail");
                     set_content = text;
                     break;
 
@@ -253,7 +267,7 @@ public class BluetoothNotificationFilter {
                         return;
                     }
 
-                    set_sender = "E-Mail";
+                    set_sender = getAppNameLabel(mContext, pack, "E-Mail");
 
                     CharSequence[] textline_gmx = extras.getCharSequenceArray(Notification.EXTRA_TEXT_LINES);
                     if (textline_gmx != null) {
@@ -554,16 +568,7 @@ public class BluetoothNotificationFilter {
 
                 default:
                     if (!pack.equalsIgnoreCase(BuildConfig.APPLICATION_ID) && !pack.equalsIgnoreCase("android")) {
-                        PackageManager pm = mContext.getPackageManager();
-                        ApplicationInfo ai;
-
-                        try {
-                            ai = pm.getApplicationInfo(pack, 0);
-                            set_sender = pm.getApplicationLabel(ai).toString();
-                        } catch (PackageManager.NameNotFoundException e) {
-                            set_sender = "";
-                        }
-
+                        set_sender = getAppNameLabel(mContext, pack, "");
                         set_content = (ticker.equals("") ? title + ": " + text : ticker);
                         if(set_content.trim().equals(":")) { set_content = ""; }
                     }
