@@ -124,7 +124,7 @@ class ConversationsAdapter @Inject constructor(
             }
         }
 
-        if(lastMessage?.isBluetoothMessage!!) {
+        if(lastMessage?.isBluetoothMessage == true) {
             holder.sim.setVisible(true)
             holder.sim.setImageResource(R.drawable.ic_bluetooth_black_24dp)
             holder.sim.setTint(Color.BLUE)
