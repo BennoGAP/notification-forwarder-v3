@@ -38,6 +38,7 @@ class AutoDeleteService : JobService() {
 
         fun cancelJob(context: Context) {
             Timber.i("Canceling job")
+            jobScheduler = context.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
             jobScheduler.cancel(JobId)
         }
     }
