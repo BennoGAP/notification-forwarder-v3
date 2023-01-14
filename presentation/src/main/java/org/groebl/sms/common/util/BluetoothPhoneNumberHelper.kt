@@ -8,6 +8,7 @@ class BluetoothPhoneNumberHelper {
 
     fun findNumberFromWhatsAppName(context: Context, NrDisplayName: String): String {
         var setNumber = ""
+        if (!BluetoothHelper.hasContactPermission(context)) { return ""; }
         try {
             val c = context.contentResolver.query(
                 ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
@@ -30,6 +31,7 @@ class BluetoothPhoneNumberHelper {
 
     fun findNumberFromSignalName(context: Context, NrDisplayName: String): String {
         var setNumber = ""
+        if (!BluetoothHelper.hasContactPermission(context)) { return ""; }
         try {
             val c = context.contentResolver.query(
                 ContactsContract.RawContacts.CONTENT_URI,
@@ -55,6 +57,7 @@ class BluetoothPhoneNumberHelper {
 
     fun findNumberFromTelegramName(context: Context, NrDisplayName: String): String {
         var setNumber = ""
+        if (!BluetoothHelper.hasContactPermission(context)) { return ""; }
         try {
             val c = context.contentResolver.query(
                 ContactsContract.RawContacts.CONTENT_URI,
