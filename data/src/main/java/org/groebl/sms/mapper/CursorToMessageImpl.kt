@@ -22,6 +22,7 @@ import android.content.Context
 import android.database.Cursor
 import android.net.Uri
 import android.provider.Telephony.*
+import androidx.core.database.getIntOrNull
 import com.google.android.mms.pdu_alt.EncodedStringValue
 import com.google.android.mms.pdu_alt.PduHeaders
 import com.google.android.mms.pdu_alt.PduPersister
@@ -90,7 +91,7 @@ class CursorToMessageImpl @Inject constructor(
             read = cursor.getInt(columnsMap.read) != 0
             locked = cursor.getInt(columnsMap.locked) != 0
             subId = if (columnsMap.subId != -1) cursor.getInt(columnsMap.subId) else -1
-            isBluetoothMessage = (cursor.getInt(columnsMap.smsErrorCode) == 777) or (cursor.getInt(columnsMap.smsErrorCode) == 778)
+            isBluetoothMessage = cursor.getInt(columnsMap.smsErrorCode) >= 777
 
             when (type) {
                 "sms" -> {
@@ -102,7 +103,7 @@ class CursorToMessageImpl @Inject constructor(
                             .takeIf { column -> column != -1 } // The column may not be set
                             ?.let { column -> cursor.getString(column) } ?: "" // cursor.getString() may return null
 
-                    errorCode = if(isBluetoothMessage) 0 else cursor.getInt(columnsMap.smsErrorCode)
+                    errorCode = if (cursor.getInt(columnsMap.smsErrorCode) >= 777) 0 else cursor.getInt(columnsMap.smsErrorCode)
                     deliveryStatus = cursor.getInt(columnsMap.smsStatus)
                 }
 
