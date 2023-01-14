@@ -97,6 +97,7 @@ class BluetoothPanServiceListener implements BluetoothProfile.ServiceListener {
     public void onServiceConnected(int profile, BluetoothProfile proxy) {
         try {
             proxy.getClass().getMethod("setBluetoothTethering",Boolean.TYPE).invoke(proxy, Boolean.valueOf(this.enable));
+        } catch(SecurityException ignored) {
         } catch (Exception e) {
             Timber.e(e);
         }
