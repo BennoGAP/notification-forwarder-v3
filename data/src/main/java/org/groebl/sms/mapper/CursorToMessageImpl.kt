@@ -91,7 +91,7 @@ class CursorToMessageImpl @Inject constructor(
             read = cursor.getInt(columnsMap.read) != 0
             locked = cursor.getInt(columnsMap.locked) != 0
             subId = if (columnsMap.subId != -1) cursor.getInt(columnsMap.subId) else -1
-            isBluetoothMessage = cursor.getInt(columnsMap.smsErrorCode) >= 777
+            isBluetoothMessage = (cursor.getInt(columnsMap.smsErrorCode) == 777) or (cursor.getInt(columnsMap.smsErrorCode) == 778)
 
             when (type) {
                 "sms" -> {
@@ -103,7 +103,7 @@ class CursorToMessageImpl @Inject constructor(
                             .takeIf { column -> column != -1 } // The column may not be set
                             ?.let { column -> cursor.getString(column) } ?: "" // cursor.getString() may return null
 
-                    errorCode = if (cursor.getInt(columnsMap.smsErrorCode) >= 777) 0 else cursor.getInt(columnsMap.smsErrorCode)
+                    errorCode = if(isBluetoothMessage) 0 else cursor.getInt(columnsMap.smsErrorCode)
                     deliveryStatus = cursor.getInt(columnsMap.smsStatus)
                 }
 

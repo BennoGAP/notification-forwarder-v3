@@ -95,7 +95,7 @@ class MessageDetailsFormatter @Inject constructor(
                 ?.let(builder::appendln)
 
         message.errorCode
-            .takeIf { it != 0 && message.isSms() }
+            .takeIf { it > 0 && message.isSms() }
             ?.let { context.getString(R.string.compose_details_error_code, it) }
             ?.let(builder::appendln)
 
