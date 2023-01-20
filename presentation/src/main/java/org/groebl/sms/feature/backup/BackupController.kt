@@ -227,8 +227,8 @@ class BackupController : QkController<BackupView, BackupState, BackupPresenter>(
     override fun selectFile(initialUri: Uri) {
         openDocument.launch(
             QkActivityResultContracts.OpenDocumentParams(
-            mimeTypes = listOf("application/json"),
-            initialUri = initialUri))
+                mimeTypes = listOf("application/json", "application/octet-stream"),
+                initialUri = initialUri))
     }
 
 }
