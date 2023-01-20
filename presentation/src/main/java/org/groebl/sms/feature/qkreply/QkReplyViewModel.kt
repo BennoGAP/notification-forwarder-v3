@@ -203,6 +203,7 @@ class QkReplyViewModel @Inject constructor(
                     val subscription = when {
                         subIndex == -1 -> null
                         subIndex < subs.size - 1 -> subs[subIndex + 1]
+                        subIndex == subs.size - 1 -> subs[0]
                         else -> subs[defaultSubscriptionId]
                     }
                     newState { copy(subscription = subscription) }
