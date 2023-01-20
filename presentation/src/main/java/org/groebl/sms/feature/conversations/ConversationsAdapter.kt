@@ -124,15 +124,19 @@ class ConversationsAdapter @Inject constructor(
             }
         }
 
-        if(lastMessage?.isBluetoothMessage == true) {
+        if(conversation.lastMessage?.isBluetoothMessage == true) {
             holder.sim.setVisible(true)
+            holder.simIndex.setVisible(false)
             holder.sim.setImageResource(R.drawable.ic_bluetooth_black_24dp)
-            holder.sim.setTint(Color.BLUE)
+            if (prefs.simColor.get()) {
+                holder.sim.setTint(Color.BLUE)
+            }
         } else {
             val subscription = subs.find { sub -> sub.subscriptionId == lastMessage?.subId }
             holder.simIndex.text = subscription?.simSlotIndex?.plus(1)?.toString()
             holder.sim.setVisible(subscription != null && subs.size > 1)
             holder.simIndex.setVisible(subscription != null && subs.size > 1)
+            holder.sim.setImageResource(R.drawable.ic_sim_card_black_24dp)
             val simColor = when (subscription?.simSlotIndex?.plus(1)?.toString()) {
                 "1" -> colors.colorForSim(context, 1)
                 "2" -> colors.colorForSim(context, 2)

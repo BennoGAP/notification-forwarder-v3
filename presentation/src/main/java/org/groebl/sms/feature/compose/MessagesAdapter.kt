@@ -251,12 +251,16 @@ class MessagesAdapter @Inject constructor(
 
         if(message.isBluetoothMessage && timestampVisible) {
             holder.sim.setVisible(true)
+            holder.simIndex.setVisible(false)
             holder.sim.setImageResource(R.drawable.ic_bluetooth_black_24dp)
-            holder.sim.setTint(Color.BLUE)
+            if (prefs.simColor.get()) {
+                holder.sim.setTint(Color.BLUE)
+            }
         } else {
             holder.sim.setVisible(timestampVisible && subscription != null && subs.size > 1) //(message.subId != previous?.subId && subscription != null && subs.size > 1)
             holder.simIndex.setVisible(timestampVisible &&  subscription != null && subs.size > 1) //(message.subId != previous?.subId &&  subscription != null && subs.size > 1)
             holder.simIndex.text = subscription?.simSlotIndex?.plus(1)?.toString()
+            holder.sim.setImageResource(R.drawable.ic_sim_card_black_24dp)
 
             val simColor = when (subscription?.simSlotIndex?.plus(1)?.toString()) {
                 "1" -> colors.colorForSim(context, 1)
