@@ -25,6 +25,7 @@ import android.os.Vibrator
 import android.provider.ContactsContract
 import android.telephony.SmsMessage
 import androidx.core.content.getSystemService
+import com.klinker.android.send_message.Utils
 import org.groebl.sms.R
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.base.QkViewModel
@@ -220,8 +221,10 @@ class ComposeViewModel @Inject constructor(
                 .distinctUntilChanged()
 
         val subscriptions = ActiveSubscriptionObservable(subscriptionManager)
+        val defaultSubscriptionId = if(Utils.getDefaultSubscriptionId() > 0) { Utils.getDefaultSubscriptionId()-1 } else { 0 }
+
         disposables += Observables.combineLatest(latestSubId, subscriptions) { subId, subs ->
-            val sub = if (subs.size > 1) subs.firstOrNull { it.subscriptionId == subId } ?: subs[0] else null
+            val sub = if (subs.size > 1) subs.firstOrNull { it.subscriptionId == subId } ?: subs[defaultSubscriptionId] else null
             newState { copy(subscription = sub) }
         }.subscribe()
 
@@ -637,10 +640,11 @@ class ComposeViewModel @Inject constructor(
                 .withLatestFrom(state) { _, state ->
                     val subs = subscriptionManager.activeSubscriptionInfoList
                     val subIndex = subs.indexOfFirst { it.subscriptionId == state.subscription?.subscriptionId }
+                    val defaultSubscriptionId = if(Utils.getDefaultSubscriptionId() > 0) { Utils.getDefaultSubscriptionId()-1 } else { 0 }
                     val subscription = when {
                         subIndex == -1 -> null
                         subIndex < subs.size - 1 -> subs[subIndex + 1]
-                        else -> subs[0]
+                        else -> subs[defaultSubscriptionId]
                     }
 
                     if (subscription != null) {
