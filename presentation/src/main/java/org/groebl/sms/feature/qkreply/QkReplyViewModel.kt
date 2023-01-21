@@ -187,12 +187,14 @@ class QkReplyViewModel @Inject constructor(
                 .subscribe { remaining -> newState { copy(remaining = remaining) } }
 
         // Update the draft whenever the text is changed
+        /*
         view.textChangedIntent
                 .debounce(100, TimeUnit.MILLISECONDS)
                 .map { draft -> draft.toString() }
                 .observeOn(Schedulers.io())
                 .autoDisposable(view.scope())
                 .subscribe { draft -> conversationRepo.saveDraft(threadId, draft) }
+         */
 
         // Toggle to the next sim slot
         view.changeSimIntent
