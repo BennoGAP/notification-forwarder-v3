@@ -29,6 +29,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.widget.textChanges
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
 import org.groebl.sms.R
 import org.groebl.sms.common.base.QkThemedActivity
 import org.groebl.sms.common.util.extensions.*
@@ -64,6 +66,12 @@ class QkReplyActivity : QkThemedActivity(), QkReplyView {
         window.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
         window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         viewModel.bindView(this)
+
+        theme
+            .doOnNext { send.setBackgroundTint(it.theme) }
+            .doOnNext { send.setTint(resolveThemeColor(android.R.attr.windowBackground)) }
+            .autoDisposable(scope())
+            .subscribe()
 
         toolbar.clipToOutline = true
 
