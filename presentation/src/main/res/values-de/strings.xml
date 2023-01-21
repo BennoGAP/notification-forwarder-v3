@@ -354,7 +354,7 @@
   <string name="settings_ringtone_none">Keine</string>
   <string name="settings_qkreply_title">Schnellantwort</string>
   <string name="settings_qkreply_title_new">Schnellantwort</string>
-  <string name="settings_qkreply_summary">Popup für neue Nachrichten</string>
+  <string name="settings_qkreply_summary">Popup für neue Nachrichten (Funktioniert nicht korrekt seit Android 10)</string>
   <string name="settings_qkreply_tap_dismiss_title">Zum Verwerfen tippen</string>
   <string name="settings_qkreply_tap_dismiss_summary">Tippe außerhalb des Popup um es zu schließen</string>
   <string name="settings_delayed_title">Verzögertes Senden</string>

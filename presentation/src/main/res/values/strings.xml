@@ -378,7 +378,7 @@
     <string name="settings_ringtone_none">None</string>
     <string name="settings_qkreply_title">QK Reply</string>
     <string name="settings_qkreply_title_new" translatable="false">Quick Reply</string>
-    <string name="settings_qkreply_summary">Popup for new messages</string>
+    <string name="settings_qkreply_summary">Popup for new messages (May not work on Android 10+ devices)</string>
     <string name="settings_qkreply_tap_dismiss_title">Tap to dismiss</string>
     <string name="settings_qkreply_tap_dismiss_summary">Tap outside of the popup to close it</string>
     <string name="settings_delayed_title">Delayed sending</string>
