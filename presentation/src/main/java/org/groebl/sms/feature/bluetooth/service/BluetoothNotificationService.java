@@ -18,8 +18,9 @@ import com.vdurmont.emoji.EmojiParser;
 import org.groebl.sms.common.util.extensions.BluetoothMessageHelper;
 import org.groebl.sms.feature.bluetooth.common.BluetoothNotificationFilter;
 import org.groebl.sms.repository.SyncRepository;
+import org.groebl.sms.util.Preferences;
 
-import java.util.HashSet;
+
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -29,8 +30,8 @@ import dagger.android.AndroidInjection;
 
 public class BluetoothNotificationService extends NotificationListenerService {
 
-    @Inject
-    SyncRepository syncRepo;
+    @Inject SyncRepository syncRepo;
+    @Inject Preferences prefs;
 
     private BroadcastReceiver mBroadcastReceiver;
 
@@ -60,20 +61,18 @@ public class BluetoothNotificationService extends NotificationListenerService {
         super.onNotificationPosted(sbn);
         Log.d("Notification", "onNotificationPosted: " + sbn.getPackageName());
 
-        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-
         //Check if Notification is -clearable-
         if (!sbn.isClearable()) { return; }
 
         //Check if Bluetooth-Fordward is enabled
-        if (!mPrefs.getBoolean("bluetoothEnabled", false)) { return; }
+        if (!prefs.getBluetooth_enabled().get()) { return; }
 
         //Check if Connected to bluetooth is enabled
-        if(mPrefs.getBoolean("bluetoothOnlyOnConnect", false) && !mPrefs.getBoolean("bluetoothCurrentStatus", false)) { return; }
+        if(prefs.getBluetooth_only_on_connect().get() && !prefs.getBluetooth_current_status().get()) { return; }
 
         //Check if App is on App-Whitelist
         String pack = sbn.getPackageName();
-        Set<String> appwhitelist = mPrefs.getStringSet("bluetoothApps", new HashSet<>());
+        Set<String> appwhitelist = prefs.getBluetooth_apps().get();
         if (!appwhitelist.contains(pack)) { return; }
 
         //Everything is fine - here we go..
@@ -92,17 +91,17 @@ public class BluetoothNotificationService extends NotificationListenerService {
                 btMessageHelper.addBluetoothMessage(
                         getApplicationContext(),
                         EmojiParser.removeAllEmojis(BtData.getSender()),
-                        btMessageHelper.emojiToNiceEmoji(BtData.getContent(), mPrefs.getBoolean("bluetoothEmoji", true)),
+                        btMessageHelper.emojiToNiceEmoji(BtData.getContent(), prefs.getBluetooth_emoji().get()),
                         BtData.getSendTime(),
-                        mPrefs.getBoolean("bluetoothRealmMessage", false),
-                        (mPrefs.getBoolean("bluetoothSaveRead", false) && !mPrefs.getBoolean("bluetoothDelayedRead", false)),
+                        prefs.getBluetooth_realm_hide_message().get(),
+                        (prefs.getBluetooth_save_read().get() && !prefs.getBluetooth_delayed_read().get()),
                         BtData.getErrorCode(),
-                        mPrefs.getBoolean("canUseSubId", true),
+                        prefs.getCanUseSubId().get(),
                         1,
                         syncRepo);
 
                 //Delayed Mark-as-Read
-                if (mPrefs.getBoolean("bluetoothSaveRead", false) && mPrefs.getBoolean("bluetoothDelayedRead", false)) {
+                if (prefs.getBluetooth_save_read().get() && prefs.getBluetooth_delayed_read().get()) {
                     ContentValues cv = new ContentValues();
                     cv.put(Telephony.Sms.READ, 1);
 
