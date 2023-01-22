@@ -332,7 +332,7 @@ public class BluetoothNotificationFilter {
                         String SG_grp = "";
                         String SG_name = "";
 
-                        if(ticker.startsWith(title + ": ") || ticker.equals("")) { //Person Msg
+                        if(ticker.startsWith(title.substring(0, title.indexOf(" ")) + ": ") || ticker.startsWith(title + ": ") || ticker.equals("")) { //Person Msg
                             SG_name = title;
                         } else if (ticker.contains(": ") && ticker.contains("@") && title.contains(": ")) { //Group Msg
                             String[] itemsList = title.split("\\u2069: \\u2068", 2);
