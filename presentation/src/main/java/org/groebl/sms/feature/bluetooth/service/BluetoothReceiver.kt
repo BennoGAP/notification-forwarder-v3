@@ -14,19 +14,21 @@ import android.preference.PreferenceManager
 import dagger.android.AndroidInjection
 import org.groebl.sms.common.util.BluetoothHelper
 import org.groebl.sms.feature.bluetooth.common.BluetoothTethering
+import org.groebl.sms.util.Preferences
+import javax.inject.Inject
 
 
 class BluetoothReceiver : BroadcastReceiver() {
 
+    @Inject lateinit var prefs: Preferences
+
     override fun onReceive(context: Context, intent: Intent) {
         AndroidInjection.inject(this, context)
 
-        val mPrefs = PreferenceManager.getDefaultSharedPreferences(context)
-
-        val btDeviceWhitelist = mPrefs.getStringSet("bluetoothDevices", HashSet())
+        val btDeviceWhitelist =  prefs.bluetooth_devices.get()
         val btCurrentDevice = intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
 
-        if (btDeviceWhitelist!!.contains(btCurrentDevice?.address)) {
+        if (btDeviceWhitelist.contains(btCurrentDevice?.address)) {
             var deviceID = btCurrentDevice!!.address
             if (BluetoothHelper.hasBluetoothPermission(context)) {
                 @SuppressLint("MissingPermission")
@@ -36,20 +38,20 @@ class BluetoothReceiver : BroadcastReceiver() {
             when (intent.action) {
                 BluetoothDevice.ACTION_ACL_CONNECTED -> {
                     //Set Temp-Status to -Connected-
-                    mPrefs.edit().putBoolean("bluetoothCurrentStatus", true).apply()
-                    mPrefs.edit().putLong("bluetoothLastConnect", System.currentTimeMillis()).apply()
-                    mPrefs.edit().putString("bluetoothLastDevice", deviceID).apply()
+                    prefs.bluetooth_current_status.set(true)
+                    prefs.bluetooth_last_connect.set(System.currentTimeMillis())
+                    prefs.bluetooth_last_connect_device.set(deviceID)
 
                     //Set Bluetooth Tethering enabled
-                    if (mPrefs.getBoolean("bluetoothEnabled", false) && mPrefs.getBoolean("bluetoothTethering", false)) {
+                    if (prefs.bluetooth_enabled.get() && prefs.bluetooth_tethering.get()) {
                         BluetoothTethering(context, context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager).startTethering()
                     }
                 }
 
                 BluetoothDevice.ACTION_ACL_DISCONNECTED -> {
-                    if (mPrefs.getBoolean("bluetoothEnabled", false)) {
+                    if (prefs.bluetooth_enabled.get()) {
                         //Set Bluetooth Tethering disabled
-                        if (mPrefs.getBoolean("bluetoothTethering", false)) {
+                        if (prefs.bluetooth_tethering.get()) {
                             BluetoothTethering(context, context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager).stopTethering()
                         }
 
@@ -60,25 +62,25 @@ class BluetoothReceiver : BroadcastReceiver() {
                         //}
 
                         //Delete Temporary Messages
-                        val afterTimeDelete = if (mPrefs.getBoolean("bluetoothOnlyOnConnect", false) && mPrefs.getBoolean("bluetoothAutodelete", true)) 0L else 6L
-                        Thread { BluetoothHelper.deleteBluetoothMessages(context, mPrefs.getBoolean("bluetoothRealmHideMessage", true), afterTimeDelete) }.start()
+                        val afterTimeDelete = if (prefs.bluetooth_only_on_connect.get() && prefs.bluetooth_autodelete.get()) 0L else 6L
+                        Thread { BluetoothHelper.deleteBluetoothMessages(context, prefs.bluetooth_realm_hide_message.get(), afterTimeDelete) }.start()
                     }
 
                     //Set Temp-Status to -Disonnected-
-                    mPrefs.edit().putBoolean("bluetoothCurrentStatus", false).apply()
-                    mPrefs.edit().putLong("bluetoothLastDisconnect", System.currentTimeMillis()).apply()
-                    mPrefs.edit().putString("bluetoothLastDevice", deviceID).apply()
-                    mPrefs.edit().putInt("bluetoothCurrentVol", -1).apply()
+                    prefs.bluetooth_current_status.set(false)
+                    prefs.bluetooth_last_disconnect.set(System.currentTimeMillis())
+                    prefs.bluetooth_last_connect_device.set(deviceID)
+                    prefs.bluetooth_current_vol.set(-1)
                 }
 
                 BluetoothA2dp.ACTION_PLAYING_STATE_CHANGED -> {
                     val state = intent.getIntExtra(BluetoothA2dp.EXTRA_STATE, -1)
                     if (state == BluetoothA2dp.STATE_PLAYING) {
-                        if (mPrefs.getBoolean("bluetoothEnabled", false) && mPrefs.getBoolean("bluetoothMaxVol", false) && mPrefs.getInt("bluetoothCurrentVol", -1) == -1) {
+                        if (prefs.bluetooth_enabled.get() && prefs.bluetooth_max_vol.get() && prefs.bluetooth_current_vol.get() == -1) {
                             val mAudioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
                             Handler(Looper.getMainLooper()).postDelayed({
-                                mPrefs.edit().putInt("bluetoothCurrentVol", mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC)).apply()
+                                prefs.bluetooth_current_vol.set(mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC))
                                 mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0)
                             }, 1000)
                         }
