@@ -328,6 +328,7 @@ public class BluetoothNotificationFilter {
                         return;
                     }
 
+                    if (title.equals("Signal")) { return; }
 
                     if (mPrefs.getBoolean("bluetoothSignalToContact", true)) {
                         String SG_grp = "";
