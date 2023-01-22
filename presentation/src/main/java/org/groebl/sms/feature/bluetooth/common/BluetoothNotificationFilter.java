@@ -340,13 +340,28 @@ public class BluetoothNotificationFilter {
 
                             set_sender = "Signal";
                             set_content = SG_name + ": " + SG_text;
+                        } else if (ticker.contains(": ") && ticker.contains("@") && title.contains(": ")) {
+                            String[] itemsList = title.split("\\u2069: \\u2068", 2);
+                            if (itemsList.length == 2) {
+                                SG_grp = itemsList[0];
+                                SG_name = itemsList[1];
+                            } else {
+                                String[] dataList = title.split(": ", 2);
+                                SG_grp = dataList[0];
+                                SG_name = dataList[1];
+                            }
+
+                            SG_text = text;
+
+                            set_sender = "Signal";
+                            set_content = SG_name + " @ " + SG_grp + ": " + SG_text;
                         } else if (ticker.contains(": ") && title.contains(": ")) {
                             String[] itemsList = title.split("\\u2069: \\u2068", 2);
                             if (itemsList.length == 2) {
                                 SG_grp = itemsList[0];
                                 SG_name = itemsList[1];
                             } else {
-                                SG_grp = title.substring(0, title.indexOf(": " + text.substring(0, 1)));
+                                SG_grp = title.substring(0, title.indexOf(": " + text.charAt(0)));
                                 SG_name = title.substring(title.indexOf(SG_grp + ": ") + 2 + SG_grp.length());
                             }
 
