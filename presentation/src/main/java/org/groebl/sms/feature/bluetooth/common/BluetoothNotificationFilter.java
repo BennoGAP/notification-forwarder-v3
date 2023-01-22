@@ -328,20 +328,13 @@ public class BluetoothNotificationFilter {
                         return;
                     }
 
-                    if (title.equals("Signal")) { return; }
-
                     if (mPrefs.getBoolean("bluetoothSignalToContact", true)) {
                         String SG_grp = "";
                         String SG_name = "";
-                        String SG_text = "";
 
-                        if(ticker.startsWith(title + ": ") || ticker.equals("")) {
+                        if(ticker.startsWith(title + ": ") || ticker.equals("")) { //Person Msg
                             SG_name = title;
-                            SG_text = text;
-
-                            set_sender = "Signal";
-                            set_content = SG_name + ": " + SG_text;
-                        } else if (ticker.contains(": ") && ticker.contains("@") && title.contains(": ")) {
+                        } else if (ticker.contains(": ") && ticker.contains("@") && title.contains(": ")) { //Group Msg
                             String[] itemsList = title.split("\\u2069: \\u2068", 2);
                             if (itemsList.length == 2) {
                                 SG_grp = itemsList[0];
@@ -351,12 +344,7 @@ public class BluetoothNotificationFilter {
                                 SG_grp = dataList[0];
                                 SG_name = dataList[1];
                             }
-
-                            SG_text = text;
-
-                            set_sender = "Signal";
-                            set_content = SG_name + " @ " + SG_grp + ": " + SG_text;
-                        } else if (ticker.contains(": ") && title.contains(": ")) {
+                        } else if (ticker.contains(": ") && title.contains(": ")) { //Group Msg (old?)
                             String[] itemsList = title.split("\\u2069: \\u2068", 2);
                             if (itemsList.length == 2) {
                                 SG_grp = itemsList[0];
@@ -365,11 +353,6 @@ public class BluetoothNotificationFilter {
                                 SG_grp = title.substring(0, title.indexOf(": " + text.charAt(0)));
                                 SG_name = title.substring(title.indexOf(SG_grp + ": ") + 2 + SG_grp.length());
                             }
-
-                            SG_text = text;
-
-                            set_sender = "Signal";
-                            set_content = SG_name + " @ " + SG_grp + ": " + SG_text;
                         }
 
                         //\u2068 ... \u2069
@@ -389,22 +372,24 @@ public class BluetoothNotificationFilter {
                                 set_sender = phoneNumberSignal;
                                 this.errorCode = 778;
 
-                                if (SG_grp.equals("")) {
-                                    set_content = SG_text;
-                                } else {
-                                    set_content = SG_grp + ": " + SG_text;
+                                if (SG_grp.equals("")) { //Phone Number found (People Msg)
+                                    set_content = text;
+                                } else { //Phone Number found (Group Msg)
+                                    set_content = SG_grp + ": " + text;
                                 }
+                            } else { //Phone Number not found
+                                set_content = title + ": " + text;
                             }
                         } catch (Exception e) {
                             Timber.e(e, "Signal Exception");
+                            set_content = title + ": " + text;
                         }
 
-                        //Set Signal Prefix to Msg
+                        //Set Signal Prefix to phone-number-assigned Msg
                         if(!set_sender.equals("Signal") && !mPrefs.getBoolean("bluetoothSignalHidePrefix", true)) {
                             set_content = "[Signal] " + set_content;
                         }
                     } else {
-                        set_sender = "Signal";
                         set_content = title + ": " + text;
                     }
                     break;
@@ -423,21 +408,12 @@ public class BluetoothNotificationFilter {
                     if (mPrefs.getBoolean("bluetoothTelegramToContact", true)) {
                         String TG_grp = "";
                         String TG_name = "";
-                        String TG_text = "";
 
                         if (title.contains(": ")) {
                             TG_grp = EmojiParser.removeAllEmojis(title.substring(0, title.indexOf(": "))).trim();
                             TG_name = title.substring(title.indexOf(": ") + 2);
-                            TG_text = text;
-
-                            set_sender = "Telegram";
-                            set_content = TG_name + " @ " + TG_grp + ": " + TG_text;
                         } else {
                             TG_name = title;
-                            TG_text = text;
-
-                            set_sender = "Telegram";
-                            set_content = TG_name + ": " + TG_text;
                         }
 
                         //Check if Message is from blocked group
@@ -452,23 +428,24 @@ public class BluetoothNotificationFilter {
                                 set_sender = phoneNumberTelegram;
                                 this.errorCode = 778;
 
-                                if (TG_grp.equals("")) {
-                                    set_content = TG_text;
-                                } else {
-                                    set_content = TG_grp + ": " + TG_text;
+                                if (TG_grp.equals("")) { //Phone Number found (People Msg)
+                                    set_content = text;
+                                } else { // Phone Number found (Group Msg)
+                                    set_content = TG_grp + ": " + text;
                                 }
+                            } else { //Phone Number not found
+                                set_content = title + ": " + text;
                             }
                         } catch (Exception e) {
                             Timber.e(e, "Telegram Exception");
+                            set_content = title + ": " + text;
                         }
 
-                        //Set Signal Prefix to Msg
+                        //Set Telegram Prefix to phone-number-assigned Msg
                         if(!set_sender.equals("Telegram") && !mPrefs.getBoolean("bluetoothTelegramHidePrefix", true)) {
                             set_content = "[Telegram] " + set_content;
                         }
-
                     } else {
-                        set_sender = "Telegram";
                         set_content = title + ": " + text;
                     }
                     break;
