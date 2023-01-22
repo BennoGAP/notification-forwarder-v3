@@ -377,10 +377,10 @@ public class BluetoothNotificationFilter {
                         SG_grp = EmojiParser.removeAllEmojis(SG_grp).trim();
 
                         //Check if Message is from blocked group
-                        if (BluetoothMessengerBlocked.isMessengerBlocked(mPrefs, SG_grp, true, "Signal")) { return; }
+                        if (BluetoothMessengerBlocked.isMessengerBlocked(mContext, SG_grp, true, "Signal")) { return; }
 
                         //Check if Message is from blocked contact
-                        if (BluetoothMessengerBlocked.isMessengerBlocked(mPrefs, SG_name, false, "Signal")) { return; }
+                        if (BluetoothMessengerBlocked.isMessengerBlocked(mContext, SG_name, false, "Signal")) { return; }
 
                         try {
                             String phoneNumberSignal = btPhoneHelper.findNumberFromSignalName(mContext, SG_name);
@@ -440,10 +440,10 @@ public class BluetoothNotificationFilter {
                         }
 
                         //Check if Message is from blocked group
-                        if (BluetoothMessengerBlocked.isMessengerBlocked(mPrefs, TG_grp, true, "Telegram")) { return; }
+                        if (BluetoothMessengerBlocked.isMessengerBlocked(mContext, TG_grp, true, "Telegram")) { return; }
 
                         //Check if Message is from blocked contact
-                        if (BluetoothMessengerBlocked.isMessengerBlocked(mPrefs, TG_name, false, "Telegram")) { return; }
+                        if (BluetoothMessengerBlocked.isMessengerBlocked(mContext, TG_name, false, "Telegram")) { return; }
 
                         try {
                             String phoneNumberTelegram = btPhoneHelper.findNumberFromTelegramName(mContext, TG_name);
@@ -525,7 +525,7 @@ public class BluetoothNotificationFilter {
                         WA_grp = EmojiParser.removeAllEmojis(WA_grp).trim();
 
                         //Check if Message is from blocked group
-                        if (BluetoothMessengerBlocked.isMessengerBlocked(mPrefs, WA_grp, true, "WhatsApp")) { return; }
+                        if (BluetoothMessengerBlocked.isMessengerBlocked(mContext, WA_grp, true, "WhatsApp")) { return; }
 
                         //Check if the Name is just a Number or a Name we can search for in the Phonebook
                         if (isPhoneNumber(WA_name)) {
@@ -545,7 +545,7 @@ public class BluetoothNotificationFilter {
                                     }
                                 } else {
                                     //Check if Message is from blocked contact
-                                    if (BluetoothMessengerBlocked.isMessengerBlocked(mPrefs, phoneNumber, false, "WhatsApp")) { return; }
+                                    if (BluetoothMessengerBlocked.isMessengerBlocked(mContext, phoneNumber, false, "WhatsApp")) { return; }
 
                                     set_sender = phoneNumber;
                                     this.errorCode = 778;

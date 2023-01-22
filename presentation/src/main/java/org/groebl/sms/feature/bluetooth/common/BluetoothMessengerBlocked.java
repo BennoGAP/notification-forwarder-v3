@@ -30,7 +30,8 @@ public class BluetoothMessengerBlocked {
         PreferenceManager.getDefaultSharedPreferences(context).edit().putStringSet(getBlockPref(isGroup, MessengerType), idStrings).apply();
     }
 
-    public static boolean isMessengerBlocked(SharedPreferences prefs, String name, Boolean isGroup, String MessengerType) {
+    public static boolean isMessengerBlocked(Context context, String name, Boolean isGroup, String MessengerType) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         if (name.equals(""))                                { return false; }
         if (!isGroup && MessengerType.equals("WhatsApp"))   { name = PhoneNumberUtils.stripSeparators(name); }
 
