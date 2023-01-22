@@ -60,7 +60,7 @@ class BluetoothReceiver : BroadcastReceiver() {
                         //}
 
                         //Delete Temporary Messages
-                        val afterTimeDelete = if (mPrefs.getBoolean("bluetoothOnlyOnConnect", true) && mPrefs.getBoolean("bluetoothAutodelete", true)) 0L else 6L
+                        val afterTimeDelete = if (mPrefs.getBoolean("bluetoothOnlyOnConnect", false) && mPrefs.getBoolean("bluetoothAutodelete", true)) 0L else 6L
                         Thread { BluetoothHelper.deleteBluetoothMessages(context, mPrefs.getBoolean("bluetoothRealmHideMessage", true), afterTimeDelete) }.start()
                     }
 

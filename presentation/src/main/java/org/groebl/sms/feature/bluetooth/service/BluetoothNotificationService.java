@@ -69,7 +69,7 @@ public class BluetoothNotificationService extends NotificationListenerService {
         if (!mPrefs.getBoolean("bluetoothEnabled", false)) { return; }
 
         //Check if Connected to bluetooth is enabled
-        if(mPrefs.getBoolean("bluetoothOnlyOnConnect", true) && !mPrefs.getBoolean("bluetoothCurrentStatus", false)) { return; }
+        if(mPrefs.getBoolean("bluetoothOnlyOnConnect", false) && !mPrefs.getBoolean("bluetoothCurrentStatus", false)) { return; }
 
         //Check if App is on App-Whitelist
         String pack = sbn.getPackageName();
