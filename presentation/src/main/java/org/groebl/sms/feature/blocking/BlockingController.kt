@@ -91,17 +91,14 @@ class BlockingController : QkController<BlockingView, BlockingState, BlockingPre
         drop.checkbox.isChecked = state.dropEnabled
         blockedMessages.isEnabled = !state.dropEnabled
 
-        val blockedNumber: OrderedRealmCollection<BlockedNumber> = Realm.getDefaultInstance().where(BlockedNumber::class.java).findAll()
+        val blockedNumber: OrderedRealmCollection<BlockedNumber> = Realm.getDefaultInstance().use { realm -> realm.where(BlockedNumber::class.java).findAll() }
         blockedNumbers.value = if (state.blockingManager == activity!!.getString(R.string.blocking_manager_qksms_title_new)) blockedNumber.size.toString() else ""
-        Realm.getDefaultInstance().close()
 
-        val blockedRegexp: OrderedRealmCollection<BlockedRegex> = Realm.getDefaultInstance().where(BlockedRegex::class.java).findAll()
+        val blockedRegexp: OrderedRealmCollection<BlockedRegex> = Realm.getDefaultInstance().use { realm -> realm.where(BlockedRegex::class.java).findAll() }
         blockedRegexps.value = if (state.blockingManager == activity!!.getString(R.string.blocking_manager_qksms_title_new)) blockedRegexp.size.toString() else ""
-        Realm.getDefaultInstance().close()
 
-        val blockedConversation: OrderedRealmCollection<Conversation> = Realm.getDefaultInstance().where(Conversation::class.java).equalTo("blocked", true).findAll()
+        val blockedConversation: OrderedRealmCollection<Conversation> = Realm.getDefaultInstance().use { realm -> realm.where(Conversation::class.java).equalTo("blocked", true).findAll() }
         blockedMessages.value = blockedConversation.size.toString()
-        Realm.getDefaultInstance().close()
     }
 
     override fun openBlockedNumbers() {

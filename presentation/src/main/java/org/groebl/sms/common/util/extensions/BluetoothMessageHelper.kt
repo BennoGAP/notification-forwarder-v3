@@ -18,20 +18,17 @@ import java.security.NoSuchAlgorithmException
 class BluetoothMessageHelper {
 
     fun isBluetoothHashCached(app: String, hash: String): Boolean {
-        val realm = Realm.getDefaultInstance()
-        realm.refresh()
-
-        val count = realm.where(BluetoothForwardCache::class.java)
-            .equalTo("app", app)
-            .equalTo("hash", hash)
-            .count()
+        val count = Realm.getDefaultInstance().use { realm ->
+            realm.where(BluetoothForwardCache::class.java)
+                .equalTo("app", app)
+                .equalTo("hash", hash)
+                .count()
+        }
 
         //In Database, return true
         if (count > 0L) { return true; }
 
-        var maxValue: Long = realm.use { realm ->
-            realm.where(BluetoothForwardCache::class.java).max("id")?.toLong() ?: 0L
-        }
+        var maxValue: Long = Realm.getDefaultInstance().use { realm -> realm.where(BluetoothForwardCache::class.java).max("id")?.toLong() ?: 0L }
 
         val bluetoothMessage = BluetoothForwardCache().apply {
             this.app = app
@@ -40,7 +37,8 @@ class BluetoothMessageHelper {
             this.id = ++maxValue
         }
 
-        realm.executeTransaction { realm.insert(bluetoothMessage) }
+        Realm.getDefaultInstance().executeTransaction { Realm.getDefaultInstance().insertOrUpdate(bluetoothMessage) }
+
         return false
     }
 
@@ -128,13 +126,9 @@ class BluetoothMessageHelper {
     }
 
     private fun addMessageToRealmInboxAsRead(context: Context, address: String, body: String, sentTime: Long, asRead: Boolean = false, errorCode: Int = 0, canUseSubId: Boolean = true, subId: Long = 0L, syncRepo: SyncRepository) {
-        val realmInstance = Realm.getDefaultInstance()
-
         var managedMessage: Message? = null
 
-        var maxValue: Long = realmInstance.use { realm ->
-            realm.where(Message::class.java).max("id")?.toLong() ?: 0L
-        }
+        var maxValue: Long = Realm.getDefaultInstance().use { realm -> realm.where(Message::class.java).max("id")?.toLong() ?: 0L }
 
         // Insert the message to Realm
         val message = Message().apply {
@@ -154,7 +148,7 @@ class BluetoothMessageHelper {
             type = "sms"
         }
 
-        realmInstance.executeTransaction { managedMessage = realmInstance.copyToRealmOrUpdate(message) }
+        Realm.getDefaultInstance().executeTransaction { managedMessage = Realm.getDefaultInstance().copyToRealmOrUpdate(message) }
 
         // Insert the message to the native content provider
         val values = ContentValues().apply {
@@ -169,7 +163,7 @@ class BluetoothMessageHelper {
             values.put(Telephony.Sms.SUBSCRIPTION_ID, subId)
         }
 
-        if(asRead) {
+        if (asRead) {
             values.put(Telephony.Sms.READ, 1)
         } else {
             values.put(Telephony.Sms.READ, 0)
@@ -179,30 +173,26 @@ class BluetoothMessageHelper {
 
         uri?.lastPathSegment?.toLong()?.let { id ->
             // Update the contentId after the message has been inserted to the content provider
-            realmInstance.executeTransaction { managedMessage?.contentId = id }
+            Realm.getDefaultInstance().executeTransaction { managedMessage?.contentId = id }
         }
 
         //Update Conversation/Thread
-        val conversation = realmInstance
+        val conversation = Realm.getDefaultInstance().use { realm -> realm
             .where(Conversation::class.java)
             .equalTo("id", message.threadId)
-            .findFirst()
+            .findFirst() }
 
-        val lastMessage = realmInstance
+        val lastMessage = Realm.getDefaultInstance().use { realm -> realm
             .where(Message::class.java)
             .equalTo("threadId", message.threadId)
             .sort("date", Sort.DESCENDING)
-            .findFirst()
+            .findFirst() }
 
-        if(conversation == null) {
+        if (conversation == null) {
             syncRepo.syncMessage(uri!!)
             return
         } else {
-            realmInstance.executeTransaction {
-                conversation.lastMessage = lastMessage
-            }
+            Realm.getDefaultInstance().executeTransaction { conversation.lastMessage = lastMessage }
         }
-
-        realmInstance.close()
     }
 }
