@@ -10,7 +10,6 @@ import android.media.AudioManager
 import android.net.ConnectivityManager
 import android.os.Handler
 import android.os.Looper
-import android.preference.PreferenceManager
 import dagger.android.AndroidInjection
 import org.groebl.sms.common.util.BluetoothHelper
 import org.groebl.sms.feature.bluetooth.common.BluetoothTethering
