@@ -103,6 +103,10 @@ public class BluetoothNotificationFilter {
             return this.content;
         }
 
+        public Boolean hasPhoneNumber() {
+            return this.errorCode.equals(778);
+        }
+
         public Integer getErrorCode() {
             return this.errorCode;
         }
@@ -122,10 +126,10 @@ public class BluetoothNotificationFilter {
             } catch (PackageManager.NameNotFoundException e) {
                 set_sender = defaultName;
             }
-            
+
             return set_sender;
         }
-        
+
         public void BluetoothFilter(StatusBarNotification sbn, Context mContext) {
 
             String set_sender = "";
@@ -322,6 +326,10 @@ public class BluetoothNotificationFilter {
 
                 //Signal
                 case "org.thoughtcrime.securesms":
+                    set_sender = "Signal";
+
+                    if (title.equals("Signal")) { return; }
+
                     CharSequence[] textline_signal = extras.getCharSequenceArray(Notification.EXTRA_TEXT_LINES);
 
                     if(textline_signal != null) {
@@ -396,6 +404,8 @@ public class BluetoothNotificationFilter {
 
                 //Telegram
                 case "org.telegram.messenger":
+                    set_sender = "Telegram";
+
                     if (!ticker.equals("")) {
                         return;
                     }
