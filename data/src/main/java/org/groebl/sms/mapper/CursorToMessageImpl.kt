@@ -91,7 +91,6 @@ class CursorToMessageImpl @Inject constructor(
             read = cursor.getInt(columnsMap.read) != 0
             locked = cursor.getInt(columnsMap.locked) != 0
             subId = if (columnsMap.subId != -1) cursor.getInt(columnsMap.subId) else -1
-            isBluetoothMessage = (cursor.getInt(columnsMap.smsErrorCode) == 777) or (cursor.getInt(columnsMap.smsErrorCode) == 778)
 
             when (type) {
                 "sms" -> {
@@ -105,6 +104,8 @@ class CursorToMessageImpl @Inject constructor(
 
                     errorCode = if(isBluetoothMessage) 0 else cursor.getInt(columnsMap.smsErrorCode)
                     deliveryStatus = cursor.getInt(columnsMap.smsStatus)
+
+                    isBluetoothMessage = (cursor.getInt(columnsMap.smsErrorCode) == 777) or (cursor.getInt(columnsMap.smsErrorCode) == 778)
                 }
 
                 "mms" -> {
@@ -126,6 +127,7 @@ class CursorToMessageImpl @Inject constructor(
                             ?.let { EncodedStringValue(subjectCharset, it).string } ?: ""
                     textContentType = ""
                     attachmentType = Message.AttachmentType.NOT_LOADED
+                    isBluetoothMessage = false
                 }
             }
         }

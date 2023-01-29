@@ -71,6 +71,9 @@ public final class SqliteWrapper {
             Timber.e(e, "Catch a SQLiteException when query: ");
             checkSQLiteException(context, e);
             return null;
+        } catch (Exception e) {
+            Timber.e(e, "Catch all other Sqlite-Exceptions");
+            return null;
         }
     }
 
