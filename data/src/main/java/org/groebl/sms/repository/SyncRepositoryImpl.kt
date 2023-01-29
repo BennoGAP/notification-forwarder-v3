@@ -18,37 +18,27 @@
  */
 package org.groebl.sms.repository
 
+import android.Manifest
 import android.content.ContentResolver
 import android.content.ContentUris
+import android.content.Context
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.Telephony
 import com.f2prateek.rx.preferences2.RxSharedPreferences
-import org.groebl.sms.extensions.forEach
-import org.groebl.sms.extensions.insertOrUpdate
-import org.groebl.sms.extensions.map
-import org.groebl.sms.manager.KeyManager
-import org.groebl.sms.mapper.CursorToContact
-import org.groebl.sms.mapper.CursorToContactGroup
-import org.groebl.sms.mapper.CursorToContactGroupMember
-import org.groebl.sms.mapper.CursorToConversation
-import org.groebl.sms.mapper.CursorToMessage
-import org.groebl.sms.mapper.CursorToPart
-import org.groebl.sms.mapper.CursorToRecipient
-import org.groebl.sms.model.Contact
-import org.groebl.sms.model.ContactGroup
-import org.groebl.sms.model.Conversation
-import org.groebl.sms.model.Message
-import org.groebl.sms.model.MmsPart
-import org.groebl.sms.model.PhoneNumber
-import org.groebl.sms.model.Recipient
-import org.groebl.sms.model.SyncLog
-import org.groebl.sms.util.PhoneNumberUtils
-import org.groebl.sms.util.tryOrNull
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
 import io.realm.Realm
 import io.realm.RealmList
 import io.realm.Sort
+import org.groebl.sms.extensions.forEach
+import org.groebl.sms.extensions.insertOrUpdate
+import org.groebl.sms.extensions.map
+import org.groebl.sms.manager.KeyManager
+import org.groebl.sms.mapper.*
+import org.groebl.sms.model.*
+import org.groebl.sms.util.PhoneNumberUtils
+import org.groebl.sms.util.tryOrNull
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -65,13 +55,15 @@ class SyncRepositoryImpl @Inject constructor(
     private val cursorToContactGroupMember: CursorToContactGroupMember,
     private val keys: KeyManager,
     private val phoneNumberUtils: PhoneNumberUtils,
-    private val rxPrefs: RxSharedPreferences
+    private val rxPrefs: RxSharedPreferences,
+    private val context: Context
 ) : SyncRepository {
 
     override val syncProgress: Subject<SyncRepository.SyncProgress> =
             BehaviorSubject.createDefault(SyncRepository.SyncProgress.Idle)
 
     override fun syncMessages() {
+        if (context.checkSelfPermission(Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) { return; }
 
         // If the sync is already running, don't try to do another one
         if (syncProgress.blockingFirst() is SyncRepository.SyncProgress.Running) return
@@ -221,6 +213,7 @@ class SyncRepositoryImpl @Inject constructor(
     }
 
     override fun syncMessage(uri: Uri): Message? {
+        if (context.checkSelfPermission(Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) { return null; }
 
         // If we don't have a valid type, return null
         val type = when {
