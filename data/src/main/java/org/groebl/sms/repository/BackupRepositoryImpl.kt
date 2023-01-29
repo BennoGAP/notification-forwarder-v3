@@ -244,7 +244,7 @@ class BackupRepositoryImpl @Inject constructor(
                     arrayOf(message.type.toString(), message.address, message.date.toString(), message.dateSent.toString(), message.body),
                     null);
 
-                if (c?.count!! > 0) {
+                if (c?.count!! > 0 || message.body == "") {
                     skipCount++
                 } else {
                     context.contentResolver.insert(Telephony.Sms.CONTENT_URI, values)
