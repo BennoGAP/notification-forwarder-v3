@@ -47,10 +47,23 @@
         android:layout_marginTop="8dp"
         android:layout_marginStart="5dp"
         android:layout_gravity="top"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/unread"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0" />
+
+    <ImageView
+        android:id="@+id/unread"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginBottom="6dp"
+        android:src="@drawable/circle"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/snippet"
+        app:layout_constraintStart_toEndOf="@id/avatars"
+        tools:tint="@color/tools_theme"
+        tools:visibility="visible"
+        android:contentDescription="unread" />
 
     <org.groebl.sms.common.widget.QkTextView
         android:id="@+id/title"
@@ -58,7 +71,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginStart="12dp"
+        android:layout_marginStart="6dp"
         android:layout_marginEnd="16dp"
         android:ellipsize="end"
         android:lines="1"
@@ -66,7 +79,7 @@
         app:layout_constraintBottom_toTopOf="@id/snippet"
         app:layout_constraintEnd_toStartOf="@id/date"
         app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintStart_toEndOf="@id/avatars"
+        app:layout_constraintStart_toEndOf="@id/unread"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
         tools:text="@tools:sample/full_names"
@@ -78,11 +91,12 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
+        android:layout_marginStart="6dp"
         android:ellipsize="end"
         android:maxLines="2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/pinned"
-        app:layout_constraintStart_toStartOf="@id/title"
+        app:layout_constraintStart_toEndOf="@id/avatars"
         app:layout_constraintTop_toBottomOf="@id/title"
         tools:text="@tools:sample/lorem/random" />
 
@@ -93,27 +107,14 @@
         android:layout_marginTop="2dp"
         android:paddingStart="4dp"
         android:src="@drawable/ic_baseline_push_pin_24"
-        android:tint="?android:attr/textColorSecondary"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/snippet"
         tools:visibility="visible"
-        android:contentDescription="pinned" />
+        android:contentDescription="pinned"
+        app:tint="?android:attr/textColorSecondary" />
 
-    <ImageView
-        android:id="@+id/unread"
-        android:layout_width="10dp"
-        android:layout_height="10dp"
-        android:layout_gravity="center"
-        android:layout_marginStart="2dp"
-        android:src="@drawable/circle"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@id/avatars"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/avatars"
-        tools:tint="@color/tools_theme"
-        tools:visibility="visible"
-        android:contentDescription="unread" />
+
 
     <org.groebl.sms.common.widget.QkTextView
         android:id="@+id/date"
@@ -133,12 +134,12 @@
         android:layout_height="16dp"
         android:layout_marginEnd="2dp"
         android:src="@drawable/ic_sim_card_black_24dp"
-        android:tint="?android:attr/textColorSecondary"
         app:layout_constraintTop_toTopOf="@id/date"
         app:layout_constraintBottom_toBottomOf="@id/date"
         app:layout_constraintEnd_toStartOf="@id/chevron"
         app:layout_constraintHorizontal_bias="100"
-        android:contentDescription="sim" />
+        android:contentDescription="sim"
+        app:tint="?android:attr/textColorSecondary" />
 
     <org.groebl.sms.common.widget.QkTextView
         android:id="@+id/simIndex"
@@ -158,32 +159,9 @@
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:src="@drawable/ic_chevron_right_black_24dp"
-        android:tint="?android:attr/textColorTertiary"
         app:layout_constraintTop_toTopOf="@id/date"
         app:layout_constraintBottom_toBottomOf="@id/date"
-        app:layout_constraintEnd_toEndOf="parent" />
-<!--
-    <ImageView
-        android:id="@+id/sim"
-        android:layout_width="12dp"
-        android:layout_height="12dp"
-        android:layout_marginEnd="2dp"
-        android:gravity="center_vertical"
-        android:src="@drawable/ic_sim_card_black_24dp"
-        android:tint="?android:attr/textColorSecondary"
-        app:layout_constraintTop_toTopOf="@id/simIndex"
-        app:layout_constraintBottom_toBottomOf="@id/simIndex"
-        app:layout_constraintEnd_toStartOf="@id/simIndex" />
-
-    <org.groebl.sms.common.widget.QkTextView
-        android:id="@+id/simIndex"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:textColor="?android:attr/textColorSecondary"
-        app:layout_constraintBottom_toBottomOf="@id/title"
         app:layout_constraintEnd_toEndOf="parent"
-        app:textSize="tertiary"
-        tools:text="1" />
--->
+        app:tint="?android:attr/textColorTertiary" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
