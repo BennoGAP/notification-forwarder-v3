@@ -150,6 +150,7 @@
     <string name="bluetooth_donate_thanks" tools:ignore="MissingTranslation">Thank you for your donation</string>
     <string name="bluetooth_donate_text" tools:ignore="MissingTranslation">If you like this app, a donation is highly appreciated :)</string>
 
+    <string name="main_default_sms_mainscreen" tools:ignore="MissingTranslation">If you want to use this app, set it as the default SMS-Handler</string>
     <string name="main_default_sms_message_new" tools:ignore="MissingTranslation">Make this your default SMS app</string>
     <string name="main_permission_sms_new" tools:ignore="MissingTranslation">This App needs permission to send and view SMS messages</string>
     <string name="main_permission_contacts_new" tools:ignore="MissingTranslation">This App needs permission to view your contacts</string>

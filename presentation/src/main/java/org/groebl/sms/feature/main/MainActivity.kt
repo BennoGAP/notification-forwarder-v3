@@ -253,7 +253,7 @@ class MainActivity : QkThemedActivity(), MainView {
 
         rateLayout.setVisible(state.showRating)
 
-        compose.setVisible(state.page is Inbox || state.page is Archived)
+        compose.setVisible((state.page is Inbox || state.page is Archived) && BluetoothHelper.isDefaultSms(applicationContext))
         compose.animate().rotation(if (state.drawerOpen) 90f else 0f).start()
         conversationsAdapter.emptyView = empty.takeIf { state.page is Inbox || state.page is Archived }
         searchAdapter.emptyView = empty.takeIf { state.page is Searching }
@@ -273,9 +273,19 @@ class MainActivity : QkThemedActivity(), MainView {
                     compose.animate().rotation(0f).start()}
                 title = getString(R.string.main_title_selected, state.page.selected)
                 if (recyclerView.adapter !== conversationsAdapter) recyclerView.adapter = conversationsAdapter
-                conversationsAdapter.updateData(state.page.data)
-                itemTouchHelper.attachToRecyclerView(recyclerView)
-                empty.setText(R.string.inbox_empty_text)
+
+                //Do not show messages when not default sms handler
+                if (BluetoothHelper.isDefaultSms(applicationContext)) {
+                    conversationsAdapter.updateData(state.page.data)
+                    itemTouchHelper.attachToRecyclerView(recyclerView)
+                    empty.setText(R.string.inbox_empty_text)
+                    toolbarSearch.isEnabled = true
+                } else {
+                    itemTouchHelper.attachToRecyclerView(null)
+                    empty.setVisible(true)
+                    empty.setText(R.string.main_default_sms_mainscreen)
+                    toolbarSearch.isEnabled = false
+                }
             }
 
             is Searching -> {

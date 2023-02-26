@@ -146,6 +146,7 @@
   <string name="bluetooth_donate_thanks">Vielen Dank für die Spende</string>
   <string name="bluetooth_donate_text">Ich hoffe dir gefällt die App.\n\nDa die App auch weiterhin werbefrei und kostenfrei bleiben soll würde ich mich über eine freiwillige Spende freuen :)</string>
 
+  <string name="main_default_sms_mainscreen">Um diese App zu verwenden muss sie als Standard-SMS-App festgelegt werden</string>
   <string name="main_default_sms_message_new">Diese App als Standard-SMS-App festlegen</string>
   <string name="main_permission_sms_new">Die App benötigt die Berechtigung zum Senden und Anzeigen von SMS-Nachrichten</string>
   <string name="main_permission_contacts_new">Die App benötigt die Berechtigung zum Zugreifen auf die Kontakte</string>
