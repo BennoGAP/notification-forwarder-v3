@@ -30,7 +30,7 @@ android {
         applicationId "org.groebl.sms"
         minSdkVersion 23
         targetSdkVersion 33
-        versionCode 3500
+        versionCode 3501
         versionName '3.5'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

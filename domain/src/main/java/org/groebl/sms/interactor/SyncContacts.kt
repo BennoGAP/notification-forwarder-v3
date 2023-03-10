@@ -29,7 +29,7 @@ class SyncContacts @Inject constructor(private val syncManager: SyncRepository) 
         return Flowable.just(System.currentTimeMillis())
                 .doOnNext { syncManager.syncContacts() }
                 .map { startTime -> System.currentTimeMillis() - startTime }
-                .doOnNext { duration -> Timber.v("Completed sync in ${duration}ms") }
+                .doOnNext { duration -> Timber.v("Completed Contact sync in ${duration}ms") }
     }
 
 }
