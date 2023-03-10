@@ -183,6 +183,7 @@ class ComposeViewModel @Inject constructor(
                     messages
                 }
                 .switchMap { messages -> messages.asObservable() }
+                .doOnError { throwable -> Timber.v("Error during subscription: ${throwable.message}") }
                 .subscribe(messages::onNext)
 
         disposables += conversation
