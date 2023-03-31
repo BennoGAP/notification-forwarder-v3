@@ -30,8 +30,8 @@ android {
         applicationId "org.groebl.sms"
         minSdkVersion 23
         targetSdkVersion 33
-        versionCode 3501
-        versionName '3.5'
+        versionCode 3502
+        versionName '3.5 (2)'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -208,7 +208,7 @@ dependencies {
     withAnalyticsRelease project(path: ':data', configuration: 'withAnalyticsRelease')
 
     //bluetooth
-    implementation "com.vdurmont:emoji-java:5.1.1"
+    implementation files("libs/emoji-java-5.1.3.jar")
 }
 
 
