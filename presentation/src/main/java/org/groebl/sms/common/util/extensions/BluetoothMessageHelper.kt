@@ -56,8 +56,8 @@ class BluetoothMessageHelper {
     }
 
     fun emojiToNiceEmoji(text: String, active: Boolean): String {
-        var text = text
         /*
+        var text = text
         text = text.replace("[\ud83d\ude42]".toRegex(), ":)")
         text = text.replace("[\ud83d\ude0a]".toRegex(), ":)")
         text = text.replace("[\ud83d\ude09]".toRegex(), ";)")
@@ -74,7 +74,6 @@ class BluetoothMessageHelper {
         text = text.replace("[\u2639]".toRegex(), ":(")
         text = text.replace("[\ud83d\ude10]".toRegex(), ":|")
         text = text.replace("[\ud83d\ude11]".toRegex(), ":|")
-        */
         text = text.replace("[\ud83d\udc9a]".toRegex(), "<3")
         text = text.replace("[\ud83d\udc9b]".toRegex(), "<3")
         text = text.replace("[\ud83d\udc9c]".toRegex(), "<3")
@@ -82,7 +81,7 @@ class BluetoothMessageHelper {
         text = text.replace("[\u2764]".toRegex(), "<3")
         text = text.replace("[\ud83d\udc94]".toRegex(), "</3")
         //TODO: find more
-
+        */
         //text = text.replaceAll("[\u25a1]", ""); // [] =>
         /*
             String output = "";

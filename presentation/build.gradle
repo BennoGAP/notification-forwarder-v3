@@ -208,7 +208,7 @@ dependencies {
     withAnalyticsRelease project(path: ':data', configuration: 'withAnalyticsRelease')
 
     //bluetooth
-    implementation files("libs/emoji-java-5.1.4.jar")
+    implementation files("libs/emoji-java-5.1.5.jar")
 }
 
 
