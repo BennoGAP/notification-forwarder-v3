@@ -533,7 +533,7 @@
     <string name="about_changelog" translatable="false">https://github.com/moezbhatti/qksms/releases</string>
     <string name="about_contact" translatable="false">moez@qklabs.com</string>
     <string name="about_license" translatable="false">GNU General Public License v3.0</string>
-    <string name="about_copyright" translatable="false">© 2014–2022</string>
+    <string name="about_copyright" translatable="false">© 2014–2023</string>
 
     <string name="changelog_title" translatable="false">New</string>
     <string name="changelog_version" translatable="false">Version %s</string>
