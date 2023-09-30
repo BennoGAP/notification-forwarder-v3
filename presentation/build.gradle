@@ -199,7 +199,7 @@ dependencies {
     implementation project(':data')
     implementation project(':domain')
 
-    withAnalyticsImplementation 'com.google.firebase:firebase-crashlytics:18.3.2'
+    withAnalyticsImplementation "com.google.firebase:firebase-crashlytics:$crashlytics_version"
     withAnalyticsImplementation "com.android.billingclient:billing:$billing_version"
     withAnalyticsImplementation "com.android.billingclient:billing-ktx:$billing_version"
 
