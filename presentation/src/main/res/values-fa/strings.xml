@@ -169,7 +169,7 @@
     <string name="backup_disclaimer">در حال حاضر ، فقط پشتیبان‌گیری و بازگردانی پیامک پشتیبانی می شود. پشتیبان‌گیری و برنامه‌ریزی برای پشتیبان‌گیری از MMS به زودی ارائه می شود!</string>
     <string name="backup_now">اکنون پشتیبان‌گیری کن</string>
     <string name="backup_progress_parsing">در حال تجزیه پشتیبان&#8230;</string>
-    <string name="backup_progress_running">%d/%d پیام</string>
+    <string name="backup_progress_running">%1$d/%2$d پیام</string>
     <string name="backup_progress_saving">در حال ذخیره پشتیبان&#8230;</string>
     <string name="backup_progress_syncing">در حال همگام‌سازی پیام‌ها&#8230;</string>
     <string name="backup_progress_finished">تمام شد!</string>

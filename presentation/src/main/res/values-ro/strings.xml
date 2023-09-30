@@ -170,7 +170,7 @@
     <string name="backup_disclaimer">Momentan, doar SMS este acceptat prin Backup și Restaurare. Suportul MMS și backup-urile programate vor fi disponibile în curând!</string>
     <string name="backup_now">Backup acum</string>
     <string name="backup_progress_parsing">Se analizează copia de rezervă&#8230;</string>
-    <string name="backup_progress_running">%d/%d mesaje</string>
+    <string name="backup_progress_running">%1$d/%2$d mesaje</string>
     <string name="backup_progress_saving">Salvare copie de rezervă&#8230;</string>
     <string name="backup_progress_syncing">Se sincronizează mesajele&#8230;</string>
     <string name="backup_progress_finished">Terminat!</string>

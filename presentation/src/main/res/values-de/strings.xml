@@ -48,8 +48,8 @@
   <string name="settings_bluetooth_delete_summary">Temporär angelegte Nachrichten beim trennen der Bluetooth-Verbindung löschen</string>
   <string name="settings_bluetooth_devices_title">Bluetooth-Geräte auswählen</string>
   <string name="settings_bluetooth_devices_summary">Bluetooth-Geräte festlegen, bei deren Verbindung die Weiterleitung aktiviert wird (z.B. Auto)</string>
-  <string name="settings_bluetooth_device_status_connected">Verbunden mit %s seit %s</string>
-  <string name="settings_bluetooth_device_status_disconnected">Verbindung mit %s getrennt seit %s</string>
+  <string name="settings_bluetooth_device_status_connected">Verbunden mit %1$s seit %2$s</string>
+  <string name="settings_bluetooth_device_status_disconnected">Verbindung mit %1$s getrennt seit %2$s</string>
   <string name="settings_bluetooth_markasread_title">Nachrichten als gelesen speichern</string>
   <string name="settings_bluetooth_markasread_summary">Nachrichten werden direkt als gelesen abgespeichert</string>
   <string name="settings_bluetooth_markasread_delayed_title">Verzögerte Gelesen-Markierung</string>
@@ -311,7 +311,7 @@
   <string name="backup_disclaimer">Derzeit wird nur das Sichern und Wiederherstellen von SMS unterstützt. Die Unterstützung für MMS und geplante Sicherungen folgen demnächst!</string>
   <string name="backup_now">Jetzt sichern</string>
   <string name="backup_progress_parsing">Analysiere Sicherung&#8230;</string>
-  <string name="backup_progress_running">%d/%d Nachrichten</string>
+  <string name="backup_progress_running">%1$d/%2$d Nachrichten</string>
   <string name="backup_progress_saving">Sicherung wird gespeichert&#8230;</string>
   <string name="backup_progress_syncing">Synchronisiere Nachrichten&#8230;</string>
   <string name="backup_progress_finished">Fertig!</string>

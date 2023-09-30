@@ -169,7 +169,7 @@
     <string name="backup_disclaimer">Actuellement, seulement la sauvegarde et la restauration des SMS sont pris en charge. Les MMS et les sauvegardes planifiées arriveront bientôt !</string>
     <string name="backup_now">Sauvegarder maintenant</string>
     <string name="backup_progress_parsing">Analyse de la sauvegarde&#8230;</string>
-    <string name="backup_progress_running">%d/%d messages</string>
+    <string name="backup_progress_running">%1$d/%2$d messages</string>
     <string name="backup_progress_saving">Enregistrement de la sauvegarde&#8230;</string>
     <string name="backup_progress_syncing">Synchronisation des messages&#8230;</string>
     <string name="backup_progress_finished">Terminé !</string>
