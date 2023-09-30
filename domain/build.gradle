@@ -38,6 +38,8 @@ android {
 }
 
 dependencies {
+    compileOnly 'com.github.pengrad:jdk9-deps:1.0'
+
     // androidx
     implementation "androidx.documentfile:documentfile:$androidx_documentfile_version"
 

@@ -101,6 +101,7 @@ configurations {
 }
 
 dependencies {
+    compileOnly 'com.github.pengrad:jdk9-deps:1.0'
 
     // lifecycle
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
