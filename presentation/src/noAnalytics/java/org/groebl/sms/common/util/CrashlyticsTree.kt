@@ -18,10 +18,14 @@
  */
 package org.groebl.sms.common.util
 
+import android.content.Context
 import timber.log.Timber
 import javax.inject.Inject
 
-class CrashlyticsTree : Timber.Tree() {
+class CrashlyticsTree @Inject constructor(
+    private val context: Context
+) : Timber.Tree()
+{
 
     override fun log(priority: Int, tag: String?, message: String?, throwable: Throwable?) {
         // Do nothing for noAnalytics build flavor

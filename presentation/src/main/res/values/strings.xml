@@ -17,8 +17,7 @@
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name_release" translatable="false">SMS &amp; Notifications</string>
-    <string name="app_name_debug" translatable="false">[DBG] SMS &amp; Notifications</string>
+    <string name="app_name" translatable="false">SMS &amp; Notifications</string>
     <string name="bluetooth_about_developer" translatable="false">Benno Gröbl</string>
     <string name="bluetooth_about_contact" translatable="false">android@groebl.org</string>
     <string name="version_qksms" translatable="false">3.10.1</string>
