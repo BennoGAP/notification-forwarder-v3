@@ -340,7 +340,7 @@ public class BluetoothNotificationFilter {
                         String SG_grp = "";
                         String SG_name = "";
 
-                        if(ticker.startsWith(title.substring(0, title.indexOf(" ")) + ": ") || ticker.startsWith(title + ": ") || ticker.equals("")) { //Person Msg
+                        if(ticker.startsWith(title + ": ") || ticker.equals("")) { //Person Msg
                             SG_name = title;
                         } else if (ticker.contains(": ") && ticker.contains("@") && title.contains(": ")) { //Group Msg
                             String[] itemsList = title.split("\\u2069: \\u2068", 2);
@@ -490,14 +490,18 @@ public class BluetoothNotificationFilter {
                                 WA_name = text.substring(0, text.indexOf(" @ "));
                                 WA_grp = text.substring(text.indexOf(" @ ") + 3, text.indexOf(": "));
                                 WA_msg = text.substring(text.indexOf(": ") + 2);
-                            } else {
+                            } else if (text.contains(": ")) {
                                 WA_grp = "";
                                 WA_name = text.substring(0, text.indexOf(": "));
                                 WA_msg = text.substring(text.indexOf(": ") + 2);
+                            } else {
+                                WA_grp = "";
+                                WA_name = title;
+                                WA_msg = text;
                             }
                         } else if (textline_whatsapp != null && !ticker.equals("")) {
                             text = removeDirectionChars(textline_whatsapp[textline_whatsapp.length - 1].toString());
-                            if (ticker.endsWith(" @ " + title)) {
+                            if (ticker.endsWith(" @ " + title) && text.contains(": ")) {
                                 WA_grp = title;
                                 WA_name = text.substring(0, text.indexOf(": "));
                                 WA_msg = text.substring(text.indexOf(": ") + 2);
