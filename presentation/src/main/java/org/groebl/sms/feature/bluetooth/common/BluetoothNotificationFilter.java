@@ -361,6 +361,10 @@ public class BluetoothNotificationFilter {
                                 SG_grp = title.substring(0, title.indexOf(": " + text.charAt(0)));
                                 SG_name = title.substring(title.indexOf(SG_grp + ": ") + 2 + SG_grp.length());
                             }
+                        } else if (ticker.contains(": ") && title.contains(" ")) { //Person Msg (First- and Last-Name)
+                            if(ticker.startsWith(title.substring(0, title.indexOf(" ")) + ": ")) {
+                                SG_name = title;
+                            }
                         }
 
                         //\u2068 ... \u2069
