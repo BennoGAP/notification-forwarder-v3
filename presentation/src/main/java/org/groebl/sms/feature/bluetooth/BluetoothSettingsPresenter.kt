@@ -64,6 +64,9 @@ class BluetoothSettingsPresenter @Inject constructor(
         disposables += prefs.bluetooth_telegram_hide_prefix.asObservable()
                 .subscribe { enabled -> newState { copy(bluetooth_telegram_hide_prefix = enabled) } }
 
+        disposables += prefs.bluetooth_threema_hide_prefix.asObservable()
+                .subscribe { enabled -> newState { copy(bluetooth_threema_hide_prefix = enabled) } }
+
         disposables += prefs.bluetooth_max_vol.asObservable()
                 .subscribe { enabled -> newState { copy(bluetooth_max_vol = enabled) } }
 
@@ -148,12 +151,15 @@ class BluetoothSettingsPresenter @Inject constructor(
                         R.id.bluetooth_signal_hide_prefix -> prefs.bluetooth_signal_hide_prefix.set(!prefs.bluetooth_signal_hide_prefix.get())
                         R.id.bluetooth_telegram_to_contact -> prefs.bluetooth_telegram_to_contact.set(!prefs.bluetooth_telegram_to_contact.get())
                         R.id.bluetooth_telegram_hide_prefix -> prefs.bluetooth_telegram_hide_prefix.set(!prefs.bluetooth_telegram_hide_prefix.get())
+                        R.id.bluetooth_threema_hide_prefix -> prefs.bluetooth_threema_hide_prefix.set(!prefs.bluetooth_threema_hide_prefix.get())
                         R.id.bluetooth_whatsapp_blocked_group -> view.showBluetoothBlockedGroup("WhatsApp")
                         R.id.bluetooth_whatsapp_blocked_contact -> view.showBluetoothBlockedContactWhatsApp()
                         R.id.bluetooth_signal_blocked_group -> view.showBluetoothBlockedGroup("Signal")
                         R.id.bluetooth_signal_blocked_contact -> view.showBluetoothBlockedContactByName("Signal")
                         R.id.bluetooth_telegram_blocked_group -> view.showBluetoothBlockedGroup("Telegram")
                         R.id.bluetooth_telegram_blocked_contact -> view.showBluetoothBlockedContactByName("Telegram")
+                        R.id.bluetooth_threema_blocked_group -> view.showBluetoothBlockedGroup("Threema")
+                        R.id.bluetooth_threema_blocked_contact -> view.showBluetoothBlockedContactByName("Threema")
                         R.id.bluetooth_max_vol -> prefs.bluetooth_max_vol.set(!prefs.bluetooth_max_vol.get())
                         R.id.bluetooth_tethering -> prefs.bluetooth_tethering.set(!prefs.bluetooth_tethering.get())
                         R.id.bluetooth_realm_hide_message -> {

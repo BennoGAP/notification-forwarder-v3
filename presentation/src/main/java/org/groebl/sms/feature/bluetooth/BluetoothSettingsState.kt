@@ -20,6 +20,8 @@ data class BluetoothSettingsState(
         val bluetooth_signal_to_contact: Boolean = false,
         val bluetooth_signal_hide_prefix: Boolean = true,
 
+        val bluetooth_threema_hide_prefix: Boolean = true,
+
         val bluetooth_max_vol: Boolean = false,
         val bluetooth_tethering: Boolean = false,
         val bluetooth_realm_hide_message: Boolean = true

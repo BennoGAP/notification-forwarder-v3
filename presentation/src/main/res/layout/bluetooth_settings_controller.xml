@@ -290,6 +290,44 @@
                 app:icon="@drawable/ic_bluetooth_person_24px" />
 
             <View
+                android:id="@+id/bluetooth_threema_divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:background="?android:attr/divider" />
+
+            <org.groebl.sms.common.widget.QkTextView
+                style="@style/PreferenceCategory"
+                android:id="@+id/bluetooth_threema_category"
+                android:text="@string/settings_category_bluetooth_threema" />
+
+            <org.groebl.sms.common.widget.PreferenceView
+                android:id="@+id/bluetooth_threema_hide_prefix"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:summary="@string/settings_bluetooth_threema_hide_prefix_summary"
+                app:title="@string/settings_bluetooth_threema_hide_prefix_title"
+                app:icon="@drawable/ic_bluetooth_threema_24px"
+                app:widget="@layout/settings_switch_widget" />
+
+            <org.groebl.sms.common.widget.PreferenceView
+                android:id="@+id/bluetooth_threema_blocked_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:summary="@string/settings_bluetooth_block_threema_group_summary"
+                app:title="@string/settings_bluetooth_block_threema_group_title"
+                app:icon="@drawable/ic_bluetooth_group_24px" />
+
+            <org.groebl.sms.common.widget.PreferenceView
+                android:id="@+id/bluetooth_threema_blocked_contact"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:summary="@string/settings_bluetooth_block_threema_contact_summary"
+                app:title="@string/settings_bluetooth_block_threema_contact_title"
+                app:icon="@drawable/ic_bluetooth_person_24px" />
+
+            <View
                 android:id="@+id/bluetooth_more_divider"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"

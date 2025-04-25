@@ -117,6 +117,7 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
         val localBluetoothWhatsappInstalled = context.isInstalled("com.whatsapp")
         val localBluetoothTelegramInstalled = context.isInstalled("org.telegram.messenger")
         val localBluetoothSignalInstalled = context.isInstalled("org.thoughtcrime.securesms")
+        val localBluetoothThreemaInstalled = context.isInstalled("ch.threema.app")
 
         //Forwarding enabled but not default SMS-App or has no Notification-Access
         if(localBluetoothEnabled and (!BluetoothHelper.isDefaultSms(context) or !BluetoothHelper.hasNotificationAccess(context))) {
@@ -195,6 +196,12 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
         bluetooth_telegram_blocked_group.setVisible(localBluetoothTelegramToContact && localBluetoothTelegramInstalled)
         bluetooth_telegram_blocked_contact.setVisible(localBluetoothTelegramToContact && localBluetoothTelegramInstalled)
         bluetooth_telegram_hide_prefix.setVisible(localBluetoothTelegramToContact && localBluetoothTelegramInstalled)
+
+        bluetooth_threema_divider.setVisible(localBluetoothThreemaInstalled)
+        bluetooth_threema_category.setVisible(localBluetoothThreemaInstalled)
+        bluetooth_threema_blocked_group.setVisible(localBluetoothThreemaInstalled)
+        bluetooth_threema_blocked_contact.setVisible(localBluetoothThreemaInstalled)
+        bluetooth_threema_hide_prefix.setVisible(localBluetoothThreemaInstalled)
 
         bluetooth_more_divider.setVisible(localBluetoothOnlyOnConnect)
         bluetooth_more_cat.setVisible(localBluetoothOnlyOnConnect)
@@ -347,6 +354,7 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
         val items = when (MessengerType) {
             "Signal" ->     { prefs.bluetooth_signal_blocked_contact.get() }
             "Telegram" ->   { prefs.bluetooth_telegram_blocked_contact.get() }
+            "Threema" ->   { prefs.bluetooth_threema_blocked_contact.get() }
             else ->         { return; }
         }
 
@@ -393,6 +401,7 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
             "WhatsApp" ->   { prefs.bluetooth_whatsapp_blocked_group.get() }
             "Signal" ->     { prefs.bluetooth_signal_blocked_group.get() }
             "Telegram" ->   { prefs.bluetooth_telegram_blocked_group.get() }
+            "Threema" ->   { prefs.bluetooth_threema_blocked_group.get() }
             else ->         { return; }
         }
 

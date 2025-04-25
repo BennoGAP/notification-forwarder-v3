@@ -177,12 +177,36 @@ public class BluetoothNotificationFilter {
                     break;
 
                 case "ch.threema.app":
+                    set_sender = "Threema";
+
                     if (ticker.equals("")) {
                         return;
                     }
 
-                    set_sender = "Threema";
+
+                    String TH_grp = "";
+                    String TH_name = "";
+
+                    if (title.contains(": ") && ticker.contains(": ")) {
+                        TH_grp = EmojiParser.removeAllEmojis(title.substring(0, title.indexOf(": "))).trim();
+                        TH_name = title.substring(title.indexOf(TH_grp + ": ") + 2 + TH_grp.length());
+                    } else {
+                        TH_name = title;
+                    }
+
+                    //Check if Message is from blocked group
+                    if (BluetoothMessengerBlocked.isMessengerBlocked(mContext, TH_grp, true, "Threema")) { return; }
+
+                    //Check if Message is from blocked contact
+                    if (BluetoothMessengerBlocked.isMessengerBlocked(mContext, TH_name, false, "Threema")) { return; }
+
                     set_content = title + ": " + text;
+
+                    //Set Telegram Prefix to phone-number-assigned Msg
+                    if(!set_sender.equals("Threema") && !mPrefs.getBoolean("bluetoothTelegramHidePrefix", true)) {
+                        set_content = "[Threema] " + set_content;
+                    }
+
                     break;
 
                 case "com.skype.raider":
