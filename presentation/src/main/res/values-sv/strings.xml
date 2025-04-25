@@ -183,11 +183,6 @@
     <string name="scheduled_empty_message_3_timestamp">Skickar den 23:e December </string>
     <string name="scheduled_compose_cd">Schemalägg ett meddelande</string>
     <string name="scheduled_options_title">Schemalagt meddelande</string>
-    <string-array name="scheduled_options">
-        <item>Skicka nu</item>
-        <item>Kopiera text</item>
-        <item>Radera</item>
-    </string-array>
     <string name="settings_category_appearance">Utseende</string>
     <string name="settings_category_general">Generellt</string>
     <string name="settings_category_qkreply">QK svar</string>
@@ -358,7 +353,6 @@
     <string name="button_set">Ställ in</string>
     <string name="button_undo">Ångra</string>
     <string name="toast_copied">Kopierad</string>
-    <string name="toast_archived">Arkiverade konversationer</string>
     <string name="toast_qksms_plus">Du måste låsa upp QKSMS+ för att använda det här</string>
     <plurals name="notification_new_messages">
         <item quantity="one">Nytt meddelande</item>

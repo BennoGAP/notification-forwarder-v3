@@ -183,11 +183,6 @@
     <string name="scheduled_empty_message_3_timestamp">23 दिसंबर को भेजा जा रहा है </string>
     <string name="scheduled_compose_cd">एक संदेश अनुसूचित करें</string>
     <string name="scheduled_options_title">निर्धारित संदेश</string>
-    <string-array name="scheduled_options">
-        <item>अभी भेजें</item>
-        <item>टेक्स्ट कॉपी करें</item>
-        <item>मिटाएँ</item>
-    </string-array>
     <string name="settings_category_appearance">दिखावट</string>
     <string name="settings_category_general">सामान्य</string>
     <string name="settings_category_qkreply">QK उत्तर</string>
@@ -358,7 +353,6 @@
     <string name="button_set">सेट करें</string>
     <string name="button_undo">पूर्ववत करें</string>
     <string name="toast_copied">प्रतिलिपि बनाई गई हैं।</string>
-    <string name="toast_archived">संग्रहीत बातचीत</string>
     <string name="toast_qksms_plus">इसका उपयोग करने के लिए आपको QKSMS+ को अनलॉक करना होगा</string>
     <plurals name="notification_new_messages">
         <item quantity="one">नई संदेश</item>

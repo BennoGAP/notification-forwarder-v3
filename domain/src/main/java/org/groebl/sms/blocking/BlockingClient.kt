@@ -60,9 +60,7 @@ interface BlockingClient {
     /**
      * Returns the recommendation action to perform given a message from the [address]
      */
-    fun shouldBlock(address: String): Single<Action> = Single.fromCallable {
-        BlockingClient.Action.Unblock
-    }
+    fun shouldBlock(address: String): Single<Action>
 
     /**
      * Returns whether or not the [address] is in the blocking manager's blacklist
@@ -81,12 +79,12 @@ interface BlockingClient {
     /**
      * Blocks the numbers or opens the manager
      */
-    fun blockAddresses(addresses: List<String>): Completable
+    fun block(addresses: List<String>): Completable
 
     /**
      * Unblocks the numbers or opens the manager
      */
-    fun unblockAddresses(addresses: List<String>): Completable
+    fun unblock(addresses: List<String>): Completable
 
     /**
      * Blocks the regexps

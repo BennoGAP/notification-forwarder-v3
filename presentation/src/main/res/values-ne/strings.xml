@@ -183,11 +183,6 @@
     <string name="scheduled_empty_message_3_timestamp">Sending on December 23rd </string>
     <string name="scheduled_compose_cd">Schedule a message</string>
     <string name="scheduled_options_title">Scheduled message</string>
-    <string-array name="scheduled_options">
-        <item>Send now</item>
-        <item>Copy text</item>
-        <item>Delete</item>
-    </string-array>
     <string name="settings_category_appearance">Appearance</string>
     <string name="settings_category_general">General</string>
     <string name="settings_category_qkreply">QK Reply</string>
@@ -358,7 +353,6 @@
     <string name="button_set">Set</string>
     <string name="button_undo">Undo</string>
     <string name="toast_copied">Copied</string>
-    <string name="toast_archived">Archived conversation</string>
     <string name="toast_qksms_plus">You must unlock QKSMS+ to use this</string>
     <plurals name="notification_new_messages">
         <item quantity="one">New message</item>

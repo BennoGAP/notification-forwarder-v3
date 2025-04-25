@@ -183,11 +183,6 @@
     <string name="scheduled_empty_message_3_timestamp">Lähetetään joulukuun 23. päivänä</string>
     <string name="scheduled_compose_cd">Ajoita viesti</string>
     <string name="scheduled_options_title">Ajoitettu viesti</string>
-    <string-array name="scheduled_options">
-        <item>Lähetä nyt</item>
-        <item>Kopioi teksti</item>
-        <item>Poista</item>
-    </string-array>
     <string name="settings_category_appearance">Ulkonäkö</string>
     <string name="settings_category_general">Yleiset</string>
     <string name="settings_category_qkreply">QK-vastaus</string>
@@ -358,7 +353,6 @@
     <string name="button_set">Aseta</string>
     <string name="button_undo">Kumoa</string>
     <string name="toast_copied">Kopioitu</string>
-    <string name="toast_archived">Arkistoidut keskustelut</string>
     <string name="toast_qksms_plus">Sinun pitää avata QKSMS+ käyttääksesi tätä</string>
     <plurals name="notification_new_messages">
         <item quantity="one">Uusi viesti</item>

@@ -96,7 +96,7 @@ class BlockingRepositoryImpl @Inject constructor(
             .findFirst()
     }
 
-    override fun isBlockedAddress(address: String): Boolean {
+    override fun isBlocked(address: String): Boolean {
         return Realm.getDefaultInstance().use { realm ->
             realm.where(BlockedNumber::class.java)
                     .findAll()

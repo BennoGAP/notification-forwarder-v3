@@ -182,11 +182,6 @@
     <string name="scheduled_empty_message_3_timestamp">Sẽ gửi vào ngày 23 tháng 12</string>
     <string name="scheduled_compose_cd">Hẹn giờ tin nhắn</string>
     <string name="scheduled_options_title">Tin nhắn đã hẹn giờ</string>
-    <string-array name="scheduled_options">
-        <item>Gửi ngay</item>
-        <item>Sao chép kí tự</item>
-        <item>Xoá</item>
-    </string-array>
     <string name="settings_category_appearance">Giao diện</string>
     <string name="settings_category_general">Chung</string>
     <string name="settings_category_qkreply">Trả lời nhanh</string>
@@ -354,7 +349,6 @@
     <string name="button_set">Chọn</string>
     <string name="button_undo">Undo</string>
     <string name="toast_copied">Đã sao chép</string>
-    <string name="toast_archived">Cuộc trò chuyện đã được lưu trữ</string>
     <string name="toast_qksms_plus">Bạn phải mở khóa QKSMS+ để sử dụng chức năng này</string>
     <plurals name="notification_new_messages">
         <item quantity="other">%s tin nhắn mới</item>

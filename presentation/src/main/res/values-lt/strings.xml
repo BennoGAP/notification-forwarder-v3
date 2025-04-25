@@ -185,11 +185,6 @@
     <string name="scheduled_empty_message_3_timestamp">Sending on December 23rd </string>
     <string name="scheduled_compose_cd">Schedule a message</string>
     <string name="scheduled_options_title">Scheduled message</string>
-    <string-array name="scheduled_options">
-        <item>Send now</item>
-        <item>Copy text</item>
-        <item>Delete</item>
-    </string-array>
     <string name="settings_category_appearance">Išvaizda</string>
     <string name="settings_category_general">Bendra</string>
     <string name="settings_category_qkreply">Greitas atsakas</string>
@@ -366,7 +361,6 @@
     <string name="button_set">Padaryti</string>
     <string name="button_undo">Anuliuoti</string>
     <string name="toast_copied">Nukopijuota</string>
-    <string name="toast_archived">Archyvuotas pokalbis</string>
     <string name="toast_qksms_plus">Reikia turėti QKSMS+ funkcijos naudojomui</string>
     <plurals name="notification_new_messages">
         <item quantity="one">Naujas pranešimas</item>

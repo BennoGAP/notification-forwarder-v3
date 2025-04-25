@@ -36,9 +36,9 @@ class BlockingManager @Inject constructor(
 
     override fun getActionFromContent(content: String): Single<BlockingClient.Action> = client.getActionFromContent(content)
 
-    override fun blockAddresses(addresses: List<String>): Completable = client.blockAddresses(addresses)
+    override fun block(addresses: List<String>): Completable = client.block(addresses)
 
-    override fun unblockAddresses(addresses: List<String>): Completable = client.unblockAddresses(addresses)
+    override fun unblock(addresses: List<String>): Completable = client.unblock(addresses)
 
     override fun blockRegexps(regexps: List<String>): Completable = client.blockRegexps(regexps)
 

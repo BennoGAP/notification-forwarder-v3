@@ -21,21 +21,22 @@ package org.groebl.sms.repository
 import org.groebl.sms.model.Conversation
 import org.groebl.sms.model.Recipient
 import org.groebl.sms.model.SearchResult
+import io.reactivex.Completable
 import io.reactivex.Observable
 import io.realm.RealmResults
 
 interface ConversationRepository {
 
-    fun getConversations(archived: Boolean = false): RealmResults<Conversation>
+    fun getConversations(unreadAtTop: Boolean, archived: Boolean = false): RealmResults<Conversation>
 
-    fun getConversationsSnapshot(): List<Conversation>
+    fun getConversationsSnapshot(unreadAtTop: Boolean): List<Conversation>
 
     /**
      * Returns the top conversations that were active in the last week
      */
     fun getTopConversations(): List<Conversation>
 
-    fun setConversationName(id: Long, name: String)
+    fun setConversationName(id: Long, name: String): Completable
 
     fun searchConversations(query: CharSequence): List<SearchResult>
 
@@ -46,6 +47,12 @@ interface ConversationRepository {
     fun getConversationAsync(threadId: Long): Conversation
 
     fun getConversation(threadId: Long): Conversation?
+
+    fun getUnseenIds(archived: Boolean = false): List<Long>
+
+    fun getUnreadIds(archived: Boolean = false): List<Long>
+
+    fun getConversationAndLastSenderContactName(threadId: Long): Pair<Conversation?, String?>?
 
     /**
      * Returns all conversations with an id in [threadIds]
@@ -60,15 +67,15 @@ interface ConversationRepository {
 
     fun getRecipient(recipientId: Long): Recipient?
 
-    fun getThreadId(recipient: String): Long?
+    fun getConversation(recipient: String): Conversation?
 
-    fun getThreadId(recipients: Collection<String>): Long?
+    fun getConversation(recipients: Collection<String>): Conversation?
 
     fun getOrCreateConversation(threadId: Long): Conversation?
 
     fun getOrCreateConversation(address: String): Conversation?
 
-    fun getOrCreateConversation(addresses: List<String>): Conversation?
+    fun getOrCreateConversation(addresses: Collection<String>): Conversation?
 
     fun saveDraft(threadId: Long, draft: String)
 
@@ -85,7 +92,7 @@ interface ConversationRepository {
 
     fun markUnpinned(vararg threadIds: Long)
 
-    fun markBlocked(threadIds: List<Long>, blockingClient: Int, blockReason: String?)
+    fun markBlocked(threadIds: Collection<Long>, blockingClient: Int, blockReason: String?)
 
     fun markUnblocked(vararg threadIds: Long)
 

@@ -184,11 +184,6 @@
     <string name="scheduled_empty_message_3_timestamp">Шаље се 23. децембра.</string>
     <string name="scheduled_compose_cd">Закажи слање</string>
     <string name="scheduled_options_title">Заказана порука</string>
-    <string-array name="scheduled_options">
-        <item>Пошаљи одмах</item>
-        <item>Копирај текст</item>
-        <item>Обриши</item>
-    </string-array>
     <string name="settings_category_appearance">Уреди изглед</string>
     <string name="settings_category_general">Опште</string>
     <string name="settings_category_qkreply">Брзи одговор</string>
@@ -362,7 +357,6 @@
     <string name="button_set">Постави</string>
     <string name="button_undo">Опозови</string>
     <string name="toast_copied">Копирано</string>
-    <string name="toast_archived">Сачувани разговори</string>
     <string name="toast_qksms_plus">Откључај QKSMS+ за приступ овој опцији</string>
     <plurals name="notification_new_messages">
         <item quantity="one">Нова порука</item>

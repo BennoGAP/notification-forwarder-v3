@@ -20,12 +20,13 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 25
+    compileSdk 34
 
     defaultConfig {
         minSdkVersion 23
-        targetSdkVersion 25
+        targetSdkVersion 33
     }
+
 
     useLibrary 'org.apache.http.legacy'
     lint {
@@ -40,8 +41,17 @@ dependencies {
     implementation 'com.squareup.okhttp:okhttp:2.5.0'
     implementation 'com.squareup.okhttp:okhttp-urlconnection:2.5.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+//    implementation 'javax.annotation:javax.annotation-api:1.3.2'
 }
 
 repositories {
+    google()
+    maven { url "https://jitpack.io" }
+    maven { url 'https://maven.google.com' }
+    maven {
+        name 'glide-snapshot'
+        url 'https://oss.sonatype.org/content/repositories/snapshots'
+    }
     mavenCentral()
+    jcenter()
 }

@@ -185,11 +185,6 @@
     <string name="scheduled_empty_message_3_timestamp">Отправка 23 декабря </string>
     <string name="scheduled_compose_cd">Запланировать сообщение</string>
     <string name="scheduled_options_title">Запланированное сообщение</string>
-    <string-array name="scheduled_options">
-        <item>Отправить сейчас</item>
-        <item>Копировать текст</item>
-        <item>Удалить</item>
-    </string-array>
     <string name="settings_category_appearance">Внешний вид</string>
     <string name="settings_category_general">Общее</string>
     <string name="settings_category_qkreply">QK-ответ</string>
@@ -366,7 +361,6 @@
     <string name="button_set">Задать</string>
     <string name="button_undo">Отмена</string>
     <string name="toast_copied">Скопировано</string>
-    <string name="toast_archived">Архивированная беседа</string>
     <string name="toast_qksms_plus">Вы должны разблокировать QKSMS+, чтобы использовать</string>
     <plurals name="notification_new_messages">
         <item quantity="one">Новое сообщение</item>

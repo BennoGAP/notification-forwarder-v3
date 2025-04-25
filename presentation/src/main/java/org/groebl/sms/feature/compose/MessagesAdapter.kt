@@ -22,43 +22,60 @@ import android.animation.ObjectAnimator
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Typeface
+import android.net.Uri
 import android.os.Build
 import android.text.Layout
 import android.text.Spannable
 import android.text.SpannableString
+import android.text.SpannableStringBuilder
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.text.style.StyleSpan
+import android.text.style.URLSpan
+import android.text.util.Linkify
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
-import androidx.recyclerview.widget.RecyclerView
+import androidx.core.net.toUri
+import androidx.core.view.isVisible
 import com.jakewharton.rxbinding2.view.clicks
+import org.groebl.sms.common.QkMediaPlayer
 import org.groebl.sms.R
+import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.base.QkRealmAdapter
 import org.groebl.sms.common.base.QkViewHolder
 import org.groebl.sms.common.util.Colors
 import org.groebl.sms.common.util.DateFormatter
 import org.groebl.sms.common.util.TextViewStyler
-import org.groebl.sms.common.util.extensions.*
+import org.groebl.sms.common.util.extensions.dpToPx
+import org.groebl.sms.common.util.extensions.setBackgroundTint
+import org.groebl.sms.common.util.extensions.setPadding
+import org.groebl.sms.common.util.extensions.setTint
+import org.groebl.sms.common.util.extensions.setVisible
+import org.groebl.sms.common.util.extensions.withAlpha
 import org.groebl.sms.compat.SubscriptionManagerCompat
 import org.groebl.sms.extensions.isSmil
 import org.groebl.sms.extensions.isText
+import org.groebl.sms.extensions.joinTo
+import org.groebl.sms.extensions.millisecondsToMinutes
+import org.groebl.sms.extensions.truncateWithEllipses
 import org.groebl.sms.feature.compose.BubbleUtils.canGroup
 import org.groebl.sms.feature.compose.BubbleUtils.getBubble
 import org.groebl.sms.feature.compose.part.PartsAdapter
+import org.groebl.sms.feature.extensions.isEmojiOnly
 import org.groebl.sms.model.Conversation
 import org.groebl.sms.model.Message
 import org.groebl.sms.model.Recipient
 import org.groebl.sms.util.PhoneNumberUtils
 import org.groebl.sms.util.Preferences
+import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import io.realm.RealmResults
-import kotlinx.android.synthetic.main.conversation_list_item.*
 import kotlinx.android.synthetic.main.message_list_item_in.*
-import kotlinx.android.synthetic.main.message_list_item_in.attachments
-import kotlinx.android.synthetic.main.message_list_item_in.avatar
+import kotlinx.android.synthetic.main.message_list_item_in.parts
 import kotlinx.android.synthetic.main.message_list_item_in.body
 import kotlinx.android.synthetic.main.message_list_item_in.sim
 import kotlinx.android.synthetic.main.message_list_item_in.simIndex
@@ -66,7 +83,8 @@ import kotlinx.android.synthetic.main.message_list_item_in.status
 import kotlinx.android.synthetic.main.message_list_item_in.timestamp
 import kotlinx.android.synthetic.main.message_list_item_in.view.*
 import kotlinx.android.synthetic.main.message_list_item_out.*
-import kotlinx.android.synthetic.main.speech_bubble_controller.*
+import kotlinx.android.synthetic.main.message_list_item_out.view.cancel
+import org.groebl.sms.common.util.extensions.resolveThemeColor
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -80,23 +98,30 @@ class MessagesAdapter @Inject constructor(
     private val partsAdapterProvider: Provider<PartsAdapter>,
     private val phoneNumberUtils: PhoneNumberUtils,
     private val prefs: Preferences,
-    private val textViewStyler: TextViewStyler
+    private val textViewStyler: TextViewStyler,
+    private val navigator: Navigator,
 ) : QkRealmAdapter<Message>() {
+    class AudioState(
+        var partId: Long = -1,
+        var state: QkMediaPlayer.PlayingState = QkMediaPlayer.PlayingState.Stopped,
+        var seekBarUpdater: Disposable? = null,
+        var viewHolder: QkViewHolder? = null
+    )
 
     companion object {
         private const val VIEW_TYPE_MESSAGE_IN = 0
         private const val VIEW_TYPE_MESSAGE_OUT = 1
 
-        // Thanks to Cory Kilger for this regex
-        // https://gist.github.com/cmkilger/b8f7dba3e76244a84e7e
-        private val EMOJI_REGEX = Regex(
-                "^[\\s\n\r]*(?:(?:[\u00a9\u00ae\u203c\u2049\u2122\u2139\u2194-\u2199\u21a9-\u21aa\u231a-\u231b\u2328\u23cf\u23e9-\u23f3\u23f8-\u23fa\u24c2\u25aa-\u25ab\u25b6\u25c0\u25fb-\u25fe\u2600-\u2604\u260e\u2611\u2614-\u2615\u2618\u261d\u2620\u2622-\u2623\u2626\u262a\u262e-\u262f\u2638-\u263a\u2648-\u2653\u2660\u2663\u2665-\u2666\u2668\u267b\u267f\u2692-\u2694\u2696-\u2697\u2699\u269b-\u269c\u26a0-\u26a1\u26aa-\u26ab\u26b0-\u26b1\u26bd-\u26be\u26c4-\u26c5\u26c8\u26ce-\u26cf\u26d1\u26d3-\u26d4\u26e9-\u26ea\u26f0-\u26f5\u26f7-\u26fa\u26fd\u2702\u2705\u2708-\u270d\u270f\u2712\u2714\u2716\u271d\u2721\u2728\u2733-\u2734\u2744\u2747\u274c\u274e\u2753-\u2755\u2757\u2763-\u2764\u2795-\u2797\u27a1\u27b0\u27bf\u2934-\u2935\u2b05-\u2b07\u2b1b-\u2b1c\u2b50\u2b55\u3030\u303d\u3297\u3299\ud83c\udc04\ud83c\udccf\ud83c\udd70-\ud83c\udd71\ud83c\udd7e-\ud83c\udd7f\ud83c\udd8e\ud83c\udd91-\ud83c\udd9a\ud83c\ude01-\ud83c\ude02\ud83c\ude1a\ud83c\ude2f\ud83c\ude32-\ud83c\ude3a\ud83c\ude50-\ud83c\ude51\u200d\ud83c\udf00-\ud83d\uddff\ud83d\ude00-\ud83d\ude4f\ud83d\ude80-\ud83d\udeff\ud83e\udd00-\ud83e\uddff\udb40\udc20-\udb40\udc7f]|\u200d[\u2640\u2642]|[\ud83c\udde6-\ud83c\uddff]{2}|.[\u20e0\u20e3\ufe0f]+)+[\\s\n\r]*)+$")
-
+        private const val MAX_MESSAGE_DISPLAY_LENGTH = 5000
     }
 
-    val clicks: Subject<Long> = PublishSubject.create()
+    // click events passed back to compose view model
     val partClicks: Subject<Long> = PublishSubject.create()
-    val cancelSending: Subject<Long> = PublishSubject.create()
+    val messageLinkClicks: Subject<Uri> = PublishSubject.create()
+    val cancelSendingClicks: Subject<Long> = PublishSubject.create()
+    val sendNowClicks: Subject<Long> = PublishSubject.create()
+    val resendClicks: Subject<Long> = PublishSubject.create()
+    val partContextMenuRegistrar: Subject<View> = PublishSubject.create()
 
     var data: Pair<Conversation, RealmResults<Message>>? = null
         set(value) {
@@ -111,70 +136,53 @@ class MessagesAdapter @Inject constructor(
     /**
      * Safely return the conversation, if available
      */
-    val conversation: Conversation?
+    private val conversation: Conversation?
         get() = data?.first?.takeIf { it.isValid }
-
-    /**
-     * Mark this message as highlighted
-     */
-    var highlight: Long = -1L
-        set(value) {
-            if (field == value) return
-
-            field = value
-            notifyDataSetChanged()
-        }
 
     private val contactCache = ContactCache()
     private val expanded = HashMap<Long, Boolean>()
-    private val partsViewPool = RecyclerView.RecycledViewPool()
     private val subs = subscriptionManager.activeSubscriptionInfoList
 
     var theme: Colors.Theme = colors.theme()
 
-    /**
-     * If the viewType is negative, then the viewHolder has an attachment. We'll consider
-     * this a unique viewType even though it uses the same view, so that regular messages
-     * don't need clipToOutline set to true, and they don't need to worry about images
-     */
+    private val audioState = AudioState()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QkViewHolder {
-
         // Use the parent's context to inflate the layout, otherwise link clicks will crash the app
-        val layoutInflater = LayoutInflater.from(parent.context)
-        val view: View
+        val inflater = LayoutInflater.from(parent.context)
 
-        if (viewType == VIEW_TYPE_MESSAGE_OUT) {
-            view = layoutInflater.inflate(R.layout.message_list_item_out, parent, false)
-            view.findViewById<ImageView>(R.id.cancelIcon).setTint(theme.theme)
-            view.findViewById<ProgressBar>(R.id.cancel).setTint(theme.theme)
-        } else {
-            view = layoutInflater.inflate(R.layout.message_list_item_in, parent, false)
-        }
+        val view = if (viewType == VIEW_TYPE_MESSAGE_OUT) {
+            inflater.inflate(R.layout.message_list_item_out, parent,false).apply {
+                findViewById<ImageView>(R.id.cancelIcon).setTint(theme.theme)
+                findViewById<ProgressBar>(R.id.cancel).setTint(theme.theme)
+                findViewById<ImageView>(R.id.sendNowIcon).setTint(theme.theme)
+                findViewById<ImageView>(R.id.resendIcon).setTint(theme.theme)
+            }
+        } else
+            inflater.inflate(R.layout.message_list_item_in, parent, false)
 
         view.body.hyphenationFrequency = Layout.HYPHENATION_FREQUENCY_NONE
 
-        val partsAdapter = partsAdapterProvider.get()
-        partsAdapter.clicks.subscribe(partClicks)
-        view.attachments.adapter = partsAdapter
-        view.attachments.setRecycledViewPool(partsViewPool)
-        view.body.forwardTouches(view)
+        // register recycler view with compose activity for context menus
+        partContextMenuRegistrar.onNext(view.parts)
 
         return QkViewHolder(view).apply {
             view.setOnClickListener {
-                val message = getItem(adapterPosition) ?: return@setOnClickListener
-                when (toggleSelection(message.id, false)) {
-                    true -> view.isActivated = isSelected(message.id)
-                    false -> {
-                        clicks.onNext(message.id)
-                        expanded[message.id] = view.status.visibility != View.VISIBLE
-                        notifyItemChanged(adapterPosition)
+                getItem(adapterPosition)?.let {
+                    when (toggleSelection(it.id, false)) {
+                        true -> view.isActivated = isSelected(it.id)
+                        false -> {
+                            expanded[it.id] = view.status.visibility != View.VISIBLE
+                            notifyItemChanged(adapterPosition)
+                        }
                     }
                 }
             }
             view.setOnLongClickListener {
-                val message = getItem(adapterPosition) ?: return@setOnLongClickListener true
-                toggleSelection(message.id)
-                view.isActivated = isSelected(message.id)
+                getItem(adapterPosition)?.let {
+                    toggleSelection(it.id)
+                    view.isActivated = isSelected(it.id)
+                }
                 true
             }
         }
@@ -193,63 +201,91 @@ class MessagesAdapter @Inject constructor(
         // Update the selected state
         holder.containerView.isActivated = isSelected(message.id) || highlight == message.id
 
-        // Bind the cancel view
-        holder.cancel?.let { cancel ->
+        // Bind the cancelFrame (cancel button) view
+        holder.cancelFrame?.let {
+            val isCancellable = message.isSending() && message.date > System.currentTimeMillis()
+            it.visibility = if (isCancellable) View.VISIBLE else View.GONE
+            it.let {
+                it.clicks().subscribe { cancelSendingClicks.onNext(message.id) }
+            }
+            it.cancel.progress = 2
+
+            if (isCancellable) {
                 val delay = when (prefs.sendDelay.get()) {
                     Preferences.SEND_DELAY_SHORT -> 3000
                     Preferences.SEND_DELAY_MEDIUM -> 5000
                     Preferences.SEND_DELAY_LONG -> 10000
                     else -> 0
                 }
-            val isCancellable = message.isSending() && (message.date + delay) > System.currentTimeMillis()// && message.date > System.currentTimeMillis()
-            cancel.setVisible(isCancellable)
-            cancel.clicks().subscribe { cancelSending.onNext(message.id) }
-            cancel.progress = 2
+                val progress =
+                    (1 - (message.date - System.currentTimeMillis()) / delay.toFloat()) * 100
 
-            if (isCancellable) {
-                if (message.date > System.currentTimeMillis()) {
-                    val progress =
-                        (1 - (message.date - System.currentTimeMillis()) / delay.toFloat()) * 100
-
-                ObjectAnimator.ofInt(cancel, "progress", progress.toInt(), 100)
-                        .setDuration(message.date - System.currentTimeMillis())
-                        .start()
-                } else {
-                    val progress =
-                        (1 - ((message.date + delay) - System.currentTimeMillis()) / delay.toFloat()) * 100
-                    ObjectAnimator.ofInt(cancel, "progress", progress.toInt(), 100)
-                        .setDuration((message.date + delay) - System.currentTimeMillis())
-                        .start()
-                   /* val timer = object: CountDownTimer(delay.toLong(), 1000) {
-                        override fun onTick(millisUntilFinished: Long) {
-                            val progress = (1 - millisUntilFinished / delay.toFloat()) * 100
-                            ObjectAnimator.ofInt(cancel, "progress", progress.toInt(), 100)
-                                .setDuration(millisUntilFinished)
-                                .start()
-                        }
-
-                        override fun onFinish() {
-                            cancel.setVisible(false)
-                        }
-                    }.start()*/
-                }
+                ObjectAnimator.ofInt(it.cancel, "progress", progress.toInt(), 100)
+                    .setDuration(message.date - System.currentTimeMillis())
+                    .start()
             }
         }
 
+        // bind the send now icon view
+        holder.sendNowIcon?.let {
+            if (message.isSending() && message.date > System.currentTimeMillis()) {
+                it.visibility = View.VISIBLE
+                it.clicks().subscribe { sendNowClicks.onNext(message.id) }
+            } else
+                it.visibility = View.GONE
+        }
+
+        // bind the resend icon view
+        holder.resendIcon?.let { resendIcon ->
+            if (message.isFailedMessage()) {
+                resendIcon.visibility = View.VISIBLE
+                resendIcon.clicks().subscribe {
+                    resendClicks.onNext(message.id)
+                    resendIcon.visibility = View.GONE
+                }
+            } else
+                resendIcon.visibility = View.GONE
+        }
+
+        val subject = message.getCleansedSubject()
+
+        var isMsgTextTruncated = false
+
+        // get message text to display, which may need to be truncated
+        val displayText = subject.joinTo(message.getText(false), "\n").let {
+            isMsgTextTruncated = (it.length > MAX_MESSAGE_DISPLAY_LENGTH)
+
+            // make subject sub-string bold, if subject is not blank
+            if (subject.isNotBlank())
+                SpannableString(it.truncateWithEllipses(MAX_MESSAGE_DISPLAY_LENGTH)).apply {
+                    setSpan(
+                        StyleSpan(Typeface.BOLD),
+                        0,
+                        subject.length,
+                        Spannable.SPAN_INCLUSIVE_EXCLUSIVE
+                    )
+                }
+            else
+                it.truncateWithEllipses(MAX_MESSAGE_DISPLAY_LENGTH)
+        }
+
         // Bind the message status
-        bindStatus(holder, message, next)
+        bindStatus(holder, isMsgTextTruncated, message, next)
 
         // Bind the timestamp
-        val timeSincePrevious = TimeUnit.MILLISECONDS.toMinutes(message.date - (previous?.date ?: 0))
-        val subscription = subs.find { sub -> sub.subscriptionId == message.subId }
+        val subscription = subs.find { it.subscriptionId == message.subId }
 
-        holder.timestamp.text = dateFormatter.getMessageTimestamp(message.date)
-        holder.timestamp.setVisible(timeSincePrevious >= BubbleUtils.TIMESTAMP_THRESHOLD
-                || message.subId != previous?.subId && subscription != null)
-        val timestampVisible = (timeSincePrevious >= BubbleUtils.TIMESTAMP_THRESHOLD
-                || message.subId != previous?.subId && subscription != null)
+        holder.timestamp.apply {
+            text = dateFormatter.getMessageTimestamp(message.date)
+            setVisible(
+                    ((message.date - (previous?.date ?: 0))
+                        .millisecondsToMinutes() >= BubbleUtils.TIMESTAMP_THRESHOLD) ||
+                            (message.subId != previous?.subId) &&
+                            (subscription != null)
+            )
+        }
 
-        if(message.isBluetoothMessage && timestampVisible) {
+         if(message.isBluetoothMessage && holder.timestamp.isVisible) {
             holder.sim.setVisible(true)
             holder.simIndex.setVisible(false)
             holder.sim.setImageResource(R.drawable.ic_bluetooth_black_24dp)
@@ -257,8 +293,8 @@ class MessagesAdapter @Inject constructor(
                 holder.sim.setTint(Color.BLUE)
             }
         } else {
-            holder.sim.setVisible(timestampVisible && subscription != null && subs.size > 1) //(message.subId != previous?.subId && subscription != null && subs.size > 1)
-            holder.simIndex.setVisible(timestampVisible &&  subscription != null && subs.size > 1) //(message.subId != previous?.subId &&  subscription != null && subs.size > 1)
+            holder.sim.setVisible(holder.timestamp.isVisible && subscription != null && subs.size > 1) //(message.subId != previous?.subId && subscription != null && subs.size > 1)
+            holder.simIndex.setVisible(holder.timestamp.isVisible &&  subscription != null && subs.size > 1) //(message.subId != previous?.subId &&  subscription != null && subs.size > 1)
             holder.simIndex.text = subscription?.simSlotIndex?.plus(1)?.toString()
             holder.sim.setImageResource(R.drawable.ic_sim_card_black_24dp)
 
@@ -273,74 +309,117 @@ class MessagesAdapter @Inject constructor(
             }
         }
 
+
         // Bind the grouping
-        val media = message.parts.filter { !it.isSmil() && !it.isText() }
-        holder.containerView.setPadding(bottom = if (canGroup(message, next)) 0 else 16.dpToPx(context))
+        holder.containerView.setPadding(
+            bottom = if (canGroup(message, next)) 0 else 16.dpToPx(context)
+        )
 
         // Bind the avatar and bubble colour
         if (!message.isMe()) {
-            holder.avatar.setRecipient(contactCache[message.address])
-            holder.avatar.setVisible(!canGroup(message, next), View.INVISIBLE)
-           // holder.avatar.setVisible(false)
-           // holder.body.setTextColor(theme.textPrimary)
-           // holder.body.setBackgroundTint(theme.theme)
-        }
-
-        if (prefs.bubbleColorInvert.get()) {
-            if (message.isMe()) {
-                holder.body.setTextColor(theme.textPrimary)
-                holder.body.setBackgroundTint(theme.theme)
-            } else {
-                holder.body.setTextColor(holder.body.context.resolveThemeColor(android.R.attr.textColorPrimary))
-                holder.body.setBackgroundTint(holder.body.context.resolveThemeColor(R.attr.bubbleColor))
+            holder.avatar.apply {
+                setRecipient(contactCache[message.address])
+                setVisible(!canGroup(message, next), View.INVISIBLE)
             }
-        } else {
-            if (message.isMe()) {
-                holder.body.setTextColor(holder.body.context.resolveThemeColor(android.R.attr.textColorPrimary))
-                holder.body.setBackgroundTint(holder.body.context.resolveThemeColor(R.attr.bubbleColor))
-            } else {
-
-            holder.body.setTextColor(theme.textPrimary)
-            holder.body.setBackgroundTint(theme.theme)
-        }
         }
 
-        // Bind the body text
-        val messageText = when (message.isSms()) {
-            true -> message.body
-            false -> {
-                val subject = message.getCleansedSubject()
-                val body = message.parts
-                        .filter { part -> part.isText() }
-                        .mapNotNull { part -> part.text }
-                        .filter { text -> text.isNotBlank() }
-                        .joinToString("\n")
-
-                when {
-                    subject.isNotBlank() -> {
-                        val spannable = SpannableString(if (body.isNotBlank()) "$subject\n$body" else subject)
-                        spannable.setSpan(StyleSpan(Typeface.BOLD), 0, subject.length,
-                                Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
-                        spannable
+        if ((prefs.bubbleColorInvert.get() && message.isMe())
+            || (!prefs.bubbleColorInvert.get() && !message.isMe())) {
+                holder.body.apply {
+                    setTextColor(theme.textPrimary)
+                    setBackgroundTint(theme.theme)
+                    highlightColor = R.attr.bubbleColor.withAlpha(0x5d)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        textSelectHandle?.setTint(R.attr.bubbleColor.withAlpha(0x7d))
+                        textSelectHandleLeft?.setTint(R.attr.bubbleColor.withAlpha(0x7d))
+                        textSelectHandleRight?.setTint(R.attr.bubbleColor.withAlpha(0x7d))
                     }
-                    else -> body
+                }
+            } else {
+                holder.body.apply {
+                    setTextColor(holder.body.context.resolveThemeColor(android.R.attr.textColorPrimary))
+                    setBackgroundTint(holder.body.context.resolveThemeColor(R.attr.bubbleColor))
+
+                    highlightColor = R.attr.bubbleColor.withAlpha(0x5d)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        textSelectHandle?.setTint(R.attr.bubbleColor.withAlpha(0x7d))
+                        textSelectHandleLeft?.setTint(R.attr.bubbleColor.withAlpha(0x7d))
+                        textSelectHandleRight?.setTint(R.attr.bubbleColor.withAlpha(0x7d))
+                    }
                 }
             }
-        }
-        val emojiOnly = messageText.isNotBlank() && messageText.matches(EMOJI_REGEX)
-        textViewStyler.setTextSize(holder.body, when (emojiOnly) {
-            true -> TextViewStyler.SIZE_EMOJI
-            false -> TextViewStyler.SIZE_PRIMARY
-        })
 
-        holder.body.text = messageText
-        holder.body.setVisible(message.isSms() || messageText.isNotBlank())
-        holder.body.setBackgroundResource(getBubble(
-                emojiOnly = emojiOnly,
-                canGroupWithPrevious = canGroup(message, previous) || media.isNotEmpty(),
-                canGroupWithNext = canGroup(message, next),
-                isMe = message.isMe(),
-                style = prefs.bubbleStyle.get()))
+            holder.body.apply {
+                highlightColor = theme.theme.withAlpha(0x5d)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    textSelectHandle?.setTint(theme.theme.withAlpha(0xad))
+                    textSelectHandleLeft?.setTint(theme.theme.withAlpha(0xad))
+                    textSelectHandleRight?.setTint(theme.theme.withAlpha(0xad))
+                }
+            }
+
+        // Bind the body text
+        val emojiOnly = displayText.isEmojiOnly()
+        textViewStyler.setTextSize(
+            holder.body,
+            when (emojiOnly) {
+                true -> TextViewStyler.SIZE_EMOJI
+                false -> TextViewStyler.SIZE_PRIMARY
+            }
+        )
+
+        val spanString = SpannableStringBuilder(displayText)
+
+        when (prefs.messageLinkHandling.get()) {
+            Preferences.MESSAGE_LINK_HANDLING_BLOCK -> holder.body.autoLinkMask = 0
+            Preferences.MESSAGE_LINK_HANDLING_ASK -> {
+                //  manually handle link clicks if user has set to ask before opening links
+                holder.body.apply {
+                    isClickable = false
+                    linksClickable = false
+                    movementMethod = LinkMovementMethod.getInstance()
+
+                    Linkify.addLinks(spanString, autoLinkMask)
+                }
+
+                spanString.apply {
+                    for (span in getSpans(0, length, URLSpan::class.java)) {
+                        // set handler for when user touches a link into new span
+                        setSpan(
+                            object : ClickableSpan() {
+                                override fun onClick(widget: View) {
+                                    messageLinkClicks.onNext(span.url.toUri())
+                                }
+                            },
+                            getSpanStart(span),
+                            getSpanEnd(span),
+                            getSpanFlags(span)
+                        )
+
+                        // remove original span
+                        removeSpan(span)
+                    }
+                }
+            }
+            else -> holder.body.movementMethod = LinkMovementMethod.getInstance()
+        }
+
+        holder.body.apply {
+            text = spanString
+            setVisible(message.isSms() || spanString.isNotBlank())
+
+            setBackgroundResource(
+                getBubble(
+                    emojiOnly = emojiOnly,
+                    canGroupWithPrevious = canGroup(message, previous) ||
+                            message.parts.any { !it.isSmil() && !it.isText() },
+                    canGroupWithNext = canGroup(message, next),
+                    isMe = message.isMe(),
+                    style = prefs.bubbleStyle.get()
+                )
+            )
+        }
+
         val paddingTop = context.resources.getDimensionPixelOffset(R.dimen.bubble_padding_top)
         val paddingBottom = context.resources.getDimensionPixelOffset(R.dimen.bubble_padding_bottom)
         val paddingLeft = context.resources.getDimensionPixelOffset(R.dimen.bubble_padding_left)
@@ -351,38 +430,64 @@ class MessagesAdapter @Inject constructor(
             holder.body.setPadding(paddingRight, paddingTop, paddingLeft, paddingBottom)
         }
 
-        // Bind the attachments
-        val partsAdapter = holder.attachments.adapter as PartsAdapter
-        partsAdapter.theme = theme
-        partsAdapter.setData(message, previous, next, holder)
+
+
+        // Bind the parts
+        holder.parts.adapter = partsAdapterProvider.get().apply {
+            this.theme = theme
+            setData(message, previous, next, holder, audioState)
+            contextMenuValue = message.id
+            clicks.subscribe(partClicks)    // part clicks gets passed back to compose view model
+        }
     }
 
-    private fun bindStatus(holder: QkViewHolder, message: Message, next: Message?) {
-        val age = TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis() - message.date)
-
-        holder.status.text = when {
-            message.isSending() -> context.getString(R.string.message_status_sending)
-            message.isDelivered() -> context.getString(R.string.message_status_delivered,
-                    dateFormatter.getTimestamp(message.dateSent))
-            message.isFailedMessage() -> context.getString(R.string.message_status_failed)
-
-            // Incoming group message
-            !message.isMe() && conversation?.recipients?.size ?: 0 > 1 -> {
-                "${contactCache[message.address]?.getDisplayName()} • ${dateFormatter.getTimestamp(message.date)}"
+    private fun bindStatus(
+        holder: QkViewHolder,
+        bodyTextTruncated: Boolean,
+        message: Message,
+        next: Message?
+    ) {
+        holder.status.apply {
+            text = when {
+                message.isSending() -> context.getString(R.string.message_status_sending)
+                message.isDelivered() -> context.getString(
+                    R.string.message_status_delivered,
+                    dateFormatter.getTimestamp(message.dateSent)
+                )
+                message.isFailedMessage() -> context.getString(R.string.message_status_failed)
+                bodyTextTruncated -> context.getString(R.string.message_body_too_long_to_display)
+                (!message.isMe() && (conversation?.recipients?.size ?: 0) > 1) ->
+                    // incoming group message
+                    "${contactCache[message.address]?.getDisplayName()} • ${
+                        dateFormatter.getTimestamp(message.date)}"
+                else -> dateFormatter.getTimestamp(message.date)
             }
 
-            else -> dateFormatter.getTimestamp(message.date)
-        }
+            val age = TimeUnit.MILLISECONDS.toMinutes(
+                System.currentTimeMillis() - message.date
+            )
 
-        holder.status.setVisible(when {
-            expanded[message.id] == true -> true
-            message.isSending() -> true
-            message.isFailedMessage() -> true
-            expanded[message.id] == false -> false
-            conversation?.recipients?.size ?: 0 > 1 && !message.isMe() && next?.compareSender(message) != true -> true
-            message.isDelivered() && next?.isDelivered() != true && age <= BubbleUtils.TIMESTAMP_THRESHOLD -> true
-            else -> false
-        })
+            setVisible(
+                when {
+                    expanded[message.id] == true -> true
+                    message.isSending() -> true
+                    message.isFailedMessage() -> true
+                    bodyTextTruncated -> true
+                    expanded[message.id] == false -> false
+                    ((conversation?.recipients?.size ?: 0) > 1) &&
+                            !message.isMe() && next?.compareSender(message) != true -> true
+                    (message.isDelivered() &&
+                            (next?.isDelivered() != true) &&
+                            (age <= BubbleUtils.TIMESTAMP_THRESHOLD)) -> true
+
+                    else -> false
+                }
+            )
+        }
+    }
+
+    override fun getItemId(position: Int): Long {
+        return getItem(position)?.id ?: -1
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -393,16 +498,24 @@ class MessagesAdapter @Inject constructor(
         }
     }
 
+    fun expandMessages(messageIds: List<Long>, expand: Boolean) {
+        messageIds.forEach { expanded[it] = expand }
+        notifyDataSetChanged()
+    }
+
     /**
      * Cache the contacts in a map by the address, because the messages we're binding don't have
      * a reference to the contact.
      */
     private inner class ContactCache : HashMap<String, Recipient?>() {
-
         override fun get(key: String): Recipient? {
-            if (super.get(key)?.isValid != true) {
-                set(key, conversation?.recipients?.firstOrNull { phoneNumberUtils.compare(it.address, key) })
-            }
+            if (super.get(key)?.isValid != true)
+                set(
+                    key,
+                    conversation?.recipients?.firstOrNull {
+                        phoneNumberUtils.compare(it.address, key)
+                    }
+                )
 
             return super.get(key)?.takeIf { it.isValid }
         }

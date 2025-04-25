@@ -33,7 +33,9 @@ interface ScheduledMessageRepository {
         sendAsGroup: Boolean,
         body: String,
         attachments: List<String>
-    )
+    ): ScheduledMessage
+
+    fun updateScheduledMessage(scheduledMessage: ScheduledMessage)
 
     /**
      * Returns all of the scheduled messages, sorted chronologically
@@ -49,5 +51,11 @@ interface ScheduledMessageRepository {
      * Deletes the scheduled message with the given [id]
      */
     fun deleteScheduledMessage(id: Long)
+
+    // delete multiple scheduled messages by id list
+    fun deleteScheduledMessages(ids: List<Long>)
+
+    // get a list of all scheduled message ids (in scheduled date order)
+    fun getAllScheduledMessageIdsSnapshot(): List<Long>
 
 }

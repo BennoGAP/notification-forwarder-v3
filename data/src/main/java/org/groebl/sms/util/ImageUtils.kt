@@ -20,13 +20,12 @@ package org.groebl.sms.util
 
 import android.content.Context
 import android.net.Uri
-import com.bumptech.glide.Glide
 import java.io.ByteArrayOutputStream
 
 object ImageUtils {
 
     fun getScaledGif(context: Context, uri: Uri, maxWidth: Int, maxHeight: Int, quality: Int = 90): ByteArray {
-        val gif = Glide
+        val gif = GlideApp
                 .with(context)
                 .asGif()
                 .load(uri)
@@ -36,12 +35,12 @@ object ImageUtils {
                 .get()
 
         val outputStream = ByteArrayOutputStream()
-        GifEncoder(context, Glide.get(context).bitmapPool).encodeTransformedToStream(gif, outputStream)
+        GifEncoder(context, GlideApp.get(context).bitmapPool).encodeTransformedToStream(gif, outputStream)
         return outputStream.toByteArray()
     }
 
     fun getScaledImage(context: Context, uri: Uri, maxWidth: Int, maxHeight: Int, quality: Int = 90): ByteArray {
-        return Glide
+        return GlideApp
                 .with(context)
                 .`as`(ByteArray::class.java)
                 .load(uri)

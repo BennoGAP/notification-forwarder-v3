@@ -36,7 +36,7 @@ interface BlockingRepository {
 
     fun getBlockedRegex(id: Long): BlockedRegex?
 
-    fun isBlockedAddress(address: String): Boolean
+    fun isBlocked(address: String): Boolean
 
     fun isBlockedContent(content: String): Boolean
 

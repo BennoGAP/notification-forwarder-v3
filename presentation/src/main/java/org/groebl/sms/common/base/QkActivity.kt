@@ -22,14 +22,18 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import org.groebl.sms.util.Preferences
 import org.groebl.sms.R
 import org.groebl.sms.common.util.extensions.resolveThemeColor
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
 import kotlinx.android.synthetic.main.toolbar.*
+import javax.inject.Inject
 
 abstract class QkActivity : AppCompatActivity() {
+    @Inject lateinit var prefs: Preferences
 
     protected val menu: Subject<Menu> = BehaviorSubject.create()
 
@@ -37,6 +41,12 @@ abstract class QkActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         onNewIntent(intent)
+        disableScreenshots(prefs.disableScreenshots.get())
+    }
+
+    override fun onResume() {
+        super.onResume()
+        disableScreenshots(prefs.disableScreenshots.get())
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -76,6 +86,14 @@ abstract class QkActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(show)
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_24dp)
         toolbar.navigationIcon?.setTint(resolveThemeColor(android.R.attr.textColorSecondary))
+    }
+
+    private fun disableScreenshots(disableScreenshots: Boolean) {
+        if (disableScreenshots) {
+            window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
+        } else {
+            window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
+        }
     }
 
 }

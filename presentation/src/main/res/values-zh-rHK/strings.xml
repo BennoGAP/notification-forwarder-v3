@@ -182,11 +182,6 @@
     <string name="scheduled_empty_message_3_timestamp">在 12 月 23 日傳送</string>
     <string name="scheduled_compose_cd">新增排程訊息</string>
     <string name="scheduled_options_title">排程訊息</string>
-    <string-array name="scheduled_options">
-        <item>立即發送</item>
-        <item>複製文字</item>
-        <item>刪除</item>
-    </string-array>
     <string name="settings_category_appearance">外觀</string>
     <string name="settings_category_general">通用</string>
     <string name="settings_category_qkreply">快速答覆</string>
@@ -354,7 +349,6 @@
     <string name="button_set">設置</string>
     <string name="button_undo">復原</string>
     <string name="toast_copied">已複製</string>
-    <string name="toast_archived">存檔的對話</string>
     <string name="toast_qksms_plus">您必須解鎖QKSMS+才能使用此功能</string>
     <plurals name="notification_new_messages">
         <item quantity="other">%s條新訊息</item>

@@ -20,11 +20,11 @@
     <string name="app_name" translatable="false">SMS &amp; Notifications</string>
     <string name="bluetooth_about_developer" translatable="false">Benno Gröbl</string>
     <string name="bluetooth_about_contact" translatable="false">android@groebl.org</string>
-    <string name="version_qksms" translatable="false">3.10.1</string>
+    <string name="version_qksms" translatable="false">3.10.1 / 4.1.1</string>
 
     <string name="button_add" tools:ignore="MissingTranslation">Add</string>
     <string name="button_no" tools:ignore="MissingTranslation">No</string>
-    <string name="settings_category_about_lower" tools:ignore="MissingTranslation">Based on QKSMS</string>
+    <string name="settings_category_about_lower" tools:ignore="MissingTranslation">Based on QKSMS/QUIK</string>
     <string name="theme_color" tools:ignore="MissingTranslation">Color</string>
 
     <string name="title_settings_bluetooth" tools:ignore="MissingTranslation">Bluetooth Settings</string>
@@ -35,6 +35,7 @@
     <string name="settings_category_bluetooth_whatsapp" tools:ignore="MissingTranslation">WhatsApp settings</string>
     <string name="settings_category_bluetooth_telegram" tools:ignore="MissingTranslation">Telegram settings</string>
     <string name="settings_category_bluetooth_signal" tools:ignore="MissingTranslation">Signal settings</string>
+    <string name="settings_category_bluetooth_threema" tools:ignore="MissingTranslation">Threema settings</string>
     <string name="settings_category_bluetooth_other" tools:ignore="MissingTranslation">Other settings</string>
     <string name="settings_category_bluetooth_system" tools:ignore="MissingTranslation">System settings</string>
 
@@ -85,6 +86,8 @@
     <string name="settings_bluetooth_telegram_to_contact_summary" tools:ignore="MissingTranslation">Show the contact name from the sender of the Telegram-Message if possible</string>
     <string name="settings_bluetooth_telegram_hide_prefix_title" tools:ignore="MissingTranslation">Hide Telegram-Prefix</string>
     <string name="settings_bluetooth_telegram_hide_prefix_summary" tools:ignore="MissingTranslation">Hide the \'Telegram\'-Prefix in front of the messages</string>
+    <string name="settings_bluetooth_threema_hide_prefix_title" tools:ignore="MissingTranslation">Hide Threema-Prefix</string>
+    <string name="settings_bluetooth_threema_hide_prefix_summary" tools:ignore="MissingTranslation">Hide the \'Threema\'-Prefix in front of the messages</string>
     <string name="settings_bluetooth_block_whatsapp_group_title" tools:ignore="MissingTranslation">Exclude WhatsApp groups</string>
     <string name="settings_bluetooth_block_whatsapp_group_summary" tools:ignore="MissingTranslation">WhatsApp-Messages from the following groups will not be forwarded</string>
     <string name="settings_bluetooth_block_whatsapp_contact_title" tools:ignore="MissingTranslation">Exclude WhatsApp contacts</string>
@@ -97,6 +100,10 @@
     <string name="settings_bluetooth_block_telegram_group_summary" tools:ignore="MissingTranslation">Telegram-Messages from the following groups will not be forwarded</string>
     <string name="settings_bluetooth_block_telegram_contact_title" tools:ignore="MissingTranslation">Exclude Telegram contacts</string>
     <string name="settings_bluetooth_block_telegram_contact_summary" tools:ignore="MissingTranslation">Telegram-Messages from the following contacts will not be forwarded</string>
+    <string name="settings_bluetooth_block_threema_group_title" tools:ignore="MissingTranslation">Exclude Threema groups</string>
+    <string name="settings_bluetooth_block_threema_group_summary" tools:ignore="MissingTranslation">Threema-Messages from the following groups will not be forwarded</string>
+    <string name="settings_bluetooth_block_threema_contact_title" tools:ignore="MissingTranslation">Exclude Threema contacts</string>
+    <string name="settings_bluetooth_block_threema_contact_summary" tools:ignore="MissingTranslation">Threema-Messages from the following contacts will not be forwarded</string>
     <string name="settings_bluetooth_notification_access_title" tools:ignore="MissingTranslation">Notification Access</string>
     <string name="settings_bluetooth_battery_title" tools:ignore="MissingTranslation">Battery Optimization</string>
     <string name="settings_bluetooth_battery_summary" tools:ignore="MissingTranslation">If the forwarding stopped working after a time, check your autostart/power-saving options</string>
@@ -184,9 +191,15 @@
     <string name="menu_save">Save to gallery</string>
     <string name="menu_share">Share</string>
 
+    <string name="menu_mms_part_save">Save to gallery</string>
+    <string name="menu_mms_part_share">Share</string>
+    <string name="menu_mms_part_forward">Forward</string>
+    <string name="menu_mms_part_open">Open externally</string>
+
     <string name="main_drawer_open_cd">Open navigation drawer</string>
     <string name="main_title_selected">%d selected</string>
     <string name="main_menu_clear">Clear</string>
+    <string name="main_menu_select_all">Select all</string>
     <string name="main_menu_archive">Archive</string>
     <string name="main_menu_unarchive">Unarchive</string>
     <string name="main_menu_delete">Delete</string>
@@ -196,6 +209,9 @@
     <string name="main_menu_read">Mark read</string>
     <string name="main_menu_unread">Mark unread</string>
     <string name="main_menu_block">Block</string>
+    <string name="main_menu_send_now">Send now</string>
+    <string name="main_menu_edit_message">Edit message</string>
+    <string name="main_menu_rename_conversation">Rename conversation</string>
     <string name="main_syncing">Syncing messages…</string>
     <string name="main_sender_you">You: %s</string>
     <string name="main_draft">Draft</string>
@@ -213,6 +229,10 @@
     <string name="main_permission_contacts">QKSMS needs permission to view your contacts</string>
     <string name="main_permission_notifications">QKSMS needs permission to display notifications</string>
     <string name="main_permission_allow">Allow</string>
+
+    <string name="scheduled_menu_send_now">Send now</string>
+    <string name="scheduled_menu_edit_message">Edit message</string>
+
     <string name="drawer_inbox">Inbox</string>
     <string name="drawer_archived">Archived</string>
     <string name="drawer_scheduled">Scheduled</string>
@@ -235,6 +255,21 @@
         <item quantity="one">Are you sure you would like to delete this conversation?</item>
         <item quantity="other">Are you sure you would like to delete %d conversations?</item>
     </plurals>
+    <plurals name="dialog_delete_chat">
+        <item quantity="one">Are you sure you would like to delete this message?</item>
+        <item quantity="other">Are you sure you would like to delete %d messages?</item>
+    </plurals>
+    <plurals name="dialog_send_now">
+        <item quantity="one">Are you sure you would like to send this message now?</item>
+        <item quantity="other">Are you sure you would like to send %d messages now?</item>
+    </plurals>
+
+    <string name="dialog_edit_scheduled_message_title">Edit message</string>
+    <string name="dialog_edit_scheduled_message">Editing this message will remove it from the schedule.\n\nMake sure to re-submit it on the next screen, or it will be lost.\n\nDo you want to continue?</string>
+    <string name="dialog_edit_scheduled_message_positive_button">Yes, edit the message</string>
+
+    <string name="dialog_clear_compose_title">Clear message</string>
+    <string name="dialog_clear_compose">Clear the message? This action can\'t be undone.</string>
 
     <string-array name="message_options">
         <item>Copy text</item>
@@ -257,8 +292,10 @@
     <string name="compose_scheduled_plus">You must unlock QKSMS+ to use scheduled messaging</string>
     <string name="compose_scheduled_toast">Added to scheduled messages</string>
     <string name="compose_hint">Write a message…</string>
+    <string name="compose_no_valid_recipients">Can\'t send to other participants</string>
     <string name="compose_menu_copy">Copy text</string>
     <string name="compose_menu_forward">Forward</string>
+    <string name="compose_menu_show_status">Show status</string>
     <string name="compose_menu_delete">Delete</string>
     <string name="compose_menu_previous">Previous</string>
     <string name="compose_menu_next">Next</string>
@@ -275,19 +312,36 @@
     <string name="compose_details_delivered">Delivered: %s</string>
     <string name="compose_details_error_code">Error code: %d</string>
     <string name="compose_attach_cd">Add an attachment</string>
+    <string name="compose_attach_file_cd">Attach any file</string>
     <string name="compose_gallery_cd">Attach a photo</string>
+    <string name="compose_audio_message_cd">Record an audio message</string>
     <string name="compose_camera_cd">Take a photo</string>
     <string name="compose_schedule_cd">Schedule message</string>
+    <string name="compose_schedule_cancel_cd">Cancel schedule message</string>
     <string name="compose_contact_cd">Attach a contact</string>
     <string name="compose_contact_error">Error reading contact</string>
     <!-- Example: SIM 1 (Verizon) selected-->
     <string name="compose_sim_changed_toast">SIM %1$d (%2$s) selected</string>
     <string name="compose_sim_cd">%s selected, change SIM card</string>
     <string name="compose_send_cd">Send message</string>
+    <string name="compose_record_audio_msg_cd">Record audio message</string>
+
+    <string name="compose_record_audio_msg_abort_cd">Cancel audio message</string>
+    <string name="compose_record_audio_msg_attach_cd">Attach audio message</string>
+    <string name="compose_record_audio_msg_play_pause_cd">Play or pause audio message</string>
+
+    <string name="compose_message_cancel">Cancel</string>
+    <string name="compose_message_send_now">Send now</string>
+    <string name="compose_message_sim">SIM number</string>
+    <string name="compose_message_item">Message item</string>
+    <string name="compose_message_attachment">Attachment</string>
+
+    <string name="compose_toast_drag_stt">Move the speech-to-text button anywhere you like</string>
 
     <string name="message_status_sending">Sending…</string>
     <string name="message_status_delivered">Delivered %s</string>
     <string name="message_status_failed">Failed to send. Tap to try again</string>
+    <string name="message_body_too_long_to_display">⚠ Message is long. Copy or Save for the full text</string>
 
     <string name="info_title">Details</string>
     <string name="info_copied_address">Address copied</string>
@@ -336,6 +390,8 @@
     <string name="backup_progress_finished">Finished!</string>
     <string name="backup_notification_channel_name">Backup and restore</string>
 
+    <string name="clipboard_too_large_to_copy">Data size exceeds clipboard limit</string>
+    <string name="clipboard_unable_to_copy_to">Unable to copy to the clipboard</string>
     <string name="scheduled_title">Scheduled</string>
     <string name="scheduled_empty_description">Automatically send a message, at the exact moment you\'d like</string>
     <string name="scheduled_empty_message_1">Hey! When was your birthday again?</string>
@@ -345,11 +401,7 @@
     <string name="scheduled_empty_message_3_timestamp">Sending on December 23rd&#x200A;</string>
     <string name="scheduled_compose_cd">Schedule a message</string>
     <string name="scheduled_options_title">Scheduled message</string>
-    <string-array name="scheduled_options">
-        <item>Send now</item>
-        <item>Copy text</item>
-        <item>Delete</item>
-    </string-array>
+    <string name="attachment_missing">Missing</string>
 
     <string name="settings_category_appearance">Appearance</string>
     <string name="settings_category_general">General</string>
@@ -364,6 +416,7 @@
     <string name="settings_automatic_colors_title">Automatic contact colors</string>
     <string name="settings_text_size_title">Font size</string>
     <string name="settings_system_font_title">Use system font</string>
+    <string name="settings_system_show_stt_title">Show the speech-to-text button</string>
     <string name="settings_auto_emoji_title">Automatic emoji</string>
     <string name="settings_notifications_title">Notifications</string>
     <string name="settings_notifications_o_summary">Tap to customize</string>
@@ -372,7 +425,10 @@
     <string name="settings_notification_action_2">Button 2</string>
     <string name="settings_notification_action_3">Button 3</string>
     <string name="settings_notification_previews_title">Notification previews</string>
+<string name="settings_notification_previews_summary">Show name and message</string>
     <string name="settings_notification_wake_title">Wake screen</string>
+    <string name="settings_notification_silent_title">Silent if not a contact</string>
+    <string name="settings_notification_silent_summary">Silences notifications for messages without recipients in your contacts</string>
     <string name="settings_vibration_title">Vibration</string>
     <string name="settings_ringtone_title">Sound</string>
     <string name="settings_ringtone_none">None</string>
@@ -395,9 +451,12 @@
         <item>Call</item>
         <item>Mark read</item>
         <item>Mark unread</item>
+        <item>Speak</item>
     </string-array>
     <string name="settings_delivery_title">Delivery confirmations</string>
     <string name="settings_delivery_summary">Confirm that messages were sent successfully</string>
+    <string name="settings_unread_at_top_title">Unread at the top</string>
+    <string name="settings_unread_at_top_summary">Show unread conversations at the top</string>
     <string name="settings_signature_title">Signature</string>
     <string name="settings_signature_summary">Add a signature to the end of your messages</string>
     <string name="settings_unicode_title">Strip accents</string>
@@ -418,6 +477,10 @@
     <string name="settings_long_as_mms_title">Send long messages as MMS</string>
     <string name="settings_long_as_mms_summary">If your longer text messages are failing to send, or sending in the wrong order, you can send them as MMS messages instead. Additional charges may apply</string>
     <string name="settings_mms_size_title">Auto-compress MMS attachments</string>
+    <string name="settings_mms_weblink_title">Link handling in messages</string>
+    <string name="settings_disable_screenshots_title">Disable Screenshots</string>
+    <string name="settings_diable_screenshots_summary">Prevent your OS and other apps from taking screenshots of the app.</string>
+    
     <string name="settings_opt_out_title" tools:ignore="MissingTranslation">Enable crash logs</string>
     <string name="settings_opt_out_summary" tools:ignore="MissingTranslation">Send crash logs in case of an error</string>
     <string name="settings_sync_title">Sync messages</string>
@@ -527,18 +590,19 @@
     <string name="theme_hex">HEX</string>
     <string name="theme_apply">Apply</string>
 
-    <string name="about_developer" translatable="false">Moez Bhatti</string>
+    <string name="about_developer" translatable="false">Moez Bhatti / Marcos Jones</string>
     <string name="about_source" translatable="false">https://github.com/moezbhatti/qksms</string>
     <string name="about_changelog" translatable="false">https://github.com/moezbhatti/qksms/releases</string>
     <string name="about_contact" translatable="false">moez@qklabs.com</string>
     <string name="about_license" translatable="false">GNU General Public License v3.0</string>
-    <string name="about_copyright" translatable="false">© 2014–2023</string>
+    <string name="about_copyright" translatable="false">© 2014–2025</string>
 
     <string name="changelog_title" translatable="false">New</string>
     <string name="changelog_version" translatable="false">Version %s</string>
     <string name="changelog_added" translatable="false">Added</string>
     <string name="changelog_improved" translatable="false">Improved</string>
     <string name="changelog_fixed" translatable="false">Fixed</string>
+    <string name="changelog_removed" translatable="false">Removed</string>
     <string name="changelog_more" translatable="false">More</string>
     <string name="changelog_dismiss" translatable="false">Dismiss</string>
 
@@ -550,6 +614,7 @@
         <item>Call</item>
         <item>Mark read</item>
         <item>Reply</item>
+        <item>Speak</item>
     </string-array>
 
     <string name="button_yes">Yes</string>
@@ -561,9 +626,13 @@
     <string name="button_more">More</string>
     <string name="button_set">Set</string>
     <string name="button_undo">Undo</string>
+    <string name="button_clear">Clear</string>
 
     <string name="toast_copied">Copied</string>
-    <string name="toast_archived">Archived conversation</string>
+    <plurals name="toast_archived">
+        <item quantity="one">Archived conversation</item>
+        <item quantity="other">Archived %d conversations</item>
+    </plurals>
     <string name="toast_qksms_plus">You must unlock QKSMS+ to use this</string>
 
     <plurals name="notification_new_messages">
@@ -591,6 +660,7 @@
         <item>Normal</item>
         <item>Large</item>
         <item>Larger</item>
+        <item>Super</item>
     </string-array>
 
     <string-array name="delayed_sending_labels">
@@ -622,6 +692,19 @@
         <item>0</item>
     </integer-array>
 
+
+    <string-array name="messageLinkHandlings">
+        <item>Block</item>
+        <item>Allow</item>
+        <item>Ask before opening</item>
+    </string-array>
+
+    <integer-array name="messageLinkHandling_ids">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </integer-array>
+
     <string-array name="qk_responses">
         <item>Okay</item>
         <item>Give me a moment</item>
@@ -636,6 +719,18 @@
         <item>LOL</item>
         <item>That\'s okay</item>
     </string-array>
+
+    <string name="speak_no_messages">No Messages</string>
+    <string name="speak_unseen_messages">Speak unseen messages</string>
+    <string name="messageLinkHandling_dialog_title">External Link Warning</string>
+    <string name="messageLinkHandling_dialog_body">Some links may be unsafe or redirect you unexpectedly. Review the link below before proceeding:\n\n%1$s\n\nDo you want to continue?</string>
+    <string name="messageLinkHandling_dialog_positive">Yes, open the link</string>
+    <string name="messageLinkHandling_dialog_negative">No</string>
+    <string name="error_stt_toast">Sorry, there was an error loading the Speech-To-Text provider.</string>
+    <string name="stt_toast_extra_prompt">Speak your message</string>
+
+    <string name="messages_text_share_file_error">Oops! Something went wrong while sharing</string>
+
 
     <string name="drawer_share">Share</string>
     <string name="settings_gray_title">Gray day mode</string>

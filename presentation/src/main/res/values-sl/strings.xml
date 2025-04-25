@@ -185,11 +185,6 @@
     <string name="scheduled_empty_message_3_timestamp">Pošiljanje na 23. December</string>
     <string name="scheduled_compose_cd">Načrtuj sporočilo</string>
     <string name="scheduled_options_title">Načrtovano sporočilo</string>
-    <string-array name="scheduled_options">
-        <item>Pošlji sedaj</item>
-        <item>Kopiraj besedilo</item>
-        <item>Izbriši</item>
-    </string-array>
     <string name="settings_category_appearance">Izgled</string>
     <string name="settings_category_general">Glavno</string>
     <string name="settings_category_qkreply">QK Odgovor</string>
@@ -366,7 +361,6 @@
     <string name="button_set">Nastavi</string>
     <string name="button_undo">Razveljavi</string>
     <string name="toast_copied">Kopirano</string>
-    <string name="toast_archived">Arhivirani pogovori</string>
     <string name="toast_qksms_plus">Da uporabiš to, moraš odkleniti QKSMS+</string>
     <plurals name="notification_new_messages">
         <item quantity="one">Novo sporočilo</item>

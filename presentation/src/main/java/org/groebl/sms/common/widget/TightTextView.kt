@@ -22,8 +22,8 @@ import android.content.Context
 import android.util.AttributeSet
 
 class TightTextView @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null
+    context: Context,
+    attrs: AttributeSet? = null
 ) : QkTextView(context, attrs) {
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -36,15 +36,12 @@ class TightTextView @JvmOverloads constructor(
         }
 
         val maxLineWidth = (0 until layout.lineCount)
-            .map(layout::getLineWidth).maxOrNull() ?: 0f
+                .map(layout::getLineWidth)
+                .max() ?: 0f
 
-//                .max() ?: 0f
-
-        val width =
-            Math.ceil(maxLineWidth.toDouble()).toInt() + compoundPaddingLeft + compoundPaddingRight
+        val width = Math.ceil(maxLineWidth.toDouble()).toInt() + compoundPaddingLeft + compoundPaddingRight
         if (width < measuredWidth) {
-            val widthSpec =
-                MeasureSpec.makeMeasureSpec(width, MeasureSpec.getMode(widthMeasureSpec))
+            val widthSpec = MeasureSpec.makeMeasureSpec(width, MeasureSpec.getMode(widthMeasureSpec))
             super.onMeasure(widthSpec, heightMeasureSpec)
         }
     }

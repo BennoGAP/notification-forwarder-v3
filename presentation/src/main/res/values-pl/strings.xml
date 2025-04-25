@@ -78,7 +78,7 @@
     <string name="rate_dismiss">ODMAWIAM</string>
     <string name="dialog_delete_title">Usuń</string>
     <plurals name="dialog_delete_message">
-        <item quantity="one">Czy na pewno chcesz usunąć tą rozmowę?</item>
+        <item quantity="one">Czy na pewno chcesz usunąć tę rozmowę?</item>
         <item quantity="few">Czy na pewno chcesz usunąć te %d rozmowy?</item>
         <item quantity="many">Czy na pewno chcesz usunąć te %d rozmów?</item>
         <item quantity="other">Czy na pewno chcesz usunąć te %d rozmów?</item>
@@ -185,11 +185,6 @@
     <string name="scheduled_empty_message_3_timestamp">Do wysłania 23-go grudnia</string>
     <string name="scheduled_compose_cd">Zaplanuj wiadomość</string>
     <string name="scheduled_options_title">Zaplanowana wiadomość</string>
-    <string-array name="scheduled_options">
-        <item>Wyślij teraz</item>
-        <item>Skopiuj treść</item>
-        <item>Usuń</item>
-    </string-array>
     <string name="settings_category_appearance">Wygląd</string>
     <string name="settings_category_general">Ogólne</string>
     <string name="settings_category_qkreply">Szybka odpowiedź</string>
@@ -305,7 +300,7 @@
     <string name="about_license_title">Licencja</string>
     <string name="about_copyright_title">Prawa autorskie</string>
     <string name="qksms_plus_description_title">Wesprzyj rozwój, odblokuj wszystko</string>
-    <string name="qksms_plus_description_summary">Możesz wesprzeć głodującego programistę za jedyne %s</string>
+    <string name="qksms_plus_description_summary">Możesz wesprzeć programistę za jedyne %s</string>
     <!-- Substitutions are for price and currency. Ex: Lifetime upgrade for $1.99 USD -->
     <string name="qksms_plus_upgrade">Dożywotnie aktualizacja za %1$s %2$s</string>
     <!-- Substitutions are for price and currency. Ex: Unlock + donate for $4.99 USD -->
@@ -366,7 +361,6 @@
     <string name="button_set">Ustaw</string>
     <string name="button_undo">Cofnij</string>
     <string name="toast_copied">Skopiowano</string>
-    <string name="toast_archived">Zarchiwizowana rozmowa</string>
     <string name="toast_qksms_plus">Musisz odblokować QKSMS+, aby używać tej funkcji</string>
     <plurals name="notification_new_messages">
         <item quantity="one">Nowa wiadomość</item>

@@ -112,6 +112,8 @@ class NotificationPrefsActivity : QkThemedActivity(), NotificationPrefsView {
         previews.value = state.previewSummary
         previewModeDialog.adapter.selectedItem = state.previewId
         wake.checkbox.isChecked = state.wakeEnabled
+        silentNotContact.checkbox.isChecked = state.silentNotContact
+        silentNotContact.isVisible = state.threadId == 0L
         vibration.checkbox.isChecked = state.vibrationEnabled
         ringtone.value = state.ringtoneName
 

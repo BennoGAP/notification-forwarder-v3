@@ -50,7 +50,18 @@ abstract class QkRealmAdapter<T : RealmModel> : RealmRecyclerViewAdapter<T, QkVi
 
     val selectionChanges: Subject<List<Long>> = BehaviorSubject.create()
 
-    private var selection = listOf<Long>()
+    private var selection = mutableListOf<Long>()
+
+    /**
+     * Mark this message as highlighted
+     */
+    var highlight: Long = -1L
+        set(value) {
+            if (field == value) return
+
+            field = value
+            notifyDataSetChanged()
+        }
 
     /**
      * Toggles the selected state for a particular view
@@ -61,12 +72,13 @@ abstract class QkRealmAdapter<T : RealmModel> : RealmRecyclerViewAdapter<T, QkVi
     protected fun toggleSelection(id: Long, force: Boolean = true): Boolean {
         if (!force && selection.isEmpty()) return false
 
-        selection = when (selection.contains(id)) {
-            true -> selection - id
-            false -> selection + id
+        when (selection.contains(id)) {
+            true -> selection -= id
+            false -> selection += id
         }
 
         selectionChanges.onNext(selection)
+
         return true
     }
 
@@ -75,8 +87,24 @@ abstract class QkRealmAdapter<T : RealmModel> : RealmRecyclerViewAdapter<T, QkVi
     }
 
     fun clearSelection() {
-        selection = listOf()
+        selection.clear()
         selectionChanges.onNext(selection)
+        notifyDataSetChanged()
+    }
+
+    fun toggleSelectAll() {
+        val needToSelectAll = (selection.size != itemCount)
+
+        selection.clear()
+
+        if (needToSelectAll) {
+            for (position in 0 until itemCount)
+                selection += getItemId(position)
+            }
+
+        // fire a single change event now
+        selectionChanges.onNext(selection)
+
         notifyDataSetChanged()
     }
 

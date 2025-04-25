@@ -183,11 +183,6 @@
     <string name="scheduled_empty_message_3_timestamp">ارسال در ۲۳ دسامبر</string>
     <string name="scheduled_compose_cd">یک پیام را برنامه‌ریزی کنید</string>
     <string name="scheduled_options_title">پیام برنامه‌ریزی شده</string>
-    <string-array name="scheduled_options">
-        <item>هم اکنون بفرست</item>
-        <item>کپی متن</item>
-        <item>حذف</item>
-    </string-array>
     <string name="settings_category_appearance">ظاهر</string>
     <string name="settings_category_general">عمومی</string>
     <string name="settings_category_qkreply">پاسخ سریع</string>
@@ -358,7 +353,6 @@
     <string name="button_set">تنظیم</string>
     <string name="button_undo">برگرده</string>
     <string name="toast_copied">کپی شد</string>
-    <string name="toast_archived">گفتگوی بایگانی شده</string>
     <string name="toast_qksms_plus">باید نسخه پیشرفته را فعال کنید</string>
     <plurals name="notification_new_messages">
         <item quantity="one">پیام جدید</item>

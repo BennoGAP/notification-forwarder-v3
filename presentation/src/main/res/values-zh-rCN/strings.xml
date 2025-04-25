@@ -182,11 +182,6 @@
     <string name="scheduled_empty_message_3_timestamp">在12月23日发送 </string>
     <string name="scheduled_compose_cd">创建预约短信</string>
     <string name="scheduled_options_title">预约短信</string>
-    <string-array name="scheduled_options">
-        <item>现在发送</item>
-        <item>复制文本</item>
-        <item>删除</item>
-    </string-array>
     <string name="settings_category_appearance">外观</string>
     <string name="settings_category_general">通用</string>
     <string name="settings_category_qkreply">快速回复</string>
@@ -354,7 +349,6 @@
     <string name="button_set">设置</string>
     <string name="button_undo">撤销</string>
     <string name="toast_copied">已复制</string>
-    <string name="toast_archived">已存档的对话</string>
     <string name="toast_qksms_plus">您必须解锁 QKSMS+ 才能使用此功能</string>
     <plurals name="notification_new_messages">
         <item quantity="other">%s条新信息</item>

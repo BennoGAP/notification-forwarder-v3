@@ -183,11 +183,6 @@
     <string name="scheduled_empty_message_3_timestamp">Sender d. 23. december </string>
     <string name="scheduled_compose_cd">Planlæg en besked</string>
     <string name="scheduled_options_title">Planlagt besked</string>
-    <string-array name="scheduled_options">
-        <item>Send nu</item>
-        <item>Kopiér tekst</item>
-        <item>Slet</item>
-    </string-array>
     <string name="settings_category_appearance">Udseende</string>
     <string name="settings_category_general">Generelt</string>
     <string name="settings_category_qkreply">QK-svar</string>
@@ -358,7 +353,6 @@
     <string name="button_set">Indstil</string>
     <string name="button_undo">Fortryd</string>
     <string name="toast_copied">Kopieret</string>
-    <string name="toast_archived">Arkiveret samtale</string>
     <string name="toast_qksms_plus">Dette kræver oplåsning af QKSMS+</string>
     <plurals name="notification_new_messages">
         <item quantity="one">Ny besked</item>

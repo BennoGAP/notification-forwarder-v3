@@ -182,11 +182,6 @@
     <string name="scheduled_empty_message_3_timestamp">Sending on December 23rd </string>
     <string name="scheduled_compose_cd">Schedule a message</string>
     <string name="scheduled_options_title">Scheduled message</string>
-    <string-array name="scheduled_options">
-        <item>Send now</item>
-        <item>Copy text</item>
-        <item>Delete</item>
-    </string-array>
     <string name="settings_category_appearance">ลักษณะที่ปรากฏ</string>
     <string name="settings_category_general">ทั่วไป</string>
     <string name="settings_category_qkreply">QK ตอบกลับ</string>
@@ -354,7 +349,6 @@
     <string name="button_set">ตั้งค่า</string>
     <string name="button_undo">ย้อนกลับ</string>
     <string name="toast_copied">คัดลอกแล้ว</string>
-    <string name="toast_archived">จัดเก็บการสนทนาแล้ว</string>
     <string name="toast_qksms_plus">คุณต้องปลดล็อก QKSMS+ เพื่อใช้งานคุณสมบัตินี้</string>
     <plurals name="notification_new_messages">
         <item quantity="other">มี %s ข้อความใหม่</item>

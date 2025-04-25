@@ -151,7 +151,7 @@ class CursorToMessageImpl @Inject constructor(
         }
 
         return when (permissionManager.hasReadSms()) {
-            true -> SqliteWrapper.query(context, uri, projection, sortOrder = "normalized_date asc")
+            true -> SqliteWrapper.query(context, uri, projection, sortOrder = "normalized_date desc")
             false -> null
         }
     }

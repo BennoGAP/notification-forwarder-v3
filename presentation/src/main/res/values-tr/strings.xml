@@ -183,11 +183,6 @@
     <string name="scheduled_empty_message_3_timestamp">23  Aralık\'ta gönder</string>
     <string name="scheduled_compose_cd">Bir mesaj zamanla</string>
     <string name="scheduled_options_title">Zamanlanmış mesaj</string>
-    <string-array name="scheduled_options">
-        <item>Şimdi gönder</item>
-        <item>Metni kopyala</item>
-        <item>Sil</item>
-    </string-array>
     <string name="settings_category_appearance">Görünüm</string>
     <string name="settings_category_general">Genel</string>
     <string name="settings_category_qkreply">QK Yanıt</string>
@@ -360,7 +355,6 @@ BAĞLAM İSTEĞİ</string>
     <string name="button_set">Ayarla</string>
     <string name="button_undo">Geri al</string>
     <string name="toast_copied">Kopyalandı.</string>
-    <string name="toast_archived">Arşivlenmiş konuşmalar</string>
     <string name="toast_qksms_plus">Bunu kullanmak için QKSMS+ kilidi gerekir</string>
     <plurals name="notification_new_messages">
         <item quantity="one">Yeni mesaj</item>

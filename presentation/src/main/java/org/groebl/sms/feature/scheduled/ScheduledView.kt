@@ -23,10 +23,19 @@ import io.reactivex.Observable
 
 interface ScheduledView : QkView<ScheduledState> {
 
-    val messageClickIntent: Observable<Long>
-    val messageMenuIntent: Observable<Int>
     val composeIntent: Observable<*>
+    val messagesSelectedIntent: Observable<List<Long>>
+    val optionsItemIntent: Observable<Int>
+    val deleteScheduledMessages: Observable<List<Long>>
+    val sendScheduledMessages: Observable<List<Long>>
+    val editScheduledMessage: Observable<Long>
+    val backPressedIntent: Observable<Unit>
 
-    fun showMessageOptions()
+    fun clearSelection()
+    fun toggleSelectAll()
+    fun showDeleteDialog(messages: List<Long>)
+    fun showSendNowDialog(messages: List<Long>)
+    fun showEditMessageDialog(message: Long)
+    fun finishActivity()
 
 }

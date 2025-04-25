@@ -185,11 +185,6 @@
     <string name="scheduled_empty_message_3_timestamp">الإرسال في 23 ديسمبر</string>
     <string name="scheduled_compose_cd">جدولة رسالة</string>
     <string name="scheduled_options_title">الرسالة المجدولة</string>
-    <string-array name="scheduled_options">
-        <item>أرسل الآن</item>
-        <item>نسخ النص</item>
-        <item>حذف</item>
-    </string-array>
     <string name="settings_category_appearance">المظهر</string>
     <string name="settings_category_general">عام</string>
     <string name="settings_category_qkreply">رد QK</string>
@@ -373,7 +368,6 @@
     <string name="button_set">تعيين</string>
     <string name="button_undo">تراجع</string>
     <string name="toast_copied">تم النسخ</string>
-    <string name="toast_archived">تم حفظ المحادثة</string>
     <string name="toast_qksms_plus">استخدام هذه الميزة يتطلب فتح QKSMS+</string>
     <plurals name="notification_new_messages">
         <item quantity="zero">لا رسائل جديدة</item>

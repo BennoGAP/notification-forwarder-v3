@@ -75,6 +75,7 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
     @Inject lateinit var textSizeDialog: QkDialog
     @Inject lateinit var sendDelayDialog: QkDialog
     @Inject lateinit var mmsSizeDialog: QkDialog
+    @Inject lateinit var messageLinkHandlingDialog: QkDialog
 
     @Inject override lateinit var presenter: SettingsPresenter
 
@@ -114,6 +115,7 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
         textSizeDialog.adapter.setData(R.array.text_sizes)
         sendDelayDialog.adapter.setData(R.array.delayed_sending_labels)
         mmsSizeDialog.adapter.setData(R.array.mms_sizes, R.array.mms_sizes_ids)
+        messageLinkHandlingDialog.adapter.setData(R.array.messageLinkHandlings, R.array.messageLinkHandling_ids)
 
         //about.summary = context.getString(R.string.settings_version, BuildConfig.VERSION_NAME)
     }
@@ -162,6 +164,8 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
 
     override fun mmsSizeSelected(): Observable<Int> = mmsSizeDialog.adapter.menuItemClicks
 
+    override fun messageLinkHandlingSelected(): Observable<Int> = messageLinkHandlingDialog.adapter.menuItemClicks
+
     override fun render(state: SettingsState) {
         themePreview.setBackgroundTint(state.theme)
 
@@ -190,6 +194,8 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
 
         delivery.checkbox.isChecked = state.deliveryEnabled
 
+        unreadAtTop.checkbox.isChecked = state.unreadAtTopEnabled
+
        /* signature.summary = state.signature.takeIf { it.isNotBlank() }
                 ?: context.getString(R.string.settings_signature_summary)*/
         signature.value = state.signature.takeIf { it.isNotBlank() }
@@ -209,6 +215,8 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
         unicode.checkbox.isChecked = state.stripUnicodeEnabled
         mobileOnly.checkbox.isChecked = state.mobileOnly
 
+        showStt.checkbox.isChecked = state.showStt
+
         autoDelete.value = when (state.autoDelete) {
             0 -> context.getString(R.string.settings_auto_delete_never)
             else -> context.resources.getQuantityString(
@@ -222,6 +230,10 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
         mmsSize.value = state.maxMmsSizeSummary
         mmsSizeDialog.adapter.selectedItem = state.maxMmsSizeId
 
+        messsageLinkHandling.value = state.messageLinkHandlingSummary
+        messageLinkHandlingDialog.adapter.selectedItem = state.messageLinkHandlingId
+
+        disableScreenshots.checkbox.isChecked = state.disableScreenshotsEnabled
         when (state.syncProgress) {
             is SyncRepository.SyncProgress.Idle -> syncingProgress.isVisible = false
 
@@ -270,6 +282,8 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
     }
 
     override fun showMmsSizePicker() = mmsSizeDialog.show(activity!!)
+
+    override fun showMessageLinkHandlingDialogPicker() = messageLinkHandlingDialog.show(activity!!)
 
     override fun showSpeechBubble() {
         router.pushController(RouterTransaction.with(SpeechBubbleController())

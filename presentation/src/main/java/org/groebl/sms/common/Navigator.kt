@@ -31,6 +31,8 @@ import android.provider.Telephony
 import android.webkit.MimeTypeMap
 import androidx.core.content.FileProvider
 import org.groebl.sms.BuildConfig
+import org.groebl.sms.compat.TelephonyCompat
+import org.groebl.sms.extensions.resourceExists
 import org.groebl.sms.manager.BillingManager
 import org.groebl.sms.feature.backup.BackupActivity
 import org.groebl.sms.feature.blocking.BlockingActivity
@@ -45,6 +47,7 @@ import org.groebl.sms.feature.settings.SettingsActivity
 import org.groebl.sms.manager.AnalyticsManager
 import org.groebl.sms.manager.NotificationManager
 import org.groebl.sms.manager.PermissionManager
+import org.groebl.sms.model.ScheduledMessage
 import java.io.File
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -87,13 +90,47 @@ class Navigator @Inject constructor(
         }
     }
 
-    fun showCompose(body: String? = null, images: List<Uri>? = null) {
+    fun showCompose(body: String? = null, attachments: List<Uri>? = null, mode: String? = null) {
         val intent = Intent(context, ComposeActivity::class.java)
         intent.putExtra(Intent.EXTRA_TEXT, body)
+        intent.putExtra("mode", mode)
 
-        images?.takeIf { it.isNotEmpty() }?.let {
-            intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, ArrayList(images))
-        }
+        attachments
+            ?.takeIf { it.isNotEmpty() }
+            ?.mapNotNull {
+                if (it.resourceExists(context)) it
+                else null
+            }
+            ?.let { intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, ArrayList(it)) }
+
+        startActivity(intent)
+    }
+
+    fun showCompose(scheduledMessage: ScheduledMessage) {
+        val scheduledThreadId = TelephonyCompat.getOrCreateThreadId(
+            context,
+            scheduledMessage.recipients
+        )
+
+        val intent = Intent(context, ComposeActivity::class.java)
+        intent.putExtra(Intent.EXTRA_TEXT, scheduledMessage.body)
+        intent.putExtra("threadId", scheduledThreadId)
+        intent.putExtra("subscriptionId", scheduledMessage.subId)
+        intent.putExtra("sendAsGroup", scheduledMessage.sendAsGroup)
+        intent.putExtra("scheduleDateTime", scheduledMessage.date)
+
+        scheduledMessage.recipients
+            .takeIf { it.isNotEmpty() }
+            ?.let { intent.putStringArrayListExtra("addresses", ArrayList(it)) }
+
+        scheduledMessage.attachments
+            .takeIf { it.isNotEmpty() }
+            ?.mapNotNull {
+                val uri = Uri.parse(it)
+                if (uri.resourceExists(context)) uri
+                else null
+            }
+            ?.let { intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, ArrayList(it)) }
 
         startActivity(intent)
     }

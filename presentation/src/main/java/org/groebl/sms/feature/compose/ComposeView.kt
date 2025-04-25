@@ -19,9 +19,13 @@
 package org.groebl.sms.feature.compose
 
 import android.net.Uri
+import android.view.MenuItem
+import android.view.View
 import androidx.annotation.StringRes
 import androidx.core.view.inputmethod.InputContentInfoCompat
+import org.groebl.sms.common.QkMediaPlayer
 import org.groebl.sms.common.base.QkView
+import org.groebl.sms.common.widget.MicInputCloudView
 import org.groebl.sms.model.Attachment
 import org.groebl.sms.model.Recipient
 import io.reactivex.Observable
@@ -29,24 +33,39 @@ import io.reactivex.subjects.Subject
 
 interface ComposeView : QkView<ComposeState> {
 
+    companion object {
+        const val SelectContactRequestCode = 0
+        const val TakePhotoRequestCode = 1
+        const val AttachContactRequestCode = 3
+        const val AttachAFileRequestCode = 4
+        const val SpeechRecognitionRequestCode = 5
+
+        const val CameraDestinationKey = "camera_destination"
+    }
+
     val activityVisibleIntent: Observable<Boolean>
     val chipsSelectedIntent: Subject<HashMap<String, String?>>
     val chipDeletedIntent: Subject<Recipient>
     val menuReadyIntent: Observable<Unit>
     val optionsItemIntent: Observable<Int>
+    val contextItemIntent: Observable<MenuItem>
     val sendAsGroupIntent: Observable<*>
-    val messageClickIntent: Subject<Long>
     val messagePartClickIntent: Subject<Long>
+    val messagePartContextMenuRegistrar: Subject<View>
     val messagesSelectedIntent: Observable<List<Long>>
     val cancelSendingIntent: Subject<Long>
+    val sendNowIntent: Subject<Long>
+    val resendIntent: Subject<Long>
     val attachmentDeletedIntent: Subject<Attachment>
     val textChangedIntent: Observable<CharSequence>
     val attachIntent: Observable<Unit>
     val cameraIntent: Observable<*>
-    val galleryIntent: Observable<*>
+    val attachAnyFileIntent: Observable<*>
+    val attachImageFileIntent: Observable<*>
     val scheduleIntent: Observable<*>
+    val scheduleAction: Observable<*>
     val attachContactIntent: Observable<*>
-    val attachmentSelectedIntent: Observable<Uri>
+    val attachAnyFileSelectedIntent: Observable<Uri>
     val contactSelectedIntent: Observable<Uri>
     val inputContentIntent: Observable<InputContentInfoCompat>
     val scheduleSelectedIntent: Observable<Long>
@@ -54,21 +73,43 @@ interface ComposeView : QkView<ComposeState> {
     val changeSimIntent: Observable<*>
     val sendIntent: Observable<Unit>
     val backPressedIntent: Observable<Unit>
+    val confirmDeleteIntent: Observable<List<Long>>
+    val clearCurrentMessageIntent: Subject<Boolean>
+    val messageLinkAskIntent: Observable<Uri>
+    val speechRecogniserIntent: Observable<*>
+    val shadeIntent: Observable<Unit>
+    val recordAudioStartStopRecording: Subject<Boolean>
+    val recordAnAudioMessage: Observable<Unit>
+    val recordAudioAbort: Observable<Unit>
+    val recordAudioAttach: Observable<Unit>
+    val recordAudioPlayerPlayPause: Observable<QkMediaPlayer.PlayingState>
+    val recordAudioPlayerConfigUI: Subject<QkMediaPlayer.PlayingState>
+    val recordAudioPlayerVisible: Subject<Boolean>
+    val recordAudioMsgRecordVisible: Subject<Boolean>
+    val recordAudioRecord: Subject<MicInputCloudView.ViewState>
+    val recordAudioChronometer: Subject<Boolean>
 
     fun clearSelection()
+    fun toggleSelectAll()
+    fun expandMessages(messageIds: List<Long>, expand: Boolean)
     fun showDetails(details: String)
+    fun showMessageLinkAskDialog(uri: Uri)
     fun requestDefaultSms()
     fun requestStoragePermission()
+    fun requestRecordAudioPermission()
     fun requestSmsPermission()
     fun showContacts(sharing: Boolean, chips: List<Recipient>)
     fun themeChanged()
     fun showKeyboard()
     fun requestCamera()
-    fun requestGallery()
+    fun requestGallery(mimeType: String, requestCode: Int)
     fun requestDatePicker()
     fun requestContact()
     fun setDraft(draft: String)
     fun scrollToMessage(id: Long)
     fun speechText(text: String)
-
+    fun showDeleteDialog( messages: List<Long>)
+    fun showClearCurrentMessageDialog()
+    fun startSpeechRecognition()
+    fun focusMessage()
 }

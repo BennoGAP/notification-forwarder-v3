@@ -183,11 +183,6 @@
     <string name="scheduled_empty_message_3_timestamp">Enviar no dia 23 de dezembro</string>
     <string name="scheduled_compose_cd">Agendar mensagem</string>
     <string name="scheduled_options_title">Mensagem agendada</string>
-    <string-array name="scheduled_options">
-        <item>Enviar agora</item>
-        <item>Copiar texto</item>
-        <item>Apagar</item>
-    </string-array>
     <string name="settings_category_appearance">Aparência</string>
     <string name="settings_category_general">Geral</string>
     <string name="settings_category_qkreply">QK Reply</string>
@@ -358,7 +353,6 @@
     <string name="button_set">Definir</string>
     <string name="button_undo">Anular</string>
     <string name="toast_copied">Copiada</string>
-    <string name="toast_archived">Conversa arquivada</string>
     <string name="toast_qksms_plus">Tem que ter o QKSMS+ para esta função</string>
     <plurals name="notification_new_messages">
         <item quantity="one">1 nova mensagem</item>

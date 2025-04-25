@@ -183,11 +183,6 @@
     <string name="scheduled_empty_message_3_timestamp">Küldés december 23-án</string>
     <string name="scheduled_compose_cd">Küldés időzítése</string>
     <string name="scheduled_options_title">Időzített üzenet</string>
-    <string-array name="scheduled_options">
-        <item>Küldés most</item>
-        <item>Szöveg másolása</item>
-        <item>Törlés</item>
-    </string-array>
     <string name="settings_category_appearance">Megjelenés</string>
     <string name="settings_category_general">Általános</string>
     <string name="settings_category_qkreply">QK válasz</string>
@@ -358,7 +353,6 @@
     <string name="button_set">Beállítás</string>
     <string name="button_undo">Visszavonás</string>
     <string name="toast_copied">Átmásolva</string>
-    <string name="toast_archived">Archivált beszélgetés</string>
     <string name="toast_qksms_plus">Ehhez ki kell nyitnod a QKSMS+-t</string>
     <plurals name="notification_new_messages">
         <item quantity="one">Új üzenet</item>

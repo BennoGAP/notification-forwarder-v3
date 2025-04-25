@@ -184,11 +184,6 @@
     <string name="scheduled_empty_message_3_timestamp">Trimite pe 23 decembrie</string>
     <string name="scheduled_compose_cd">Programează un mesaj</string>
     <string name="scheduled_options_title">Mesaj programat</string>
-    <string-array name="scheduled_options">
-        <item>Trimite acum</item>
-        <item>Copiază textul</item>
-        <item>Șterge</item>
-    </string-array>
     <string name="settings_category_appearance">Aspect</string>
     <string name="settings_category_general">General</string>
     <string name="settings_category_qkreply">QK Răspuns</string>
@@ -362,7 +357,6 @@
     <string name="button_set">Setați</string>
     <string name="button_undo">Anulează</string>
     <string name="toast_copied">Copiat</string>
-    <string name="toast_archived">Conversație arhivată</string>
     <string name="toast_qksms_plus">Trebuie să deblocați QKSMS+ pentru a utiliza acest lucru</string>
     <plurals name="notification_new_messages">
         <item quantity="one">Mesaj nou</item>

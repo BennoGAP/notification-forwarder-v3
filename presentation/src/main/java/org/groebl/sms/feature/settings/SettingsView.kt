@@ -34,6 +34,7 @@ interface SettingsView : QkViewContract<SettingsState> {
     fun signatureChanged(): Observable<String>
     fun autoDeleteChanged(): Observable<Int>
     fun mmsSizeSelected(): Observable<Int>
+    fun messageLinkHandlingSelected(): Observable<Int>
 
     fun showNightModeDialog()
     fun showStartTimePicker(hour: Int, minute: Int)
@@ -44,6 +45,7 @@ interface SettingsView : QkViewContract<SettingsState> {
     fun showAutoDeleteDialog(days: Int)
     suspend fun showAutoDeleteWarningDialog(messages: Int): Boolean
     fun showMmsSizePicker()
+    fun showMessageLinkHandlingDialogPicker()
     fun showSpeechBubble()
     fun showSimConfigure()
     fun showSwipeActions()

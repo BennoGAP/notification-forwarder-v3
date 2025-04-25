@@ -183,11 +183,6 @@
     <string name="scheduled_empty_message_3_timestamp">டிசம்பர் 23 அன்று அனுப்புகிறது</string>
     <string name="scheduled_compose_cd">செய்தியைத் திட்டமிடு</string>
     <string name="scheduled_options_title">திட்டமிடப்பட்ட செய்தி</string>
-    <string-array name="scheduled_options">
-        <item>இப்போது அனுப்பு</item>
-        <item>உரையை நகலெடு</item>
-        <item>நீக்கு</item>
-    </string-array>
     <string name="settings_category_appearance">தோற்றம்</string>
     <string name="settings_category_general">பொது</string>
     <string name="settings_category_qkreply">QK பதில்</string>
@@ -358,7 +353,6 @@
     <string name="button_set">அமை</string>
     <string name="button_undo">செயல்தவிர்</string>
     <string name="toast_copied">நகலெடுக்கப்பட்டது</string>
-    <string name="toast_archived">காப்பகப்படுத்திய உரையாடல்</string>
     <string name="toast_qksms_plus">இதைப் பயன்படுத்த கட்டாயம் QKSMS+ ஐப் பூட்டவிழ்க்க வேண்டும்</string>
     <plurals name="notification_new_messages">
         <item quantity="one">புது தகவல்</item>

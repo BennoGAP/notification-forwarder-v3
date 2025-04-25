@@ -18,37 +18,80 @@
  */
 package org.groebl.sms.model
 
+import android.annotation.SuppressLint
+import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
 import android.os.Build
+import androidx.core.net.toFile
 import androidx.core.view.inputmethod.InputContentInfoCompat
+import org.groebl.sms.extensions.contactToVCard
+import org.groebl.sms.extensions.getName
+import org.groebl.sms.extensions.getResourceBytes
+import org.groebl.sms.extensions.getSize
+import org.groebl.sms.extensions.getType
+import org.groebl.sms.extensions.isAudio
+import org.groebl.sms.extensions.isContact
+import org.groebl.sms.extensions.isImage
+import org.groebl.sms.extensions.isVCard
 
-sealed class Attachment {
 
-    data class Image(
-        private val uri: Uri? = null,
-        private val inputContent: InputContentInfoCompat? = null
-    ) : Attachment() {
+@SuppressLint("Range")
+class Attachment (
+    context: Context,
+    var uri: Uri = Uri.EMPTY,
+    inputContent: InputContentInfoCompat? = null
+) {
+    private var resourceBytes: ByteArray? = null
 
-        fun getUri(): Uri? {
-            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-                inputContent?.contentUri ?: uri
-            } else {
-                uri
-            }
-        }
+    init {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1)
+            uri = inputContent?.contentUri ?: uri
 
-        fun isGif(context: Context): Boolean {
-            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1 && inputContent != null) {
-                inputContent.description.hasMimeType("image/gif")
-            } else {
-                uri?.let(context.contentResolver::getType) == "image/gif"
-            }
-        }
+        // if constructed with a uri to a contact, convert uri to associated vcard uri
+        if (uri.isContact(context))
+            uri = uri.contactToVCard(context)
     }
 
-    data class Contact(val vCard: String) : Attachment()
+    fun isVCard(context: Context): Boolean = uri.isVCard(context)
 
+    fun isAudio(context: Context): Boolean = uri.isAudio(context)
+
+    fun isImage(context: Context): Boolean = uri.isImage(context)
+
+    fun getType(context: Context): String = uri.getType(context)
+
+    fun getName(context: Context): String = uri.getName(context) ?: "unknown"
+
+    fun getSize(context: Context): Long = uri.getSize(context)
+
+    fun hasDisplayableImage(context: Context): Boolean {
+        val mimeType = getType(context)
+        return (mimeType.startsWith("image/") || mimeType.startsWith("video/"))
+    }
+
+    fun getResourceBytes(context: Context): ByteArray {
+        // cache resource bytes by loading first time only
+        if (resourceBytes != null)
+            return resourceBytes!!
+
+        resourceBytes = uri.getResourceBytes(context)
+
+        return resourceBytes!!
+    }
+
+    fun releaseResourceBytes() {
+        resourceBytes = null
+    }
+
+    fun removeCacheFile(): Boolean {
+        // all file:// scheme files are local to the app cache dir, so can be deleted
+        if (uri.scheme == ContentResolver.SCHEME_FILE) {
+            return try { uri.toFile().delete() }
+            catch (e: Exception) { false }
+        }
+
+        return false
+    }
 }
 
-class Attachments(attachments: List<Attachment>) : List<Attachment> by attachments

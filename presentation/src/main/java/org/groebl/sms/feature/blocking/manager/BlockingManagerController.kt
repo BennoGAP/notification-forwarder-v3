@@ -17,7 +17,6 @@ import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.blocking_manager_controller.*
 import kotlinx.android.synthetic.main.blocking_manager_list_option.view.*
-import kotlinx.android.synthetic.main.radio_preference_view.view.*
 import javax.inject.Inject
 
 class BlockingManagerController : QkController<BlockingManagerView, BlockingManagerState, BlockingManagerPresenter>(),
@@ -41,8 +40,8 @@ class BlockingManagerController : QkController<BlockingManagerView, BlockingMana
         showBackButton(true)
 
         val states = arrayOf(
-            intArrayOf(android.R.attr.state_activated),
-            intArrayOf(-android.R.attr.state_activated))
+                intArrayOf(android.R.attr.state_activated),
+                intArrayOf(-android.R.attr.state_activated))
 
         val textTertiary = view.context.resolveThemeColor(android.R.attr.textColorTertiary)
         val imageTintList = ColorStateList(states, intArrayOf(colors.theme().theme, textTertiary))

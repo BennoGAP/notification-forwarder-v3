@@ -43,6 +43,8 @@ import org.groebl.sms.feature.bluetooth.service.BluetoothReceiver
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 import org.groebl.sms.feature.bluetooth.service.BluetoothNotificationService
+import org.groebl.sms.receiver.SpeakThreadsReceiver
+import org.groebl.sms.receiver.StartActivityFromWidgetReceiver
 
 @Module
 abstract class BroadcastReceiverBuilderModule {
@@ -70,6 +72,14 @@ abstract class BroadcastReceiverBuilderModule {
     @ActivityScope
     @ContributesAndroidInjector()
     abstract fun bindMarkReadReceiver(): MarkReadReceiver
+
+    @ActivityScope
+    @ContributesAndroidInjector()
+    abstract fun bindSpeakThreadsReceiver(): SpeakThreadsReceiver
+
+    @ActivityScope
+    @ContributesAndroidInjector()
+    abstract fun bindStartActivityFromWidgetReceiver(): StartActivityFromWidgetReceiver
 
     @ActivityScope
     @ContributesAndroidInjector()

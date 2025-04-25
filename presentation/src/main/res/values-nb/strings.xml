@@ -183,11 +183,6 @@
     <string name="scheduled_empty_message_3_timestamp">Sender den 23. desember</string>
     <string name="scheduled_compose_cd">Planlegg en melding</string>
     <string name="scheduled_options_title">Planlagt melding</string>
-    <string-array name="scheduled_options">
-        <item>Send nå</item>
-        <item>Copy text</item>
-        <item>Delete</item>
-    </string-array>
     <string name="settings_category_appearance">Utseende</string>
     <string name="settings_category_general">Generelt</string>
     <string name="settings_category_qkreply">Raskt svar</string>
@@ -358,7 +353,6 @@
     <string name="button_set">Angi</string>
     <string name="button_undo">Angre</string>
     <string name="toast_copied">Kopiert</string>
-    <string name="toast_archived">Arkiverte samtaler</string>
     <string name="toast_qksms_plus">Du må aktivere QKSMS+ for å bruke dette</string>
     <plurals name="notification_new_messages">
         <item quantity="one">Ny melding</item>

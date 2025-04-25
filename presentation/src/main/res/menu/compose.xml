@@ -35,8 +35,27 @@
         app:showAsAction="always" />
 
     <item
-        android:id="@+id/info"
+        android:id="@+id/select_all"
+        android:icon="?attr/actionModeSelectAllDrawable"
+        android:title="@string/main_menu_select_all"
+        android:visible="false"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/details"
         android:icon="@drawable/ic_info_black_24dp"
+        android:title="@string/compose_details_title"
+        android:visible="false"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/delete"
+        android:icon="@drawable/ic_delete_white_24dp"
+        android:title="@string/compose_menu_delete"
+        android:visible="false"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/info"
+        android:icon="@drawable/ic_more_vert_black_24dp"
         android:title="@string/menu_info"
         android:visible="false"
         app:showAsAction="always" />
@@ -49,9 +68,9 @@
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/delete"
-        android:icon="@drawable/ic_delete_white_24dp"
-        android:title="@string/compose_menu_delete"
+        android:id="@+id/share"
+        android:icon="@android:drawable/ic_menu_share"
+        android:title="@string/compose_menu_share"
         android:visible="false"
         app:showAsAction="ifRoom" />
 
@@ -63,16 +82,9 @@
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/share"
-        android:icon="@drawable/ic_people_black_24dp"
-        android:title="@string/compose_menu_share"
-        android:visible="false"
-        app:showAsAction="ifRoom" />
-
-    <item
-        android:id="@+id/details"
-        android:icon="@drawable/ic_info_black_24dp"
-        android:title="@string/info_title"
+        android:id="@+id/show_status"
+        android:icon="@android:drawable/ic_menu_more"
+        android:title="@string/compose_menu_show_status"
         android:visible="false"
         app:showAsAction="ifRoom" />
 

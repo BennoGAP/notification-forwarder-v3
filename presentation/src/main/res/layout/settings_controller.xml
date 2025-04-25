@@ -134,6 +134,14 @@
             app:widget="@layout/settings_switch_widget" />
 
         <org.groebl.sms.common.widget.PreferenceView
+            android:id="@+id/unreadAtTop"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/ic_unreadattop_all_black_24dp"
+            app:title="@string/settings_unread_at_top_title"
+            app:widget="@layout/settings_switch_widget" />
+
+        <org.groebl.sms.common.widget.PreferenceView
             android:id="@+id/textSize"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -147,6 +155,14 @@
             android:layout_height="wrap_content"
             app:icon="@drawable/ic_title_black_24dp"
             app:title="@string/settings_system_font_title"
+            app:widget="@layout/settings_switch_widget" />
+
+        <org.groebl.sms.common.widget.PreferenceView
+            android:id="@+id/showStt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/ic_speech_to_text_black"
+            app:title="@string/settings_system_show_stt_title"
             app:widget="@layout/settings_switch_widget" />
 
         <View
@@ -238,7 +254,7 @@
             android:layout_height="wrap_content"
             app:icon="@drawable/ic_baseline_history_toggle_off_24"
             app:title="@string/settings_auto_delete"
-            tools:value="Never" />
+            tools:summary="Never" />
 
         <org.groebl.sms.common.widget.PreferenceView
             android:id="@+id/longAsMms"
@@ -256,7 +272,25 @@
             android:visibility="visible"
             app:icon="@drawable/ic_photo_size_select_actual_black_24dp"
             app:title="@string/settings_mms_size_title"
-            tools:value="100KB" />
+            tools:summary="100KB" />
+
+        <org.groebl.sms.common.widget.PreferenceView
+            android:id="@+id/messsageLinkHandling"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            app:icon="@android:drawable/stat_sys_warning"
+            app:title="@string/settings_mms_weblink_title"
+            tools:summary="100KB" />
+
+        <org.groebl.sms.common.widget.PreferenceView
+            android:id="@+id/disableScreenshots"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/ic_screenshot"
+            app:summary="@string/settings_diable_screenshots_summary"
+            app:title="@string/settings_disable_screenshots_title"
+            app:widget="@layout/settings_switch_widget" />
 
         <View
             android:layout_width="match_parent"

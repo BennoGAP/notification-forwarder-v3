@@ -21,7 +21,6 @@ package org.groebl.sms.feature.themepicker
 import android.animation.ObjectAnimator
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding2.view.clicks
 import org.groebl.sms.R
 import org.groebl.sms.common.base.QkController
@@ -32,8 +31,6 @@ import org.groebl.sms.common.util.extensions.setVisible
 import org.groebl.sms.feature.themepicker.injection.ThemePickerModule
 import org.groebl.sms.injection.appComponent
 import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
-import io.reactivex.subjects.Subject
 import kotlinx.android.synthetic.main.theme_picker_controller.*
 import kotlinx.android.synthetic.main.theme_picker_hsv.*
 import javax.inject.Inject
@@ -86,10 +83,17 @@ class ThemePickerController(
         presenter.bindIntents(this)
         setTitle(R.string.title_theme)
         showBackButton(true)
+        themedActivity?.supportActionBar?.let { toolbar ->
+            ObjectAnimator.ofFloat(toolbar, "elevation", toolbar.elevation, 0f).start()
+        }
     }
 
     override fun onDetach(view: View) {
         super.onDetach(view)
+
+        themedActivity?.supportActionBar?.let { toolbar ->
+            ObjectAnimator.ofFloat(toolbar, "elevation", toolbar.elevation, 8.dpToPx(toolbar.themedContext).toFloat()).start()
+        }
     }
 
     override fun themeSelected(): Observable<Int> = themeAdapter.colorSelected

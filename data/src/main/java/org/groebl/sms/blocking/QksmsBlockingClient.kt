@@ -34,24 +34,24 @@ class QksmsBlockingClient @Inject constructor(
     override fun shouldBlock(address: String): Single<BlockingClient.Action> = isBlacklisted(address)
 
     override fun isBlacklisted(address: String): Single<BlockingClient.Action> = Single.fromCallable {
-        when (blockingRepo.isBlockedAddress(address)) {
-            true -> BlockingClient.Action.Block()
+        when (blockingRepo.isBlocked(address)) {
+            true -> BlockingClient.Action.Block("address")
             false -> BlockingClient.Action.Unblock
         }
     }
 
     override fun getActionFromContent(content: String): Single<BlockingClient.Action> = Single.fromCallable {
         when (blockingRepo.isBlockedContent(content)) {
-            true -> BlockingClient.Action.Block("Blocked for content")
+            true -> BlockingClient.Action.Block("message")
             false -> BlockingClient.Action.Unblock
         }
     }
 
-    override fun blockAddresses(addresses: List<String>): Completable = Completable.fromCallable {
+    override fun block(addresses: List<String>): Completable = Completable.fromCallable {
         blockingRepo.blockNumber(*addresses.toTypedArray())
     }
 
-    override fun unblockAddresses(addresses: List<String>): Completable = Completable.fromCallable {
+    override fun unblock(addresses: List<String>): Completable = Completable.fromCallable {
         blockingRepo.unblockNumbers(*addresses.toTypedArray())
     }
 

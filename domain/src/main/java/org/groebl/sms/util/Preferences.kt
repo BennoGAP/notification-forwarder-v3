@@ -49,6 +49,7 @@ class Preferences @Inject constructor(
         const val TEXT_SIZE_NORMAL = 1
         const val TEXT_SIZE_LARGE = 2
         const val TEXT_SIZE_LARGER = 3
+        const val TEXT_SIZE_SUPER = 4
 
         const val NOTIFICATION_PREVIEWS_ALL = 0
         const val NOTIFICATION_PREVIEWS_NAME = 1
@@ -61,6 +62,7 @@ class Preferences @Inject constructor(
         const val NOTIFICATION_ACTION_CALL = 4
         const val NOTIFICATION_ACTION_READ = 5
         const val NOTIFICATION_ACTION_REPLY = 6
+        const val NOTIFICATION_ACTION_SPEAK = 7
 
         const val SEND_DELAY_NONE = 0
         const val SEND_DELAY_SHORT = 1
@@ -74,6 +76,7 @@ class Preferences @Inject constructor(
         const val SWIPE_ACTION_CALL = 4
         const val SWIPE_ACTION_READ = 5
         const val SWIPE_ACTION_UNREAD = 6
+        const val SWIPE_ACTION_SPEAK = 7
 
         const val BLOCKING_MANAGER_QKSMS = 0
         const val BLOCKING_MANAGER_CC = 1
@@ -91,6 +94,10 @@ class Preferences @Inject constructor(
         const val BUBBLE_STYLE_IOS = 1
         const val BUBBLE_STYLE_SIMPLE = 2
         const val BUBBLE_STYLE_TRIANGLE = 3
+
+        const val MESSAGE_LINK_HANDLING_BLOCK = 0
+        const val MESSAGE_LINK_HANDLING_ALLOW = 1
+        const val MESSAGE_LINK_HANDLING_ASK = 2
     }
 
     // Internal
@@ -124,9 +131,13 @@ class Preferences @Inject constructor(
     val sim3Color = rxPrefs.getInteger("sim3Color", SIM_COLOR_YELLOW)
     val separator = rxPrefs.getBoolean("separator", false)
     val systemFont = rxPrefs.getBoolean("systemFont", false)
+    val showStt = rxPrefs.getBoolean("showStt", false)
+    val showSttOffsetX = rxPrefs.getFloat("showSttOffsetX", Float.MIN_VALUE)
+    val showSttOffsetY = rxPrefs.getFloat("showSttOffsetY", Float.MIN_VALUE)
     val textSize = rxPrefs.getInteger("textSize", TEXT_SIZE_NORMAL)
     val blockingManager = rxPrefs.getInteger("blockingManager", BLOCKING_MANAGER_QKSMS)
     val drop = rxPrefs.getBoolean("drop", false)
+    val silentNotContact = rxPrefs.getBoolean("silentNotContact", false)
     val notifAction1 = rxPrefs.getInteger("notifAction1", NOTIFICATION_ACTION_READ)
     val notifAction2 = rxPrefs.getInteger("notifAction2", NOTIFICATION_ACTION_REPLY)
     val notifAction3 = rxPrefs.getInteger("notifAction3", NOTIFICATION_ACTION_NONE)
@@ -144,7 +155,10 @@ class Preferences @Inject constructor(
     val longAsMms = rxPrefs.getBoolean("longAsMms", false)
     val optOut = rxPrefs.getBoolean("optOut", true)
     val mmsSize = rxPrefs.getInteger("mmsSize", 300)
+    val messageLinkHandling = rxPrefs.getInteger("messageLinkHandling", MESSAGE_LINK_HANDLING_ASK)
+    val disableScreenshots = rxPrefs.getBoolean("disableScreenshots", false)
     val logging = rxPrefs.getBoolean("logging", false)
+    val unreadAtTop = rxPrefs.getBoolean("unreadAtTop", false)
 
 	val bluetooth_enabled = rxPrefs.getBoolean("bluetoothEnabled", false)
     val bluetooth_apps = rxPrefs.getStringSet("bluetoothApps", HashSet<String>())
@@ -197,7 +211,8 @@ class Preferences @Inject constructor(
     val keyChanges: Observable<String> = Observable.create<String> { emitter ->
         // Making this a lambda would cause it to be GCd
         val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
-            emitter.onNext(key)
+            if (key != null)
+                emitter.onNext(key)
         }
 
         emitter.setCancellable {

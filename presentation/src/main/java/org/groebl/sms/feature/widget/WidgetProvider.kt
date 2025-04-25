@@ -28,14 +28,15 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.RemoteViews
+import dagger.android.AndroidInjection
 import org.groebl.sms.R
 import org.groebl.sms.common.util.Colors
 import org.groebl.sms.common.util.extensions.getColorCompat
 import org.groebl.sms.feature.compose.ComposeActivity
 import org.groebl.sms.feature.main.MainActivity
 import org.groebl.sms.manager.WidgetManager
+import org.groebl.sms.receiver.StartActivityFromWidgetReceiver
 import org.groebl.sms.util.Preferences
-import dagger.android.AndroidInjection
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -141,20 +142,40 @@ class WidgetProvider : AppWidgetProvider() {
         intent.data = Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME))
         remoteViews.setRemoteAdapter(R.id.conversations, intent)
 
-        // Main intent
-        val mainIntent = Intent(context, MainActivity::class.java)
-        val mainPI = PendingIntent.getActivity(context, 0, mainIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-        remoteViews.setOnClickPendingIntent(R.id.title, mainPI)
+        // compose new message image color and on click intent
+        remoteViews.setInt(R.id.compose, "setColorFilter", colors.theme().theme)
+        remoteViews.setOnClickPendingIntent(
+            R.id.compose,
+            PendingIntent.getActivity(
+                context,
+                0,
+                Intent(context, ComposeActivity::class.java),
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+        )
 
-        // Compose intent
-        val composeIntent = Intent(context, ComposeActivity::class.java)
-        val composePI = PendingIntent.getActivity(context, 0, composeIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-        remoteViews.setOnClickPendingIntent(R.id.compose, composePI)
+        // use a single pending intent for launching main activity because they
+        // can sometimes be in short supply in the OS
+        val mainActivityPendingIntent = PendingIntent.getActivity(
+            context,
+            99,
+            Intent(context, MainActivity::class.java),
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
 
-        // Conversation intent
-        val startActivityIntent = Intent(context, MainActivity::class.java)
-        val startActivityPendingIntent = PendingIntent.getActivity(context, 0, startActivityIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
-        remoteViews.setPendingIntentTemplate(R.id.conversations, startActivityPendingIntent)
+        // title click to load app main activity / conversation view
+        remoteViews.setOnClickPendingIntent(R.id.title, mainActivityPendingIntent)
+
+        // pending intent template to be used for all list items
+        remoteViews.setPendingIntentTemplate(
+            R.id.conversations,
+            PendingIntent.getBroadcast(
+                context,
+                1,
+                Intent(context, StartActivityFromWidgetReceiver::class.java),
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+            )
+        )
 
         AppWidgetManager.getInstance(context).updateAppWidget(appWidgetId, remoteViews)
     }

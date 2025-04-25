@@ -22,17 +22,12 @@ import android.app.Activity
 import android.app.Application
 import android.app.Service
 import android.content.BroadcastReceiver
-import androidx.core.provider.FontRequest
-import androidx.emoji.text.EmojiCompat
-import androidx.emoji.text.FontRequestEmojiCompatConfig
-import com.uber.rxdogtag.RxDogTag
-import com.uber.rxdogtag.autodispose.AutoDisposeConfigurer
-import dagger.android.*
-import io.realm.Realm
-import io.realm.RealmConfiguration
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import androidx.emoji2.bundled.BundledEmojiCompatConfig
+import androidx.emoji2.text.EmojiCompat
+import androidx.work.Configuration
+import androidx.work.WorkManager
+import androidx.work.WorkerFactory
+import org.groebl.sms.manager.SpeakManager
 import org.groebl.sms.R
 import org.groebl.sms.common.util.CrashlyticsTree
 import org.groebl.sms.common.util.FileLoggingTree
@@ -43,10 +38,22 @@ import org.groebl.sms.manager.BillingManager
 import org.groebl.sms.migration.QkMigration
 import org.groebl.sms.migration.QkRealmMigration
 import org.groebl.sms.util.NightModeManager
+import com.uber.rxdogtag.RxDogTag
+import com.uber.rxdogtag.autodispose.AutoDisposeConfigurer
+import dagger.android.AndroidInjector
+import dagger.android.DispatchingAndroidInjector
+import dagger.android.HasActivityInjector
+import dagger.android.HasBroadcastReceiverInjector
+import dagger.android.HasServiceInjector
+import org.groebl.sms.interactor.SpeakThreads
+import org.groebl.sms.worker.HousekeepingWorker
+import io.realm.Realm
+import io.realm.RealmConfiguration
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
-
-
 
 class QKApplication : Application(), HasActivityInjector, HasBroadcastReceiverInjector, HasServiceInjector {
 
@@ -65,14 +72,19 @@ class QKApplication : Application(), HasActivityInjector, HasBroadcastReceiverIn
     @Inject lateinit var fileLoggingTree: FileLoggingTree
     @Inject lateinit var nightModeManager: NightModeManager
     @Inject lateinit var realmMigration: QkRealmMigration
+    @Inject lateinit var workerFactory: WorkerFactory
 
     override fun onCreate() {
         super.onCreate()
 
+        // set application context for SpeakManager
+        SpeakManager.setContext(this)
+
+        // set translated "no messages" string for speakThreads interactor
+        SpeakThreads.setNoMessagesString(getString(R.string.speak_no_messages))
+
         AppComponentManager.init(this)
         appComponent.inject(this)
-
-
 
         Realm.init(this)
         Realm.setDefaultConfiguration(RealmConfiguration.Builder()
@@ -91,19 +103,38 @@ class QKApplication : Application(), HasActivityInjector, HasBroadcastReceiverIn
 
         nightModeManager.updateCurrentTheme()
 
-        val fontRequest = FontRequest(
-                "com.google.android.gms.fonts",
-                "com.google.android.gms",
-                "Noto Color Emoji Compat",
-                R.array.com_google_android_gms_fonts_certs)
-
-        EmojiCompat.init(FontRequestEmojiCompatConfig(this, fontRequest))
-
+        // configure timber logging
         Timber.plant(Timber.DebugTree(), CrashlyticsTree(this), fileLoggingTree)
 
+        // configure emoji compatibility with bundled package
+        // (bundled library works with no play-services/gsm os versions)
+        EmojiCompat.init(BundledEmojiCompatConfig(this)
+            .registerInitCallback(object: EmojiCompat.InitCallback() {
+                override fun onInitialized() {
+                    super.onInitialized()
+                    Timber.v("bundled emojicompat initialized")
+                }
+
+                override fun onFailed(throwable: Throwable?) {
+                    super.onFailed(throwable)
+                    Timber.e("bundled emojicompat initialization failed")
+                }
+            })
+        )
+
+        // rxdogtag provides 'look-back' for exceptions in rxjava2 'chains'
         RxDogTag.builder()
                 .configureWith(AutoDisposeConfigurer::configure)
                 .install()
+
+        // init work manager with custom factory supporting dagger/injection capability
+        WorkManager.initialize(
+            this,
+            Configuration.Builder().setWorkerFactory(workerFactory).build()
+        )
+
+        // register, or re-register, housekeeping work manager
+        HousekeepingWorker.register(applicationContext)
     }
 
     override fun activityInjector(): AndroidInjector<Activity> {

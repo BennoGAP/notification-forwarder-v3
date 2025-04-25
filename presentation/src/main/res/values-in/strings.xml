@@ -182,11 +182,6 @@
     <string name="scheduled_empty_message_3_timestamp">Mengirim pada tanggal 23 Desember</string>
     <string name="scheduled_compose_cd">Jadwalkan pesan</string>
     <string name="scheduled_options_title">Pesan terjadwal</string>
-    <string-array name="scheduled_options">
-        <item>Kirim sekarang</item>
-        <item>Salin teks</item>
-        <item>Hapus</item>
-    </string-array>
     <string name="settings_category_appearance">Tampilan</string>
     <string name="settings_category_general">Umum</string>
     <string name="settings_category_qkreply">Balasan cepat</string>
@@ -354,7 +349,6 @@
     <string name="button_set">Set</string>
     <string name="button_undo">Urungkan</string>
     <string name="toast_copied">Disalin</string>
-    <string name="toast_archived">Percakapan diarsipkan</string>
     <string name="toast_qksms_plus">Anda harus membuka akses QKSMS+ untuk menggunakan ini</string>
     <plurals name="notification_new_messages">
         <item quantity="other">%s pesan baru</item>

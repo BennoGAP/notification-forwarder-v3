@@ -21,15 +21,12 @@ package org.groebl.sms.feature.compose
 import android.content.Intent
 import android.net.Uri
 import androidx.lifecycle.ViewModel
-import com.google.android.mms.ContentType
 import org.groebl.sms.injection.ViewModelKey
 import org.groebl.sms.model.Attachment
-import org.groebl.sms.model.Attachments
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoMap
 import java.net.URLDecoder
-import java.nio.charset.Charset
 import javax.inject.Named
 
 @Module
@@ -45,69 +42,81 @@ class ComposeActivityModule {
 
     @Provides
     @Named("addresses")
-    fun provideAddresses(activity: ComposeActivity): List<String> {
-        return activity.intent
-                ?.decodedDataString()
-                ?.substringAfter(':') // Remove scheme
-                ?.substringBefore("?") // Remove query
+    fun provideAddresses(activity: ComposeActivity): List<String> =
+        if ((activity.intent?.data?.scheme == "sms") || (activity.intent?.data?.scheme == "smsto"))
+            activity.intent?.data
+                ?.schemeSpecificPart
+                ?.removeSuffix("?${activity.intent?.data?.query}")
                 ?.split(",", ";")
-                ?.filter { number -> number.isNotEmpty() }
+                ?.filter { it.isNotEmpty() }
                 ?: listOf()
-    }
+        else
+            listOf()
 
     @Provides
     @Named("text")
     fun provideSharedText(activity: ComposeActivity): String {
-        var subject = activity.intent.getStringExtra(Intent.EXTRA_SUBJECT) ?: "";
-        if (subject != "") {
-            subject += "\n"
-        }
+        var retVal = StringBuilder()
 
-        return subject + (activity.intent.extras?.getString(Intent.EXTRA_TEXT)
-                ?: activity.intent.extras?.getString("sms_body")
-                ?: activity.intent?.decodedDataString()
-                        ?.substringAfter('?') // Query string
-                        ?.takeIf { it.startsWith("body") }
-                        ?.substringAfter('=')
+        // from subject, if passed in intent
+        retVal.append(activity.intent?.getStringExtra(Intent.EXTRA_SUBJECT) ?: "")
+        if (retVal.isNotEmpty())
+            retVal.append("\n")
+
+        // from extra_text or sms_body extras, if passed in intent
+        retVal.append(
+            activity.intent?.extras?.getString(Intent.EXTRA_TEXT)
+                ?: activity.intent?.extras?.getString("sms_body")
                 ?: "")
+
+        // from body param value(s) if intent data uri is like
+        // sms:12345678?body=hello%20there&body=goodbye
+        if ((activity.intent?.data?.scheme == "sms") || (activity.intent?.data?.scheme == "smsto"))
+            retVal.append(
+                activity.intent?.data?.query
+                    ?.split("&")
+                    ?.filter { it.startsWith("body=") }
+                    ?.joinToString("\n") { it.removePrefix("body=") }
+                    ?: ""
+            )
+
+        return retVal.toString()
     }
 
     @Provides
     @Named("attachments")
-    fun provideSharedAttachments(activity: ComposeActivity): Attachments {
+    fun provideSharedAttachments(activity: ComposeActivity): List<Attachment> {
         val uris = mutableListOf<Uri>()
         activity.intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM)?.run(uris::add)
         activity.intent.getParcelableArrayListExtra<Uri>(Intent.EXTRA_STREAM)?.run(uris::addAll)
-        return Attachments(uris.mapNotNull { uri ->
-            val mimeType = activity.contentResolver.getType(uri)
-            when {
-                ContentType.isImageType(mimeType) -> {
-                    Attachment.Image(uri)
-                }
 
-                ContentType.TEXT_VCARD.equals(mimeType, true) -> {
-                    val inputStream = activity.contentResolver.openInputStream(uri)
-                    val text = inputStream?.reader(Charset.forName("utf-8"))?.readText()
-                    text?.let(Attachment::Contact)
-                }
-
-                else -> null
-            }
-        })
+        return uris.mapNotNull { Attachment(activity, it) }
     }
+
+    @Provides
+    @Named("mode")
+    fun provideSharedAction(activity: ComposeActivity): String =
+        activity.intent.getStringExtra("mode") ?: ""
+
+    @Provides
+    @Named("subscriptionId")
+    fun provideSubscriptionId(activity: ComposeActivity): Int =
+        activity.intent.getIntExtra("subscriptionId", -1)
+
+    @Provides
+    @Named("sendAsGroup")
+    fun provideSendAsGroup(activity: ComposeActivity): Boolean? =
+        if (!activity.intent.hasExtra("sendAsGroup")) null
+        else activity.intent.getBooleanExtra("sendAsGroup", false)
+
+    @Provides
+    @Named("scheduleDateTime")
+    fun provideSharedScheduleDateTime(activity: ComposeActivity): Long =
+        activity.intent.getLongExtra("scheduleDateTime", 0L)
 
     @Provides
     @IntoMap
     @ViewModelKey(ComposeViewModel::class)
     fun provideComposeViewModel(viewModel: ComposeViewModel): ViewModel = viewModel
-
-    // The dialer app on Oreo sends a URL encoded string, make sure to decode it
-    private fun Intent.decodedDataString(): String? {
-        val data = data?.toString()
-        if (data?.contains('%') == true) {
-            return URLDecoder.decode(data, "UTF-8")
-        }
-        return data
-    }
 
 }

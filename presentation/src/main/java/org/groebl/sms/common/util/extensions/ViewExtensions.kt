@@ -21,15 +21,17 @@ package org.groebl.sms.common.util.extensions
 import android.animation.LayoutTransition
 import android.content.Context
 import android.content.res.ColorStateList
-import android.graphics.PorterDuff
-import android.os.Build
+import android.view.GestureDetector
+import android.view.GestureDetector.SimpleOnGestureListener
 import android.view.MotionEvent
 import android.view.View
+import android.view.View.OnTouchListener
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 
@@ -51,17 +53,34 @@ fun EditText.hideKeyboard() {
     imm.hideSoftInputFromWindow(windowToken, 0)
 }
 
-fun ImageView.setTint(color: Int) {
-    imageTintList = ColorStateList.valueOf(color)
+fun ImageView.setTint(color: Int?) {
+    imageTintList =
+        if (color == null) null
+        else ColorStateList.valueOf(color)
 }
 
-fun ProgressBar.setTint(color: Int) {
-    indeterminateTintList = ColorStateList.valueOf(color)
-    progressTintList = ColorStateList.valueOf(color)
+fun TextView.setTint(color: Int?) {
+    foregroundTintList =
+        if (color == null) null
+        else ColorStateList.valueOf(color)
 }
 
-fun View.setBackgroundTint(color: Int) {
-    backgroundTintList = ColorStateList.valueOf(color)
+fun ProgressBar.setTint(color: Int?) {
+    indeterminateTintList =
+        if (color == null) null
+        else ColorStateList.valueOf(color)
+    progressTintList =
+        if (color == null) null
+        else ColorStateList.valueOf(color)
+}
+
+fun View.setBackgroundTint(color: Int?) {
+
+    // API 21 doesn't support this
+
+    backgroundTintList =
+        if (color == null) null
+        else ColorStateList.valueOf(color)
 }
 
 fun View.setPadding(left: Int? = null, top: Int? = null, right: Int? = null, bottom: Int? = null) {
@@ -78,31 +97,67 @@ fun View.setVisible(visible: Boolean, invisible: Int = View.GONE) {
  * the view no longer work. Also problematic when we try to long press on an image in the message
  * view
  */
-fun View.forwardTouches(parent: View) {
-    var isLongClick = false
 
-    setOnLongClickListener {
-        isLongClick = true
-        true
+class CancelableSimpleOnGestureListener(view: View, parentView: View) : SimpleOnGestureListener() {
+    private var lastUpEvent: MotionEvent? = null
+    private val parent = parentView
+    private val thisView = view
+    private var textInitiallySelectable = false
+
+    init {
+        if (thisView is TextView)
+            textInitiallySelectable = thisView.isTextSelectable
     }
 
-    setOnTouchListener { v, event ->
-        parent.onTouchEvent(event)
+    fun cancelCurrentClick() {
+        lastUpEvent?.recycle()
+        lastUpEvent = null
+    }
 
-        when {
-            event.action == MotionEvent.ACTION_UP && isLongClick -> {
-                isLongClick = true
-                true
-            }
+    override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
+        if (lastUpEvent !== null) {
+            parent.onTouchEvent(e)
+            parent.onTouchEvent(lastUpEvent)
+            lastUpEvent?.recycle()
+            lastUpEvent = null
+        }
+        return true
+    }
 
-            event.action == MotionEvent.ACTION_DOWN -> {
-                isLongClick = false
-                v.onTouchEvent(event)
-            }
+    override fun onSingleTapUp(e: MotionEvent): Boolean {
+        lastUpEvent = MotionEvent.obtain(e)
+        thisView.onTouchEvent(e)
+        return true
+    }
 
-            else -> v.onTouchEvent(event)
+    override fun onDown(e: MotionEvent): Boolean {
+        thisView.onTouchEvent(e)
+        return true
+    }
+
+    override fun onLongPress(e: MotionEvent) {
+        parent.onTouchEvent(e)
+        // this is kinda odd but we have to 'bounce' the text selectable value so it doesn't
+        // start selecting text on a long press, but will start selecting it on the next double-tap
+        if (thisView is TextView) {
+            thisView.setTextIsSelectable(false)
+            thisView.setTextIsSelectable(textInitiallySelectable)
         }
     }
+}
+
+fun View.forwardTouches(parent: View): CancelableSimpleOnGestureListener {
+    val gestureListener = CancelableSimpleOnGestureListener(this, parent)
+
+    setOnTouchListener(object : OnTouchListener {
+        val gestureDetector = GestureDetector(parent.context, gestureListener)
+
+        override fun onTouch(v: View, e: MotionEvent): Boolean {
+            return gestureDetector.onTouchEvent(e)
+        }
+    })
+
+    return gestureListener
 }
 
 fun ViewPager.addOnPageChangeListener(listener: (Int) -> Unit) {

@@ -54,16 +54,16 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/styleOriginal"
                 android:layout_width="0dp"
-                android:layout_height="170dp"
+                android:layout_height="180dp"
                 android:layout_gravity="center"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
+                android:background="@drawable/rounded_rectangle_outline_2dp"
+                android:backgroundTint="?android:attr/divider"
+                android:foreground="?attr/selectableItemBackground"
+                android:gravity="center"
                 android:paddingTop="12dp"
                 android:paddingBottom="12dp"
-                android:background="@drawable/rounded_rectangle_outline_2dp"
-                android:foreground="?attr/selectableItemBackground"
-                android:backgroundTint="?android:attr/divider"
-                android:gravity="center"
                 app:layout_constraintEnd_toEndOf="@+id/x50"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -75,8 +75,8 @@
                     android:layout_marginTop="4dp"
                     android:layout_marginEnd="12dp"
                     android:src="@drawable/radio_button"
-                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     tools:tint="?android:attr/textColorTertiary" />
 
                 <org.groebl.sms.common.widget.TightTextView
@@ -99,7 +99,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintWidth_max="384dp"
-                    tools:backgroundTint="@color/tools_theme"/>
+                    tools:backgroundTint="@color/tools_theme" />
 
                 <org.groebl.sms.common.widget.TightTextView
                     android:id="@+id/styleOriginalBubbleTwo"
@@ -121,7 +121,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/styleOriginalBubbleOne"
                     app:layout_constraintWidth_max="384dp"
-                    tools:backgroundTint="@color/tools_theme"/>
+                    tools:backgroundTint="@color/tools_theme" />
 
                 <org.groebl.sms.common.widget.TightTextView
                     android:id="@+id/styleOriginalBubbleThree"
@@ -142,23 +142,23 @@
                     app:layout_constraintHorizontal_bias="1"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/styleOriginalBubbleTwo"
-                    app:layout_constraintWidth_max="384dp"/>
+                    app:layout_constraintWidth_max="384dp" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/styleIos"
                 android:layout_width="0dp"
-                android:layout_height="170dp"
+                android:layout_height="180dp"
                 android:layout_gravity="center"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
+                android:background="@drawable/rounded_rectangle_outline_2dp"
+                android:backgroundTint="?android:attr/divider"
+                android:foreground="?attr/selectableItemBackground"
+                android:gravity="center"
                 android:paddingTop="12dp"
                 android:paddingBottom="12dp"
-                android:background="@drawable/rounded_rectangle_outline_2dp"
-                android:foreground="?attr/selectableItemBackground"
-                android:backgroundTint="?android:attr/divider"
-                android:gravity="center"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/x50"
                 app:layout_constraintTop_toTopOf="parent">
@@ -170,8 +170,8 @@
                     android:layout_marginTop="4dp"
                     android:layout_marginEnd="12dp"
                     android:src="@drawable/radio_button"
-                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     tools:tint="?android:attr/textColorTertiary" />
 
                 <org.groebl.sms.common.widget.TightTextView
@@ -194,7 +194,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintWidth_max="384dp"
-                    tools:backgroundTint="@color/tools_theme"/>
+                    tools:backgroundTint="@color/tools_theme" />
 
                 <org.groebl.sms.common.widget.TightTextView
                     android:id="@+id/styleIosBubbleTwo"
@@ -216,7 +216,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/styleIosBubbleOne"
                     app:layout_constraintWidth_max="384dp"
-                    tools:backgroundTint="@color/tools_theme"/>
+                    tools:backgroundTint="@color/tools_theme" />
 
                 <org.groebl.sms.common.widget.TightTextView
                     android:id="@+id/styleIosBubbleThree"
@@ -237,24 +237,24 @@
                     app:layout_constraintHorizontal_bias="1"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/styleIosBubbleTwo"
-                    app:layout_constraintWidth_max="384dp"/>
+                    app:layout_constraintWidth_max="384dp" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/styleSimple"
                 android:layout_width="0dp"
-                android:layout_height="170dp"
+                android:layout_height="180dp"
                 android:layout_gravity="center"
-                android:layout_marginTop="16dp"
                 android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="8dp"
+                android:background="@drawable/rounded_rectangle_outline_2dp"
+                android:backgroundTint="?android:attr/divider"
+                android:foreground="?attr/selectableItemBackground"
+                android:gravity="center"
                 android:paddingTop="12dp"
                 android:paddingBottom="12dp"
-                android:background="@drawable/rounded_rectangle_outline_2dp"
-                android:foreground="?attr/selectableItemBackground"
-                android:backgroundTint="?android:attr/divider"
-                android:gravity="center"
                 app:layout_constraintEnd_toEndOf="@+id/x50"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/styleOriginal">
@@ -266,8 +266,8 @@
                     android:layout_marginTop="4dp"
                     android:layout_marginEnd="12dp"
                     android:src="@drawable/radio_button"
-                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     tools:tint="?android:attr/textColorTertiary" />
 
                 <org.groebl.sms.common.widget.TightTextView
@@ -290,7 +290,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintWidth_max="384dp"
-                    tools:backgroundTint="@color/tools_theme"/>
+                    tools:backgroundTint="@color/tools_theme" />
 
                 <org.groebl.sms.common.widget.TightTextView
                     android:id="@+id/styleSimpleBubbleTwo"
@@ -312,7 +312,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/styleSimpleBubbleOne"
                     app:layout_constraintWidth_max="384dp"
-                    tools:backgroundTint="@color/tools_theme"/>
+                    tools:backgroundTint="@color/tools_theme" />
 
                 <org.groebl.sms.common.widget.TightTextView
                     android:id="@+id/styleSimpleBubbleThree"
@@ -333,24 +333,24 @@
                     app:layout_constraintHorizontal_bias="1"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/styleSimpleBubbleTwo"
-                    app:layout_constraintWidth_max="384dp"/>
+                    app:layout_constraintWidth_max="384dp" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/styleTriangle"
                 android:layout_width="0dp"
-                android:layout_height="170dp"
+                android:layout_height="180dp"
                 android:layout_gravity="center"
-                android:layout_marginTop="16dp"
                 android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="8dp"
+                android:background="@drawable/rounded_rectangle_outline_2dp"
+                android:backgroundTint="?android:attr/divider"
+                android:foreground="?attr/selectableItemBackground"
+                android:gravity="center"
                 android:paddingTop="12dp"
                 android:paddingBottom="12dp"
-                android:background="@drawable/rounded_rectangle_outline_2dp"
-                android:foreground="?attr/selectableItemBackground"
-                android:backgroundTint="?android:attr/divider"
-                android:gravity="center"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/x50"
                 app:layout_constraintTop_toBottomOf="@+id/styleOriginal">
@@ -362,8 +362,8 @@
                     android:layout_marginTop="4dp"
                     android:layout_marginEnd="12dp"
                     android:src="@drawable/radio_button"
-                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     tools:tint="?android:attr/textColorTertiary" />
 
                 <org.groebl.sms.common.widget.TightTextView
@@ -386,7 +386,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintWidth_max="384dp"
-                    tools:backgroundTint="@color/tools_theme"/>
+                    tools:backgroundTint="@color/tools_theme" />
 
                 <org.groebl.sms.common.widget.TightTextView
                     android:id="@+id/styleTriangleBubbleTwo"
@@ -408,7 +408,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/styleTriangleBubbleOne"
                     app:layout_constraintWidth_max="384dp"
-                    tools:backgroundTint="@color/tools_theme"/>
+                    tools:backgroundTint="@color/tools_theme" />
 
                 <org.groebl.sms.common.widget.TightTextView
                     android:id="@+id/styleTriangleBubbleThree"
@@ -429,7 +429,7 @@
                     app:layout_constraintHorizontal_bias="1"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/styleTriangleBubbleTwo"
-                    app:layout_constraintWidth_max="384dp"/>
+                    app:layout_constraintWidth_max="384dp" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

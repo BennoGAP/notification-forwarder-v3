@@ -4,7 +4,7 @@
 
 # Credits
 
-Application is based on [QKSMS](https://github.com/qklabs/qksms/)
+Application is based on [QKSMS](https://github.com/qklabs/qksms/) and [QUIK](https://github.com/octoshrimpy/quik)
 
 # License
 

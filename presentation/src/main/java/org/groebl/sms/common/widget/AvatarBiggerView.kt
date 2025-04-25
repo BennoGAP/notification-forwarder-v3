@@ -11,9 +11,9 @@ import org.groebl.sms.common.util.extensions.setBackgroundTint
 import org.groebl.sms.common.util.extensions.setTint
 import org.groebl.sms.injection.appComponent
 import org.groebl.sms.model.Recipient
-import com.bumptech.glide.Glide
 import org.groebl.sms.util.Preferences
 import kotlinx.android.synthetic.main.avatar_big_view.view.*
+import org.groebl.sms.util.GlideApp
 import javax.inject.Inject
 
 class AvatarBiggerView @JvmOverloads constructor(
@@ -88,7 +88,7 @@ class AvatarBiggerView @JvmOverloads constructor(
 
         photo.setImageDrawable(null)
         photoUri?.let { photoUri ->
-            Glide.with(photo)
+            GlideApp.with(photo)
                     .load(photoUri)
                     .into(photo)
         }

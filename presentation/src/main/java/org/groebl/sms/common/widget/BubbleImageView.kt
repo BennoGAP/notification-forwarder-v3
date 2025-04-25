@@ -24,7 +24,6 @@ import android.graphics.Path
 import android.graphics.RectF
 import android.util.AttributeSet
 import org.groebl.sms.common.util.extensions.dpToPx
-
 import org.groebl.sms.injection.appComponent
 import org.groebl.sms.util.Preferences
 import javax.inject.Inject

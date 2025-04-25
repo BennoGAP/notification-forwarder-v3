@@ -26,12 +26,12 @@ import android.service.chooser.ChooserTarget
 import android.service.chooser.ChooserTargetService
 import androidx.annotation.RequiresApi
 import androidx.core.os.bundleOf
-import com.bumptech.glide.Glide
 import org.groebl.sms.R
 import org.groebl.sms.feature.compose.ComposeActivity
 import org.groebl.sms.injection.appComponent
 import org.groebl.sms.model.Conversation
 import org.groebl.sms.repository.ConversationRepository
+import org.groebl.sms.util.GlideApp
 import org.groebl.sms.util.tryOrNull
 import javax.inject.Inject
 
@@ -54,7 +54,7 @@ class QkChooserTargetService : ChooserTargetService() {
         val icon = when (conversation.recipients.size) {
             1 -> {
                 val photoUri = conversation.recipients.first()?.contact?.photoUri
-                val request = Glide.with(this)
+                val request = GlideApp.with(this)
                         .asBitmap()
                         .circleCrop()
                         .load(photoUri)

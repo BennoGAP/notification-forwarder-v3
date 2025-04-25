@@ -29,7 +29,6 @@ import android.widget.RemoteViewsService
 import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
 import androidx.core.text.color
-import com.bumptech.glide.Glide
 import org.groebl.sms.R
 import org.groebl.sms.common.util.Colors
 import org.groebl.sms.common.util.DateFormatter
@@ -42,7 +41,9 @@ import org.groebl.sms.injection.appComponent
 import org.groebl.sms.model.Contact
 import org.groebl.sms.model.Conversation
 import org.groebl.sms.model.PhoneNumber
+import org.groebl.sms.receiver.StartActivityFromWidgetReceiver
 import org.groebl.sms.repository.ConversationRepository
+import org.groebl.sms.util.GlideApp
 import org.groebl.sms.util.Preferences
 import org.groebl.sms.util.tryOrNull
 import javax.inject.Inject
@@ -88,7 +89,7 @@ class WidgetAdapter(intent: Intent) : RemoteViewsService.RemoteViewsFactory {
     }
 
     override fun onDataSetChanged() {
-        conversations = conversationRepo.getConversationsSnapshot()
+        conversations = conversationRepo.getConversationsSnapshot(prefs.unreadAtTop.get())
 
         val remoteViews = RemoteViews(context.packageName, R.layout.widget)
         appWidgetManager.partiallyUpdateAppWidget(appWidgetId, remoteViews)
@@ -141,7 +142,7 @@ class WidgetAdapter(intent: Intent) : RemoteViewsService.RemoteViewsFactory {
         }
 
         remoteViews.setImageViewBitmap(R.id.photo, null)
-        val futureGet = Glide.with(context)
+        val futureGet = GlideApp.with(context)
                 .asBitmap()
                 .load(contact?.photoUri)
                 .submit(48.dpToPx(context), 48.dpToPx(context))
@@ -170,11 +171,13 @@ class WidgetAdapter(intent: Intent) : RemoteViewsService.RemoteViewsFactory {
         remoteViews.setTextColor(R.id.snippet, if (conversation.unread) textPrimary else textTertiary)
         remoteViews.setTextViewText(R.id.snippet, boldText(snippet, conversation.unread))
 
-        // Launch conversation on click
-        val clickIntent = Intent()
-                .putExtra("screen", "compose")
+        // set fill-in intent to be used for current item
+        remoteViews.setOnClickFillInIntent(
+            R.id.conversation,
+            Intent()
+                .putExtra("activityToStart", StartActivityFromWidgetReceiver.COMPOSE_ACTIVITY)
                 .putExtra("threadId", conversation.id)
-        remoteViews.setOnClickFillInIntent(R.id.conversation, clickIntent)
+        )
 
         return remoteViews
     }
@@ -183,7 +186,11 @@ class WidgetAdapter(intent: Intent) : RemoteViewsService.RemoteViewsFactory {
         val view = RemoteViews(context.packageName, R.layout.widget_loading)
         view.setTextColor(R.id.loadingText, textSecondary)
         view.setTextViewText(R.id.loadingText, context.getString(R.string.widget_more))
-        view.setOnClickFillInIntent(R.id.loading, Intent())
+        view.setOnClickFillInIntent(
+            R.id.loadingText,
+            Intent()
+                .putExtra("activityToStart", StartActivityFromWidgetReceiver.MAIN_ACTIVITY)
+        )
         return view
     }
 

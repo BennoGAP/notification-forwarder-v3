@@ -18,13 +18,14 @@
  */
 package org.groebl.sms.common.util
 
+import android.content.Context
+import android.net.Uri
 import android.util.Log
 import org.groebl.sms.util.Preferences
+import org.groebl.sms.util.FileUtils
 import io.reactivex.schedulers.Schedulers
-import io.realm.Realm.getApplicationContext
 import timber.log.Timber
-import java.io.File
-import java.io.FileOutputStream
+import java.io.FileNotFoundException
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -34,40 +35,71 @@ import javax.inject.Singleton
  * Based off Vipin Kumar's FileLoggingTree: https://medium.com/@vicky7230/file-logging-with-timber-4e63a1b86a66
  */
 @Singleton
-class FileLoggingTree @Inject constructor(private val prefs: Preferences) : Timber.DebugTree() {
+class FileLoggingTree @Inject constructor(
+    private val prefs: Preferences,
+    private val context: Context
+) : Timber.DebugTree() {
+    companion object {
+        val TAG: String? = FileLoggingTree::class.simpleName
+    }
 
-    private val fileLock: Boolean = false
+    private var logFileUri: Uri? = null
 
     override fun log(priority: Int, tag: String, message: String, t: Throwable?) {
         if (!prefs.logging.get()) return
 
         Schedulers.io().scheduleDirect {
-            val timestamp = SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS", Locale.getDefault()).format(System.currentTimeMillis())
-            val priorityString = when (priority) {
-                Log.VERBOSE -> "V"
-                Log.DEBUG -> "D"
-                Log.INFO -> "I"
-                Log.WARN -> "W"
-                Log.ERROR -> "E"
-                else -> "WTF"
-            }
+            synchronized(this) {    // one thread can access file at a time
+                val logItem =
+                    "${    // date/time
+                        SimpleDateFormat(
+                            "yyyy-MM-dd HH:mm:ss:SSS",
+                            Locale.getDefault()
+                        ).format(System.currentTimeMillis())
+                    } ${    // priority
+                        when (priority) {
+                            Log.VERBOSE -> "V"
+                            Log.DEBUG -> "D"
+                            Log.INFO -> "I"
+                            Log.WARN -> "W"
+                            Log.ERROR -> "E"
+                            else -> "?"
+                        }
+                    }/${    // tag
+                        tag
+                    }: ${    // message
+                        message
+                    }${    // stack trace
+                        Log.getStackTraceString(t)
+                    }\n"
 
-            // Format the log to be written to the file
-            val log = "$timestamp $priorityString/$tag: $message ${Log.getStackTraceString(t)}\n".toByteArray()
+                // if uri of log file not yet determined, get one now
+                if (logFileUri == null) {
+                    val filename = "NFP-log-${
+                        SimpleDateFormat(
+                            "yyyy-MM-dd",
+                            Locale.getDefault()
+                        ).format(System.currentTimeMillis())
+                    }.log"
 
-            // Ensure that only one thread is writing to the file at a time
-            synchronized(fileLock) {
-                try {
-                    // Create the directory
-                    val dir = File(getApplicationContext()!!.getExternalFilesDir("NotificationForwarderPro"), "Logs").apply { mkdirs() }
+                    val (uri, e) = FileUtils.create(
+                        FileUtils.Companion.Location.Downloads,
+                        context,
+                        filename,
+                        "text/plain"
+                    )
+                    if (e is Exception)
+                        Log.e(TAG, "Error opening log file", e)
+                    else
+                        logFileUri = uri
+                }
 
-                    // Create the file
-                    val file = File(dir, "${SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(System.currentTimeMillis())}.log")
-
-                    // Write the log to the file
-                    FileOutputStream(file, true).use { fileOutputStream -> fileOutputStream.write(log) }
-                } catch (e: Exception) {
-                    Log.e("FileLoggingTree", "Error while logging into file", e)
+                logFileUri?.let {
+                    val e = FileUtils.append(context, it, logItem.toByteArray())
+                    if (e is FileNotFoundException)
+                        Log.e(TAG, "Log file went away. Lost log file item: $logItem", e)
+                    else if (e is Exception)
+                        Log.e(TAG, "Error while logging into file", e)
                 }
             }
         }

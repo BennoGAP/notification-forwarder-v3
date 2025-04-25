@@ -23,22 +23,29 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
+import androidx.core.app.Person
+import org.groebl.sms.common.util.extensions.getThemedIcon
+import org.groebl.sms.common.util.extensions.toPerson
 import android.graphics.drawable.Icon
 import android.os.Build
-import com.bumptech.glide.Glide
+import androidx.core.content.pm.ShortcutInfoCompat
+import androidx.core.content.pm.ShortcutManagerCompat
 import org.groebl.sms.R
 import org.groebl.sms.feature.compose.ComposeActivity
 import org.groebl.sms.model.Conversation
 import org.groebl.sms.repository.ConversationRepository
 import org.groebl.sms.repository.MessageRepository
+import org.groebl.sms.util.GlideApp
 import org.groebl.sms.util.tryOrNull
 import me.leolin.shortcutbadger.ShortcutBadger
+import timber.log.Timber
 import javax.inject.Inject
 
 class ShortcutManagerImpl @Inject constructor(
     private val context: Context,
     private val conversationRepo: ConversationRepository,
-    private val messageRepo: MessageRepository
+    private val messageRepo: MessageRepository,
+    private val colors: Colors
 ) : org.groebl.sms.manager.ShortcutManager {
 
     override fun updateBadge() {
@@ -51,41 +58,109 @@ class ShortcutManagerImpl @Inject constructor(
             val shortcutManager = context.getSystemService(Context.SHORTCUT_SERVICE) as ShortcutManager
             if (shortcutManager.isRateLimitingActive) return
 
-            shortcutManager.dynamicShortcuts = conversationRepo.getTopConversations()
-                    .take(shortcutManager.maxShortcutCountPerActivity - shortcutManager.manifestShortcuts.size)
-                    .map { conversation -> createShortcutForConversation(conversation, shortcutManager) }
+            val shortcuts: List<ShortcutInfoCompat> = conversationRepo.getTopConversations()
+                .take(shortcutManager.maxShortcutCountPerActivity - shortcutManager.manifestShortcuts.size)
+                .map { conversation -> createShortcutForConversation(conversation) }
+
+            ShortcutManagerCompat.setDynamicShortcuts(context, shortcuts)
         }
     }
 
-    @TargetApi(25)
-    private fun createShortcutForConversation(conversation: Conversation, shortcutManager: ShortcutManager): ShortcutInfo {
+    /**
+     * Get the shortcut for a threadId. Will create it if it doesn't exist.
+     */
+    override fun getShortcut(threadId: Long): ShortcutInfoCompat? {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+            var sc = getShortcuts().find { it.id == threadId.toString() }
+            if(sc != null)
+                sc = updateShortcut(sc)
+            if (sc == null)  {
+                val conv = conversationRepo.getConversation(threadId)
+                if (conv == null)
+                    return null
+                else
+                    sc =  createShortcutForConversation(conv)
+            }
+            return sc
+        } else {
+            return null
+        }
+    }
+
+    /**
+     * Report thread usage. Will create the shortcut if it doesn't exist.
+     */
+    override fun reportShortcutUsed(threadId: Long) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+            val shortcutManager = context.getSystemService(Context.SHORTCUT_SERVICE) as ShortcutManager
+            if(getShortcut(threadId ) == null) {
+                val conversation = conversationRepo.getOrCreateConversation(threadId)
+                if (conversation == null)
+                    return
+                val shortcut = createShortcutForConversation(conversation)
+                ShortcutManagerCompat.setDynamicShortcuts(context, listOf(shortcut))
+            }
+            shortcutManager.reportShortcutUsed(threadId.toString())
+        }
+    }
+
+    @TargetApi(29)
+    private fun createShortcutForConversation(conversation: Conversation): ShortcutInfoCompat {
+        Timber.v("creating shortcut for conversation ${conversation.id} : ${conversation.getTitle()}")
         val icon = when {
             conversation.recipients.size == 1 -> {
-                val address = conversation.recipients.first()!!.address
-                val request = Glide.with(context)
-                        .asBitmap()
-                        .circleCrop()
-                        .load("tel:$address")
-                        .submit(shortcutManager.iconMaxWidth, shortcutManager.iconMaxHeight)
-                val bitmap = tryOrNull(false) { request.get() }
-
-                if (bitmap != null) Icon.createWithBitmap(bitmap)
-                else Icon.createWithResource(context, R.mipmap.ic_shortcut_person)
+                val recipient = conversation.recipients.first()!!
+                recipient.getThemedIcon(context,
+                    colors.theme(recipient),
+                    ShortcutManagerCompat.getIconMaxWidth(context),
+                    ShortcutManagerCompat.getIconMaxHeight(context)
+                )
             }
 
-            else -> Icon.createWithResource(context, R.mipmap.ic_shortcut_people)
+            else -> {
+                conversation.getThemedIcon(context,
+                    ShortcutManagerCompat.getIconMaxWidth(context),
+                    ShortcutManagerCompat.getIconMaxHeight(context)
+                )
+            }
         }
 
-        val intent = Intent(context, ComposeActivity::class.java)
-                .setAction(Intent.ACTION_VIEW)
-                .putExtra("threadId", conversation.id)
+        val persons: Array<Person> = conversation.recipients.map { it -> it.toPerson(context, colors) }.toTypedArray();
 
-        return ShortcutInfo.Builder(context, "${conversation.id}")
-                .setShortLabel(conversation.getTitle())
-                .setLongLabel(conversation.getTitle())
-                .setIcon(icon)
-                .setIntent(intent)
-                .build()
+        val intent = Intent(context, ComposeActivity::class.java)
+            .setAction(Intent.ACTION_VIEW)
+            .putExtra("threadId", conversation.id)
+            .putExtra("fromShortcut", true)
+
+        val sc = ShortcutInfoCompat.Builder(context, "${conversation.id}")
+            .setShortLabel(conversation.getTitle())
+            .setLongLabel(conversation.getTitle())
+            .setIcon(icon)
+            .setIntent(intent)
+            .setPersons(persons)
+            .setLongLived(true)
+            .build()
+
+        ShortcutManagerCompat.pushDynamicShortcut(context, sc)
+        return sc
     }
 
+    private fun updateShortcut(shortcut: ShortcutInfoCompat): ShortcutInfoCompat {
+        val conversation = conversationRepo.getConversation(shortcut.id.toLong())
+        if (conversation == null)
+            return shortcut
+        else {
+            val sc = createShortcutForConversation(conversation)
+            ShortcutManagerCompat.pushDynamicShortcut(context, sc)
+            return sc
+        }
+    }
+
+    private fun getShortcuts() : List<ShortcutInfoCompat> {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+            return ShortcutManagerCompat.getDynamicShortcuts(context)
+        } else {
+            return emptyList()
+        }
+    }
 }

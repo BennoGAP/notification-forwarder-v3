@@ -25,8 +25,8 @@ class BlockedRegexpsPresenter @Inject constructor(
         view.unblockRegex()
             .doOnNext { id ->
                 blockingRepo.getBlockedRegex(id)?.regex
-                    ?.let(conversationRepo::getThreadId)
-                    ?.let { threadId -> markUnblocked.execute(listOf(threadId)) }
+                    ?.let(conversationRepo::getConversation)
+                    ?.let { conversation -> markUnblocked.execute(listOf(conversation.id)) }
             }
             .doOnNext(blockingRepo::unblockRegex)
             .subscribeOn(Schedulers.io())

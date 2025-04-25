@@ -21,7 +21,7 @@
 <resources>
   <string name="button_add">Hinzufügen</string>
   <string name="button_no">Nein</string>
-  <string name="settings_category_about_lower">Basierend auf QKSMS</string>
+  <string name="settings_category_about_lower">Basierend auf QKSMS/QUIK</string>
   <string name="theme_color">Farbe</string>
 
   <string name="title_settings_bluetooth">Bluetooth Einstellungen</string>
@@ -32,6 +32,7 @@
   <string name="settings_category_bluetooth_whatsapp">WhatsApp Einstellungen</string>
   <string name="settings_category_bluetooth_telegram">Telegram Einstellungen</string>
   <string name="settings_category_bluetooth_signal">Signal Einstellungen</string>
+  <string name="settings_category_bluetooth_threema">Threema Einstellungen</string>
   <string name="settings_category_bluetooth_other">Sonstiges</string>
   <string name="settings_category_bluetooth_system">System Einstellungen</string>
 
@@ -78,6 +79,8 @@
   <string name="settings_bluetooth_signal_to_contact_summary">Signal-Nachrichten werden - wenn möglich - dem Absender-Kontakt zugeordnet</string>
   <string name="settings_bluetooth_signal_hide_prefix_title">Signal-Prefix verstecken</string>
   <string name="settings_bluetooth_signal_hide_prefix_summary">Zeigt das vorangestellte \'Signal\' bei den Nachrichten nicht an</string>
+  <string name="settings_bluetooth_threema_hide_prefix_title">Threema-Prefix verstecken</string>
+  <string name="settings_bluetooth_threema_hide_prefix_summary">Zeigt das vorangestellte \'Threema\' bei den Nachrichten nicht an</string>
   <string name="settings_bluetooth_telegram_to_contact_title">Telegram-Nachrichten zuweisen</string>
   <string name="settings_bluetooth_telegram_to_contact_summary">Telegram-Nachrichten werden - wenn möglich - dem Absender-Kontakt zugeordnet</string>
   <string name="settings_bluetooth_telegram_hide_prefix_title">Telegram-Prefix verstecken</string>
@@ -94,6 +97,10 @@
   <string name="settings_bluetooth_block_telegram_group_summary">Nachrichten von den ausgewählten Gruppen werden nicht weitergeleitet</string>
   <string name="settings_bluetooth_block_telegram_contact_title">Telegram-Kontakte blockieren</string>
   <string name="settings_bluetooth_block_telegram_contact_summary">Nachrichten von den ausgewählten Kontakten werden nicht weitergeleitet</string>
+  <string name="settings_bluetooth_block_threema_group_title">Threema-Gruppen blockieren</string>
+  <string name="settings_bluetooth_block_threema_group_summary">Nachrichten von den ausgewählten Gruppen werden nicht weitergeleitet</string>
+  <string name="settings_bluetooth_block_threema_contact_title">Threema-Kontakte blockieren</string>
+  <string name="settings_bluetooth_block_threema_contact_summary">Nachrichten von den ausgewählten Kontakten werden nicht weitergeleitet</string>
   <string name="settings_bluetooth_notification_access_title">Benachrichtigungszugriff</string>
   <string name="settings_bluetooth_battery_title">Akku Leistungsoptimierung</string>
   <string name="settings_bluetooth_battery_summary">Sollte die Weiterleitung nicht (mehr) funktionieren, bitte zunächst die Autostart/Energiespareinstellungen überprüfen</string>
@@ -176,9 +183,11 @@
   <string name="menu_info">Details</string>
   <string name="menu_save">In Galerie speichern</string>
   <string name="menu_share">Teilen</string>
+  <string name="menu_mms_part_open">Extern öffnen</string>
   <string name="main_drawer_open_cd">Menüleiste öffnen</string>
   <string name="main_title_selected">%d ausgewählt</string>
   <string name="main_menu_clear">Zurücksetzen</string>
+  <string name="main_menu_select_all">Alle auswählen</string>
   <string name="main_menu_archive">Archivieren</string>
   <string name="main_menu_unarchive">Wiederherstellen</string>
   <string name="main_menu_delete">Löschen</string>
@@ -188,6 +197,9 @@
   <string name="main_menu_read">Als gelesen markieren</string>
   <string name="main_menu_unread">Als ungelesen markieren</string>
   <string name="main_menu_block">Blockieren</string>
+  <string name="main_menu_send_now">Jetzt Senden</string>
+  <string name="main_menu_edit_message">Bearbeiten</string>
+  <string name="main_menu_rename_conversation">Unterhaltung umbenennen</string>
   <string name="main_syncing">Synchronisiere Nachrichten&#8230;</string>
   <string name="main_sender_you">Du: %s</string>
   <string name="main_draft">Entwurf</string>
@@ -205,6 +217,8 @@
   <string name="main_permission_contacts">QKSMS benötigt die Berechtigung zum Zugreifen auf die Kontakte</string>
   <string name="main_permission_notifications">QKSMS benötigt die Berechtigung zum anzeigen von Benachrichtigungen</string>
   <string name="main_permission_allow">Zulassen</string>
+  <string name="scheduled_menu_send_now">Jetzt senden</string>
+  <string name="scheduled_menu_edit_message">Nachricht bearbeiten</string>
   <string name="drawer_inbox">Posteingang</string>
   <string name="drawer_archived">Archiviert</string>
   <string name="drawer_scheduled">Geplant</string>
@@ -223,15 +237,29 @@
     <item quantity="one">Bist du sicher, dass du diese Unterhaltung löschen möchtest\?</item>
     <item quantity="other">Bist du sicher, dass du %d Unterhaltungen löschen möchtest\?</item>
   </plurals>
+  <string name="dialog_edit_scheduled_message_title">Nachricht bearbeiten</string>
+  <string name="dialog_edit_scheduled_message">Durch das bearbeiten wird die Nachricht aus den geplanten Nachrichten entfernt.\n\nStelle sicher, sie im folgenden Fenster wieder zu speichern/abzusenden, da ansonsten die Nachricht weg ist!\n\nMöchtest du fortfahren?</string>
+  <string name="dialog_edit_scheduled_message_positive_button">Ja, bearbeiten</string>
+  <string name="messageLinkHandling_dialog_title">Warnung</string>
+  <string name="messageLinkHandling_dialog_body">Der Link könnte möglicherweise auf eine unsichere Seite verweisen.\nBitte den Link vorher überprüfen\n\n%1$s\n\nMöchtest du fortfahren?</string>
+  <string name="messageLinkHandling_dialog_positive">Ja, Link öffnen</string>
+  <string name="messageLinkHandling_dialog_negative">ein</string>
+  <string name="speak_no_messages">Keine Nachrichten</string>
+  <string name="speak_unseen_messages">Ungelesene Nachrichten vorlesen</string>
   <string-array name="message_options">
     <item>Text kopieren</item>
     <item>Weiterleiten</item>
     <item>Löschen</item>
   </string-array>
-    <string name="compose_number_picker_title">Wählen Sie eine Telefonnummer</string>
-    <string name="compose_number_picker_default">%s - Standard</string>
-    <string name="compose_number_picker_once">Nur einmal</string>
-    <string name="compose_number_picker_always">Immer</string>
+  <string-array name="messageLinkHandlings">
+    <item>Blockieren</item>
+    <item>Erlauben</item>
+    <item>Fragen</item>
+  </string-array>
+  <string name="compose_number_picker_title">Wählen Sie eine Telefonnummer</string>
+  <string name="compose_number_picker_default">%s - Standard</string>
+  <string name="compose_number_picker_once">Nur einmal</string>
+  <string name="compose_number_picker_always">Immer</string>
   <string name="compose_title_selected">%d ausgewählt</string>
   <string name="compose_subtitle_results">%1$d von %2$d Ergebnissen</string>
   <string name="compose_send_group_title">Als Gruppennachricht senden</string>
@@ -243,8 +271,10 @@
   <string name="compose_scheduled_plus">Für diese Funktion muss QKSMS+ freigeschalten werden</string>
   <string name="compose_scheduled_toast">Zu geplanten Nachrichten hinzugefügt</string>
   <string name="compose_hint">Nachricht schreiben&#8230;</string>
+  <string name="compose_no_valid_recipients">Kein gültiger Empfänger</string>
   <string name="compose_menu_copy">Text kopieren</string>
   <string name="compose_menu_forward">Weiterleiten</string>
+  <string name="compose_menu_show_status">Status anzeigen</string>
   <string name="compose_menu_delete">Löschen</string>
   <string name="compose_menu_previous">Vorherige</string>
   <string name="compose_menu_next">Nächste</string>
@@ -261,18 +291,31 @@
   <string name="compose_details_delivered">Zugestellt: %s</string>
   <string name="compose_details_error_code">Fehlercode: %d</string>
   <string name="compose_attach_cd">Anhang hinzufügen</string>
+  <string name="compose_attach_file_cd">Anhang hinzufügen</string>
+  <string name="compose_audio_message_cd">Sprachnachricht aufnehmen</string>
+  <string name="compose_schedule_cancel_cd">Geplante Nachricht löschen</string>
   <string name="compose_gallery_cd">Foto anhängen</string>
   <string name="compose_camera_cd">Foto aufnehmen</string>
   <string name="compose_schedule_cd">Plane Nachricht</string>
   <string name="compose_contact_cd">Kontakt anhängen</string>
   <string name="compose_contact_error">Fehler beim Lesen des Kontaktes</string>
+  <string name="dialog_clear_compose_title">Entwurf löschen</string>
+  <string name="dialog_clear_compose">Soll die Nachricht gelöscht werden? Dies kann nicht rückgängig gemacht werden!</string>
   <!-- Example: SIM 1 (Verizon) selected-->
   <string name="compose_sim_changed_toast">SIM %1$d (%2$s) ausgewählt</string>
   <string name="compose_sim_cd">%s ausgewählt, SIM-Karte ändern</string>
   <string name="compose_send_cd">Nachricht senden</string>
+  <string name="compose_record_audio_msg_play_pause_cd">Sprachnachricht abspielen/pausieren</string>
+  <string name="compose_message_cancel">Abbrechen</string>
+  <string name="compose_message_send_now">Jetzt senden</string>
+  <string name="compose_message_sim">SIM Nummer</string>
+  <string name="compose_message_item">Nachrichten Items</string>
+  <string name="compose_message_attachment">Anhang</string>
+  <string name="compose_toast_drag_stt">Spracheingabe-Button durch langes drücken frei bewegen</string>
   <string name="message_status_sending">Wird gesendet&#8230;</string>
   <string name="message_status_delivered">Zugestellt %s</string>
   <string name="message_status_failed">Fehler beim Senden. Tippen, um es erneut zu versuchen</string>
+  <string name="message_body_too_long_to_display">Nachricht ist zu lang. Kopieren oder Speichern für den gesamten Text</string>
   <string name="info_title">Details</string>
   <string name="info_copied_address">Adresse kopiert</string>
   <string name="info_name">Unterhaltungstitel</string>
@@ -316,6 +359,8 @@
   <string name="backup_progress_syncing">Synchronisiere Nachrichten&#8230;</string>
   <string name="backup_progress_finished">Fertig!</string>
   <string name="backup_notification_channel_name">Sicherung und Wiederherstellung</string>
+  <string name="clipboard_too_large_to_copy">Zu groß für die Zwischenablage</string>
+  <string name="clipboard_unable_to_copy_to">Fehler beim kopieren</string>
   <string name="scheduled_title">Geplant</string>
   <string name="scheduled_empty_description">Nachricht genau dann senden, wenn du magst</string>
   <string name="scheduled_empty_message_1">Hey! Wann war dein Geburtstag nochmal?</string>
@@ -325,14 +370,11 @@
   <string name="scheduled_empty_message_3_timestamp">Am 23. Dezember senden </string>
   <string name="scheduled_compose_cd">Nachricht planen</string>
   <string name="scheduled_options_title">Geplante Nachricht</string>
-  <string-array name="scheduled_options">
-    <item>Sofort senden</item>
-    <item>Text kopieren</item>
-    <item>Löschen</item>
-  </string-array>
+  <string name="attachment_missing">Fehlt</string>
   <string name="settings_category_appearance">Aussehen</string>
   <string name="settings_category_general">Allgemein</string>
   <string name="settings_category_qkreply">Schnellantwort</string>
+  <string name="settings_category_qkreply_new" translatable="false">Schnellantwort</string>
   <string name="settings_theme_title">Erscheinungsbild</string>
   <string name="settings_night_title">Nachtmodus</string>
   <string name="settings_black_title">Rein schwarzer Nachtmodus</string>
@@ -341,6 +383,7 @@
   <string name="settings_automatic_colors_title">Farbige Kontaktavatare</string>
   <string name="settings_text_size_title">Schriftgröße</string>
   <string name="settings_system_font_title">Systemschriftart verwenden</string>
+  <string name="settings_system_show_stt_title">Spracheingabe-Button anzeigen</string>
   <string name="settings_auto_emoji_title">Automatische Emoji</string>
   <string name="settings_notifications_title">Benachrichtigungen</string>
   <string name="settings_notifications_o_summary">Zum Anpassen antippen</string>
@@ -348,14 +391,16 @@
   <string name="settings_notification_action_1">Taste 1</string>
   <string name="settings_notification_action_2">Taste 2</string>
   <string name="settings_notification_action_3">Taste 3</string>
-  <string name="settings_notification_previews_title">Benachrichtigungsvorschau</string>
+  <string name="settings_notification_previews_title">Benachrichtigungs-\nvorschau</string>
+  <string name="settings_notification_previews_summary">Name und Nachricht anzeigen</string>
   <string name="settings_notification_wake_title">Bildschirm aufwecken</string>
+  <string name="settings_notification_silent_summary">Deaktiviert den Benachrichtigungston wenn die Person nicht in den Kontakten ist</string>
   <string name="settings_vibration_title">Vibration</string>
   <string name="settings_ringtone_title">Ton</string>
   <string name="settings_ringtone_none">Keine</string>
   <string name="settings_qkreply_title">Schnellantwort</string>
   <string name="settings_qkreply_title_new">Schnellantwort</string>
-  <string name="settings_qkreply_summary">Popup für neue Nachrichten (Funktioniert nicht korrekt seit Android 10)</string>
+  <string name="settings_qkreply_summary">Popup bei neue Nachrichten</string>
   <string name="settings_qkreply_tap_dismiss_title">Zum Verwerfen tippen</string>
   <string name="settings_qkreply_tap_dismiss_summary">Tippe außerhalb des Popup um es zu schließen</string>
   <string name="settings_delayed_title">Verzögertes Senden</string>
@@ -375,6 +420,8 @@
   </string-array>
   <string name="settings_delivery_title">Zustellbestätigungen</string>
   <string name="settings_delivery_summary">Bestätigung, dass Nachrichten erfolgreich gesendet wurden</string>
+  <string name="settings_unread_at_top_title">Ungelesen oben anheften</string>
+  <string name="settings_unread_at_top_summary">Ungelesene Nachrichten werden ganz oben angezeigt</string>
   <string name="settings_signature_title">Signatur</string>
   <string name="settings_signature_summary">Füge eine Signatur am Ende deiner Nachrichten hinzu</string>
   <string name="settings_unicode_title">Akzente entfernen</string>
@@ -392,8 +439,11 @@
     <item quantity="other">Nach %d Tagen</item>
   </plurals>
   <string name="settings_long_as_mms_title">Lange Nachrichten als MMS senden</string>
-  <string name="settings_long_as_mms_summary">Wenn Ihre längeren Textnachrichten nicht gesendet oder in der falsche Reihenfolge gesendet werden, können Sie sie stattdessen als MMS-Nachrichten senden. Dafür können zusätzliche Gebühren anfallen.</string>
+  <string name="settings_long_as_mms_summary">Sendet lange Nachrichten als MMS anstatt mehrerer SMS</string>
   <string name="settings_mms_size_title">MMS-Anhänge automatisch komprimieren</string>
+  <string name="settings_mms_weblink_title">Weblinks aus den Nachrichten öffnen lassen?</string>
+  <string name="settings_disable_screenshots_title">Screenshots verbieten</string>
+  <string name="settings_diable_screenshots_summary">Verhindert das erstellen von Screenshots der App</string>
   <string name="settings_opt_out_title">Fehlerberichte</string>
   <string name="settings_opt_out_summary">Fehlerberichte senden falls Fehler auftreten</string>
   <string name="settings_sync_title">Nachrichten synchronisieren</string>
@@ -490,8 +540,8 @@
     <item>Löschen</item>
     <item>Blockieren</item>
     <item>Anrufen</item>
-    <item>Als gelesen markieren</item>
-    <item>Antwort</item>
+    <item>Gelesen</item>
+    <item>Antworten</item>
   </string-array>
   <string name="button_yes">Ja</string>
   <string name="button_continue">Fortsetzen</string>
@@ -502,8 +552,8 @@
   <string name="button_more">Mehr</string>
   <string name="button_set">OK</string>
   <string name="button_undo">Rückgängig</string>
+  <string name="button_clear">Löschen</string>
   <string name="toast_copied">Kopiert</string>
-  <string name="toast_archived">Archivierte Unterhaltung</string>
   <string name="toast_qksms_plus">Für diese Funktion muss QKSMS+ freigeschalten werden</string>
   <plurals name="notification_new_messages">
     <item quantity="one">Neue Nachricht</item>
@@ -519,8 +569,8 @@
   </string-array>
   <string-array name="notification_preview_options">
     <item>Name und Nachricht anzeigen</item>
-    <item>Name anzeigen</item>
-    <item>Inhalt ausblenden</item>
+    <item>Nur Name anzeigen</item>
+    <item>Name und Nachricht ausblenden</item>
   </string-array>
   <string-array name="text_sizes">
     <item>Klein</item>
@@ -590,5 +640,12 @@
       <item>Lila</item>
       <item>Magenta</item>
     </string-array>
+  <string name="settings_notification_silent_title">Lautlos wenn unbekannt</string>
+  <string name="compose_record_audio_msg_cd">Sprachnachricht aufnehmen</string>
+  <string name="compose_record_audio_msg_abort_cd">Sprachnachricht abbrechen</string>
+  <string name="compose_record_audio_msg_attach_cd">Sprachnachricht anhängen</string>
+  <string name="menu_mms_part_save">Speichern</string>
+  <string name="menu_mms_part_share">Teilen</string>
+  <string name="menu_mms_part_forward">Weiterleiten</string>
 
 </resources>

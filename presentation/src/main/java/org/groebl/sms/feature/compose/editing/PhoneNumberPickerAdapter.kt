@@ -24,6 +24,7 @@ import android.view.ViewGroup
 import org.groebl.sms.R
 import org.groebl.sms.common.base.QkAdapter
 import org.groebl.sms.common.base.QkViewHolder
+import org.groebl.sms.common.util.extensions.forwardTouches
 import org.groebl.sms.extensions.Optional
 import org.groebl.sms.model.PhoneNumber
 import io.reactivex.subjects.BehaviorSubject
@@ -31,12 +32,11 @@ import io.reactivex.subjects.Subject
 import kotlinx.android.synthetic.main.phone_number_list_item.*
 import kotlinx.android.synthetic.main.radio_preference_view.*
 import kotlinx.android.synthetic.main.radio_preference_view.view.*
-import org.groebl.sms.common.util.extensions.forwardTouches
 import javax.inject.Inject
 
 class PhoneNumberPickerAdapter @Inject constructor(
     private val context: Context
-) : QkAdapter<PhoneNumber>() {
+) : QkAdapter<PhoneNumber, QkViewHolder>() {
 
     val selectedItemChanges: Subject<Optional<Long>> = BehaviorSubject.create()
 

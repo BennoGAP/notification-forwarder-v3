@@ -185,11 +185,6 @@
     <string name="scheduled_empty_message_3_timestamp">Pošle sa 23. decembra</string>
     <string name="scheduled_compose_cd">Naplánovať správu</string>
     <string name="scheduled_options_title">Naplánovaná správa</string>
-    <string-array name="scheduled_options">
-        <item>Odoslať teraz</item>
-        <item>Kopírovať text</item>
-        <item>Odstrániť</item>
-    </string-array>
     <string name="settings_category_appearance">Vzhľad</string>
     <string name="settings_category_general">Všeobecné</string>
     <string name="settings_category_qkreply">Rýchla odpoveď</string>
@@ -366,7 +361,6 @@
     <string name="button_set">Nastaviť</string>
     <string name="button_undo">Vrátiť späť</string>
     <string name="toast_copied">Skopírované</string>
-    <string name="toast_archived">Archivované konverzácie</string>
     <string name="toast_qksms_plus">Pre použitie aktivujte QKSMS+</string>
     <plurals name="notification_new_messages">
         <item quantity="one">Nová správa</item>

@@ -21,30 +21,49 @@ package org.groebl.sms.feature.scheduled
 import android.content.Context
 import android.net.Uri
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import com.bumptech.glide.Glide
 import org.groebl.sms.R
 import org.groebl.sms.common.base.QkAdapter
 import org.groebl.sms.common.base.QkViewHolder
-import kotlinx.android.synthetic.main.attachment_image_list_item.view.*
-import kotlinx.android.synthetic.main.scheduled_message_image_list_item.*
+import org.groebl.sms.extensions.getName
+import org.groebl.sms.feature.extensions.LoadBestIconIntoImageView
+import org.groebl.sms.feature.extensions.loadBestIconIntoImageView
+import kotlinx.android.synthetic.main.scheduled_message_image_list_item.fileName
+import kotlinx.android.synthetic.main.scheduled_message_image_list_item.thumbnail
 import javax.inject.Inject
+
 
 class ScheduledMessageAttachmentAdapter @Inject constructor(
     private val context: Context
-) : QkAdapter<Uri>() {
+) : QkAdapter<Uri, QkViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QkViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.scheduled_message_image_list_item, parent, false)
-        view.thumbnail.clipToOutline = true
-
-        return QkViewHolder(view)
+        return QkViewHolder(
+            LayoutInflater
+                .from(parent.context)
+                .inflate(R.layout.scheduled_message_image_list_item, parent, false)
+        )
     }
 
     override fun onBindViewHolder(holder: QkViewHolder, position: Int) {
-        val attachment = getItem(position)
+        val uri = getItem(position)
 
-        Glide.with(context).load(attachment).into(holder.thumbnail)
+        // set best image and text to use for icon
+        when (getItem(position).loadBestIconIntoImageView(context, holder.thumbnail)) {
+            LoadBestIconIntoImageView.Missing -> {
+                holder.fileName.text = context.getString(R.string.attachment_missing)
+                holder.fileName.visibility = View.VISIBLE
+            }
+            LoadBestIconIntoImageView.ActivityIcon,
+            LoadBestIconIntoImageView.DefaultAudioIcon,
+            LoadBestIconIntoImageView.GenericIcon -> {
+                // generic style icon used, also show name
+                holder.fileName.text = uri.getName(context)
+                holder.fileName.visibility = View.VISIBLE
+            }
+            else -> holder.fileName.visibility = View.GONE
+        }
     }
 
 }

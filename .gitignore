@@ -2,6 +2,7 @@
 *.apk
 *.ap_
 *.aab
+*.dm
 
 # Files for the ART/Dalvik VM
 *.dex
@@ -48,7 +49,9 @@ captures/
 
 # Google Services (e.g. APIs or Firebase)
 google-services.json
+
 output.json
+output-metadata.json
 
 # Freeline
 freeline.py

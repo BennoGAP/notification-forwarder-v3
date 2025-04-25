@@ -94,7 +94,6 @@ class QkReplyViewModel @Inject constructor(
                 .distinctUntilChanged()
 
         val subscriptions = ActiveSubscriptionObservable(subscriptionManager)
-
         disposables += Observables.combineLatest(latestSubId, subscriptions) { subId, subs ->
             val sub = if (subs.size > 1) subs.firstOrNull { it.subscriptionId == subId } ?: subs[0] else null
             newState { copy(subscription = sub) }
@@ -105,10 +104,11 @@ class QkReplyViewModel @Inject constructor(
         super.bindView(view)
 
         conversation
-                .map { conversation -> conversation.draft }
-                .distinctUntilChanged()
-                .autoDisposable(view.scope())
-                .subscribe { draft -> view.setDraft(draft) }
+            .take(1)  // only update saved draft to ui once
+            .map { conversation -> conversation.draft }
+            .distinctUntilChanged()
+            .autoDisposable(view.scope())
+            .subscribe { draft -> view.setDraft(draft) }
 
         // Mark read
         view.menuItemIntent
@@ -120,12 +120,15 @@ class QkReplyViewModel @Inject constructor(
 
         // Call
         view.menuItemIntent
-                .filter { id -> id == R.id.call }
-                .withLatestFrom(conversation) { _, conversation -> conversation }
-                .mapNotNull { conversation -> conversation.recipients.first()?.address }
-                .doOnNext { address -> navigator.makePhoneCall(address) }
-                .autoDisposable(view.scope())
-                .subscribe { newState { copy(hasError = true) } }
+            .filter { id -> id == R.id.call }
+            .withLatestFrom(state, conversation)
+            .mapNotNull { (_, state, conversation) ->
+                state.data?.second?.lastOrNull { !it.isMe() }?.address // most recent non-me msg address
+                    ?: conversation.recipients.firstOrNull()?.address  // first recipient in convo
+            }
+            .doOnNext { navigator.makePhoneCall(it) }
+            .autoDisposable(view.scope())
+            .subscribe { newState { copy(hasError = true) } }
 
         // Show all messages
         view.menuItemIntent
@@ -185,14 +188,12 @@ class QkReplyViewModel @Inject constructor(
                 .subscribe { remaining -> newState { copy(remaining = remaining) } }
 
         // Update the draft whenever the text is changed
-        /*
         view.textChangedIntent
                 .debounce(100, TimeUnit.MILLISECONDS)
                 .map { draft -> draft.toString() }
                 .observeOn(Schedulers.io())
                 .autoDisposable(view.scope())
                 .subscribe { draft -> conversationRepo.saveDraft(threadId, draft) }
-         */
 
         // Toggle to the next sim slot
         view.changeSimIntent

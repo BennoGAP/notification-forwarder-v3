@@ -18,7 +18,6 @@
  */
 package org.groebl.sms.interactor
 
-import android.telephony.SmsMessage
 import org.groebl.sms.blocking.BlockingClient
 import org.groebl.sms.extensions.mapNotNull
 import org.groebl.sms.manager.NotificationManager
@@ -38,66 +37,83 @@ class ReceiveSms @Inject constructor(
     private val notificationManager: NotificationManager,
     private val updateBadge: UpdateBadge,
     private val shortcutManager: ShortcutManager
-) : Interactor<ReceiveSms.Params>() {
+) : Interactor<Long>() {
 
-    class Params(val subId: Int, val messages: Array<SmsMessage>)
-
-    override fun buildObservable(params: Params): Flowable<*> {
+    override fun buildObservable(params: Long): Flowable<*> {
         return Flowable.just(params)
-                .filter { it.messages.isNotEmpty() }
-                .mapNotNull {
-                    // Don't continue if the sender is blocked
-                    val messages = it.messages
-                    val address = messages[0].displayOriginatingAddress
-                    val body: String = messages
-                        .mapNotNull { message -> message.displayMessageBody }
-                        .reduce { body, new -> body + new }
+            .mapNotNull { messageRepo.getMessage(it) }
+            .mapNotNull {
+                var action = blockingClient.shouldBlock(it.address).blockingGet()
 
-                    var action = blockingClient.shouldBlock(address).blockingGet()
-                    if (action !is BlockingClient.Action.Block) {
-                        // Check if we should block it because of its content
-                        action = blockingClient.getActionFromContent(body).blockingGet()
-                    }
+                if (action !is BlockingClient.Action.Block) {
+                    Timber.v("number is not blocked, check if content is blocked")
+                    // Check if we should block it because of its content
+                    action = blockingClient.getActionFromContent(it.body).blockingGet()
+                }
 
-                    val shouldDrop = prefs.drop.get()
-                    Timber.v("block=$action, drop=$shouldDrop")
-
-                    // If we should drop the message, don't even save it
-                    if (action is BlockingClient.Action.Block && shouldDrop) {
+                when {
+                    ((action is BlockingClient.Action.Block) && prefs.drop.get()) ->  {
+                        // blocked and 'drop blocked.' remove from db and don't continue
+                        Timber.v("address/message is blocked and drop blocked is on. dropped")
+                        messageRepo.deleteMessages(listOf(it.id))
                         return@mapNotNull null
                     }
-
-                    val time = messages[0].timestampMillis
-
-                    // Add the message to the db
-                    val message = messageRepo.insertReceivedSms(it.subId, address, body, time)
-
-                    when (action) {
-                        is BlockingClient.Action.Block -> {
-                            messageRepo.markRead(message.threadId)
-                            conversationRepo.markBlocked(listOf(message.threadId), prefs.blockingManager.get(), action.reason)
+                    action is BlockingClient.Action.Block -> {
+                        Timber.v("blocked for reason: ${action.reason}")
+                        when (action.reason) {
+                            "message" -> {
+                                Timber.v("message is blocked and deleted")
+                                messageRepo.deleteMessages(listOf(it.id))
+                                return@mapNotNull null
+                            }
+                            else -> {
+                                Timber.v("address is blocked")
+                                messageRepo.markRead(listOf(it.threadId))
+                                conversationRepo.markBlocked(
+                                    listOf(it.threadId),
+                                    prefs.blockingManager.get(),
+                                    action.reason
+                                )
+                            }
                         }
-                        is BlockingClient.Action.Unblock -> conversationRepo.markUnblocked(message.threadId)
-                        else -> Unit
                     }
+                    action is BlockingClient.Action.Unblock -> {
+                        // unblock
+                        Timber.v("unblock conversation if blocked")
+                        conversationRepo.markUnblocked(it.threadId)
+                    }
+                }
 
-                    message
+                // update and fetch conversation
+                conversationRepo.updateConversations(it.threadId)
+                conversationRepo.getOrCreateConversation(it.threadId)
+            }
+            .mapNotNull {
+                // don't notify (continue) for blocked conversations
+                if (it.blocked) {
+                    Timber.v("no notifications for blocked")
+                    return@mapNotNull null
                 }
-                .doOnNext { message ->
-                    conversationRepo.updateConversations(message.threadId) // Update the conversation
+
+                // unarchive conversation if necessary
+                if (it.archived) {
+                    Timber.v("conversation unarchived")
+                    conversationRepo.markUnarchived(it.id)
                 }
-                .mapNotNull { message ->
-                    conversationRepo.getOrCreateConversation(message.threadId) // Map message to conversation
-                }
-                .filter { conversation -> !conversation.blocked } // Don't notify for blocked conversations
-                .doOnNext { conversation ->
-                    // Unarchive conversation if necessary
-                    if (conversation.archived) conversationRepo.markUnarchived(conversation.id)
-                }
-                .map { conversation -> conversation.id } // Map to the id because [delay] will put us on the wrong thread
-                .doOnNext { threadId -> notificationManager.update(threadId) } // Update the notification
-                .doOnNext { shortcutManager.updateShortcuts() } // Update shortcuts
-                .flatMap { updateBadge.buildObservable(Unit) } // Update the badge and widget
+
+                // update/create notification
+                Timber.v("update/create notification")
+                notificationManager.update(it.id)
+
+                // update shortcuts
+                Timber.v("update shortcuts")
+                shortcutManager.updateShortcuts()
+                shortcutManager.reportShortcutUsed(it.id)
+
+                // update the badge and widget
+                Timber.v("update badge and widget")
+                updateBadge.buildObservable(Unit)
+            }
     }
 
 }

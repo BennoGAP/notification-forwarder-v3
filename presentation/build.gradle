@@ -23,15 +23,15 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 33
+    compileSdkVersion 34
     flavorDimensions "analytics"
 
     defaultConfig {
         applicationId "org.groebl.sms"
         minSdkVersion 23
         targetSdkVersion 33
-        versionCode 3600
-        versionName '3.6'
+        versionCode 3700
+        versionName '3.7.0.0'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -86,7 +86,14 @@ android {
         abortOnError false
     }
     namespace 'org.groebl.sms'
-
+    buildFeatures {
+        buildConfig true
+    }
+    if (System.getenv("CI") == "true") {
+        signingConfigs.release.storePassword = System.getenv("keystore_password")
+        signingConfigs.release.keyAlias = System.getenv("key_alias")
+        signingConfigs.release.keyPassword = System.getenv("key_password")
+    }
 }
 
 androidExtensions {
@@ -101,19 +108,18 @@ configurations {
 }
 
 dependencies {
-    compileOnly 'com.github.pengrad:jdk9-deps:1.0'
-
     // lifecycle
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version_common"
 
     // androidx
     implementation "androidx.appcompat:appcompat:$androidx_appcompat_version"
+    implementation "androidx.emoji2:emoji2-bundled:$androidx_emoji2_version"
     implementation "androidx.constraintlayout:constraintlayout:$androidx_constraintlayout_version"
     implementation "androidx.core:core-ktx:$androidx_core_version"
-    implementation "androidx.emoji:emoji-appcompat:$androidx_emoji_version"
     implementation "androidx.viewpager2:viewpager2:$androidx_viewpager_version"
     implementation "com.google.android.material:material:$material_version"
+    implementation("androidx.work:work-runtime-ktx:$androidx_work_version")
 
     // conductor
     implementation "com.bluelinelabs:conductor:$conductor_version"
@@ -124,8 +130,8 @@ dependencies {
     kapt "com.github.bumptech.glide:compiler:$glide_version"
 
     // exoplayer
-    implementation "com.google.android.exoplayer:exoplayer-core:$exoplayer_version"
-    implementation("com.google.android.exoplayer:exoplayer-ui:$exoplayer_version", {
+    implementation "com.github.google.ExoPlayer:exoplayer-core:$exoplayer_version"
+    implementation("com.github.google.ExoPlayer:exoplayer-ui:$exoplayer_version", {
         exclude group: "com.android.support", module: "support-media-compat"
     })
 
@@ -145,8 +151,12 @@ dependencies {
     implementation "com.google.dagger:dagger-android-support:$dagger_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
     kapt "com.google.dagger:dagger-android-processor:$dagger_version"
-    annotationProcessor "com.google.dagger:dagger-android-processor:$dagger_version"
-    compileOnly "javax.annotation:jsr250-api:1.0"
+//    compileOnly "javax.annotation:jsr250-api:1.0"
+    //Resolve jdk8+ Generation Annotations - javax annotation does not exist
+    implementation 'com.github.pengrad:jdk9-deps:1ffe84c468'
+
+//    look into jakarta.annotation-api when switching to java 9
+    implementation 'javax.annotation:javax.annotation-api:1.3.2'
 
     // ezvcard
     implementation('com.googlecode.ez-vcard:ez-vcard:0.10.4', {
@@ -156,7 +166,8 @@ dependencies {
     })
 
     // realm
-    implementation("io.realm:android-adapters:$realm_adapters_version") { transitive = false }
+    implementation "com.github.realm:realm-android-adapters:$realm_adapters_version"
+//    implementation("io.realm:android-adapters:$realm_adapters_version") { transitive = false }
     kapt "io.realm:realm-annotations:$realm_version"
     kapt "io.realm:realm-annotations-processor:$realm_version"
 
@@ -179,7 +190,7 @@ dependencies {
     // moshi
     implementation "com.squareup.moshi:moshi:$moshi_version"
     debugImplementation "com.squareup.moshi:moshi-kotlin:$moshi_version"
-    kaptRelease "com.squareup.moshi:moshi-kotlin-codegen:$moshi_version"
+    kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshi_version"
 
     // coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
@@ -187,9 +198,9 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-rx2:$coroutines_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-reactive:$coroutines_version"
 
-    implementation "com.github.chrisbanes:PhotoView:2.0.0"
+    implementation "com.github.chrisbanes:photoview:2.1.4"
     implementation "com.f2prateek.rx.preferences2:rx-preferences:$rx_preferences_version"
-    implementation "com.google.android.flexbox:flexbox:3.0.0"
+    implementation "com.github.google:flexbox-layout:0.3.1"
     implementation "com.jakewharton.timber:timber:$timber_version"
     implementation "com.squareup.moshi:moshi-kotlin:$moshi_version"
     implementation "me.leolin:ShortcutBadger:1.1.22"

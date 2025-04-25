@@ -28,7 +28,7 @@ interface MainView : QkView<MainState> {
     val activityResumedIntent: Observable<Boolean>
     val queryChangedIntent: Observable<CharSequence>
     val composeIntent: Observable<Unit>
-    val drawerOpenIntent: Observable<Boolean>
+    val drawerToggledIntent: Observable<Boolean>
     val homeIntent: Observable<*>
     val navigationIntent: Observable<NavItem>
     val optionsItemIntent: Observable<Int>
@@ -37,6 +37,7 @@ interface MainView : QkView<MainState> {
     val rateDonateIntent: Observable<*>
     val conversationsSelectedIntent: Observable<List<Long>>
     val confirmDeleteIntent: Observable<List<Long>>
+    val renameConversationIntent: Observable<String>
     val swipeConversationIntent: Observable<Pair<Long, Int>>
     val undoArchiveIntent: Observable<Unit>
     val snackbarButtonIntent: Observable<Unit>
@@ -46,11 +47,13 @@ interface MainView : QkView<MainState> {
     fun requestPermissions()
     fun clearSearch()
     fun clearSelection()
+    fun toggleSelectAll()
     fun themeChanged()
     fun showBlockingDialog(conversations: List<Long>, block: Boolean)
     fun showDeleteDialog(conversations: List<Long>)
-    fun showArchivedSnackbar()
-
+    fun showRenameDialog(conversationName: String)
+    fun showArchivedSnackbar(countConversationsArchived: Int)
+    fun drawerToggled(opened: Boolean)
 }
 
 enum class NavItem { BACK, INBOX, ARCHIVED, BACKUP, SCHEDULED, BLOCKING, SETTINGS, SETTINGS_BLUETOOTH, HELP }

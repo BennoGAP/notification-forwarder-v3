@@ -21,9 +21,17 @@ package org.groebl.sms.feature.compose
 import android.app.Activity
 import android.graphics.Rect
 import android.os.Build
-import android.view.*
+import android.view.ActionMode
+import android.view.KeyEvent
+import android.view.Menu
+import android.view.MenuItem
+import android.view.MotionEvent
+import android.view.SearchEvent
+import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import android.view.accessibility.AccessibilityEvent
-import androidx.annotation.RequiresApi
+
 import org.groebl.sms.feature.compose.editing.DetailedChipView
 
 class ComposeWindowCallback(
@@ -75,8 +83,8 @@ class ComposeWindowCallback(
         return localCallback.onCreatePanelMenu(i, menu)
     }
 
-    override fun onPreparePanel(p0: Int, p1: View?, p2: Menu): Boolean {
-        return localCallback.onPreparePanel(p0, p1, p2)
+    override fun onPreparePanel(i: Int, view: View?, menu: Menu): Boolean {
+        return localCallback.onPreparePanel(i, view, menu)
     }
 
     override fun onMenuOpened(i: Int, menu: Menu): Boolean {

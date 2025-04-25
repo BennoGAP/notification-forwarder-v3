@@ -183,11 +183,6 @@
     <string name="scheduled_empty_message_3_timestamp">Enviando el 23 de Diciembre</string>
     <string name="scheduled_compose_cd">Programar un mensaje</string>
     <string name="scheduled_options_title">Mensaje programado</string>
-    <string-array name="scheduled_options">
-        <item>Enviar ahora</item>
-        <item>Copiar texto</item>
-        <item>Borrar</item>
-    </string-array>
     <string name="settings_category_appearance">Apariencia</string>
     <string name="settings_category_general">General</string>
     <string name="settings_category_qkreply">Responder vía QKSMS</string>
@@ -358,7 +353,6 @@
     <string name="button_set">Establecer</string>
     <string name="button_undo">Deshacer</string>
     <string name="toast_copied">Copiado</string>
-    <string name="toast_archived">Conversación archivada</string>
     <string name="toast_qksms_plus">Debe desbloquear QKSMS+ para utilizarlo</string>
     <plurals name="notification_new_messages">
         <item quantity="one">Nuevo mensaje</item>

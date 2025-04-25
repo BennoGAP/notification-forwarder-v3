@@ -20,14 +20,14 @@ package org.groebl.sms.common.widget
 
 import android.content.Context
 import android.util.AttributeSet
-import androidx.emoji.widget.EmojiAppCompatTextView
+import androidx.appcompat.widget.AppCompatTextView
 import org.groebl.sms.common.util.TextViewStyler
 import org.groebl.sms.injection.appComponent
 import javax.inject.Inject
 
 open class QkTextView @JvmOverloads constructor(
-        context: Context, attrs: AttributeSet? = null
-) : EmojiAppCompatTextView(context, attrs) {
+    context: Context, attrs: AttributeSet? = null
+) : AppCompatTextView(context, attrs) {
 
     @Inject lateinit var textViewStyler: TextViewStyler
 

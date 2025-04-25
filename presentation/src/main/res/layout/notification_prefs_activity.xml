@@ -82,6 +82,14 @@
                 app:widget="@layout/settings_switch_widget" />
 
             <org.groebl.sms.common.widget.PreferenceView
+                android:id="@+id/silentNotContact"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:title="@string/settings_notification_silent_title"
+                app:summary="@string/settings_notification_silent_summary"
+                app:widget="@layout/settings_switch_widget" />
+
+            <org.groebl.sms.common.widget.PreferenceView
                 android:id="@+id/vibration"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

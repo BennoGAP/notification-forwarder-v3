@@ -17,7 +17,6 @@
 package com.android.mms;
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.content.res.XmlResourceParser;
 import com.klinker.android.send_message.R;
 import org.xmlpull.v1.XmlPullParser;
@@ -28,7 +27,7 @@ import java.io.IOException;
 
 public class MmsConfig {
     private static final boolean DEBUG = true;
-    private static final boolean LOCAL_LOGV = true;
+    private static final boolean LOCAL_LOGV = false;
 
     public static final String DEFAULT_HTTP_KEY_X_WAP_PROFILE = "x-wap-profile";
     public static final String DEFAULT_USER_AGENT = "Android-Mms/2.0";
@@ -107,8 +106,7 @@ public class MmsConfig {
 
     public static void init(Context context) {
         if (LOCAL_LOGV) {
-            Configuration config = context.getResources().getConfiguration();
-            Timber.v("MmsConfig.init(): mcc/mnc: " + config.mcc + "/" + config.mnc);
+            Timber.v("MmsConfig.init()");
         }
         // Always put the mnc/mcc in the log so we can tell which mms_config.xml was loaded.
 

@@ -183,11 +183,6 @@
     <string name="scheduled_empty_message_3_timestamp">Αποστολή στις 23 Δεκεμβρίου</string>
     <string name="scheduled_compose_cd">Προγραμματισμός μηνύματος</string>
     <string name="scheduled_options_title">Προγραμματισμένο μήνυμα</string>
-    <string-array name="scheduled_options">
-        <item>Αποστολή τώρα</item>
-        <item>Αντιγραφή κειμένου</item>
-        <item>Διαγραφή</item>
-    </string-array>
     <string name="settings_category_appearance">Εμφάνιση</string>
     <string name="settings_category_general">Γενικά</string>
     <string name="settings_category_qkreply">Γρήγορη απάντηση</string>
@@ -358,7 +353,6 @@
     <string name="button_set">Set</string>
     <string name="button_undo">Undo</string>
     <string name="toast_copied">Copied</string>
-    <string name="toast_archived">Archived conversation</string>
     <string name="toast_qksms_plus">You must unlock QKSMS+ to use this</string>
     <plurals name="notification_new_messages">
         <item quantity="one">New message</item>

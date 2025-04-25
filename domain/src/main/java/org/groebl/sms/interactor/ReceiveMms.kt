@@ -49,7 +49,7 @@ class ReceiveMms @Inject constructor(
                     // TODO: Ideally this is done when we're saving the MMS to ContentResolver
                     // This change can be made once we move the MMS storing code to the Data module
                     if (activeConversationManager.getActiveConversation() == message.threadId) {
-                        messageRepo.markRead(message.threadId)
+                        messageRepo.markRead(listOf(message.threadId))
                     }
                 }
                 .mapNotNull { message ->
@@ -57,21 +57,39 @@ class ReceiveMms @Inject constructor(
                     // to check if it should be blocked after we've pulled it into realm. If it
                     // turns out that it should be dropped, then delete it
                     // TODO Don't store blocked messages in the first place
-                    val action = blockingClient.shouldBlock(message.address).blockingGet()
-                    val shouldDrop = prefs.drop.get()
-                    Timber.v("block=$action, drop=$shouldDrop")
+                    var action = blockingClient.shouldBlock(message.address).blockingGet()
 
-                    if (action is BlockingClient.Action.Block && shouldDrop) {
-                        messageRepo.deleteMessages(message.id)
-                        return@mapNotNull null
+                    if (action !is BlockingClient.Action.Block) {
+                        // Check if we should block it because of its content
+                        action = blockingClient.getActionFromContent(message.body).blockingGet()
                     }
 
-                    when (action) {
-                        is BlockingClient.Action.Block -> {
-                            messageRepo.markRead(message.threadId)
-                            conversationRepo.markBlocked(listOf(message.threadId), prefs.blockingManager.get(), action.reason)
+                    when {
+                        ((action is BlockingClient.Action.Block) && prefs.drop.get()) ->  {
+                            // blocked and 'drop blocked.' remove from db and don't continue
+                            Timber.v("address/message is blocked and drop blocked is on. dropped")
+                            messageRepo.deleteMessages(listOf(message.id))
+                            return@mapNotNull null
                         }
-                        is BlockingClient.Action.Unblock -> conversationRepo.markUnblocked(message.threadId)
+                        action is BlockingClient.Action.Block -> {
+                            when (action.reason) {
+                                "message" -> {
+                                    Timber.v("message is blocked and deleted")
+                                    messageRepo.deleteMessages(listOf(message.id))
+                                    return@mapNotNull null
+                                }
+                                else -> {
+                                    Timber.v("address is blocked")
+                                    messageRepo.markRead(listOf(message.threadId))
+                                    conversationRepo.markBlocked(listOf(message.threadId), prefs.blockingManager.get(), action.reason)
+                                }
+                            }
+                        }
+                        action is BlockingClient.Action.Unblock -> {
+                            // unblock
+                            Timber.v("unblock conversation if blocked")
+                            conversationRepo.markUnblocked(message.threadId)
+                        }
                         else -> Unit
                     }
 

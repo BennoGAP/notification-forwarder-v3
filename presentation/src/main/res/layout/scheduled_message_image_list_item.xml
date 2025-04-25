@@ -33,4 +33,15 @@
         android:scaleType="centerCrop"
         tools:src="@tools:sample/backgrounds/scenic" />
 
+    <TextView
+        android:id="@+id/fileName"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#a7ffffff"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+
 </FrameLayout>

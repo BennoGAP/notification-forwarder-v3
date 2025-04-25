@@ -31,20 +31,34 @@ import android.net.Uri
 import android.os.Build
 import android.os.PowerManager
 import android.provider.ContactsContract
-import androidx.core.app.*
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.app.Person
+import androidx.core.app.RemoteInput
+import androidx.core.app.TaskStackBuilder
 import androidx.core.content.getSystemService
 import androidx.core.graphics.drawable.IconCompat
-import com.bumptech.glide.Glide
 import org.groebl.sms.R
 import org.groebl.sms.common.util.extensions.dpToPx
+import org.groebl.sms.common.util.extensions.fromRecipient
+import org.groebl.sms.common.util.extensions.toPerson
 import org.groebl.sms.extensions.isImage
 import org.groebl.sms.feature.compose.ComposeActivity
 import org.groebl.sms.feature.qkreply.QkReplyActivity
 import org.groebl.sms.manager.PermissionManager
+import org.groebl.sms.manager.ShortcutManager
 import org.groebl.sms.mapper.CursorToPartImpl
-import org.groebl.sms.receiver.*
+import org.groebl.sms.receiver.BlockThreadReceiver
+import org.groebl.sms.receiver.DeleteMessagesReceiver
+import org.groebl.sms.receiver.MarkArchivedReceiver
+import org.groebl.sms.receiver.MarkReadReceiver
+import org.groebl.sms.receiver.MarkSeenReceiver
+import org.groebl.sms.receiver.RemoteMessagingReceiver
+import org.groebl.sms.receiver.SpeakThreadsReceiver
+import org.groebl.sms.repository.ContactRepository
 import org.groebl.sms.repository.ConversationRepository
 import org.groebl.sms.repository.MessageRepository
+import org.groebl.sms.util.GlideApp
 import org.groebl.sms.util.PhoneNumberUtils
 import org.groebl.sms.util.Preferences
 import org.groebl.sms.util.tryOrNull
@@ -60,7 +74,9 @@ class NotificationManagerImpl @Inject constructor(
     private val prefs: Preferences,
     private val messageRepo: MessageRepository,
     private val permissions: PermissionManager,
-    private val phoneNumberUtils: PhoneNumberUtils
+    private val phoneNumberUtils: PhoneNumberUtils,
+    private val contactRepo: ContactRepository,
+    private val shortcutManager: ShortcutManager
 ) : org.groebl.sms.manager.NotificationManager {
 
     companion object {
@@ -115,7 +131,7 @@ class NotificationManagerImpl @Inject constructor(
 
         val seenIntent = Intent(context, MarkSeenReceiver::class.java).putExtra("threadId", threadId)
         val seenPI = PendingIntent.getBroadcast(context, threadId.toInt(), seenIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
         // We can't store a null preference, so map it to a null Uri if the pref string is empty
         val ringtone = prefs.ringtone(threadId).get()
@@ -135,12 +151,28 @@ class NotificationManagerImpl @Inject constructor(
                 .setAutoCancel(true)
                 .setContentIntent(contentPI)
                 .setDeleteIntent(seenPI)
-                .setSound(ringtone)
                 .setLights(Color.WHITE, 500, 2000)
                 .setWhen(conversation.lastMessage?.date ?: System.currentTimeMillis())
                 .setVibrate(if (prefs.vibration(threadId).get()) VIBRATE_PATTERN else longArrayOf(0))
 
-        // Tell the notification if it's a group message
+        // if preference set to silence notifications if no recipients in contacts
+        if (prefs.silentNotContact.get() && run {
+            val msgRecipientNumbers = conversation.recipients.map { it.address }
+
+            // true if any message recipients are in device's contacts
+            !contactRepo
+                .getUnmanagedAllContacts()
+                .flatMap { it.numbers }
+                .map { it.address }
+                .any { contactNumber ->
+                    msgRecipientNumbers.any { phoneNumberUtils.compare(contactNumber, it) }
+                }
+        })
+            notification.setSilent(true)
+        else
+            notification.setSound(ringtone)
+
+    // Tell the notification if it's a group message
         val messagingStyle = NotificationCompat.MessagingStyle("Me")
         if (conversation.recipients.size >= 2) {
             messagingStyle.isGroupConversation = true
@@ -156,19 +188,8 @@ class NotificationManagerImpl @Inject constructor(
                     phoneNumberUtils.compare(recipient.address, message.address)
                 }
 
-                person.setName(recipient?.getDisplayName() ?: message.address)
-                person.setIcon(
-                    Glide.with(context)
-                        .asBitmap()
-                        .circleCrop()
-                        .load(recipient?.contact?.photoUri)
-                        .submit(64.dpToPx(context), 64.dpToPx(context))
-                        .let { futureGet -> tryOrNull(false) { futureGet.get() } }
-                        ?.let(IconCompat::createWithBitmap))
-
-                recipient?.contact
-                        ?.let { contact -> "${ContactsContract.Contacts.CONTENT_LOOKUP_URI}/${contact.lookupKey}" }
-                        ?.let(person::setUri)
+                if(recipient != null)
+                    person.fromRecipient(recipient, context, colors)
             }
 
             NotificationCompat.MessagingStyle.Message(message.getSummary(), message.date, person.build()).apply {
@@ -179,11 +200,17 @@ class NotificationManagerImpl @Inject constructor(
             }
         }
 
+        // remove system generated contextual actions (they're generated from message links) unless
+        // the user has explicitly set to allow message links
+        notification.setAllowSystemGeneratedContextualActions(
+            (prefs.messageLinkHandling.get() == Preferences.MESSAGE_LINK_HANDLING_ALLOW)
+        )
+
         // Set the large icon
         val avatar = conversation.recipients.takeIf { it.size == 1 }
                 ?.first()?.contact?.photoUri
                 ?.let { photoUri ->
-                    Glide.with(context)
+                    GlideApp.with(context)
                             .asBitmap()
                             .circleCrop()
                             .load(photoUri)
@@ -218,7 +245,7 @@ class NotificationManagerImpl @Inject constructor(
         // Add all of the people from this conversation to the notification, so that the system can
         // appropriately bypass DND mode
         conversation.recipients.forEach { recipient ->
-            notification.addPerson("tel:${recipient.address}")
+            notification.addPerson(recipient.toPerson(context, colors))
         }
 
         // Add the action buttons
@@ -286,6 +313,14 @@ class NotificationManagerImpl @Inject constructor(
                                     .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_CALL).build()
                         }
 
+                        Preferences.NOTIFICATION_ACTION_SPEAK -> {
+                            val intent = Intent(context, SpeakThreadsReceiver::class.java).putExtra("threadId", threadId)
+                            val pi = PendingIntent.getBroadcast(context, 0, intent,
+                                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+                            NotificationCompat.Action.Builder(R.drawable.ic_speaker_black_24dp, actionLabels[action], pi)
+                                .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_NONE).build()
+                        }
+
                         else -> null
                     }
                 }
@@ -300,7 +335,8 @@ class NotificationManagerImpl @Inject constructor(
 
             context.startActivity(intent)
         }
-
+        val sc = shortcutManager.getShortcut(threadId)
+        notification.setShortcutInfo(sc)
         notificationManager.notify(threadId.toInt(), notification.build())
 
         // Wake screen

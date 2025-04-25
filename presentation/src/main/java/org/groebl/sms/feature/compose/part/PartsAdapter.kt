@@ -18,30 +18,33 @@
  */
 package org.groebl.sms.feature.compose.part
 
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import org.groebl.sms.common.base.QkAdapter
 import org.groebl.sms.common.base.QkViewHolder
 import org.groebl.sms.common.util.Colors
-import org.groebl.sms.common.util.extensions.forwardTouches
+import org.groebl.sms.common.widget.QkContextMenuRecyclerView
 import org.groebl.sms.extensions.isSmil
 import org.groebl.sms.extensions.isText
 import org.groebl.sms.feature.compose.BubbleUtils.canGroup
+import org.groebl.sms.feature.compose.MessagesAdapter
 import org.groebl.sms.model.Message
 import org.groebl.sms.model.MmsPart
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.message_list_item_in.*
 import javax.inject.Inject
 
+
 class PartsAdapter @Inject constructor(
     colors: Colors,
     fileBinder: FileBinder,
-    mediaBinder: MediaBinder,
-    vCardBinder: VCardBinder
-) : QkAdapter<MmsPart>() {
+    imageBinder: ImageBinder,
+    audioBinder: AudioBinder,
+    vCardBinder: VCardBinder,
+) : QkContextMenuRecyclerView.Adapter<Long, MmsPart, QkContextMenuRecyclerView.ViewHolder<MmsPart>>() {
 
-    private val partBinders = listOf(mediaBinder, vCardBinder, fileBinder)
+    private val partBinders = listOf(audioBinder, imageBinder, vCardBinder, fileBinder)
 
     var theme: Colors.Theme = colors.theme()
         set(value) {
@@ -54,39 +57,52 @@ class PartsAdapter @Inject constructor(
     private lateinit var message: Message
     private var previous: Message? = null
     private var next: Message? = null
-    private var holder: QkViewHolder? = null
     private var bodyVisible: Boolean = true
+    private var audioState: MessagesAdapter.AudioState? = null
 
-    fun setData(message: Message, previous: Message?, next: Message?, holder: QkViewHolder) {
+    fun setData(
+        message: Message,
+        previous: Message?,
+        next: Message?,
+        holder: QkViewHolder,
+        audioState: MessagesAdapter.AudioState?
+    ) {
         this.message = message
         this.previous = previous
         this.next = next
-        this.holder = holder
         this.bodyVisible = holder.body.visibility == View.VISIBLE
         this.data = message.parts.filter { !it.isSmil() && !it.isText() }
+        this.audioState = audioState
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QkViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int)
+        : QkContextMenuRecyclerView.ViewHolder<MmsPart> {
         val layout = partBinders.getOrNull(viewType)?.partLayout ?: 0
         val view = LayoutInflater.from(parent.context).inflate(layout, parent, false)
-        holder?.containerView?.let(view::forwardTouches)
-        return QkViewHolder(view)
+        return QkContextMenuRecyclerView.ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: QkViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: QkContextMenuRecyclerView.ViewHolder<MmsPart>, position: Int) {
         val part = data[position]
+
+        holder.contextMenuValue = part
 
         val canGroupWithPrevious = canGroup(message, previous) || position > 0
         val canGroupWithNext = canGroup(message, next) || position < itemCount - 1 || bodyVisible
 
-        partBinders
-                .firstOrNull { it.canBindPart(part) }
-                ?.bindPart(holder, part, message, canGroupWithPrevious, canGroupWithNext)
+        val binder = partBinders.firstOrNull { it.canBindPart(part) }
+        if (binder == null)
+            return
+
+        // if audioState is set and binder is audio type, set it's audioState ref
+        if ((audioState != null) && (binder is AudioBinder))
+            binder.audioState = audioState!!
+
+        binder.bindPart(holder, part, message, canGroupWithPrevious, canGroupWithNext)
     }
 
     override fun getItemViewType(position: Int): Int {
-        val part = data[position]
-        return partBinders.indexOfFirst { it.canBindPart(part) }
+        return partBinders.indexOfFirst { it.canBindPart(data[position]) }
     }
 
 }

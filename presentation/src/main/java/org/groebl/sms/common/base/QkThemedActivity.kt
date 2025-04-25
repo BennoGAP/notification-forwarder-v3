@@ -62,7 +62,6 @@ abstract class QkThemedActivity : QkActivity() {
     @Inject lateinit var conversationRepo: ConversationRepository
     @Inject lateinit var messageRepo: MessageRepository
     @Inject lateinit var phoneNumberUtils: PhoneNumberUtils
-    @Inject lateinit var prefs: Preferences
 
     /**
      * In case the activity should be themed for a specific conversation, the selected conversation

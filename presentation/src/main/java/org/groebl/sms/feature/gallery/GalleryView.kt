@@ -29,6 +29,5 @@ interface GalleryView : QkView<GalleryState> {
     fun pageChanged(): Observable<MmsPart>
 
     fun requestStoragePermission()
-    fun permissionResult(): Observable<*>
 
 }
