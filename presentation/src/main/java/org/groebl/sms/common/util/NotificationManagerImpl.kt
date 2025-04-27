@@ -38,6 +38,7 @@ import androidx.core.app.RemoteInput
 import androidx.core.app.TaskStackBuilder
 import androidx.core.content.getSystemService
 import androidx.core.graphics.drawable.IconCompat
+import com.bumptech.glide.Glide
 import org.groebl.sms.R
 import org.groebl.sms.common.util.extensions.dpToPx
 import org.groebl.sms.common.util.extensions.fromRecipient
@@ -58,7 +59,6 @@ import org.groebl.sms.receiver.SpeakThreadsReceiver
 import org.groebl.sms.repository.ContactRepository
 import org.groebl.sms.repository.ConversationRepository
 import org.groebl.sms.repository.MessageRepository
-import org.groebl.sms.util.GlideApp
 import org.groebl.sms.util.PhoneNumberUtils
 import org.groebl.sms.util.Preferences
 import org.groebl.sms.util.tryOrNull
@@ -210,7 +210,7 @@ class NotificationManagerImpl @Inject constructor(
         val avatar = conversation.recipients.takeIf { it.size == 1 }
                 ?.first()?.contact?.photoUri
                 ?.let { photoUri ->
-                    GlideApp.with(context)
+                    Glide.with(context)
                             .asBitmap()
                             .circleCrop()
                             .load(photoUri)

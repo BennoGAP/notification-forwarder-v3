@@ -44,7 +44,6 @@ class ChipsAdapter @Inject constructor() : QkAdapter<Recipient, QkViewHolder>() 
         val inflater = LayoutInflater.from(parent.context)
         val view = inflater.inflate(R.layout.contact_chip, parent, false)
         return QkViewHolder(view).apply {
-
             view.setOnClickListener {
                 val chip = getItem(adapterPosition)
                 showDetailedChip(view.context, chip)

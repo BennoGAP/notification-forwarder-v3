@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.core.view.isVisible
+import com.bumptech.glide.Glide
 import com.jakewharton.rxbinding2.view.clicks
 import org.groebl.sms.R
 import org.groebl.sms.common.Navigator
@@ -24,7 +25,6 @@ import kotlinx.android.synthetic.main.conversation_info_settings.*
 import kotlinx.android.synthetic.main.conversation_media_list_item.*
 import kotlinx.android.synthetic.main.conversation_recipient_list_item.*
 import org.groebl.sms.common.util.extensions.setTint
-import org.groebl.sms.util.GlideApp
 import javax.inject.Inject
 
 class ConversationInfoAdapter @Inject constructor(
@@ -121,7 +121,7 @@ class ConversationInfoAdapter @Inject constructor(
             is ConversationInfoMedia -> {
                 val part = item.value
 
-                GlideApp.with(context)
+                Glide.with(context)
                     .load(part.getUri())
                     .fitCenter()
                     .into(holder.thumbnail)

@@ -31,8 +31,13 @@ import androidx.core.view.isVisible
 import com.jakewharton.rxbinding2.view.clicks
 import org.groebl.sms.R
 import org.groebl.sms.common.base.QkController
-import org.groebl.sms.common.util.DateFormatter
-import org.groebl.sms.common.util.extensions.*
+import org.groebl.sms.common.util.QkActivityResultContracts
+import org.groebl.sms.common.util.extensions.getLabel
+import org.groebl.sms.common.util.extensions.setBackgroundTint
+import org.groebl.sms.common.util.extensions.setNegativeButton
+import org.groebl.sms.common.util.extensions.setPositiveButton
+import org.groebl.sms.common.util.extensions.setShowing
+import org.groebl.sms.common.util.extensions.setTint
 import org.groebl.sms.common.widget.PreferenceView
 import org.groebl.sms.injection.appComponent
 import org.groebl.sms.repository.BackupRepository
@@ -41,7 +46,6 @@ import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import kotlinx.android.synthetic.main.backup_controller.*
 import kotlinx.android.synthetic.main.preference_view.view.*
-import org.groebl.sms.common.util.QkActivityResultContracts
 import javax.inject.Inject
 
 class BackupController : QkController<BackupView, BackupState, BackupPresenter>(), BackupView {
@@ -225,8 +229,7 @@ class BackupController : QkController<BackupView, BackupState, BackupPresenter>(
     }
 
     override fun selectFile(initialUri: Uri) {
-        openDocument.launch(
-            QkActivityResultContracts.OpenDocumentParams(
+        openDocument.launch(QkActivityResultContracts.OpenDocumentParams(
                 mimeTypes = listOf("application/json", "application/octet-stream"),
                 initialUri = initialUri))
     }

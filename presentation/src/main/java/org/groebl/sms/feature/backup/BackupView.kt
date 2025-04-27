@@ -23,7 +23,6 @@ import org.groebl.sms.common.base.QkViewContract
 import io.reactivex.Observable
 
 interface BackupView : QkViewContract<BackupState> {
-
     fun setBackupLocationClicks(): Observable<*>
     fun restoreClicks(): Observable<*>
 

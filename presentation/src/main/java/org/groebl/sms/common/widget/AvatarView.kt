@@ -32,7 +32,6 @@ import org.groebl.sms.injection.appComponent
 import org.groebl.sms.model.Recipient
 import org.groebl.sms.util.Preferences
 import kotlinx.android.synthetic.main.avatar_view.view.*
-import org.groebl.sms.util.GlideApp
 import javax.inject.Inject
 
 class AvatarView @JvmOverloads constructor(
@@ -107,7 +106,7 @@ class AvatarView @JvmOverloads constructor(
 
         photo.setImageDrawable(null)
         photoUri?.let { photoUri ->
-            GlideApp.with(photo)
+            Glide.with(photo)
                     .load(photoUri)
                     .into(photo)
         }

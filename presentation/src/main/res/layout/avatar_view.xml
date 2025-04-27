@@ -32,13 +32,13 @@
         android:gravity="center"
         android:padding="6dp"
         android:textAllCaps="true"
-        app:autoSizeMaxTextSize="42sp"
+        app:autoSizeMaxTextSize="22sp"
         app:autoSizeTextType="uniform" />
 
     <ImageView
         android:id="@+id/icon"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_gravity="center"
         android:src="@drawable/ic_person_black_24dp"
         android:tint="@color/white" />

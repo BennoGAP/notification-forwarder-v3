@@ -24,6 +24,7 @@ import android.media.AudioAttributes
 import android.media.MediaMetadataRetriever
 import android.view.View
 import android.widget.SeekBar
+import com.bumptech.glide.Glide
 import org.groebl.sms.common.QkMediaPlayer
 import org.groebl.sms.contentproviders.MmsPartProvider
 import org.groebl.sms.R
@@ -40,7 +41,6 @@ import org.groebl.sms.extensions.resourceExists
 import org.groebl.sms.feature.compose.MessagesAdapter
 import org.groebl.sms.model.Message
 import org.groebl.sms.model.MmsPart
-import org.groebl.sms.util.GlideApp
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -274,7 +274,7 @@ class AudioBinder @Inject constructor(colors: Colors, private val context: Conte
                 } else {
                     holder.frame.layoutParams.height = holder.frame.layoutParams.width
                     setTint(null)
-                    GlideApp.with(context)
+                    Glide.with(context)
                         .asBitmap()
                         .load(embeddedPicture)
                         .override(

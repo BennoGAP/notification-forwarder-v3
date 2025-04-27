@@ -551,6 +551,7 @@ public class TransactionService extends Service implements Observer {
         throw new IOException("Cannot establish MMS connectivity");
     }
 
+
     protected void endMmsConnectivity() {
         try {
             Timber.v("endMmsConnectivity");

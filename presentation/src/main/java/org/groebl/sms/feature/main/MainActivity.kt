@@ -302,16 +302,6 @@ class MainActivity : QkThemedActivity(), MainView {
         when (state.page) {
             is Inbox -> {
                 showBackButton(state.page.selected > 0)
-                if (state.page.selected > 0) {
-                    toolbar.setNavigationIcon(R.drawable.ic_arrow_back_24dp)
-                    toolbar.navigationIcon?.setTint(resolveThemeColor(android.R.attr.textColorSecondary))
-                    toolbar.setBackgroundResource(R.drawable.rounded_rectangle_transparent_24dp)
-                    compose.animate().rotation(90f).start()}
-                else {
-                    toolbar.setNavigationIcon(R.drawable.ic_menu_24dp)
-                    toolbar.navigationIcon?.setTint(resolveThemeColor(android.R.attr.textColorSecondary))
-                    toolbar.setBackgroundResource(R.drawable.rounded_rectangle_24dp)
-                    compose.animate().rotation(0f).start()}
                 title = getString(R.string.main_title_selected, state.page.selected)
                 if (recyclerView.adapter !== conversationsAdapter)
                     recyclerView.adapter = conversationsAdapter
@@ -331,8 +321,6 @@ class MainActivity : QkThemedActivity(), MainView {
 
             is Searching -> {
                 showBackButton(true)
-                toolbar.setNavigationIcon(R.drawable.ic_arrow_back_24dp)
-                toolbar.navigationIcon?.setTint(resolveThemeColor(android.R.attr.textColorSecondary))
                 if (recyclerView.adapter !== searchAdapter) recyclerView.adapter = searchAdapter
                 searchAdapter.data = state.page.data ?: listOf()
                 itemTouchHelper.attachToRecyclerView(null)
@@ -341,15 +329,6 @@ class MainActivity : QkThemedActivity(), MainView {
 
             is Archived -> {
                 showBackButton(state.page.selected > 0)
-                if (state.page.selected > 0) {
-                    toolbar.setNavigationIcon(R.drawable.ic_arrow_back_24dp)
-                    toolbar.navigationIcon?.setTint(resolveThemeColor(android.R.attr.textColorSecondary))
-                    compose.animate().rotation(90f).start()}
-                else {
-                    toolbar.setNavigationIcon(R.drawable.ic_menu_24dp)
-                    toolbar.navigationIcon?.setTint(resolveThemeColor(android.R.attr.textColorSecondary))
-                    compose.animate().rotation(0f).start()}
-                toolbar.setBackgroundResource(R.drawable.rounded_rectangle_transparent_24dp)
                 title = when (state.page.selected != 0) {
                     true -> getString(R.string.main_title_selected, state.page.selected)
                     false -> getString(R.string.title_archived)

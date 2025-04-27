@@ -62,7 +62,9 @@ class WidgetManagerImpl @Inject constructor(
     override fun updateTheme() {
         val ids = AppWidgetManager.getInstance(context)
             .getAppWidgetIds(ComponentName(context.packageName, "org.groebl.sms.feature.widget.WidgetProvider"))
+
         val intent = Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
+
         BroadcastUtils.sendExplicitBroadcast(context, intent, AppWidgetManager.ACTION_APPWIDGET_UPDATE)
     }
 

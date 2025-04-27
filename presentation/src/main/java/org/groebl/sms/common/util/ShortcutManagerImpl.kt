@@ -35,7 +35,6 @@ import org.groebl.sms.feature.compose.ComposeActivity
 import org.groebl.sms.model.Conversation
 import org.groebl.sms.repository.ConversationRepository
 import org.groebl.sms.repository.MessageRepository
-import org.groebl.sms.util.GlideApp
 import org.groebl.sms.util.tryOrNull
 import me.leolin.shortcutbadger.ShortcutBadger
 import timber.log.Timber

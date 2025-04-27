@@ -27,6 +27,7 @@ import android.os.Build
 import android.os.Bundle
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import com.jakewharton.rxbinding2.view.clicks
 import org.groebl.sms.R
 import org.groebl.sms.common.QkDialog
@@ -60,7 +61,7 @@ class NotificationPrefsActivity : QkThemedActivity(), NotificationPrefsView {
     override val actionsSelectedIntent by lazy { actionsDialog.adapter.menuItemClicks }
 
     private val viewModel by lazy {
-        ViewModelProvider(this, viewModelFactory)[NotificationPrefsViewModel::class.java]
+        ViewModelProviders.of(this, viewModelFactory)[NotificationPrefsViewModel::class.java]
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -45,6 +45,7 @@ class CallControlBlockingClient @Inject constructor(
     }
 
     override fun isAvailable(): Boolean = context.isInstalled("com.flexaspect.android.everycallcontrol")
+
     override fun getClientCapability() = BlockingClient.Capability.BLOCK_WITH_PERMISSION
 
     override fun shouldBlock(address: String): Single<BlockingClient.Action> = isBlacklisted(address)

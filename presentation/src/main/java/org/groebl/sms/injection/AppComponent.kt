@@ -83,8 +83,6 @@ interface AppComponent {
     fun inject(service: QkChooserTargetService)
 
     fun inject(view: AvatarView)
-    fun inject(view: AvatarBigView)
-    fun inject(view: AvatarBiggerView)
     fun inject(view: BubbleImageView)
     fun inject(view: DetailedChipView)
     fun inject(view: PagerTitleView)

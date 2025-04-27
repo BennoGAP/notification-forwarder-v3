@@ -260,7 +260,7 @@ class SpeakManager() {
 
         // more than 1 recipient
         if (conversation.recipients.count() > 1)
-            utterance.append("Group SMS ")
+            utterance.append("Group message ")
 
         // message sender
         if (conversationLastSms.isMe())

@@ -15,11 +15,11 @@ import androidx.core.app.Person
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.drawable.IconCompat
 import androidx.core.widget.TextViewCompat
+import com.bumptech.glide.Glide
 import org.groebl.sms.R
 import org.groebl.sms.common.util.Colors
 import org.groebl.sms.common.widget.QkTextView
 import org.groebl.sms.model.Recipient
-import org.groebl.sms.util.GlideApp
 import org.groebl.sms.util.tryOrNull
 import timber.log.Timber
 
@@ -27,7 +27,7 @@ import timber.log.Timber
 fun Recipient.getThemedIcon(context: Context, theme: Colors.Theme, width: Int, height: Int): IconCompat {
     var icon : IconCompat? = null
     if(contact != null) {
-        val req = GlideApp.with(context)
+        val req = Glide.with(context)
             .asBitmap()
             .circleCrop()
             .load(contact!!.photoUri)

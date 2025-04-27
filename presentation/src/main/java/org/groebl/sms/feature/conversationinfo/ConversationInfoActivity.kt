@@ -44,7 +44,6 @@ class ConversationInfoActivity : QkThemedActivity() {
         if (!isNightMode()) {
             val backgroundGray = getColorCompat(R.color.backgroundGray)
             toolbar.setBackgroundColor(backgroundGray)
-            viewContainer.setBackgroundColor(backgroundGray)
             window.navigationBarColor = backgroundGray
             window.statusBarColor = backgroundGray
         }

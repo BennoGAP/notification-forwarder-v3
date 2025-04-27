@@ -38,10 +38,11 @@
         app:layout_constraintVertical_bias="0"
         app:layout_constraintWidth_percent=".75">
 
-        <org.groebl.sms.common.widget.AvatarBigView
+        <org.groebl.sms.common.widget.AvatarView
         android:id="@+id/avatar2"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
     </FrameLayout>
 
     <FrameLayout
@@ -60,7 +61,7 @@
         app:layout_constraintVertical_bias="1"
         app:layout_constraintWidth_percent=".75">
 
-        <org.groebl.sms.common.widget.AvatarBigView
+        <org.groebl.sms.common.widget.AvatarView
             android:id="@+id/avatar1"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

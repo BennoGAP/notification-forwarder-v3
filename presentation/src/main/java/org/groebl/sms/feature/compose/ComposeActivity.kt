@@ -257,6 +257,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView, TextToSpeech.OnInitList
                     loading.setTint(it.theme)
 
                     // entire attach menu
+                    send.setBackgroundTint(it.theme); send.setTint(it.textPrimary)
                     attach.setBackgroundTint(it.theme); attach.setTint(it.textPrimary)
                     contact.setBackgroundTint(it.theme); contact.setTint(it.textPrimary)
                     contactLabel.setBackgroundTint(it.theme); contactLabel.setTint(it.textPrimary)

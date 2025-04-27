@@ -35,4 +35,5 @@ class QkActivityResultContracts {
             return intent?.data ?: Uri.EMPTY
         }
     }
+
 }

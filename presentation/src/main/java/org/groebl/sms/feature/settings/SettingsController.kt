@@ -196,10 +196,8 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
 
         unreadAtTop.checkbox.isChecked = state.unreadAtTopEnabled
 
-       /* signature.summary = state.signature.takeIf { it.isNotBlank() }
-                ?: context.getString(R.string.settings_signature_summary)*/
         signature.value = state.signature.takeIf { it.isNotBlank() }
-                ?: context.getString(R.string.settings_signature_empty_value)
+                ?: context.getString(R.string.settings_signature_summary)
 
         textSize.value = state.textSizeSummary
         textSizeDialog.adapter.selectedItem = state.textSizeId
