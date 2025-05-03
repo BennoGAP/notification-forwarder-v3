@@ -243,7 +243,8 @@
   <string name="messageLinkHandling_dialog_title">Warnung</string>
   <string name="messageLinkHandling_dialog_body">Der Link könnte möglicherweise auf eine unsichere Seite verweisen.\nBitte den Link vorher überprüfen\n\n%1$s\n\nMöchtest du fortfahren?</string>
   <string name="messageLinkHandling_dialog_positive">Ja, Link öffnen</string>
-  <string name="messageLinkHandling_dialog_negative">ein</string>
+  <string name="messageLinkHandling_dialog_negative">Nein</string>
+  <string name="NotificationMeDescription">Ich</string>
   <string name="speak_no_messages">Keine Nachrichten</string>
   <string name="speak_unseen_messages">Ungelesene Nachrichten vorlesen</string>
   <string-array name="message_options">

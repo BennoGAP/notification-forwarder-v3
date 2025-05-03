@@ -173,7 +173,7 @@ class NotificationManagerImpl @Inject constructor(
             notification.setSound(ringtone)
 
     // Tell the notification if it's a group message
-        val messagingStyle = NotificationCompat.MessagingStyle("Me")
+        val messagingStyle = NotificationCompat.MessagingStyle(context.getString(R.string.NotificationMeDescription))
         if (conversation.recipients.size >= 2) {
             messagingStyle.isGroupConversation = true
             messagingStyle.conversationTitle = conversation.getTitle()
