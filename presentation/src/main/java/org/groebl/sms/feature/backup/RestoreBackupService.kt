@@ -22,7 +22,9 @@ import android.annotation.SuppressLint
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ServiceInfo
 import android.net.Uri
+import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
@@ -78,7 +80,8 @@ class RestoreBackupService : Service() {
     private fun start(intent: Intent) {
         val notificationManager = NotificationManagerCompat.from(this)
 
-        startForeground(NOTIFICATION_ID, notification.build())
+        if (Build.VERSION.SDK_INT >= 29) startForeground(NOTIFICATION_ID, notification.build(), ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC)
+        else startForeground(NOTIFICATION_ID, notification.build())
 
         backupRepo.getRestoreProgress()
                 .sample(200, TimeUnit.MILLISECONDS, true)

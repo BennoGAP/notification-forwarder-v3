@@ -27,7 +27,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <!-- Used for starting foreground service for backup/restore on Android P+ -->
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
 <!--    <uses-permission android:name="android.permission.INTERNET" />-->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <uses-permission android:name="android.permission.READ_CONTACTS" />
@@ -245,7 +245,8 @@
 
 
         <service android:name="com.android.mms.transaction.TransactionService" />
-        <service android:name=".feature.backup.RestoreBackupService" />
+        <service android:name=".feature.backup.RestoreBackupService"
+            android:foregroundServiceType="dataSync" />
         <service
             android:name=".feature.widget.WidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
