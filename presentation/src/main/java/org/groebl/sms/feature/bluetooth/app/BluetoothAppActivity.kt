@@ -104,9 +104,11 @@ class BluetoothAppActivity : QkThemedActivity(), BluetoothAppView {
 
         for (apps in installedApps) {
             currentAppCount += 1
+            val appInfo = apps.applicationInfo
+
             //println("Load Apps: $currentAppCount / $allAppCount (${(currentAppCount*100)/allAppCount}%)")
-            if(!packageManager(apps)) {
-                packageModel.add(BluetoothAppModel(apps.applicationInfo.loadLabel(packageManager).toString(), apps.packageName, apps.applicationInfo))
+            if(!packageManager(apps) && appInfo != null) {
+                packageModel.add(BluetoothAppModel(appInfo.loadLabel(packageManager).toString(), apps.packageName, appInfo))
 
                 if(checkedApps.contains(apps.packageName)) { newCheckedApps.add(apps.packageName) }
             }
@@ -122,11 +124,11 @@ class BluetoothAppActivity : QkThemedActivity(), BluetoothAppView {
     }
 
     private fun packageManager(appinfo: PackageInfo):Boolean{
-        return appinfo.applicationInfo.icon == 0 || appinfo.packageName.equals(BuildConfig.APPLICATION_ID, true)
+        return appinfo.applicationInfo?.icon == 0 || appinfo.packageName.equals(BuildConfig.APPLICATION_ID, true)
     }
 
     private fun hasLaunchIntent(pkgInfo: PackageInfo): Boolean {
-        return packageManager.getLaunchIntentForPackage(pkgInfo.applicationInfo.packageName) != null
+        return packageManager.getLaunchIntentForPackage(pkgInfo.applicationInfo!!.packageName) != null
     }
 
 }
