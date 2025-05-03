@@ -23,15 +23,15 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 34
+    compileSdkVersion 35
     flavorDimensions "analytics"
 
     defaultConfig {
         applicationId "org.groebl.sms"
         minSdkVersion 23
-        targetSdkVersion 33
-        versionCode 3700
-        versionName '3.7.0.0'
+        targetSdkVersion 34
+        versionCode 3701
+        versionName '3.7.0.1'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 

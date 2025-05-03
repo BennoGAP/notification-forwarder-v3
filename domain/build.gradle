@@ -32,7 +32,7 @@ android {
 
     defaultConfig {
         minSdk 23
-        targetSdkVersion 33
+        targetSdkVersion 34
     }
     namespace 'org.groebl.sms.domain'
 }
