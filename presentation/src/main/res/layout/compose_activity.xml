@@ -532,7 +532,7 @@
         android:contentDescription="@string/compose_audio_message_cd"
         android:elevation="4dp"
         android:padding="10dp"
-        android:src="@android:drawable/ic_btn_speak_now"
+        android:src="@drawable/ic_mic_24"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@id/gallery"
         app:layout_constraintEnd_toEndOf="@id/attach"
@@ -660,7 +660,7 @@
         android:background="?android:attr/selectableItemBackgroundBorderless"
         android:contentDescription="@string/compose_record_audio_msg_cd"
         android:padding="8dp"
-        android:src="@android:drawable/ic_btn_speak_now"
+        android:src="@drawable/ic_mic_24"
         app:layout_constraintBottom_toBottomOf="@id/messageBackground"
         app:layout_constraintEnd_toEndOf="parent"
         app:tint="?android:textColorSecondary" />
