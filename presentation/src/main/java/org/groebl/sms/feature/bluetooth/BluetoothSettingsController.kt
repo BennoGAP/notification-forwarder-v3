@@ -445,8 +445,7 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
 
     private fun selectContact() {
         when {
-            Build.VERSION.SDK_INT < 23 -> startActivityForResult(Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI), 2)
-            ContextCompat.checkSelfPermission(activity!!, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED -> ActivityCompat.requestPermissions(activity!!, arrayOf(Manifest.permission.READ_CONTACTS), 0)
+            !BluetoothHelper.hasContactPermission(activity!!) -> BluetoothHelper.requestContactPermission(activity!!)
             else -> startActivityForResult(Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI), 2)
         }
     }
