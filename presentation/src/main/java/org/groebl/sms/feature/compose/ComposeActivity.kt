@@ -725,14 +725,17 @@ class ComposeActivity : QkThemedActivity(), ComposeView, TextToSpeech.OnInitList
         startActivityForResult(Intent.createChooser(intent, null), ComposeView.TakePhotoRequestCode)
     }
 
-    override fun requestGallery(mimeType: String, requestCode: Int) {
-        val intent = Intent(Intent.ACTION_PICK)
-            .putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-            .addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION)
-            .putExtra(Intent.EXTRA_LOCAL_ONLY, false)
-            .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            .setType(mimeType)
-        startActivityForResult(Intent.createChooser(intent, null), requestCode)
+    override fun requestSAFContent(mimeType: String, requestCode: Int) {
+        startActivityForResult(
+            Intent.createChooser(
+                Intent(Intent.ACTION_GET_CONTENT)
+                    .putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+                    .putExtra(Intent.EXTRA_LOCAL_ONLY, false)
+                    .setType(mimeType),
+                resources.getString(R.string.attachmnent_pick_title)
+            ),
+            requestCode
+        )
     }
 
     override fun setDraft(draft: String) {

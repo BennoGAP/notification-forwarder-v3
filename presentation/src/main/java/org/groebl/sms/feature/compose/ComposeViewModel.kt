@@ -50,7 +50,6 @@ import org.groebl.sms.common.util.extensions.makeToast
 import org.groebl.sms.common.widget.MicInputCloudView
 import org.groebl.sms.common.widget.QkContextMenuRecyclerView
 import org.groebl.sms.compat.SubscriptionManagerCompat
-import org.groebl.sms.compat.TelephonyCompat
 import org.groebl.sms.extensions.asObservable
 import org.groebl.sms.extensions.isImage
 import org.groebl.sms.extensions.isSmil
@@ -738,13 +737,13 @@ class ComposeViewModel @Inject constructor(
         view.attachImageFileIntent
             .doOnNext { newState { copy(attaching = false) } }
             .autoDisposable(view.scope())
-            .subscribe { view.requestGallery("image/*", ComposeView.AttachAFileRequestCode) }
+            .subscribe { view.requestSAFContent("image/*", ComposeView.AttachAFileRequestCode) }
 
         // pick any file from any provider apps
         view.attachAnyFileIntent
             .doOnNext { newState { copy(attaching = false) } }
             .autoDisposable(view.scope())
-            .subscribe { view.requestGallery("*/*", ComposeView.AttachAFileRequestCode) }
+            .subscribe { view.requestSAFContent("*/*", ComposeView.AttachAFileRequestCode) }
 
         // Choose a time to schedule the message
         view.scheduleIntent

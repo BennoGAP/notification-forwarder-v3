@@ -102,7 +102,7 @@ interface ComposeView : QkView<ComposeState> {
     fun themeChanged()
     fun showKeyboard()
     fun requestCamera()
-    fun requestGallery(mimeType: String, requestCode: Int)
+    fun requestSAFContent(mimeType: String, requestCode: Int)
     fun requestDatePicker()
     fun requestContact()
     fun setDraft(draft: String)

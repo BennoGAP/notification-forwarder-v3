@@ -167,6 +167,8 @@
   <string name="rate_rate">BEWERTEN</string>
   <string name="rate_donate">SPENDEN</string>
 
+  <string name="attachmnent_pick_title">Datei wählen</string>
+
   <string name="shortcut_compose_long_label">Neue Unterhaltung</string>
   <string name="shortcut_compose_short_label">Verfassen</string>
   <string name="shortcut_compose_disabled_message">Schnellzugriff deaktiviert</string>

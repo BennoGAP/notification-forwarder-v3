@@ -731,6 +731,8 @@
 
     <string name="messages_text_share_file_error">Oops! Something went wrong while sharing</string>
 
+    <string name="attachmnent_pick_title">Select a file to attach</string>
+
 
     <string name="drawer_share">Share</string>
     <string name="settings_gray_title">Gray day mode</string>
