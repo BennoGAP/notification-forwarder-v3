@@ -425,7 +425,7 @@
     <string name="settings_notification_action_2">Button 2</string>
     <string name="settings_notification_action_3">Button 3</string>
     <string name="settings_notification_previews_title">Notification previews</string>
-<string name="settings_notification_previews_summary">Show name and message</string>
+    <string name="settings_notification_previews_summary">Show name and message</string>
     <string name="settings_notification_wake_title">Wake screen</string>
     <string name="settings_notification_silent_title">Silent if not a contact</string>
     <string name="settings_notification_silent_summary">Silences notifications for messages without recipients in your contacts</string>
@@ -451,7 +451,6 @@
         <item>Call</item>
         <item>Mark read</item>
         <item>Mark unread</item>
-        <item>Speak</item>
     </string-array>
     <string name="settings_delivery_title">Delivery confirmations</string>
     <string name="settings_delivery_summary">Confirm that messages were sent successfully</string>
@@ -614,7 +613,6 @@
         <item>Call</item>
         <item>Mark read</item>
         <item>Reply</item>
-        <item>Speak</item>
     </string-array>
 
     <string name="button_yes">Yes</string>
@@ -660,7 +658,6 @@
         <item>Normal</item>
         <item>Large</item>
         <item>Larger</item>
-        <item>Super</item>
     </string-array>
 
     <string-array name="delayed_sending_labels">
