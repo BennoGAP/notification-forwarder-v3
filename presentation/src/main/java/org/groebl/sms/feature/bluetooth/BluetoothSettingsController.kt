@@ -224,6 +224,7 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
         bluetooth_whatsapp_hide_prefix.checkbox.isChecked = state.bluetooth_whatsapp_hide_prefix
         bluetooth_signal_hide_prefix.checkbox.isChecked = state.bluetooth_signal_hide_prefix
         bluetooth_telegram_hide_prefix.checkbox.isChecked = state.bluetooth_telegram_hide_prefix
+        bluetooth_threema_hide_prefix.checkbox.isChecked = state.bluetooth_threema_hide_prefix
         bluetooth_max_vol.checkbox.isChecked = state.bluetooth_max_vol
         bluetooth_tethering.checkbox.isChecked = localBluetoothTethering
         bluetooth_realm_hide_message.checkbox.isChecked = state.bluetooth_realm_hide_message
