@@ -687,8 +687,8 @@ class ComposeActivity : QkThemedActivity(), ComposeView, TextToSpeech.OnInitList
         message.hideKeyboard()
         val serialized = HashMap(chips.associate { chip -> chip.address to chip.contact?.lookupKey })
         val intent = Intent(this, ContactsActivity::class.java)
-            .putExtra(ContactsActivity.SharingKey, sharing)
-            .putExtra(ContactsActivity.ChipsKey, serialized)
+            .putExtra(ContactsActivity.SHARING_KEY, sharing)
+            .putExtra(ContactsActivity.CHIPS_KEY, serialized)
         startActivityForResult(intent, ComposeView.SelectContactRequestCode)
     }
 
@@ -806,7 +806,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView, TextToSpeech.OnInitList
 
         when (requestCode) {
             ComposeView.SelectContactRequestCode -> {
-                chipsSelectedIntent.onNext(data?.getSerializableExtra(ContactsActivity.ChipsKey)
+                chipsSelectedIntent.onNext(data?.getSerializableExtra(ContactsActivity.CHIPS_KEY)
                     ?.let { serializable -> serializable as? HashMap<String, String?> }
                     ?: hashMapOf())
             }

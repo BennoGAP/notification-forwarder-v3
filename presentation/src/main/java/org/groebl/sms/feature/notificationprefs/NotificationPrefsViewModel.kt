@@ -105,9 +105,9 @@ class NotificationPrefsViewModel @Inject constructor(
         super.bindView(view)
 
         view.preferenceClickIntent
-                .autoDisposable(view.scope())
-                .subscribe {
-                    when (it.id) {
+            .autoDisposable(view.scope())
+            .subscribe { preferenceView ->
+                when (preferenceView.id) {
                         R.id.notificationsO -> navigator.showNotificationChannel(threadId)
 
                         R.id.notifications -> notifications.set(!notifications.get())
@@ -120,7 +120,9 @@ class NotificationPrefsViewModel @Inject constructor(
 
                         R.id.vibration -> vibration.set(!vibration.get())
 
-                        R.id.ringtone -> view.showRingtonePicker(ringtone.get().takeIf { it.isNotEmpty() }?.let(Uri::parse))
+                        R.id.ringtone -> view.showRingtonePicker(
+                            ringtone.get().takeIf { it.isNotEmpty() }?.let(Uri::parse)
+                        )
 
                         R.id.action1 -> view.showActionDialog(prefs.notifAction1.get())
 

@@ -18,7 +18,6 @@
  */
 package org.groebl.sms.feature.scheduled
 
-import android.graphics.Typeface
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem

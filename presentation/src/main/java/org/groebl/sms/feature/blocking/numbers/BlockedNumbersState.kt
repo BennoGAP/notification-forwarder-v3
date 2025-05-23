@@ -19,7 +19,6 @@
 package org.groebl.sms.feature.blocking.numbers
 
 import org.groebl.sms.model.BlockedNumber
-import io.realm.RealmList
 import io.realm.RealmResults
 
 data class BlockedNumbersState(

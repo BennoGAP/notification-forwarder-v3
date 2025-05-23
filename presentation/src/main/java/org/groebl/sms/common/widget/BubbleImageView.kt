@@ -28,7 +28,8 @@ import org.groebl.sms.injection.appComponent
 import org.groebl.sms.util.Preferences
 import javax.inject.Inject
 
-class BubbleImageView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : androidx.appcompat.widget.AppCompatImageView(context, attrs) {
+class BubbleImageView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null)
+    : androidx.appcompat.widget.AppCompatImageView(context, attrs) {
 
     @Inject lateinit var prefs: Preferences
 

@@ -22,6 +22,7 @@ import org.groebl.sms.R
 import org.groebl.sms.model.Message
 import org.groebl.sms.util.Preferences
 import java.util.concurrent.TimeUnit
+import kotlin.math.abs
 
 object BubbleUtils {
 
@@ -29,7 +30,7 @@ object BubbleUtils {
 
     fun canGroup(message: Message, other: Message?): Boolean {
         if (other == null) return false
-        val diff = TimeUnit.MILLISECONDS.toMinutes(Math.abs(message.date - other.date))
+        val diff = TimeUnit.MILLISECONDS.toMinutes(abs(message.date - other.date))
         return message.compareSender(other) && diff < TIMESTAMP_THRESHOLD
     }
 

@@ -44,14 +44,14 @@ class RestoreBackupService : Service() {
     companion object {
         private const val NOTIFICATION_ID = -1
 
-        private const val ACTION_START = "org.groebl.sms.ACTION_START"
-        private const val ACTION_STOP = "org.groebl.sms.ACTION_STOP"
-        private const val EXTRA_FILE_URI = "org.groebl.sms.EXTRA_FILE_URI"
+        private const val ACTION_START = "ACTION_START"
+        private const val ACTION_STOP = "ACTION_STOP"
+        private const val EXTRA_FILE_URI = "EXTRA_FILE_URI"
 
         fun start(context: Context, backupFile: Uri) {
             val intent = Intent(context, RestoreBackupService::class.java)
-                .setAction(ACTION_START)
-                .putExtra(EXTRA_FILE_URI, backupFile.toString())
+                .setAction("${context.packageName}.$ACTION_START")
+                .putExtra("${context.packageName}.$EXTRA_FILE_URI", backupFile.toString())
 
             ContextCompat.startForegroundService(context, intent)
         }
@@ -73,41 +73,45 @@ class RestoreBackupService : Service() {
             ACTION_STOP -> stop()
         }
 
-        return Service.START_STICKY
+        return START_STICKY
     }
 
     @SuppressLint("CheckResult")
     private fun start(intent: Intent) {
         val notificationManager = NotificationManagerCompat.from(this)
 
-        if (Build.VERSION.SDK_INT >= 29) startForeground(NOTIFICATION_ID, notification.build(), ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC)
+        if (Build.VERSION.SDK_INT >= 29) startForeground(
+            NOTIFICATION_ID,
+            notification.build(),
+            ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
+        )
         else startForeground(NOTIFICATION_ID, notification.build())
 
         backupRepo.getRestoreProgress()
-                .sample(200, TimeUnit.MILLISECONDS, true)
-                .subscribeOn(Schedulers.io())
-                .subscribe { progress ->
-                    when (progress) {
-                        is BackupRepository.Progress.Idle -> stop()
+            .sample(200, TimeUnit.MILLISECONDS, true)
+            .subscribeOn(Schedulers.io())
+            .subscribe { progress ->
+                when (progress) {
+                    is BackupRepository.Progress.Idle -> stop()
 
-                        is BackupRepository.Progress.Running -> notification
-                                .setProgress(progress.max, progress.count, progress.indeterminate)
-                                .setContentText(progress.getLabel(this))
-                                .let { notificationManager.notify(NOTIFICATION_ID, it.build()) }
+                    is BackupRepository.Progress.Running -> notification
+                        .setProgress(progress.max, progress.count, progress.indeterminate)
+                        .setContentText(progress.getLabel(this))
+                        .let { notificationManager.notify(NOTIFICATION_ID, it.build()) }
 
-                        else -> notification
-                                .setProgress(0, 0, progress.indeterminate)
-                                .setContentText(progress.getLabel(this))
-                                .let { notificationManager.notify(NOTIFICATION_ID, it.build()) }
-                    }
+                    else -> notification
+                        .setProgress(0, 0, progress.indeterminate)
+                        .setContentText(progress.getLabel(this))
+                        .let { notificationManager.notify(NOTIFICATION_ID, it.build()) }
                 }
+            }
 
         // Start the restore
         Observable.just(intent)
-                .map { Uri.parse(it.getStringExtra(EXTRA_FILE_URI)) }
-                .map(backupRepo::performRestore)
-                .subscribeOn(Schedulers.io())
-                .subscribe({}, Timber::w)
+            .map { Uri.parse(it.getStringExtra("${baseContext.packageName}.$EXTRA_FILE_URI")) }
+            .map(backupRepo::performRestore)
+            .subscribeOn(Schedulers.io())
+            .subscribe({}, Timber::w)
     }
 
     private fun stop() {

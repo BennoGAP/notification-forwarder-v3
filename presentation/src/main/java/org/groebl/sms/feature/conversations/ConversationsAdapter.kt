@@ -23,10 +23,8 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
 import androidx.core.text.color
-import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import org.groebl.sms.R
 import org.groebl.sms.common.Navigator

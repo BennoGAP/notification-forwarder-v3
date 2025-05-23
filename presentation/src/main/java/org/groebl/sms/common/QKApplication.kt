@@ -77,9 +77,6 @@ class QKApplication : Application(), HasActivityInjector, HasBroadcastReceiverIn
     override fun onCreate() {
         super.onCreate()
 
-        // set application context for SpeakManager
-        SpeakManager.setContext(this)
-
         // set translated "no messages" string for speakThreads interactor
         SpeakThreads.setNoMessagesString(getString(R.string.speak_no_messages))
 

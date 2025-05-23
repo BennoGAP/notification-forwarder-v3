@@ -29,7 +29,7 @@ import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 
-abstract class QkViewModel<in View : QkView<State>, State>(initialState: State) : ViewModel() {
+abstract class QkViewModel<in View : QkView<State>, State: Any>(initialState: State) : ViewModel() {
 
     protected val disposables = CompositeDisposable()
     protected val state: Subject<State> = BehaviorSubject.createDefault(initialState)

@@ -34,7 +34,6 @@ import org.groebl.sms.common.util.extensions.setVisible
 import org.groebl.sms.extensions.removeAccents
 import org.groebl.sms.model.SearchResult
 import kotlinx.android.synthetic.main.search_list_item.*
-import kotlinx.android.synthetic.main.search_list_item.view.*
 import javax.inject.Inject
 
 class SearchAdapter @Inject constructor(

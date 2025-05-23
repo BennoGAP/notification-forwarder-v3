@@ -21,10 +21,8 @@ package org.groebl.sms.common.util
 import android.content.ComponentName
 import android.content.IntentFilter
 import android.graphics.drawable.Icon
-import android.os.Build
 import android.service.chooser.ChooserTarget
 import android.service.chooser.ChooserTargetService
-import androidx.annotation.RequiresApi
 import androidx.core.os.bundleOf
 import com.bumptech.glide.Glide
 import org.groebl.sms.R

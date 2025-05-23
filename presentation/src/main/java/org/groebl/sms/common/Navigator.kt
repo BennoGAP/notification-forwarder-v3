@@ -48,7 +48,6 @@ import org.groebl.sms.manager.AnalyticsManager
 import org.groebl.sms.manager.NotificationManager
 import org.groebl.sms.manager.PermissionManager
 import org.groebl.sms.model.ScheduledMessage
-import java.io.File
 import javax.inject.Inject
 import javax.inject.Singleton
 

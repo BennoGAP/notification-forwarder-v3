@@ -19,8 +19,6 @@
 package org.groebl.sms.feature.compose.part
 
 import android.content.Context
-import android.view.Gravity
-import android.widget.FrameLayout
 import androidx.core.view.isVisible
 import org.groebl.sms.R
 import org.groebl.sms.common.base.QkViewHolder
@@ -39,6 +37,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.mms_vcard_list_item.*
 import org.groebl.sms.common.util.extensions.getDisplayName
+import org.groebl.sms.util.tryOrNull
 import javax.inject.Inject
 
 class VCardBinder @Inject constructor(colors: Colors, private val context: Context) : PartBinder() {
@@ -60,7 +59,8 @@ class VCardBinder @Inject constructor(colors: Colors, private val context: Conte
 
         holder.containerView.setOnClickListener { clicks.onNext(part.id) }
 
-        Observable.just(part.getUri())
+        tryOrNull(true) {
+            Observable.just(part.getUri())
                 .map(context.contentResolver::openInputStream)
                 .mapNotNull { inputStream -> inputStream.use { Ezvcard.parse(it).first() } }
                 .map { vcard -> vcard.getDisplayName() ?: "" }
@@ -70,6 +70,7 @@ class VCardBinder @Inject constructor(colors: Colors, private val context: Conte
                     holder.name?.text = displayName
                     holder.name.isVisible = displayName.isNotEmpty()
                 }
+        }
 
         if (!message.isMe()) {
             holder.vCardBackground.setBackgroundTint(theme.theme)

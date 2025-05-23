@@ -25,17 +25,16 @@ import androidx.core.content.res.getColorOrThrow
 import org.groebl.sms.R
 import org.groebl.sms.common.util.extensions.getColorCompat
 import org.groebl.sms.model.Recipient
-import org.groebl.sms.util.PhoneNumberUtils
 import org.groebl.sms.util.Preferences
 import io.reactivex.Observable
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.math.absoluteValue
+import kotlin.math.pow
 
 @Singleton
 class Colors @Inject constructor(
     private val context: Context,
-    private val phoneNumberUtils: PhoneNumberUtils,
     private val prefs: Preferences
 ) {
 
@@ -146,7 +145,7 @@ class Colors @Inject constructor(
      */
     private fun measureLuminance(color: Int): Double {
         val array = intArrayOf(Color.red(color), Color.green(color), Color.blue(color))
-                .map { if (it < 0.03928) it / 12.92 else Math.pow((it + 0.055) / 1.055, 2.4) }
+                .map { if (it < 0.03928) it / 12.92 else ((it + 0.055) / 1.055).pow(2.4) }
 
         return 0.2126 * array[0] + 0.7152 * array[1] + 0.0722 * array[2] + 0.05
     }

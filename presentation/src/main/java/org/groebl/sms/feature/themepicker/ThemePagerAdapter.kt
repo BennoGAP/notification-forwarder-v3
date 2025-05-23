@@ -36,7 +36,7 @@ class ThemePagerAdapter @Inject constructor(private val context: Context) : Page
         }
     }
 
-    override fun getPageTitle(position: Int): CharSequence? {
+    override fun getPageTitle(position: Int): CharSequence {
         return when (position) {
             0 -> context.getString(R.string.theme_color)
             1 -> context.getString(R.string.theme_material)

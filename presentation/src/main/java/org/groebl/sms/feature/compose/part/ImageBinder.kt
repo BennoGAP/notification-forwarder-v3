@@ -30,6 +30,7 @@ import org.groebl.sms.extensions.isVideo
 import org.groebl.sms.model.Message
 import org.groebl.sms.model.MmsPart
 import kotlinx.android.synthetic.main.mms_image_preview_list_item.*
+import org.groebl.sms.util.tryOrNull
 import javax.inject.Inject
 
 class ImageBinder @Inject constructor(colors: Colors, private val context: Context) : PartBinder() {
@@ -56,7 +57,9 @@ class ImageBinder @Inject constructor(colors: Colors, private val context: Conte
             else -> BubbleImageView.Style.ONLY
         }
 
-        Glide.with(context).load(part.getUri()).fitCenter().into(holder.thumbnail)
+        tryOrNull(true) {
+            Glide.with(context).load(part.getUri()).fitCenter().into(holder.thumbnail)
+        }
     }
 
 }
