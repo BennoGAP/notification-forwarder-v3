@@ -50,19 +50,19 @@ import org.groebl.sms.receiver.StartActivityFromWidgetReceiver
 abstract class BroadcastReceiverBuilderModule {
 
     @ActivityScope
-    @ContributesAndroidInjector()
+    @ContributesAndroidInjector
     abstract fun bindBlockThreadReceiver(): BlockThreadReceiver
 
     @ActivityScope
-    @ContributesAndroidInjector()
+    @ContributesAndroidInjector
     abstract fun bindBootReceiver(): BootReceiver
 
     @ActivityScope
-    @ContributesAndroidInjector()
+    @ContributesAndroidInjector
     abstract fun bindDefaultSmsChangedReceiver(): DefaultSmsChangedReceiver
 
     @ActivityScope
-    @ContributesAndroidInjector()
+    @ContributesAndroidInjector
     abstract fun bindDeleteMessagesReceiver(): DeleteMessagesReceiver
 
     @ActivityScope
@@ -70,79 +70,79 @@ abstract class BroadcastReceiverBuilderModule {
     abstract fun bindMarkArchivedReceiver(): MarkArchivedReceiver
 
     @ActivityScope
-    @ContributesAndroidInjector()
+    @ContributesAndroidInjector
     abstract fun bindMarkReadReceiver(): MarkReadReceiver
 
     @ActivityScope
-    @ContributesAndroidInjector()
+    @ContributesAndroidInjector
     abstract fun bindSpeakThreadsReceiver(): SpeakThreadsReceiver
 
     @ActivityScope
-    @ContributesAndroidInjector()
+    @ContributesAndroidInjector
     abstract fun bindStartActivityFromWidgetReceiver(): StartActivityFromWidgetReceiver
 
     @ActivityScope
-    @ContributesAndroidInjector()
+    @ContributesAndroidInjector
     abstract fun bindMarkSeenReceiver(): MarkSeenReceiver
 
     @ActivityScope
-    @ContributesAndroidInjector()
+    @ContributesAndroidInjector
     abstract fun bindMmsReceivedReceiver(): MmsReceivedReceiver
 
     @ActivityScope
-    @ContributesAndroidInjector()
+    @ContributesAndroidInjector
     abstract fun bindMmsReceiver(): MmsReceiver
 
     @ActivityScope
-    @ContributesAndroidInjector()
+    @ContributesAndroidInjector
     abstract fun bindMmsSentReceiver(): MmsSentReceiver
 
     @ActivityScope
-    @ContributesAndroidInjector()
+    @ContributesAndroidInjector
     abstract fun bindMmsUpdatedReceiver(): MmsUpdatedReceiver
 
     @ActivityScope
-    @ContributesAndroidInjector()
+    @ContributesAndroidInjector
     abstract fun bindNightModeReceiver(): NightModeReceiver
 
     @ActivityScope
-    @ContributesAndroidInjector()
+    @ContributesAndroidInjector
     abstract fun bindRemoteMessagingReceiver(): RemoteMessagingReceiver
 
     @ActivityScope
-    @ContributesAndroidInjector()
+    @ContributesAndroidInjector
     abstract fun bindSendScheduledMessageReceiver(): SendScheduledMessageReceiver
 
     @ActivityScope
-    @ContributesAndroidInjector()
+    @ContributesAndroidInjector
     abstract fun bindSmsDeliveredReceiver(): SmsDeliveredReceiver
 
     @ActivityScope
-    @ContributesAndroidInjector()
+    @ContributesAndroidInjector
     abstract fun bindSmsProviderChangedReceiver(): SmsProviderChangedReceiver
 
     @ActivityScope
-    @ContributesAndroidInjector()
+    @ContributesAndroidInjector
     abstract fun bindSmsReceiver(): SmsReceiver
 
     @ActivityScope
-    @ContributesAndroidInjector()
+    @ContributesAndroidInjector
     abstract fun bindSmsSentReceiver(): SmsSentReceiver
 
     @ActivityScope
-    @ContributesAndroidInjector()
+    @ContributesAndroidInjector
     abstract fun bindWidgetProvider(): WidgetProvider
 
     @ActivityScope
-    @ContributesAndroidInjector()
+    @ContributesAndroidInjector
     abstract fun bindBluetoothBootReceiver(): BluetoothBootReceiver
 
     @ActivityScope
-    @ContributesAndroidInjector()
+    @ContributesAndroidInjector
     abstract fun bindBluetoothReceiver(): BluetoothReceiver
 
     @ActivityScope
-    @ContributesAndroidInjector()
+    @ContributesAndroidInjector
     abstract fun bindBluetoothNotification(): BluetoothNotificationService
 
 }

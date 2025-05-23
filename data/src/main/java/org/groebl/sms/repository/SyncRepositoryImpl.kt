@@ -217,8 +217,8 @@ class SyncRepositoryImpl @Inject constructor(
 
         // If we don't have a valid type, return null
         val type = when {
-            uri.toString().contains("mms") -> "mms"
-            uri.toString().contains("sms") -> "sms"
+            uri.toString().contains(Message.TYPE_MMS) -> Message.TYPE_MMS
+            uri.toString().contains(Message.TYPE_SMS) -> Message.TYPE_SMS
             else -> return null
         }
 

@@ -28,6 +28,10 @@ import io.realm.annotations.Index
 import io.realm.annotations.PrimaryKey
 
 open class Message : RealmObject() {
+    companion object {
+        const val TYPE_SMS = "sms"
+        const val TYPE_MMS = "mms"
+    }
 
     enum class AttachmentType { TEXT, IMAGE, VIDEO, AUDIO, SLIDESHOW, NOT_LOADED }
 
@@ -74,14 +78,19 @@ open class Message : RealmObject() {
     var textContentType: String = ""
     var parts: RealmList<MmsPart> = RealmList()
 
+    var sendAsGroup: Boolean = false
+
     fun getUri(): Uri {
-        val baseUri = if (isMms()) Mms.CONTENT_URI else Sms.CONTENT_URI
-        return ContentUris.withAppendedId(baseUri, contentId)
+        if (contentId == 0L)
+            return Uri.EMPTY
+        return ContentUris.withAppendedId(
+            if (isMms()) Mms.CONTENT_URI else Sms.CONTENT_URI, contentId
+        )
     }
 
-    fun isMms(): Boolean = type == "mms"
+    fun isMms(): Boolean = type == TYPE_MMS
 
-    fun isSms(): Boolean = type == "sms"
+    fun isSms(): Boolean = type == TYPE_SMS
 
     fun isMe(): Boolean {
         val isIncomingMms = isMms() && (boxId == Mms.MESSAGE_BOX_INBOX || boxId == Mms.MESSAGE_BOX_ALL)
@@ -91,7 +100,7 @@ open class Message : RealmObject() {
     }
 
     fun isOutgoingMessage(): Boolean {
-        val isOutgoingMms = isMms() && boxId == Mms.MESSAGE_BOX_OUTBOX
+        val isOutgoingMms = isMms() && (boxId == Mms.MESSAGE_BOX_OUTBOX)
         val isOutgoingSms = isSms() && (boxId == Sms.MESSAGE_TYPE_FAILED
                 || boxId == Sms.MESSAGE_TYPE_OUTBOX
                 || boxId == Sms.MESSAGE_TYPE_QUEUED)
@@ -99,9 +108,6 @@ open class Message : RealmObject() {
         return isOutgoingMms || isOutgoingSms
     }
 
-    /**
-     * Returns the text that should be copied to the clipboard
-     */
     fun getText(withSubject: Boolean = true): String {
         val messageText = when {
             isSms() -> body
@@ -140,10 +146,10 @@ open class Message : RealmObject() {
             val sb = StringBuilder()
 
             // Add subject
-            getCleansedSubject().takeIf { it.isNotEmpty() }?.run(sb::appendln)
+            getCleansedSubject().takeIf { it.isNotEmpty() }?.run(sb::appendLine)
 
             // Add parts
-            parts.mapNotNull { it.getSummary() }.forEach { summary -> sb.appendln(summary) }
+            parts.mapNotNull { it.getSummary() }.forEach { summary -> sb.appendLine(summary) }
 
             sb.toString().trim()
         }

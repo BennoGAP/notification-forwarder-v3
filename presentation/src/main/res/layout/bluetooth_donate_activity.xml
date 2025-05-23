@@ -36,7 +36,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="64dp"
                     android:src="@drawable/ic_favorite_black_24dp"
-                    android:tint="@android:color/holo_red_light" />
+                    app:tint="@android:color/holo_red_light" />
 
                 <org.groebl.sms.common.widget.QkTextView
                     android:layout_width="match_parent"

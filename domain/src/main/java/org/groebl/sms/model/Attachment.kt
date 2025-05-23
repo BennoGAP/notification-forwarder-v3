@@ -18,7 +18,6 @@
  */
 package org.groebl.sms.model
 
-import android.annotation.SuppressLint
 import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
@@ -36,7 +35,6 @@ import org.groebl.sms.extensions.isImage
 import org.groebl.sms.extensions.isVCard
 
 
-@SuppressLint("Range")
 class Attachment (
     context: Context,
     var uri: Uri = Uri.EMPTY,

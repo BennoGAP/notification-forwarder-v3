@@ -21,7 +21,7 @@ package org.groebl.sms.manager
 interface WidgetManager {
 
     companion object {
-        const val ACTION_NOTIFY_DATASET_CHANGED = "org.groebl.sms.intent.action.ACTION_NOTIFY_DATASET_CHANGED"
+        const val ACTION_NOTIFY_DATASET_CHANGED = "action.ACTION_NOTIFY_DATASET_CHANGED"
     }
 
     fun sendDatasetChanged()

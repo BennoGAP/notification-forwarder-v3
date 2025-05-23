@@ -35,7 +35,7 @@
         android:elevation="8dp"
         android:padding="16dp"
         android:src="@drawable/ic_add_black_24dp"
-        android:tint="@color/white"
+        app:tint="@color/white"
         tools:backgroundTint="@color/tools_theme" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -92,7 +92,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_chevron_right_black_24dp"
-            android:tint="?android:attr/textColorTertiary"
+            app:tint="?android:attr/textColorTertiary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

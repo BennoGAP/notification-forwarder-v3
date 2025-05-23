@@ -43,6 +43,6 @@
         android:background="?android:attr/selectableItemBackground"
         android:padding="12dp"
         android:src="@drawable/ic_close_black_24dp"
-        android:tint="?android:attr/textColorSecondary" />
+        app:tint="?android:attr/textColorSecondary" />
 
 </LinearLayout>

@@ -86,7 +86,7 @@
                 android:background="?android:attr/selectableItemBackgroundBorderless"
                 android:padding="8dp"
                 android:src="@drawable/ic_cancel_black_24dp"
-                android:tint="?android:attr/textColorSecondary"
+                app:tint="?android:attr/textColorSecondary"
                 android:visibility="gone" />
 
         </FrameLayout>

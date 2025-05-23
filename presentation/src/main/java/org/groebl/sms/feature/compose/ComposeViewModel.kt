@@ -545,8 +545,8 @@ class ComposeViewModel @Inject constructor(
                 val menuInfo = it.menuInfo as QkContextMenuRecyclerView.ContextMenuInfo<Long, MmsPart>
                 if (menuInfo.viewHolderValue != null)
                     navigator.shareFile(
-                        MmsPartProvider.getUriForMmsPartId(
-                            menuInfo.viewHolderValue.id,
+                        MmsPartProvider().getUriForMmsPartId(
+                            context, menuInfo.viewHolderValue.id,
                             menuInfo.viewHolderValue.getBestFilename()
                         ),
                         menuInfo.viewHolderValue.type
@@ -571,8 +571,8 @@ class ComposeViewModel @Inject constructor(
                 val menuInfo = it.menuInfo as QkContextMenuRecyclerView.ContextMenuInfo<Long, MmsPart>
                 if (menuInfo.viewHolderValue != null)
                     navigator.viewFile(
-                        MmsPartProvider.getUriForMmsPartId(
-                            menuInfo.viewHolderValue.id,
+                        MmsPartProvider().getUriForMmsPartId(
+                            context, menuInfo.viewHolderValue.id,
                             menuInfo.viewHolderValue.getBestFilename()
                         ),
                         menuInfo.viewHolderValue.type
@@ -612,7 +612,7 @@ class ComposeViewModel @Inject constructor(
                 .autoDisposable(view.scope())
                 .subscribe {
                     navigator.viewFile(
-                        MmsPartProvider.getUriForMmsPartId(it.id, it.getBestFilename()),
+                        MmsPartProvider().getUriForMmsPartId(context, it.id, it.getBestFilename()),
                         it.type
                     )
                 }

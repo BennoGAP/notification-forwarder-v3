@@ -202,7 +202,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="${applicationId}.intent.action.ACTION_NOTIFY_DATASET_CHANGED" />
+                <action android:name="${applicationId}.action.ACTION_NOTIFY_DATASET_CHANGED" />
             </intent-filter>
 
             <meta-data
@@ -214,7 +214,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="${applicationId}.intent.action.ACTION_NOTIFY_DATASET_CHANGED" />
+                <action android:name="${applicationId}.action.ACTION_NOTIFY_DATASET_CHANGED" />
             </intent-filter>
 
             <meta-data

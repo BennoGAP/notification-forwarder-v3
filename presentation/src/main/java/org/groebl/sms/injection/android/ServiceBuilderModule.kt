@@ -30,19 +30,19 @@ import dagger.android.ContributesAndroidInjector
 abstract class ServiceBuilderModule {
 
     @ActivityScope
-    @ContributesAndroidInjector()
+    @ContributesAndroidInjector
     abstract fun bindAutoDeleteService(): AutoDeleteService
 
     @ActivityScope
-    @ContributesAndroidInjector()
+    @ContributesAndroidInjector
     abstract fun bindHeadlessSmsSendService(): HeadlessSmsSendService
 
     @ActivityScope
-    @ContributesAndroidInjector()
+    @ContributesAndroidInjector
     abstract fun bindRestoreBackupService(): RestoreBackupService
 
     @ActivityScope
-    @ContributesAndroidInjector()
+    @ContributesAndroidInjector
     abstract fun bindSendSmsReceiver(): SendSmsReceiver
 
 }

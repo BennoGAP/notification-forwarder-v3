@@ -240,7 +240,7 @@
         android:src="@drawable/ic_cancel_black_24dp"
         app:layout_constraintBottom_toTopOf="@id/scheduledSeparator"
         app:layout_constraintEnd_toEndOf="@id/messageBackground"
-        android:tint="?android:attr/textColorSecondary" />
+        app:tint="?android:attr/textColorSecondary" />
 
     <View
         android:id="@+id/scheduledSeparator"
@@ -299,7 +299,7 @@
         android:contentDescription="@string/compose_sim_cd"
         android:padding="8dp"
         android:src="@drawable/ic_sim_card_black_24dp"
-        android:tint="?android:attr/textColorSecondary"
+        app:tint="?android:attr/textColorSecondary"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/messageBackground"
         app:layout_constraintEnd_toEndOf="@id/messageBackground" />
@@ -430,7 +430,7 @@
         android:elevation="4dp"
         android:padding="10dp"
         android:src="@drawable/ic_person_black_24dp"
-        android:tint="?android:attr/textColorSecondary"
+        app:tint="?android:attr/textColorSecondary"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@id/schedule"
         app:layout_constraintEnd_toEndOf="@id/attach"
@@ -464,7 +464,7 @@
         android:elevation="4dp"
         android:padding="10dp"
         android:src="@drawable/ic_event_black_24dp"
-        android:tint="?android:attr/textColorSecondary"
+        app:tint="?android:attr/textColorSecondary"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@id/attachAFileIcon"
         app:layout_constraintEnd_toEndOf="@id/attach"
@@ -567,7 +567,7 @@
         android:elevation="4dp"
         android:padding="10dp"
         android:src="@drawable/ic_insert_photo_black_24dp"
-        android:tint="?android:attr/textColorSecondary"
+        app:tint="?android:attr/textColorSecondary"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@id/camera"
         app:layout_constraintEnd_toEndOf="@id/attach"
@@ -601,7 +601,7 @@
         android:elevation="4dp"
         android:padding="10dp"
         android:src="@drawable/ic_camera_alt_black_24dp"
-        android:tint="?android:attr/textColorSecondary"
+        app:tint="?android:attr/textColorSecondary"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@id/attach"
         app:layout_constraintEnd_toEndOf="@id/attach"

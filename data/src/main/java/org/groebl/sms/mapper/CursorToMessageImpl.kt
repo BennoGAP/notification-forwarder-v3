@@ -79,8 +79,8 @@ class CursorToMessageImpl @Inject constructor(
         return Message().apply {
             type = when {
                 cursor.getColumnIndex(MmsSms.TYPE_DISCRIMINATOR_COLUMN) != -1 -> cursor.getString(columnsMap.msgType)
-                cursor.getColumnIndex(Mms.SUBJECT) != -1 -> "mms"
-                cursor.getColumnIndex(Sms.ADDRESS) != -1 -> "sms"
+                cursor.getColumnIndex(Mms.SUBJECT) != -1 -> Message.TYPE_MMS
+                cursor.getColumnIndex(Sms.ADDRESS) != -1 -> Message.TYPE_SMS
                 else -> "unknown"
             }
 
@@ -94,7 +94,8 @@ class CursorToMessageImpl @Inject constructor(
             subId = if (columnsMap.subId != -1) cursor.getInt(columnsMap.subId) else -1
 
             when (type) {
-                "sms" -> {
+                Message.TYPE_SMS -> {
+                    type = Message.TYPE_SMS
                     address = cursor.getString(columnsMap.smsAddress) ?: ""
                     boxId = cursor.getInt(columnsMap.smsType)
                     seen = cursor.getInt(columnsMap.smsSeen) != 0
@@ -109,7 +110,8 @@ class CursorToMessageImpl @Inject constructor(
                     isBluetoothMessage = (cursor.getInt(columnsMap.smsErrorCode) == 777) or (cursor.getInt(columnsMap.smsErrorCode) == 778)
                 }
 
-                "mms" -> {
+                Message.TYPE_MMS -> {
+                    type = Message.TYPE_MMS
                     address = getMmsAddress(contentId)
                     boxId = cursor.getInt(columnsMap.mmsMessageBox)
                     date *= 1000L

@@ -40,7 +40,7 @@
                 android:backgroundTint="?android:attr/divider"
                 android:padding="2dp"
                 android:src="@drawable/ic_sim_card_black_24dp"
-                android:tint="?android:attr/textColorSecondary"
+                app:tint="?android:attr/textColorSecondary"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -91,7 +91,7 @@
                 android:backgroundTint="?android:attr/divider"
                 android:padding="2dp"
                 android:src="@drawable/ic_sim_card_black_24dp"
-                android:tint="?android:attr/textColorSecondary"
+                app:tint="?android:attr/textColorSecondary"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -142,7 +142,7 @@
                 android:backgroundTint="?android:attr/divider"
                 android:padding="2dp"
                 android:src="@drawable/ic_sim_card_black_24dp"
-                android:tint="?android:attr/textColorSecondary"
+                app:tint="?android:attr/textColorSecondary"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />

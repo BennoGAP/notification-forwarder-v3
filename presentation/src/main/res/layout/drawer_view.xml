@@ -77,7 +77,7 @@
             <ImageView
                 style="@style/DrawerIcon"
                 android:src="@drawable/ic_import_export_black_24dp"
-                android:tint="?android:attr/textColorSecondary" />
+                app:tint="?android:attr/textColorSecondary" />
 
             <org.groebl.sms.common.widget.QkTextView
                 style="@style/DrawerText"
@@ -92,7 +92,7 @@
             <ImageView
                 style="@style/DrawerIcon"
                 android:src="@drawable/ic_event_black_24dp"
-                android:tint="?android:attr/textColorSecondary" />
+                app:tint="?android:attr/textColorSecondary" />
 
             <org.groebl.sms.common.widget.QkTextView
                 style="@style/DrawerText"
@@ -107,7 +107,7 @@
             <ImageView
                 style="@style/DrawerIcon"
                 android:src="@drawable/ic_block_white_24dp"
-                android:tint="?android:attr/textColorSecondary" />
+                app:tint="?android:attr/textColorSecondary" />
 
             <org.groebl.sms.common.widget.QkTextView
                 style="@style/DrawerText"
@@ -129,7 +129,7 @@
             <ImageView
                 style="@style/DrawerIcon"
                 android:src="@drawable/ic_settings_black_24dp"
-                android:tint="?android:attr/textColorSecondary" />
+                app:tint="?android:attr/textColorSecondary" />
 
             <org.groebl.sms.common.widget.QkTextView
                 style="@style/DrawerText"
@@ -144,7 +144,7 @@
             <ImageView
                 style="@style/DrawerIcon"
                 android:src="@drawable/ic_bluetooth_black_24dp"
-                android:tint="?android:attr/textColorSecondary" />
+                app:tint="?android:attr/textColorSecondary" />
 
             <org.groebl.sms.common.widget.QkTextView
                 style="@style/DrawerText"
@@ -159,7 +159,7 @@
             <ImageView
                 style="@style/DrawerIcon"
                 android:src="@drawable/ic_help_black_24dp"
-                android:tint="?android:attr/textColorSecondary" />
+                app:tint="?android:attr/textColorSecondary" />
 
             <org.groebl.sms.common.widget.QkTextView
                 style="@style/DrawerText"
