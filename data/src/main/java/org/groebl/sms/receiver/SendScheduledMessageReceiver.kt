@@ -24,6 +24,7 @@ import android.content.Intent
 import org.groebl.sms.interactor.SendScheduledMessage
 import org.groebl.sms.repository.MessageRepository
 import dagger.android.AndroidInjection
+import timber.log.Timber
 import javax.inject.Inject
 
 class SendScheduledMessageReceiver : BroadcastReceiver() {
@@ -33,6 +34,8 @@ class SendScheduledMessageReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         AndroidInjection.inject(this, context)
+
+        Timber.v("received")
 
         intent.getLongExtra("id", -1L).takeIf { it >= 0 }?.let { id ->
             val result = goAsync()

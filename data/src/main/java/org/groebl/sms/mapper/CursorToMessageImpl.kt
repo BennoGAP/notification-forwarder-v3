@@ -23,6 +23,7 @@ import android.database.Cursor
 import android.net.Uri
 import android.provider.Telephony.*
 import androidx.core.database.getIntOrNull
+import androidx.core.net.toUri
 import com.google.android.mms.pdu_alt.EncodedStringValue
 import com.google.android.mms.pdu_alt.PduHeaders
 import com.google.android.mms.pdu_alt.PduPersister
@@ -43,7 +44,7 @@ class CursorToMessageImpl @Inject constructor(
     private val preferences: Preferences
 ) : CursorToMessage {
 
-    private val uri = Uri.parse("content://mms-sms/complete-conversations")
+    private val uri = "content://mms-sms/complete-conversations".toUri()
     private val projection = arrayOf(
             MmsSms.TYPE_DISCRIMINATOR_COLUMN,
             MmsSms._ID,
@@ -67,7 +68,7 @@ class CursorToMessageImpl @Inject constructor(
             Mms.MESSAGE_BOX,
             Mms.DELIVERY_REPORT,
             Mms.READ_REPORT,
-            MmsSms.PendingMessages.ERROR_TYPE,
+//            MmsSms.PendingMessages.ERROR_TYPE,
             Mms.STATUS
     )
 
@@ -115,7 +116,7 @@ class CursorToMessageImpl @Inject constructor(
                     dateSent *= 1000L
                     seen = cursor.getInt(columnsMap.mmsSeen) != 0
                     mmsDeliveryStatusString = cursor.getString(columnsMap.mmsDeliveryReport) ?: ""
-                    errorType = if (columnsMap.mmsErrorType != -1) cursor.getInt(columnsMap.mmsErrorType) else 0
+//                    errorType = if (columnsMap.mmsErrorType != -1) cursor.getInt(columnsMap.mmsErrorType) else 0
                     messageSize = 0
                     readReportString = cursor.getString(columnsMap.mmsReadReport) ?: ""
                     messageType = cursor.getInt(columnsMap.mmsMessageType)

@@ -22,6 +22,7 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.media.AudioAttributes
 import android.media.MediaMetadataRetriever
+import android.media.MediaMetadataRetriever.METADATA_KEY_TITLE
 import android.view.View
 import android.widget.SeekBar
 import com.bumptech.glide.Glide
@@ -52,10 +53,6 @@ import javax.inject.Inject
 
 class AudioBinder @Inject constructor(colors: Colors, private val context: Context) :
     PartBinder() {
-
-    companion object {
-        const val DEFAULT_SHARE_FILENAME = "sms-audio-attachment.mp3"
-    }
 
     @Inject lateinit var navigator: Navigator
 
@@ -238,12 +235,13 @@ class AudioBinder @Inject constructor(colors: Colors, private val context: Conte
         }
 
         MediaMetadataRetriever().apply {
+            try {
             if (part.getUri().resourceExists(context))
                 setDataSource(context, part.getUri())
 
             // metadata title
             holder.metadataTitle.apply {
-                text = extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE)
+                text = extractMetadata(METADATA_KEY_TITLE)
 
                 if (text.isEmpty())
                     visibility = View.GONE
@@ -284,8 +282,10 @@ class AudioBinder @Inject constructor(colors: Colors, private val context: Conte
                         .into(this)
                 }
             }
-
-            release()
+            } catch (e: Exception) { /* nothing */ }
+            finally {
+                release()
+            }
         }
     }
 }

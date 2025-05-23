@@ -26,20 +26,19 @@ import com.klinker.android.send_message.BroadcastUtils
 import org.groebl.sms.util.Preferences
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import org.groebl.sms.util.nonDebugPackageName
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Inject
 
-class WidgetManagerImpl @Inject constructor(
-    private val context: Context,
-    private val prefs: Preferences
-    ) : WidgetManager {
+class WidgetManagerImpl @Inject constructor(private val context: Context, prefs: Preferences)
+    : WidgetManager {
 
     companion object {
         private var staticUnreadAtTopPrefsDisposable = AtomicReference<Disposable>(null)
 
         fun sendDatasetChanged(context: Context) {
-            BroadcastUtils.sendExplicitBroadcast(context, Intent(), WidgetManager.ACTION_NOTIFY_DATASET_CHANGED)
+            BroadcastUtils.sendExplicitBroadcast(context, Intent(), "${context.packageName}.${WidgetManager.ACTION_NOTIFY_DATASET_CHANGED}")
         }
     }
 
@@ -61,8 +60,12 @@ class WidgetManagerImpl @Inject constructor(
 
     override fun updateTheme() {
         val ids = AppWidgetManager.getInstance(context)
-            .getAppWidgetIds(ComponentName(context.packageName, "org.groebl.sms.feature.widget.WidgetProvider"))
-
+            .getAppWidgetIds(
+                ComponentName(
+                    context.packageName,
+                    "${nonDebugPackageName(context.packageName)}.feature.widget.WidgetProvider"
+                )
+            )
         val intent = Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
 
         BroadcastUtils.sendExplicitBroadcast(context, intent, AppWidgetManager.ACTION_APPWIDGET_UPDATE)

@@ -158,9 +158,9 @@ public class PushReceiver extends BroadcastReceiver {
                         Timber.e("Received unrecognized PDU.");
                 }
             } catch (MmsException e) {
-                Timber.e(e, "Failed to save the data from PUSH: type=" + type);
+                Timber.e("Failed to save the data from PUSH: type=" + type, e);
             } catch (RuntimeException e) {
-                Timber.e(e, "Unexpected RuntimeException.");
+                Timber.e("Unexpected RuntimeException.", e);
             }
 
             Timber.v("PUSH Intent processed.");
@@ -169,8 +169,10 @@ public class PushReceiver extends BroadcastReceiver {
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
-            pendingResult.finish();
+        public void onPostExecute(Void result) {
+            if (pendingResult != null) {
+                pendingResult.finish();
+            }
         }
     }
 
@@ -188,7 +190,8 @@ public class PushReceiver extends BroadcastReceiver {
         }
     }
 
-    public static String getContentLocation(Context context, Uri uri) throws MmsException {
+    public static String getContentLocation(Context context, Uri uri)
+            throws MmsException {
         Cursor cursor = SqliteWrapper.query(context, context.getContentResolver(),
                 uri, PROJECTION, null, null, null);
 
@@ -228,7 +231,7 @@ public class PushReceiver extends BroadcastReceiver {
         // sb.append(')');
 
         Cursor cursor = SqliteWrapper.query(context, context.getContentResolver(),
-                Mms.CONTENT_URI, new String[]{Mms.THREAD_ID},
+                Mms.CONTENT_URI, new String[] { Mms.THREAD_ID },
                 sb.toString(), null, null);
         if (cursor != null) {
             try {
@@ -245,15 +248,16 @@ public class PushReceiver extends BroadcastReceiver {
         return -1;
     }
 
-    private static boolean isDuplicateNotification(Context context, NotificationInd nInd) {
+    private static boolean isDuplicateNotification(
+            Context context, NotificationInd nInd) {
         byte[] rawLocation = nInd.getContentLocation();
         if (rawLocation != null) {
             String location = new String(rawLocation);
             String selection = Mms.CONTENT_LOCATION + " = ?";
-            String[] selectionArgs = new String[]{location};
+            String[] selectionArgs = new String[] { location };
             Cursor cursor = SqliteWrapper.query(
                     context, context.getContentResolver(),
-                    Mms.CONTENT_URI, new String[]{Mms._ID},
+                    Mms.CONTENT_URI, new String[] { Mms._ID },
                     selection, selectionArgs, null);
             if (cursor != null) {
                 try {

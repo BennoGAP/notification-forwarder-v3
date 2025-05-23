@@ -90,7 +90,7 @@ class QKApplication : Application(), HasActivityInjector, HasBroadcastReceiverIn
         Realm.setDefaultConfiguration(RealmConfiguration.Builder()
                 .compactOnLaunch()
                 .migration(realmMigration)
-                .schemaVersion(QkRealmMigration.SchemaVersion)
+                .schemaVersion(QkRealmMigration.SCHEMA_VERSION)
                 .allowWritesOnUiThread(true)
                 .build())
 

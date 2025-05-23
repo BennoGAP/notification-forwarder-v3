@@ -21,7 +21,6 @@ package org.groebl.sms.manager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import org.groebl.sms.receiver.SendScheduledMessageReceiver
 import javax.inject.Inject
 
