@@ -134,6 +134,7 @@ class ComposeViewModel @Inject constructor(
     private val searchSelection: Subject<Long> = BehaviorSubject.createDefault(-1)
 
     private var shouldShowContacts = threadId == 0L && addresses.isEmpty()
+    private var showScheduledToast = false
 
     private var bluetoothMicManager: BluetoothMicManager? = null
 
@@ -1123,8 +1124,7 @@ class ComposeViewModel @Inject constructor(
                         )
                     ).also {
                         newState { copy(scheduled = 0) }
-                        Handler(Looper.getMainLooper()).postDelayed({ context.makeToast(R.string.compose_scheduled_toast) }, 50)
-                        //context.makeToast(R.string.compose_scheduled_toast)
+                        showScheduledToast = true
                     }
 
                     // sending a group message
@@ -1163,7 +1163,13 @@ class ComposeViewModel @Inject constructor(
                 )
             }
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnNext { view.focusMessage() }
+            .doOnNext {
+                view.focusMessage()
+                if (showScheduledToast) {
+                    context.makeToast(R.string.compose_scheduled_toast)
+                    showScheduledToast = false
+                }
+            }
             .autoDisposable(view.scope())
             .subscribe()
 
