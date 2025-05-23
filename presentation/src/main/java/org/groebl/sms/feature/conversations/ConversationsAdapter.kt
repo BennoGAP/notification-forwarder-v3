@@ -117,9 +117,6 @@ class ConversationsAdapter @Inject constructor(
         holder.title.collapseEnabled = conversation.recipients.size > 1
         holder.title.text = buildSpannedString {
             append(conversation.getTitle())
-            if (conversation.draft.isNotEmpty()) {
-                color(theme) { append(" " + context.getString(R.string.main_draft)) }
-            }
         }
 
         if(conversation.lastMessage?.isBluetoothMessage == true) {
@@ -149,10 +146,10 @@ class ConversationsAdapter @Inject constructor(
         holder.date.text = conversation.date.takeIf { it > 0 }?.let(dateFormatter::getConversationTimestamp)
 
         holder.snippet.text = when {
-            conversation.draft.isNotEmpty() -> conversation.draft.replace(
+            conversation.draft.isNotEmpty() -> context.getString(R.string.main_sender_draft, conversation.draft.replace(
                 Regex("(\r\n|\r|\n)"),
                 " "
-            )
+            ))
                 .replace("  ", " ")
             conversation.me -> context.getString(
                 R.string.main_sender_you,
@@ -160,6 +157,10 @@ class ConversationsAdapter @Inject constructor(
             )
             else -> conversation.snippet?.replace(Regex("(\r\n|\r|\n)"), " ")?.replace("  ", " ")
         }
+
+        // Make the preview in italics if draft
+        if (conversation.draft.isNotEmpty()) holder.snippet.setTypeface(null, Typeface.ITALIC)
+
         holder.pinned.isVisible = conversation.pinned
         holder.unread.setTint(theme)
         holder.separator.isVisible = prefs.separator.get()

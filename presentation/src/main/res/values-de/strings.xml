@@ -204,7 +204,7 @@
   <string name="main_menu_rename_conversation">Unterhaltung umbenennen</string>
   <string name="main_syncing">Synchronisiere Nachrichten&#8230;</string>
   <string name="main_sender_you">Du: %s</string>
-  <string name="main_draft">Entwurf</string>
+  <string name="main_sender_draft">Entwurf: %s</string>
   <string name="main_message_results_title">Ergebnisse in Nachrichten</string>
   <string name="main_message_results">%d Nachrichten</string>
   <string name="inbox_empty_text">Deine Unterhaltungen werden hier angezeigt</string>
