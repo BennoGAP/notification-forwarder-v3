@@ -48,7 +48,6 @@
     <string name="main_menu_block">Tiltás</string>
     <string name="main_syncing">Üzenetek szinkronizálása&#8230;</string>
     <string name="main_sender_you">Te: %s</string>
-    <string name="main_draft">Vázlat</string>
     <string name="main_message_results_title">Eredmények az üzenetek szövegében</string>
     <string name="main_message_results">%d üzenet</string>
     <string name="inbox_empty_text">A beszélgetéseid itt jelennek meg</string>

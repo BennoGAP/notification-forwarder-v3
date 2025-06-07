@@ -48,7 +48,6 @@
     <string name="main_menu_block">Blokker</string>
     <string name="main_syncing">Synkroniserer meldinger&#8230;</string>
     <string name="main_sender_you">Du: %s</string>
-    <string name="main_draft">Draft</string>
     <string name="main_message_results_title">Resultater i meldinger</string>
     <string name="main_message_results">%d meldinger</string>
     <string name="inbox_empty_text">Samtalene dine vises her</string>

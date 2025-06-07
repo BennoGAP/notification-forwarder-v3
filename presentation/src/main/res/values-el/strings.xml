@@ -48,7 +48,6 @@
     <string name="main_menu_block">Φραγή</string>
     <string name="main_syncing">Συγχρονισμός μηνυμάτων&#8230;</string>
     <string name="main_sender_you">Εσείς: %s</string>
-    <string name="main_draft">Πρόχειρο</string>
     <string name="main_message_results_title">Αποτελέσματα στα μηνύματα</string>
     <string name="main_message_results">Μηνύματα: %d</string>
     <string name="inbox_empty_text">Οι συζητήσεις σας θα εμφανίζονται εδώ</string>

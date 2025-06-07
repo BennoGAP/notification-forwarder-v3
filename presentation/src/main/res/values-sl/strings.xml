@@ -48,7 +48,6 @@
     <string name="main_menu_block">Blokiraj</string>
     <string name="main_syncing">Sinhroniziranje sporočil&#8230;</string>
     <string name="main_sender_you">Vi: %s</string>
-    <string name="main_draft">Osnutek</string>
     <string name="main_message_results_title">Rezultati v sporočilih</string>
     <string name="main_message_results">%d sporočil</string>
     <string name="inbox_empty_text">Vaši pogovori se bodo pojavili tukaj</string>

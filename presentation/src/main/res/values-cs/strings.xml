@@ -48,7 +48,6 @@
     <string name="main_menu_block">Blokovat</string>
     <string name="main_syncing">Synchronizace zpráv&#8230;</string>
     <string name="main_sender_you">Vy: %s</string>
-    <string name="main_draft">Koncept</string>
     <string name="main_message_results_title">Výsledky ve zprávách</string>
     <string name="main_message_results">%d zpráv</string>
     <string name="inbox_empty_text">Zde se objeví vaše konverzace</string>

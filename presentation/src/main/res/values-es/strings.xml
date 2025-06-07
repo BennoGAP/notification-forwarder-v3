@@ -48,7 +48,6 @@
     <string name="main_menu_block">Bloquear</string>
     <string name="main_syncing">Sincronización de mensajes...</string>
     <string name="main_sender_you">Tú: %s</string>
-    <string name="main_draft">Borrador</string>
     <string name="main_message_results_title">Resultados en los mensajes</string>
     <string name="main_message_results">%d mensajes</string>
     <string name="inbox_empty_text">Sus conversaciones aparecerán aquí</string>

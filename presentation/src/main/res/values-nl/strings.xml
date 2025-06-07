@@ -48,7 +48,6 @@
     <string name="main_menu_block">Blokkeren</string>
     <string name="main_syncing">Berichten synchroniseren&#8230;</string>
     <string name="main_sender_you">Jij: %s</string>
-    <string name="main_draft">Concept</string>
     <string name="main_message_results_title">Resultaten in berichten</string>
     <string name="main_message_results">%d berichten</string>
     <string name="inbox_empty_text">Je conversaties verschijnen hier</string>

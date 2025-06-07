@@ -48,7 +48,6 @@
     <string name="main_menu_block">ब्लॉक</string>
     <string name="main_syncing">संदेशों को सिंक्रनाइज़ कर रहा है.. ।</string>
     <string name="main_sender_you">आप: %s</string>
-    <string name="main_draft">प्रारूप</string>
     <string name="main_message_results_title">संदेशों में परिणाम</string>
     <string name="main_message_results">%d संदेश</string>
     <string name="inbox_empty_text">आपकी बातचीत यहां दिखाई देगी</string>

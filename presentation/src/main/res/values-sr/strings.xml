@@ -48,7 +48,6 @@
     <string name="main_menu_block">Блокирај</string>
     <string name="main_syncing">Синхронизујем поруке&#8230;</string>
     <string name="main_sender_you">Ја: %s</string>
-    <string name="main_draft">Нацрт</string>
     <string name="main_message_results_title">Пронађено у порукама</string>
     <string name="main_message_results">%d поруке</string>
     <string name="inbox_empty_text">Овде ће се појавити твоји разговори</string>
