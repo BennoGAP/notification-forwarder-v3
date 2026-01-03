@@ -16,8 +16,7 @@
   ~
   ~ You should have received a copy of the GNU General Public License
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
+  --><resources>
     <string name="shortcut_compose_long_label">Uusi keskustelu</string>
     <string name="shortcut_compose_short_label">Kirjoita</string>
     <string name="shortcut_compose_disabled_message">Pikakuvake pois käytöstä</string>
@@ -25,15 +24,15 @@
     <string name="title_settings">Asetukset</string>
     <string name="title_notification_prefs">Ilmoitukset</string>
     <string name="title_theme">Teema</string>
-    <string name="title_conversations">Hae saapuneista&#8230;</string>
+    <string name="title_conversations">Hae saapuneista…</string>
     <string name="title_compose">Kirjoita nimi tai numero</string>
     <string name="setup_skip">Ohita</string>
     <string name="setup_next">Jatka</string>
     <string name="menu_add_person">Lisää henkilö</string>
     <string name="menu_call">Soita</string>
     <string name="menu_info">Lisätiedot</string>
-    <string name="menu_save">Tallenna galleriaan</string>
-    <string name="menu_share">Jaa</string>
+    <string name="menu_mms_part_save">Tallenna galleriaan</string>
+    <string name="compose_menu_share">Jaa</string>
     <string name="main_drawer_open_cd">Avaa navigointilaatikko</string>
     <string name="main_title_selected">%d valittu</string>
     <string name="main_menu_clear">Tyhjennä</string>
@@ -46,7 +45,7 @@
     <string name="main_menu_read">Merkitse luetuksi</string>
     <string name="main_menu_unread">Merkitse lukemattomaksi</string>
     <string name="main_menu_block">Estä</string>
-    <string name="main_syncing">Synkronoidaan viestejä&#8230;</string>
+    <string name="main_syncing">Synkronoidaan viestejä…</string>
     <string name="main_sender_you">Sinä: %s</string>
     <string name="main_message_results_title">Tuloksia viesteissä</string>
     <string name="main_message_results">%d viestiä</string>
@@ -55,12 +54,12 @@
     <string name="archived_empty_text">Arkistoimasi keskustelut näkyvät tässä</string>
     <string name="main_fab_cd">Aloita uusi keskustelu</string>
     <string name="main_default_sms_title">Rakastu tekstaamiseen uudelleen</string>
-    <string name="main_default_sms_message">Tee QKSMS:stä oletusviestintäsovelluksesi</string>
+    <string name="main_default_sms_message">Tee QUIK:stä oletusviestintäsovelluksesi</string>
     <string name="main_default_sms_change">Muuta</string>
     <string name="main_permission_required">Käyttöoikeus tarvitaan</string>
-    <string name="main_permission_sms">QKSMS tarvitsee oikeuden tekstiviestien lähettämiseen ja tarkastelemiseen</string>
-    <string name="main_permission_contacts">QKSMS tarvitsee oikeuden yhteystietojesi tarkatelemiseen</string>
-    <string name="main_permission_notifications">QKSMS needs permission to display notifications</string>
+    <string name="main_permission_sms">QUIK tarvitsee oikeuden tekstiviestien lähettämiseen ja tarkastelemiseen</string>
+    <string name="main_permission_contacts">QUIK tarvitsee oikeuden yhteystietojesi tarkatelemiseen</string>
+    <string name="main_permission_notifications">QUIK needs permission to display notifications</string>
     <string name="main_permission_allow">Salli</string>
     <string name="drawer_inbox">Saapuneet</string>
     <string name="drawer_archived">Arkistoidut</string>
@@ -71,7 +70,7 @@
     <string name="drawer_help">Apu ja palaute</string>
     <string name="drawer_invite">Kutsu kavereita</string>
     <string name="drawer_plus_banner_summary">Avaa mahtavia uusia ominaisuuksia ja tue kehitystä</string>
-    <string name="rate_title">Tykkäätkö QKSMS:tä?</string>
+    <string name="rate_title">Tykkäätkö QUIK:tä?</string>
     <string name="rate_summary">Jaa rakkautta ja arvostele meidät Google Playssä!</string>
     <string name="rate_okay">OKEI!</string>
     <string name="rate_dismiss">HYLKÄÄ</string>
@@ -97,9 +96,9 @@
     <string name="compose_vcard_label">Käyntikortti</string>
     <string name="compose_scheduled_for">Ajoitettu</string>
     <string name="compose_scheduled_future">Valitun ajan täytyy olla tulevaisuudessa!</string>
-    <string name="compose_scheduled_plus">Sinun täytyy avata QKSMS+ ajoittaaksesi viestejä</string>
+    <string name="compose_scheduled_plus">Sinun täytyy avata QUIK+ ajoittaaksesi viestejä</string>
     <string name="compose_scheduled_toast">Lisätty ajoitettuihin viesteihin</string>
-    <string name="compose_hint">Kirjoita viesti&#8230;</string>
+    <string name="compose_hint">Kirjoita viesti…</string>
     <string name="compose_menu_copy">Kopioi teksti</string>
     <string name="compose_menu_forward">Edelleenlähetä</string>
     <string name="compose_menu_delete">Poista</string>
@@ -127,7 +126,7 @@
     <string name="compose_sim_changed_toast">SIM %1$d (%2$s) valittu</string>
     <string name="compose_sim_cd">%s valittu, vaihda SIM-korttia</string>
     <string name="compose_send_cd">Lähetä viesti</string>
-    <string name="message_status_sending">Lähetetään&#8230;</string>
+    <string name="message_status_sending">Lähetetään…</string>
     <string name="message_status_delivered">Toimitettu: %s</string>
     <string name="message_status_failed">Lähettäminen epäonnistui. Yritä uudelleen napauttamalla</string>
     <string name="info_title">Lisätiedot</string>
@@ -145,15 +144,15 @@
     <string name="backup_title">Varmuuskopioi ja palauta</string>
     <string name="backup_backing_up">Viestejä varmuuskopioidaan</string>
     <string name="backup_restoring">Viestejä palautetaan</string>
-    <string name="backup_loading">Ladataan&#8230;</string>
+    <string name="backup_loading">Ladataan…</string>
     <string name="backup_never">Ei koskaan</string>
     <string name="backup_location_title">Backup location</string>
     <string name="backup_location_summary">Set folder</string>
     <string name="backup_restore_title">Palauta</string>
     <string name="backup_restore_summary">Valitse varmuuskopio</string>
-    <string name="backup_restore_error_plus">Ole hyvä ja avaa QKSMS+ käyttääksesi varmuuskopiointia ja palautusta</string>
-    <string name="backup_restore_error_backup">Varmuuskopiointi käynnissä&#8230;</string>
-    <string name="backup_restore_error_restore">Palautus käynnissä&#8230;</string>
+    <string name="backup_restore_error_plus">Ole hyvä ja avaa QUIK+ käyttääksesi varmuuskopiointia ja palautusta</string>
+    <string name="backup_restore_error_backup">Varmuuskopiointi käynnissä…</string>
+    <string name="backup_restore_error_restore">Palautus käynnissä…</string>
     <string name="backup_restore_confirm_title">Palauta varmuuskopiosta</string>
     <string name="backup_restore_stop_title">Pysäytä palautus</string>
     <string name="backup_restore_stop_message">Aiemmin palautetut viestit pysyvät laitteellasi</string>
@@ -167,10 +166,10 @@
     <string name="backup_restore_dialog_empty">Varmuuskopioita ei löytynyt</string>
     <string name="backup_disclaimer">Vain tekstiviestejä voidaan varmuuskopioita ja palauttaa tällä hetkellä. Tuki multimediaviesteille ja varmuuskopiointien ajastus tulevat pian!</string>
     <string name="backup_now">Varmuuskopioi nyt</string>
-    <string name="backup_progress_parsing">Varmuuskopiota jäsennetään&#8230;</string>
-    <string name="backup_progress_running">%1$d/%2$d viestiä</string>
-    <string name="backup_progress_saving">Varmuuskopiota tallennetaan&#8230;</string>
-    <string name="backup_progress_syncing">Synkronoidaan viestejä&#8230;</string>
+    <string name="backup_progress_parsing">Varmuuskopiota jäsennetään…</string>
+    <string name="backup_progress_running">%d/%d viestiä</string>
+    <string name="backup_progress_saving">Varmuuskopiota tallennetaan…</string>
+    <string name="backup_progress_syncing">Synkronoidaan viestejä…</string>
     <string name="backup_progress_finished">Valmis!</string>
     <string name="backup_notification_channel_name">Varmuuskopiointi ja palautus</string>
     <string name="scheduled_title">Ajoitettu</string>
@@ -182,6 +181,11 @@
     <string name="scheduled_empty_message_3_timestamp">Lähetetään joulukuun 23. päivänä</string>
     <string name="scheduled_compose_cd">Ajoita viesti</string>
     <string name="scheduled_options_title">Ajoitettu viesti</string>
+    <string-array name="scheduled_options">
+        <item>Lähetä nyt</item>
+        <item>Kopioi teksti</item>
+        <item>Poista</item>
+    </string-array>
     <string name="settings_category_appearance">Ulkonäkö</string>
     <string name="settings_category_general">Yleiset</string>
     <string name="settings_category_qkreply">QK-vastaus</string>
@@ -247,7 +251,7 @@
     <string name="settings_mms_size_title">Pakkaa multimediaviestien liitteet automaattisesti</string>
     <string name="settings_sync_title">Synkronoi viestit</string>
     <string name="settings_sync_summary">Synkronoi viestisi uudelleen Androidin oman SMS-tietokannan kanssa</string>
-    <string name="settings_about_title">Tietoja QKSMS:tä</string>
+    <string name="settings_about_title">Tietoja QUIK:tä</string>
     <string name="settings_version">Versio %s</string>
     <string name="settings_logging_enabled">Virheenkorjauslokien kirjaaminen käytössä</string>
     <string name="settings_logging_disabled">Virheenkorjauslokien kirjaaminen pois käytöstä</string>
@@ -257,8 +261,7 @@
     <string name="blocking_drop_summary">Pudottaa estettyjen yhteystietojen lähettämät viestit, niiden piilottamisen sijasta</string>
     <string name="blocking_conversations">Estetyt keskustelut</string>
     <string name="blocking_manager_title">Estojen hallinta</string>
-    <string name="blocking_manager_qksms_title">QKSMS</string>
-    <string name="blocking_manager_qksms_summary">QKSMS:ään sisäänrakennettu esto-toiminto</string>
+    <string name="blocking_manager_qksms_summary">QUIK:ään sisäänrakennettu esto-toiminto</string>
     <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist &amp; Schedule</string>
     <string name="blocking_manager_call_control_summary">Suodata puhelusi ja soittosi automaattisesti, yhdessä kätevässä paikassa! Community IQ™ antaa sinun estää haluamattomia viestejä, yhteisölle tutuilta roskapostin lähettäjiltä</string>
     <string name="blocking_manager_sia_summary">Suodata haluamattomien numeroin lähettämät viestit automaattisesti, \"Should I Answer\" -sovellusta käyttämällä</string>
@@ -296,10 +299,10 @@
     <string name="qksms_plus_upgrade">Elinikäinen päivitys hintaan %1$s %2$s</string>
     <!-- Substitutions are for price and currency. Ex: Unlock + donate for $4.99 USD -->
     <string name="qksms_plus_upgrade_donate">Ominaisuuksien avaus + lahjoitus hintaan %1$s %2$s</string>
-    <string name="qksms_plus_thanks_title">Kiitos, kun tuit QKSMS:ää!</string>
-    <string name="qksms_plus_thanks_summary">Olet nyt oikeutettu käyttämään kaikkia QKSMS+ -ominaisuuksia</string>
+    <string name="qksms_plus_thanks_title">Kiitos, kun tuit QUIK:ää!</string>
+    <string name="qksms_plus_thanks_summary">Olet nyt oikeutettu käyttämään kaikkia QUIK+ -ominaisuuksia</string>
     <string name="qksms_plus_error">An error has occurred, please try again</string>
-    <string name="qksms_plus_free_title">QKSMS+ on ilmainen F-Droidin käyttäjille! Jos haluaisit tukea kehitystyötä tulevaisuudessa, arvostaisimme lahjoitustasi todella paljon.</string>
+    <string name="qksms_plus_free_title">QUIK+ on ilmainen F-Droidin käyttäjille! Jos haluaisit tukea kehitystyötä tulevaisuudessa, arvostaisimme lahjoitustasi todella paljon.</string>
     <string name="qksms_plus_donate">Lahjoita PayPalilla</string>
     <string name="qksms_plus_coming_soon">Tulossa pian</string>
     <string name="qksms_plus_themes_title">Premium-teemat</string>
@@ -321,8 +324,8 @@
     <string name="qksms_plus_respond_title">Automaattinen vastaus</string>
     <string name="qksms_plus_respond_summary">Vastaa saapuviin viesteihin automaattisesti, etukäteen luoduilla vastauksilla</string>
     <string name="qksms_plus_more_title">Lisää</string>
-    <string name="qksms_plus_more_summary">QKSMS:ää kehitetään aktiivisesti, ja ostoksesi sisältää kaikki tulevat QKSMS+ -ominaisuudet!</string>
-    <string name="widget_loading">Ladataan&#8230;</string>
+    <string name="qksms_plus_more_summary">QUIK:ää kehitetään aktiivisesti, ja ostoksesi sisältää kaikki tulevat QUIK+ -ominaisuudet!</string>
+    <string name="widget_loading">Ladataan…</string>
     <string name="widget_more">Näytä lisää keskusteluja</string>
     <string name="qkreply_menu_read">Merkitse luetuksi</string>
     <string name="qkreply_menu_call">Soita</string>
@@ -352,7 +355,7 @@
     <string name="button_set">Aseta</string>
     <string name="button_undo">Kumoa</string>
     <string name="toast_copied">Kopioitu</string>
-    <string name="toast_qksms_plus">Sinun pitää avata QKSMS+ käyttääksesi tätä</string>
+    <string name="toast_qksms_plus">Sinun pitää avata QUIK+ käyttääksesi tätä</string>
     <plurals name="notification_new_messages">
         <item quantity="one">Uusi viesti</item>
         <item quantity="other">%s uutta viestiä</item>

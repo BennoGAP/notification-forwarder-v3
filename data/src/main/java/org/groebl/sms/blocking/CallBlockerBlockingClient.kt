@@ -28,7 +28,6 @@ import org.groebl.sms.extensions.map
 import io.reactivex.Completable
 import io.reactivex.Single
 import timber.log.Timber
-import java.util.*
 import javax.inject.Inject
 
 class CallBlockerBlockingClient @Inject constructor(

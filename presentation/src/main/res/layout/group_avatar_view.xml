@@ -39,9 +39,9 @@
         app:layout_constraintWidth_percent=".75">
 
         <org.groebl.sms.common.widget.AvatarView
-        android:id="@+id/avatar2"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+            android:id="@+id/avatar2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
     </FrameLayout>
 

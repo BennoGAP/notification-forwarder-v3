@@ -19,8 +19,8 @@
 package org.groebl.sms.feature.blocking
 
 import android.app.Activity
-import android.app.AlertDialog
 import android.content.Context
+import androidx.appcompat.app.AlertDialog
 import org.groebl.sms.R
 import org.groebl.sms.blocking.BlockingClient
 import org.groebl.sms.interactor.MarkBlocked

@@ -22,6 +22,8 @@ import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bluelinelabs.conductor.RouterTransaction
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
 import org.groebl.sms.R
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.QkChangeHandler
@@ -32,8 +34,6 @@ import org.groebl.sms.feature.blocking.BlockingDialog
 import org.groebl.sms.feature.conversationinfo.injection.ConversationInfoModule
 import org.groebl.sms.feature.themepicker.ThemePickerController
 import org.groebl.sms.injection.appComponent
-import com.uber.autodispose.android.lifecycle.scope
-import com.uber.autodispose.autoDisposable
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
@@ -74,8 +74,6 @@ class ConversationInfoController(
                 override fun getSpanSize(position: Int): Int = if (adapter.getItemViewType(position) == 2) 1 else 3
             }
         }
-        val margin = resources!!.getDimensionPixelSize(R.dimen.conversation_info_padding)
-        recyclerView.setPadding(margin, 0, margin, margin)
 
         themedActivity?.theme
                 ?.autoDisposable(scope())
@@ -104,6 +102,7 @@ class ConversationInfoController(
     override fun nameClicks(): Observable<*> = adapter.nameClicks
     override fun nameChanges(): Observable<String> = nameChangeSubject
     override fun notificationClicks(): Observable<*> = adapter.notificationClicks
+    override fun markUnreadClicks(): Observable<*> = adapter.markUnreadClicks
     override fun archiveClicks(): Observable<*> = adapter.archiveClicks
     override fun blockClicks(): Observable<*> = adapter.blockClicks
     override fun deleteClicks(): Observable<*> = adapter.deleteClicks
@@ -134,5 +133,4 @@ class ConversationInfoController(
                 .setNegativeButton(R.string.button_cancel, null)
                 .show()
     }
-
 }

@@ -28,10 +28,10 @@ import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import dagger.android.AndroidInjection
 import org.groebl.sms.common.util.extensions.getLabel
 import org.groebl.sms.manager.NotificationManager
 import org.groebl.sms.repository.BackupRepository
-import dagger.android.AndroidInjection
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
@@ -69,8 +69,8 @@ class RestoreBackupService : Service() {
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
         when (intent.action) {
-            ACTION_START -> start(intent)
-            ACTION_STOP -> stop()
+            "${baseContext.packageName}.${ACTION_START}" -> start(intent)
+            "${baseContext.packageName}.${ACTION_STOP}" -> stop()
         }
 
         return START_STICKY

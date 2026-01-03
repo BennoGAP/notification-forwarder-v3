@@ -18,7 +18,6 @@
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="48dp"
@@ -44,6 +43,6 @@
         android:background="?android:attr/selectableItemBackground"
         android:padding="12dp"
         android:src="@drawable/ic_close_black_24dp"
-        app:tint="?android:attr/textColorSecondary" />
+        android:tint="?android:attr/textColorSecondary" />
 
 </LinearLayout>

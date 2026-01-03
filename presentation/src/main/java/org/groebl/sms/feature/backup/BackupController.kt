@@ -68,40 +68,40 @@ class BackupController : QkController<BackupView, BackupState, BackupPresenter>(
 
     private val stopRestoreDialog by lazy {
         AlertDialog.Builder(activity!!)
-            .setTitle(R.string.backup_restore_stop_title)
-            .setMessage(R.string.backup_restore_stop_message)
-            .setPositiveButton(R.string.button_stop, stopRestoreConfirmSubject)
-            .setNegativeButton(R.string.button_cancel, stopRestoreCancelSubject)
-            .setCancelable(false)
-            .create()
+                .setTitle(R.string.backup_restore_stop_title)
+                .setMessage(R.string.backup_restore_stop_message)
+                .setPositiveButton(R.string.button_stop, stopRestoreConfirmSubject)
+                .setNegativeButton(R.string.button_cancel, stopRestoreCancelSubject)
+                .setCancelable(false)
+                .create()
     }
 
     private val selectLocationRationaleDialog by lazy {
         AlertDialog.Builder(activity!!)
-            .setTitle(R.string.backup_select_location_rationale_title)
-            .setMessage(R.string.backup_select_location_rationale_message)
-            .setPositiveButton(R.string.button_continue, selectFolderConfirmSubject)
-            .setNegativeButton(R.string.button_cancel, selectFolderCancelSubject)
-            .setCancelable(false)
-            .create()
+                .setTitle(R.string.backup_select_location_rationale_title)
+                .setMessage(R.string.backup_select_location_rationale_message)
+                .setPositiveButton(R.string.button_continue, selectFolderConfirmSubject)
+                .setNegativeButton(R.string.button_cancel, selectFolderCancelSubject)
+                .setCancelable(false)
+                .create()
     }
 
     private val selectedBackupErrorDialog by lazy {
         AlertDialog.Builder(activity!!)
-            .setTitle(R.string.backup_selected_backup_error_title)
-            .setMessage(R.string.backup_selected_backup_error_message)
-            .setPositiveButton(R.string.button_continue, restoreErrorConfirmSubject)
-            .setCancelable(false)
-            .create()
+                .setTitle(R.string.backup_selected_backup_error_title)
+                .setMessage(R.string.backup_selected_backup_error_message)
+                .setPositiveButton(R.string.button_continue, restoreErrorConfirmSubject)
+                .setCancelable(false)
+                .create()
     }
 
     private val selectedBackupDetailsDialog by lazy {
         AlertDialog.Builder(activity!!)
-            .setTitle(R.string.backup_selected_backup_details_title)
-            .setPositiveButton(R.string.backup_restore_title, confirmRestoreConfirmSubject)
-            .setNegativeButton(R.string.button_cancel, confirmRestoreCancelSubject)
-            .setCancelable(false)
-            .create()
+                .setTitle(R.string.backup_selected_backup_details_title)
+                .setPositiveButton(R.string.backup_restore_title, confirmRestoreConfirmSubject)
+                .setNegativeButton(R.string.button_cancel, confirmRestoreCancelSubject)
+                .setCancelable(false)
+                .create()
     }
 
     private lateinit var openDirectory: ActivityResultLauncher<Uri?>
@@ -159,7 +159,8 @@ class BackupController : QkController<BackupView, BackupState, BackupPresenter>(
                 progressSummary.isVisible = progressSummary.text.isNotEmpty()
                 progressCancel.isVisible = false
                 val running = (state.backupProgress as? BackupRepository.Progress.Running)
-                progressBar.isVisible = state.backupProgress.indeterminate || (running?.max ?: 0) > 0
+                progressBar.isVisible =
+                    state.backupProgress.indeterminate || (running?.max ?: 0) > 0
                 progressBar.isIndeterminate = state.backupProgress.indeterminate
                 progressBar.max = running?.max ?: 0
                 progressBar.progress = running?.count ?: 0
@@ -174,7 +175,8 @@ class BackupController : QkController<BackupView, BackupState, BackupPresenter>(
                 progressSummary.isVisible = progressSummary.text.isNotEmpty()
                 progressCancel.isVisible = true
                 val running = (state.restoreProgress as? BackupRepository.Progress.Running)
-                progressBar.isVisible = state.restoreProgress.indeterminate || (running?.max ?: 0) > 0
+                progressBar.isVisible =
+                    state.restoreProgress.indeterminate || (running?.max ?: 0) > 0
                 progressBar.isIndeterminate = state.restoreProgress.indeterminate
                 progressBar.max = running?.max ?: 0
                 progressBar.progress = running?.count ?: 0

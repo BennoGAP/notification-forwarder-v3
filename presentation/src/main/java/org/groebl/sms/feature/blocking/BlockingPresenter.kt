@@ -19,12 +19,12 @@
 package org.groebl.sms.feature.blocking
 
 import android.content.Context
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
 import org.groebl.sms.R
 import org.groebl.sms.blocking.BlockingClient
 import org.groebl.sms.common.base.QkPresenter
 import org.groebl.sms.util.Preferences
-import com.uber.autodispose.android.lifecycle.scope
-import com.uber.autodispose.autoDisposable
 import io.reactivex.rxkotlin.plusAssign
 import javax.inject.Inject
 
@@ -69,16 +69,9 @@ class BlockingPresenter @Inject constructor(
                     }
                 }
 
-        view.blockedRegexpsIntent
-            .autoDisposable(view.scope())
-            .subscribe {
-                if (prefs.blockingManager.get() == Preferences.BLOCKING_MANAGER_QKSMS) {
-                    // TODO: This is a hack, get rid of it once we implement AndroidX navigation
-                    view.openBlockedRegexps()
-                } else {
-                    // blockingClient.openSettings()
-                }
-            }
+        view.messageContentFiltersIntent
+                .autoDisposable(view.scope())
+                .subscribe { view.openMessageContentFilters() }
 
         view.blockedMessagesIntent
                 .autoDisposable(view.scope())

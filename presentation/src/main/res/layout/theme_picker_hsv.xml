@@ -92,51 +92,33 @@
         android:id="@+id/applyGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="clear, apply" />
-    <!--
-        <View
-            android:id="@+id/applyDivider"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="?android:attr/divider"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toTopOf="@id/clear" />-->
-    <!--
-        <ImageView
-            android:id="@+id/clear"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:background="?attr/selectableItemBackground"
-            android:padding="16dp"
-            android:src="@drawable/ic_cancel_black_24dp"
-            android:tint="?android:attr/textColorSecondary"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-    -->
-    <org.groebl.sms.common.widget.QkTextView
+        app:constraint_referenced_ids="applyDivider, clear, apply" />
+
+    <View
+        android:id="@+id/applyDivider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/divider"
+        app:layout_constraintBottom_toTopOf="@id/clear" />
+
+    <ImageView
         android:id="@+id/clear"
-        style="@style/TextButton"
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginBottom="8dp"
-        android:background="@drawable/rounded_rectangle_6dp"
-        android:elevation="2dp"
-        android:text="@string/button_cancel"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:background="?attr/selectableItemBackground"
+        android:padding="16dp"
+        android:src="@drawable/ic_cancel_black_24dp"
+        app:tint="?android:attr/textColorSecondary"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:backgroundTint="@color/tools_theme"
-        tools:textColor="@color/textPrimaryDark" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <org.groebl.sms.common.widget.QkTextView
         android:id="@+id/apply"
         style="@style/TextButton"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:layout_marginEnd="24dp"
-        android:background="@drawable/rounded_rectangle_6dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/rounded_rectangle_2dp"
         android:elevation="2dp"
         android:text="@string/theme_apply"
         app:layout_constraintBottom_toBottomOf="@id/clear"

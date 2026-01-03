@@ -22,12 +22,10 @@ import android.os.Bundle
 import com.bluelinelabs.conductor.Conductor
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
+import dagger.android.AndroidInjection
 import org.groebl.sms.R
 import org.groebl.sms.common.base.QkThemedActivity
-import org.groebl.sms.common.util.extensions.resolveThemeColor
-import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.container_activity.*
-import kotlinx.android.synthetic.main.container_activity.toolbar
 
 class SettingsActivity : QkThemedActivity() {
 
@@ -37,8 +35,6 @@ class SettingsActivity : QkThemedActivity() {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.container_activity)
-
-        toolbar.navigationIcon?.setTint(resolveThemeColor(android.R.attr.textColorSecondary))
 
         router = Conductor.attachRouter(this, container, savedInstanceState)
         if (!router.hasRootController()) {

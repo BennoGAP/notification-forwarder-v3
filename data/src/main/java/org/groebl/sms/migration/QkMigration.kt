@@ -19,12 +19,12 @@
 package org.groebl.sms.migration
 
 import android.content.Context
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import org.groebl.sms.blocking.QksmsBlockingClient
 import org.groebl.sms.common.util.extensions.versionCode
 import org.groebl.sms.repository.ConversationRepository
 import org.groebl.sms.util.Preferences
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class QkMigration @Inject constructor(

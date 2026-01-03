@@ -23,7 +23,6 @@ import com.f2prateek.rx.preferences2.RxSharedPreferences
 import org.groebl.sms.util.NightModeManager
 import org.groebl.sms.util.Preferences
 import io.reactivex.Flowable
-import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -32,9 +31,9 @@ import javax.inject.Inject
  * Blocked conversations will be migrated in SyncManager
  */
 class MigratePreferences @Inject constructor(
-        private val nightModeManager: NightModeManager,
-        private val prefs: Preferences,
-        private val rxPrefs: RxSharedPreferences
+    private val nightModeManager: NightModeManager,
+    private val prefs: Preferences,
+    private val rxPrefs: RxSharedPreferences
 ) : Interactor<Unit>() {
 
     override fun buildObservable(params: Unit): Flowable<*> {
@@ -52,10 +51,7 @@ class MigratePreferences @Inject constructor(
                     when {
                         autoNight -> nightModeManager.updateNightMode(Preferences.NIGHT_MODE_AUTO)
                         background == "light" -> nightModeManager.updateNightMode(Preferences.NIGHT_MODE_OFF)
-                        background == "grey" -> {
-                            nightModeManager.updateNightMode(Preferences.NIGHT_MODE_OFF)
-                            prefs.gray.set(true)
-                        }
+                        background == "grey" -> nightModeManager.updateNightMode(Preferences.NIGHT_MODE_ON)
                         background == "black" -> {
                             nightModeManager.updateNightMode(Preferences.NIGHT_MODE_ON)
                             prefs.black.set(true)
@@ -100,7 +96,7 @@ class MigratePreferences @Inject constructor(
                         }
                         prefs.bluetooth_devices.set(macAddress)
                     } catch (e: Exception) {
-                        Timber.e(e)
+                        
                     }
 
                     rxPrefs.getBoolean("pref_key_bluetooth_enabled").delete()
@@ -118,7 +114,6 @@ class MigratePreferences @Inject constructor(
                     rxPrefs.getStringSet("pref_key_bluetooth_apps").delete()
                     rxPrefs.getStringSet("pref_key_bluetooth_devices").delete()
                     rxPrefs.getStringSet("pref_key_block_whatsapp").delete()
-
                 }
                 .doOnNext { seen -> seen.delete() } // Clear this value so that we don't need to migrate again
     }

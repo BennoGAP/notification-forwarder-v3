@@ -19,6 +19,6 @@
 package org.groebl.sms.model
 
 data class BackupFile(
-        val date: Long,
-        val messages: Int
+    val date: Long,
+    val messages: Int
 )

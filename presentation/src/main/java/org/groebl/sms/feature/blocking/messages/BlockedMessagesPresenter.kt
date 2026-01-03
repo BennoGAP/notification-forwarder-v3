@@ -18,15 +18,14 @@
  */
 package org.groebl.sms.feature.blocking.messages
 
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
 import org.groebl.sms.R
 import org.groebl.sms.blocking.BlockingClient
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.base.QkPresenter
 import org.groebl.sms.interactor.DeleteConversations
 import org.groebl.sms.repository.ConversationRepository
-import com.uber.autodispose.android.lifecycle.scope
-import com.uber.autodispose.autoDisposable
-import io.reactivex.rxkotlin.withLatestFrom
 import javax.inject.Inject
 
 class BlockedMessagesPresenter @Inject constructor(

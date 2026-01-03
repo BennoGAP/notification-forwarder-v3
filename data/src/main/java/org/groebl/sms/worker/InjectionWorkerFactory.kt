@@ -23,15 +23,35 @@ import androidx.work.ListenableWorker
 import androidx.work.Worker
 import androidx.work.WorkerFactory
 import androidx.work.WorkerParameters
-import org.groebl.sms.interactor.ReceiveSms
+import org.groebl.sms.blocking.BlockingClient
+import org.groebl.sms.interactor.UpdateBadge
+import org.groebl.sms.manager.ActiveConversationManager
+import org.groebl.sms.manager.NotificationManager
+import org.groebl.sms.manager.ShortcutManager
+import org.groebl.sms.repository.ContactRepository
+import org.groebl.sms.repository.ConversationRepository
+import org.groebl.sms.repository.MessageContentFilterRepository
+import org.groebl.sms.repository.MessageRepository
 import org.groebl.sms.repository.ScheduledMessageRepository
+import org.groebl.sms.repository.SyncRepository
+import org.groebl.sms.util.Preferences
 import javax.inject.Inject
 
 class InjectionWorkerFactory @Inject constructor(
-    private val receiveSms: ReceiveSms,
-    private val scheduledMessageRepository: ScheduledMessageRepository
-)
-: WorkerFactory() {
+    private val conversationRepo: ConversationRepository,
+    private val blockingClient: BlockingClient,
+    private val prefs: Preferences,
+    private val messageRepo: MessageRepository,
+    private val updateBadge: UpdateBadge,
+    private val shortcutManager: ShortcutManager,
+    private val scheduledMessageRepository: ScheduledMessageRepository,
+    private val notificationManager: NotificationManager,
+    private val activeConversationManager: ActiveConversationManager,
+    private val syncRepo: SyncRepository,
+	private val filterRepo: MessageContentFilterRepository,
+    private val contactRepo: ContactRepository,
+
+) : WorkerFactory() {
     override fun createWorker(
         appContext: Context,
         workerClassName: String,
@@ -44,11 +64,31 @@ class InjectionWorkerFactory @Inject constructor(
             .newInstance(appContext, workerParameters)
 
         when (instance) {
-            is HousekeepingWorker -> {
+            is HousekeepingWorker ->
                 instance.scheduledMessageRepository = scheduledMessageRepository
-            }
             is ReceiveSmsWorker -> {
-                instance.receiveSms = receiveSms
+                instance.conversationRepo  = conversationRepo
+                instance.blockingClient = blockingClient
+                instance.prefs = prefs
+                instance.messageRepo = messageRepo
+                instance.shortcutManager = shortcutManager
+                instance.notificationManager = notificationManager
+                instance.updateBadge =  updateBadge
+				instance.filterRepo = filterRepo
+                instance.contactsRepo = contactRepo
+            }
+            is ReceiveMmsWorker -> {
+                instance.syncRepo = syncRepo
+                instance.activeConversationManager = activeConversationManager
+                instance.conversationRepo = conversationRepo
+                instance.blockingClient = blockingClient
+                instance.prefs = prefs
+                instance.messageRepo = messageRepo
+                instance.shortcutManager = shortcutManager
+                instance.notificationManager = notificationManager
+                instance.updateBadge = updateBadge
+				instance.filterRepo = filterRepo
+                instance.contactsRepo = contactRepo
             }
         }
 

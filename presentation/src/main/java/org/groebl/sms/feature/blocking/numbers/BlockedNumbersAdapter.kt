@@ -22,31 +22,30 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import org.groebl.sms.R
 import org.groebl.sms.common.base.QkRealmAdapter
-import org.groebl.sms.common.base.QkViewHolder
+import org.groebl.sms.common.base.QkBindingViewHolder
 import org.groebl.sms.model.BlockedNumber
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
-import kotlinx.android.synthetic.main.blocked_number_list_item.*
-import kotlinx.android.synthetic.main.blocked_number_list_item.view.*
+import org.groebl.sms.databinding.BlockedNumberListItemBinding
 
-class BlockedNumbersAdapter : QkRealmAdapter<BlockedNumber>() {
+class BlockedNumbersAdapter : QkRealmAdapter<BlockedNumber, QkBindingViewHolder<BlockedNumberListItemBinding>>() {
 
     val unblockAddress: Subject<Long> = PublishSubject.create()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QkViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.blocked_number_list_item, parent, false)
-        return QkViewHolder(view).apply {
-            containerView.unblock.setOnClickListener {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QkBindingViewHolder<BlockedNumberListItemBinding> {
+        val binding = BlockedNumberListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return QkBindingViewHolder(binding).apply {
+            binding.unblock.setOnClickListener {
                 val number = getItem(adapterPosition) ?: return@setOnClickListener
                 unblockAddress.onNext(number.id)
             }
         }
     }
 
-    override fun onBindViewHolder(holder: QkViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: QkBindingViewHolder<BlockedNumberListItemBinding>, position: Int) {
         val item = getItem(position)!!
 
-        holder.number.text = item.address
+        holder.binding.number.text = item.address
     }
 
 }

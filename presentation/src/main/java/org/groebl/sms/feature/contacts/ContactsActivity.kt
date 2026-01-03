@@ -20,19 +20,19 @@ package org.groebl.sms.feature.contacts
 
 import android.app.Activity
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProviders
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.widget.editorActions
 import com.jakewharton.rxbinding2.widget.textChanges
+import dagger.android.AndroidInjection
 import org.groebl.sms.R
+import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.ViewModelFactory
 import org.groebl.sms.common.base.QkThemedActivity
 import org.groebl.sms.common.util.extensions.hideKeyboard
-import org.groebl.sms.common.util.extensions.resolveThemeColor
-import org.groebl.sms.common.util.extensions.setBackgroundTint
 import org.groebl.sms.common.util.extensions.showKeyboard
 import org.groebl.sms.common.widget.QkDialog
 import org.groebl.sms.extensions.Optional
@@ -40,7 +40,6 @@ import org.groebl.sms.feature.compose.editing.ComposeItem
 import org.groebl.sms.feature.compose.editing.ComposeItemAdapter
 import org.groebl.sms.feature.compose.editing.PhoneNumberAction
 import org.groebl.sms.feature.compose.editing.PhoneNumberPickerAdapter
-import dagger.android.AndroidInjection
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
@@ -57,6 +56,7 @@ class ContactsActivity : QkThemedActivity(), ContactsContract {
     @Inject lateinit var contactsAdapter: ComposeItemAdapter
     @Inject lateinit var phoneNumberAdapter: PhoneNumberPickerAdapter
     @Inject lateinit var viewModelFactory: ViewModelFactory
+    @Inject lateinit var navigator: Navigator
 
     override val queryChangedIntent: Observable<CharSequence> by lazy { search.textChanges() }
     override val queryClearedIntent: Observable<*> by lazy { cancel.clicks() }
@@ -89,10 +89,12 @@ class ContactsActivity : QkThemedActivity(), ContactsContract {
 
         contacts.adapter = contactsAdapter
 
-        // These theme attributes don't apply themselves on API 21
-        if (Build.VERSION.SDK_INT <= 22) {
-            search.setBackgroundTint(resolveThemeColor(R.attr.bubbleColor))
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                navigator.showMainActivity()
+            }
         }
+        onBackPressedDispatcher.addCallback(this, callback)
     }
 
     override fun render(state: ContactsState) {

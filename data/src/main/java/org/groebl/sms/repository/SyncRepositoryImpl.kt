@@ -18,27 +18,41 @@
  */
 package org.groebl.sms.repository
 
-import android.Manifest
 import android.content.ContentResolver
 import android.content.ContentUris
-import android.content.Context
-import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Handler
+import android.os.HandlerThread
 import android.provider.Telephony
 import com.f2prateek.rx.preferences2.RxSharedPreferences
+import org.groebl.sms.extensions.forEach
+import org.groebl.sms.extensions.insertOrUpdate
+import org.groebl.sms.extensions.map
+import org.groebl.sms.manager.KeyManager
+import org.groebl.sms.mapper.CursorToContact
+import org.groebl.sms.mapper.CursorToContactGroup
+import org.groebl.sms.mapper.CursorToContactGroupMember
+import org.groebl.sms.mapper.CursorToConversation
+import org.groebl.sms.mapper.CursorToMessage
+import org.groebl.sms.mapper.CursorToPart
+import org.groebl.sms.mapper.CursorToRecipient
+import org.groebl.sms.model.Contact
+import org.groebl.sms.model.ContactGroup
+import org.groebl.sms.model.Conversation
+import org.groebl.sms.model.EmojiReaction
+import org.groebl.sms.model.Message
+import org.groebl.sms.model.MmsPart
+import org.groebl.sms.model.PhoneNumber
+import org.groebl.sms.model.Recipient
+import org.groebl.sms.model.SyncLog
+import org.groebl.sms.util.PhoneNumberUtils
+import org.groebl.sms.util.tryOrNull
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
 import io.realm.Realm
 import io.realm.RealmList
 import io.realm.Sort
-import org.groebl.sms.extensions.forEach
-import org.groebl.sms.extensions.insertOrUpdate
-import org.groebl.sms.extensions.map
-import org.groebl.sms.manager.KeyManager
-import org.groebl.sms.mapper.*
-import org.groebl.sms.model.*
-import org.groebl.sms.util.PhoneNumberUtils
-import org.groebl.sms.util.tryOrNull
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -56,164 +70,194 @@ class SyncRepositoryImpl @Inject constructor(
     private val keys: KeyManager,
     private val phoneNumberUtils: PhoneNumberUtils,
     private val rxPrefs: RxSharedPreferences,
-    private val context: Context
+    private val reactions: EmojiReactionRepository,
 ) : SyncRepository {
 
     override val syncProgress: Subject<SyncRepository.SyncProgress> =
             BehaviorSubject.createDefault(SyncRepository.SyncProgress.Idle)
 
     override fun syncMessages() {
-        if (context.checkSelfPermission(Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) { return; }
+
+        val oldBlockedSenders = rxPrefs.getStringSet("pref_key_blocked_senders")
 
         // If the sync is already running, don't try to do another one
         if (syncProgress.blockingFirst() is SyncRepository.SyncProgress.Running) return
         syncProgress.onNext(SyncRepository.SyncProgress.Running(0, 0, true))
 
-        val realm = Realm.getDefaultInstance()
-        realm.beginTransaction()
+        val handlerThread = HandlerThread("RealmSyncThread")
+        handlerThread.start()
+        Handler(handlerThread.looper).post {
+            Realm.getDefaultInstance().executeTransactionAsync(
+                { realm ->
+                // Prepare existing conversation data
+                val persistedData = realm.copyFromRealm(
+                    realm.where(Conversation::class.java)
+                        .beginGroup()
+                        .equalTo("archived", true)
+                        .or()
+                        .equalTo("blocked", true)
+                        .or()
+                        .equalTo("pinned", true)
+                        .or()
+                        .isNotEmpty("name")
+                        .or()
+                        .isNotNull("blockingClient")
+                        .or()
+                        .isNotEmpty("blockReason")
+                        .endGroup()
+                        .findAll()
+                ).associateBy { conversation -> conversation.id }.toMutableMap()
 
-        val persistedData = realm.copyFromRealm(realm.where(Conversation::class.java)
-                .beginGroup()
-                .equalTo("archived", true)
-                .or()
-                .equalTo("blocked", true)
-                .or()
-                .equalTo("pinned", true)
-                .or()
-                .isNotEmpty("name")
-                .or()
-                .isNotNull("blockingClient")
-                .or()
-                .isNotEmpty("blockReason")
-                .endGroup()
-                .findAll())
-                .associateBy { conversation -> conversation.id }
-                .toMutableMap()
+                removeOldMessages(realm)
 
-        realm.delete(Contact::class.java)
-        realm.delete(ContactGroup::class.java)
-        realm.delete(Conversation::class.java)
-        realm.delete(Message::class.java)
-        realm.delete(MmsPart::class.java)
-        realm.delete(Recipient::class.java)
+                keys.reset()
 
-        keys.reset()
+                val partsCursor = cursorToPart.getPartsCursor()
+                val messageCursor = cursorToMessage.getMessagesCursor()
+                val conversationCursor = cursorToConversation.getConversationsCursor()
+                val recipientCursor = cursorToRecipient.getRecipientCursor()
 
-        val partsCursor = cursorToPart.getPartsCursor()
-        val messageCursor = cursorToMessage.getMessagesCursor()
-        val conversationCursor = cursorToConversation.getConversationsCursor()
-        val recipientCursor = cursorToRecipient.getRecipientCursor()
+                val max = (partsCursor?.count ?: 0) +
+                        (messageCursor?.count ?: 0) +
+                        (conversationCursor?.count ?: 0) +
+                        (recipientCursor?.count ?: 0)
 
-        val max = (partsCursor?.count ?: 0) +
-                (messageCursor?.count ?: 0) +
-                (conversationCursor?.count ?: 0) +
-                (recipientCursor?.count ?: 0)
+                var progress = 0
 
-        var progress = 0
-
-        // Sync message parts
-        partsCursor?.use {
-            partsCursor.forEach {
-                tryOrNull {
-                    progress++
-                    val part = cursorToPart.map(partsCursor)
-                    realm.insertOrUpdate(part)
+                // Sync message parts
+                partsCursor?.use {
+                    partsCursor.forEach { cursor ->
+                        tryOrNull {
+                            val part = cursorToPart.map(partsCursor)
+                            realm.insertOrUpdate(part)
+                            progress++
+                        }
+                    }
                 }
-            }
-        }
 
-        // Sync messages
-        messageCursor?.use {
-            val messageColumns = CursorToMessage.MessageColumns(messageCursor)
-            messageCursor.forEach { cursor ->
-                tryOrNull {
-                    progress++
-                    syncProgress.onNext(SyncRepository.SyncProgress.Running(max, progress, false))
-                    val message = cursorToMessage.map(Pair(cursor, messageColumns)).apply {
-                        if (isMms()) {
-                            parts = RealmList<MmsPart>().apply {
-                                addAll(realm.where(MmsPart::class.java)
-                                        .equalTo("messageId", contentId)
-                                        .findAll())
+                // Sync messages
+                messageCursor?.use {
+                    val messageColumns = CursorToMessage.MessageColumns(messageCursor)
+                    messageCursor.forEach { cursor ->
+                        tryOrNull {
+                            syncProgress.onNext(
+                                SyncRepository.SyncProgress.Running(
+                                    max,
+                                    ++progress,
+                                    false
+                                )
+                            )
+                            val message = cursorToMessage.map(Pair(cursor, messageColumns)).apply {
+                                if (isMms()) {
+                                    parts = RealmList<MmsPart>().apply {
+                                        addAll(
+                                            realm.where(MmsPart::class.java)
+                                                .equalTo("messageId", contentId)
+                                                .findAll()
+                                        )
+                                    }
+                                }
+                            }
+                            
+                            when {
+                                (message.isBluetoothMessage && rxPrefs.getBoolean("bluetoothRealmHideMessage", true).get()) -> null
+                                else -> realm.insertOrUpdate(message)
                             }
                         }
                     }
-
-                    when {
-                        (message.isBluetoothMessage && rxPrefs.getBoolean("bluetoothRealmHideMessage", true).get()) -> null
-                        else -> realm.insertOrUpdate(message)
-                    }
                 }
-            }
-        }
 
-        // Migrate blocked conversations from 2.7.3
-        val oldBlockedSenders = rxPrefs.getStringSet("pref_key_blocked_senders")
-        oldBlockedSenders.get()
-                .map { threadIdString -> threadIdString.toLong() }
-                .filter { threadId -> !persistedData.contains(threadId) }
-                .forEach { threadId -> persistedData[threadId] = Conversation(id = threadId, blocked = true) }
-
-        // Sync conversations
-        conversationCursor?.use {
-            conversationCursor.forEach { cursor ->
-                tryOrNull {
-                    progress++
-                    syncProgress.onNext(SyncRepository.SyncProgress.Running(max, progress, false))
-                    val conversation = cursorToConversation.map(cursor).apply {
-                        persistedData[id]?.let { persistedConversation ->
-                            archived = persistedConversation.archived
-                            blocked = persistedConversation.blocked
-                            pinned = persistedConversation.pinned
-                            name = persistedConversation.name
-                            blockingClient = persistedConversation.blockingClient
-                            blockReason = persistedConversation.blockReason
-                        }
-
-                        lastMessage = realm.where(Message::class.java)
-                            .sort("date", Sort.DESCENDING)
-                            .equalTo("threadId", id)
-                            .let { if (rxPrefs.getBoolean("bluetoothRealmHideMessage", true).get()) it.notEqualTo("isBluetoothMessage", true) else it }
-                            .findFirst()
-
+                // Migrate blocked conversations from 2.7.3
+                oldBlockedSenders.get()
+                    .map { threadIdString -> threadIdString.toLong() }
+                    .filter { threadId -> !persistedData.contains(threadId) }
+                    .forEach { threadId ->
+                        persistedData[threadId] = Conversation(id = threadId, blocked = true)
                     }
-                    realm.insertOrUpdate(conversation)
-                }
-            }
-        }
 
-        // Sync recipients
-        recipientCursor?.use {
-            val contacts = realm.copyToRealmOrUpdate(getContacts())
-            recipientCursor.forEach { cursor ->
-                tryOrNull {
-                    progress++
-                    syncProgress.onNext(SyncRepository.SyncProgress.Running(max, progress, false))
-                    val recipient = cursorToRecipient.map(cursor).apply {
-                        contact = contacts.firstOrNull { contact ->
-                            contact.numbers.any { phoneNumberUtils.compare(address, it.address) }
+                // Sync conversations
+                conversationCursor?.use {
+                    conversationCursor.forEach { cursor ->
+                        tryOrNull {
+                            syncProgress.onNext(
+                                SyncRepository.SyncProgress.Running(
+                                    max,
+                                    ++progress,
+                                    false
+                                )
+                            )
+                            val conversation = cursorToConversation.map(cursor).apply {
+                                persistedData[id]?.let { persistedConversation ->
+                                    archived = persistedConversation.archived
+                                    blocked = persistedConversation.blocked
+                                    pinned = persistedConversation.pinned
+                                    name = persistedConversation.name
+                                    blockingClient = persistedConversation.blockingClient
+                                    blockReason = persistedConversation.blockReason
+                                    sendAsGroup = persistedConversation.sendAsGroup
+                                }
+                                lastMessage = realm.where(Message::class.java)
+                                    .sort("date", Sort.DESCENDING)
+                                    .equalTo("threadId", id)
+                                    .let { if (rxPrefs.getBoolean("bluetoothRealmHideMessage", true).get()) it.notEqualTo("isBluetoothMessage", true) else it }
+                                    .findFirst()
+                            }
+                            realm.insertOrUpdate(conversation)
                         }
                     }
-                    realm.insertOrUpdate(recipient)
                 }
-            }
+
+                // Sync recipients
+                val contacts = realm.copyToRealmOrUpdate(getContacts())
+                recipientCursor?.use {
+                    recipientCursor.forEach { cursor ->
+                        tryOrNull {
+                            syncProgress.onNext(
+                                SyncRepository.SyncProgress.Running(
+                                    max,
+                                    ++progress,
+                                    false
+                                )
+                            )
+                            val rec = cursorToRecipient.map(cursor).apply {
+                                contact = contacts.firstOrNull { c ->
+                                    c.numbers.any { num ->
+                                        phoneNumberUtils.compare(
+                                            address,
+                                            num.address
+                                        )
+                                    }
+                                }
+                            }
+                            realm.insertOrUpdate(rec)
+                        }
+                    }
+                }
+
+                syncProgress.onNext(SyncRepository.SyncProgress.ParsingEmojis(0, 0, true))
+
+                // Now that we have all the messages, we can scan for emoji reactions
+                reactions.deleteAndReparseAllEmojiReactions(
+                    realm,
+                    onProgress = { progress ->
+                        syncProgress.onNext(progress)
+                    })
+
+                realm.insert(SyncLog())
+            }, {
+                handlerThread.quitSafely()
+                oldBlockedSenders.delete()
+                syncProgress.onNext(SyncRepository.SyncProgress.Idle)
+            },
+                { error ->
+                    handlerThread.quitSafely()
+                    Timber.e(error, "syncMessages Failed")
+                    syncProgress.onNext(SyncRepository.SyncProgress.Idle)
+                })
         }
-
-        syncProgress.onNext(SyncRepository.SyncProgress.Running(0, 0, true))
-
-
-        realm.insert(SyncLog())
-        realm.commitTransaction()
-        realm.close()
-
-        // Only delete this after the sync has successfully completed
-        oldBlockedSenders.delete()
-
-        syncProgress.onNext(SyncRepository.SyncProgress.Idle)
     }
 
-    override fun syncMessage(uri: Uri): Message? {
-        if (context.checkSelfPermission(Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) { return null; }
+    override fun syncMessage(uri: Uri, messageId: Long): Message? {
 
         // If we don't have a valid type, return null
         val type = when {
@@ -223,23 +267,29 @@ class SyncRepositoryImpl @Inject constructor(
         }
 
         // If we don't have a valid id, return null
-        val id = tryOrNull(false) { ContentUris.parseId(uri) } ?: return null
+        val contentId = tryOrNull(false) { ContentUris.parseId(uri) } ?: return null
 
         // Check if the message already exists, so we can reuse the id
         val existingId = Realm.getDefaultInstance().use { realm ->
             realm.refresh()
             realm.where(Message::class.java)
-                    .equalTo("type", type)
-                    .equalTo("contentId", id)
-                    .findFirst()
-                    ?.id
+                .equalTo("type", type)
+                .equalTo("contentId", contentId)
+                .or()
+                .beginGroup()
+                .equalTo("id", messageId)
+                .and()
+                .equalTo("contentId", 0L)
+                .endGroup()
+                .findFirst()
+                ?.id
         }
 
         // The uri might be something like content://mms/inbox/id
         // The box might change though, so we should just use the mms/id uri
         val stableUri = when (type) {
-            "mms" -> ContentUris.withAppendedId(Telephony.Mms.CONTENT_URI, id)
-            else -> ContentUris.withAppendedId(Telephony.Sms.CONTENT_URI, id)
+            Message.TYPE_MMS -> ContentUris.withAppendedId(Telephony.Mms.CONTENT_URI, contentId)
+            else -> ContentUris.withAppendedId(Telephony.Sms.CONTENT_URI, contentId)
         }
 
         return contentResolver.query(stableUri, null, null, null, null)?.use { cursor ->
@@ -259,6 +309,26 @@ class SyncRepositoryImpl @Inject constructor(
 
                 conversationRepo.getOrCreateConversation(threadId)
                 insertOrUpdate()
+
+                val text = getText(false)
+                val parsedReaction = reactions.parseEmojiReaction(text)
+                if (parsedReaction != null) {
+                    Realm.getDefaultInstance().use { realm ->
+                        val targetMessage = reactions.findTargetMessage(
+                            threadId,
+                            parsedReaction.originalMessage,
+                            realm
+                        )
+                        realm.executeTransaction {
+                            reactions.saveEmojiReaction(
+                                this,
+                                parsedReaction,
+                                targetMessage,
+                                realm,
+                            )
+                        }
+                    }
+                }
             }
         }
     }
@@ -343,6 +413,15 @@ class SyncRepositoryImpl @Inject constructor(
         }
 
         return groups
+    }
+
+    private fun removeOldMessages(realm: Realm) {
+        realm.delete(Contact::class.java)
+        realm.delete(ContactGroup::class.java)
+        realm.delete(Conversation::class.java)
+        realm.delete(Message::class.java)
+        realm.delete(MmsPart::class.java)
+        realm.delete(Recipient::class.java)
     }
 
 }

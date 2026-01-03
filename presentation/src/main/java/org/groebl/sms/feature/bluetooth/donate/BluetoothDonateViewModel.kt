@@ -7,11 +7,9 @@ import io.reactivex.rxkotlin.plusAssign
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.base.QkViewModel
 import org.groebl.sms.manager.BillingManager
-import org.groebl.sms.manager.AnalyticsManager
 import javax.inject.Inject
 
 class BluetoothDonateViewModel @Inject constructor(
-        private val analyticsManager: AnalyticsManager,
         private val billingManager: BillingManager,
         private val navigator: Navigator
 ) : QkViewModel<BluetoothDonateView, BluetoothDonateState>(BluetoothDonateState()) {
@@ -43,7 +41,6 @@ class BluetoothDonateViewModel @Inject constructor(
                 view.donateIntent2.map { BillingManager.SKU_02 },
                 view.donateIntent3.map { BillingManager.SKU_03 },
                 view.donateIntent4.map { BillingManager.SKU_04 })
-                .doOnNext { sku -> analyticsManager.track("Clicked Upgrade", Pair("sku", sku)) }
                 .autoDisposable(view.scope())
                 .subscribe { sku -> view.initiatePurchaseFlow(billingManager, sku) }
 

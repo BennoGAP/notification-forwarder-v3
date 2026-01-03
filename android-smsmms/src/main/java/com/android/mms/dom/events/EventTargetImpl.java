@@ -16,15 +16,19 @@
 
 package com.android.mms.dom.events;
 
+import com.android.mms.logs.LogTag;
+
+import java.util.ArrayList;
+
 import org.w3c.dom.events.Event;
 import org.w3c.dom.events.EventException;
 import org.w3c.dom.events.EventListener;
 import org.w3c.dom.events.EventTarget;
+
 import timber.log.Timber;
 
-import java.util.ArrayList;
-
 public class EventTargetImpl implements EventTarget {
+    private static final String TAG = LogTag.TAG;
     private ArrayList<EventListenerEntry> mListenerEntries;
     private EventTarget mNodeTarget;
 

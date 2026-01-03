@@ -21,8 +21,8 @@ package org.groebl.sms.receiver
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import org.groebl.sms.util.NightModeManager
 import dagger.android.AndroidInjection
+import org.groebl.sms.util.NightModeManager
 import javax.inject.Inject
 
 class NightModeReceiver : BroadcastReceiver() {

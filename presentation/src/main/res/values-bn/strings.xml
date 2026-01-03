@@ -16,8 +16,7 @@
   ~
   ~ You should have received a copy of the GNU General Public License
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
+  --><resources>
     <string name="shortcut_compose_long_label">নতুন আলাপ</string>
     <string name="shortcut_compose_short_label">কম্পোজ করো</string>
     <string name="shortcut_compose_disabled_message">শর্টকাট নিষ্ক্রিয়</string>
@@ -25,15 +24,15 @@
     <string name="title_settings">সেটিংস</string>
     <string name="title_notification_prefs">বিজ্ঞপ্তি</string>
     <string name="title_theme">থিম</string>
-    <string name="title_conversations">ইনবক্সে খুঁজো&#8230;</string>
+    <string name="title_conversations">ইনবক্সে খুঁজো…</string>
     <string name="title_compose">নাম বা নম্বর টাইপ করো</string>
     <string name="setup_skip">এড়িয়ে যাও</string>
     <string name="setup_next">আগাও</string>
     <string name="menu_add_person">কাউকে যুক্ত করো</string>
     <string name="menu_call">কল করো</string>
     <string name="menu_info">বিস্তারিত</string>
-    <string name="menu_save">গ্যালারিতে সংরক্ষণ করো</string>
-    <string name="menu_share">শেয়ার</string>
+    <string name="menu_mms_part_save">গ্যালারিতে সংরক্ষণ করো</string>
+    <string name="compose_menu_share">শেয়ার</string>
     <string name="main_drawer_open_cd">ন্যাভিগেশন ড্রয়ার খুলো</string>
     <string name="main_title_selected">%d নির্বাচিত</string>
     <string name="main_menu_clear">পরিষ্কার</string>
@@ -46,7 +45,7 @@
     <string name="main_menu_read">পড়া হয়েছে</string>
     <string name="main_menu_unread">পড়া হয়নি</string>
     <string name="main_menu_block">অবরুদ্ধ</string>
-    <string name="main_syncing">বার্তাগুলি সিঙ্ক হচ্ছে&#8230;</string>
+    <string name="main_syncing">বার্তাগুলি সিঙ্ক হচ্ছে…</string>
     <string name="main_sender_you">তুমি: %s</string>
     <string name="main_message_results_title">বার্তার ভিতর পাওয়া গেছে</string>
     <string name="main_message_results">%dটি বার্তা</string>
@@ -55,12 +54,12 @@
     <string name="archived_empty_text">তোমার আর্কাইভ করা আলাপ এখানে দেখা যাবে</string>
     <string name="main_fab_cd">নতুন আলাপ শুরু করো</string>
     <string name="main_default_sms_title">আবার বার্তাকে ভালবাসুন</string>
-    <string name="main_default_sms_message">QKSMS-কে তোমার ডিফল্ট এসএমএস অ্যাপ করো</string>
+    <string name="main_default_sms_message">QUIK-কে তোমার ডিফল্ট এসএমএস অ্যাপ করো</string>
     <string name="main_default_sms_change">পরিবর্তন করো</string>
     <string name="main_permission_required">অনুমতি প্রয়োজন</string>
-    <string name="main_permission_sms">QKSMS-এর এসএমএস বার্তাগুলো পাঠানোর এবং দেখার অনুমতি প্রয়োজন</string>
-    <string name="main_permission_contacts">QKSMS-এর তোমার পরিচিতিগুলি দেখার জন্য অনুমতি প্রয়োজন</string>
-    <string name="main_permission_notifications">QKSMS needs permission to display notifications</string>
+    <string name="main_permission_sms">QUIK-এর এসএমএস বার্তাগুলো পাঠানোর এবং দেখার অনুমতি প্রয়োজন</string>
+    <string name="main_permission_contacts">QUIK-এর তোমার পরিচিতিগুলি দেখার জন্য অনুমতি প্রয়োজন</string>
+    <string name="main_permission_notifications">QUIK needs permission to display notifications</string>
     <string name="main_permission_allow">মঞ্জুর করো</string>
     <string name="drawer_inbox">ইনবক্স</string>
     <string name="drawer_archived">আর্কাইভকৃত</string>
@@ -71,7 +70,7 @@
     <string name="drawer_help">সাহায্য &amp; প্রতিক্রিয়া</string>
     <string name="drawer_invite">বন্ধুদের আমন্ত্রণ জানাও</string>
     <string name="drawer_plus_banner_summary">অসাধারণ সব নতুন বৈশিষ্ট্য পাও এবং উন্নয়নে সাহায্য করো</string>
-    <string name="rate_title">QKSMS উপভোগ করছো?</string>
+    <string name="rate_title">QUIK উপভোগ করছো?</string>
     <string name="rate_summary">আমাদের প্রতি ভালবাসে দেখাতে Google Play-এ আমাদের মূল্যায়ন করো!</string>
     <string name="rate_okay">ঠিক আছে!</string>
     <string name="rate_dismiss">বাতিল করো</string>
@@ -97,9 +96,9 @@
     <string name="compose_vcard_label">পরিচিতি কার্ড</string>
     <string name="compose_scheduled_for">জন্য পরিকল্পিত</string>
     <string name="compose_scheduled_future">নির্বাচিত সময় অবশ্য ভবিষ্যতে হতে হবে!</string>
-    <string name="compose_scheduled_plus">পরিকল্পিত বার্তাপ্রেরক ব্যবহার করতে আপনাকে অবশ্যই QKSMS + আনলক করতে হবে</string>
+    <string name="compose_scheduled_plus">পরিকল্পিত বার্তাপ্রেরক ব্যবহার করতে আপনাকে অবশ্যই QUIK + আনলক করতে হবে</string>
     <string name="compose_scheduled_toast">পূর্বসূচিত বার্তাগুলোতে যোগ করা হয়েছে</string>
-    <string name="compose_hint">একটি বার্তা লিখো&#8230;</string>
+    <string name="compose_hint">একটি বার্তা লিখো…</string>
     <string name="compose_menu_copy">পাঠ্য অনুলিপি করুন</string>
     <string name="compose_menu_forward">সামনে পাঠান</string>
     <string name="compose_menu_delete">মুছে ফেলুন</string>
@@ -127,7 +126,7 @@
     <string name="compose_sim_changed_toast">সিম %1$d (%2$s) নির্বাচিত</string>
     <string name="compose_sim_cd">নির্বাচিত, %s সিম কার্ড পরিবর্তন করুন</string>
     <string name="compose_send_cd">বার্তা পাঠাও</string>
-    <string name="message_status_sending">পাঠানো হচ্ছে&#8230;</string>
+    <string name="message_status_sending">পাঠানো হচ্ছে…</string>
     <string name="message_status_delivered">প্রেরিত হয়েছে: %s</string>
     <string name="message_status_failed">পাঠাতে ব্যর্থ। আবার চেষ্টা করতে টিপ দাও</string>
     <string name="info_title">বিস্তারিত</string>
@@ -145,15 +144,15 @@
     <string name="backup_title">ব্যাকআপ ও পুনরুদ্ধার</string>
     <string name="backup_backing_up">মেসেজ ব্যাকআপ হচ্ছে </string>
     <string name="backup_restoring">ব্যাকআপ হতে পুনরুদ্ধার হচ্ছে </string>
-    <string name="backup_loading">লোড হচ্ছে&#8230;</string>
+    <string name="backup_loading">লোড হচ্ছে…</string>
     <string name="backup_never">কখনই না </string>
     <string name="backup_location_title">Backup location</string>
     <string name="backup_location_summary">Set folder</string>
     <string name="backup_restore_title">পুনরুদ্ধার</string>
     <string name="backup_restore_summary">ব্যাকআপ নির্বাচন করুন</string>
-    <string name="backup_restore_error_plus">ব্যাকআপ এবং পুনরুদ্ধার ব্যবহার করতে দয়া করে QKSMS + আনলক করুন</string>
-    <string name="backup_restore_error_backup">ব্যাক-আপ চলছে&#8230;</string>
-    <string name="backup_restore_error_restore">পুনরুদ্ধার চলছে&#8230;</string>
+    <string name="backup_restore_error_plus">ব্যাকআপ এবং পুনরুদ্ধার ব্যবহার করতে দয়া করে QUIK + আনলক করুন</string>
+    <string name="backup_restore_error_backup">ব্যাক-আপ চলছে…</string>
+    <string name="backup_restore_error_restore">পুনরুদ্ধার চলছে…</string>
     <string name="backup_restore_confirm_title">ব্যাক-আপ থেকে পুনরুদ্ধার করুন</string>
     <string name="backup_restore_stop_title">পুনরুদ্ধার থামান</string>
     <string name="backup_restore_stop_message">ইতিমধ্যে পুনরুদ্ধার করা বার্তাগুলি আপনার ডিভাইসে থাকবে</string>
@@ -167,10 +166,10 @@
     <string name="backup_restore_dialog_empty">কোন ব্যাকআপ পাওয়া যায়নি</string>
     <string name="backup_disclaimer">এইমুহুর্তে, ব্যাকআপ এবং পুনরুদ্ধার শুধুমাত্র এসএমএস এ করতে পারবেন । এমএমএস সাপর্ট  ও  শিডিউল  ব্যাকআপ শীঘ্রই আসছে!</string>
     <string name="backup_now">ব্যাকআপ করুন </string>
-    <string name="backup_progress_parsing">ব্যাক-আপ পার্স করা হচ্ছে&#8230;</string>
-    <string name="backup_progress_running">%1$d/%2$d বার্তা</string>
-    <string name="backup_progress_saving">ব্যাক-আপ সংরক্ষণ করা হচ্ছে&#8230;</string>
-    <string name="backup_progress_syncing">বার্তাগুলো সিঙ্ক করা হচ্ছে&#8230;</string>
+    <string name="backup_progress_parsing">ব্যাক-আপ পার্স করা হচ্ছে…</string>
+    <string name="backup_progress_running">%d/%d বার্তা</string>
+    <string name="backup_progress_saving">ব্যাক-আপ সংরক্ষণ করা হচ্ছে…</string>
+    <string name="backup_progress_syncing">বার্তাগুলো সিঙ্ক করা হচ্ছে…</string>
     <string name="backup_progress_finished">শেষ হয়েছে!</string>
     <string name="backup_notification_channel_name">ব্যাকআপ ও পুনরুদ্ধার</string>
     <string name="scheduled_title">পরিকল্পিত</string>
@@ -182,6 +181,11 @@
     <string name="scheduled_empty_message_3_timestamp">২৩শে ডিসেম্বর পাঠানো হচ্ছে </string>
     <string name="scheduled_compose_cd">পরবর্তীতে পাঠানোর জন্য একটি বার্তা পরিকল্পনা করো</string>
     <string name="scheduled_options_title">পরিকল্পিত বার্তা</string>
+    <string-array name="scheduled_options">
+        <item>এখন পাঠাও</item>
+        <item>লেখা অনুলিপি করো</item>
+        <item>মুছো</item>
+    </string-array>
     <string name="settings_category_appearance">উপস্থিতি</string>
     <string name="settings_category_general">সাধারণ</string>
     <string name="settings_category_qkreply">QK উত্তর</string>
@@ -247,7 +251,7 @@
     <string name="settings_mms_size_title">এমএমএসের সংযুক্তি সক্রিয়ভাবে সংকোচন করুন</string>
     <string name="settings_sync_title">বার্তাগুলি সিঙ্ক করো</string>
     <string name="settings_sync_summary">তোমার বার্তাগুলি অ্যান্ড্রয়েডের নিজস্ব এসএমএস এর ডাটাবেসের সাথে পুনরায় সিঙ্ক করো</string>
-    <string name="settings_about_title">QKSMS সম্পর্কে</string>
+    <string name="settings_about_title">QUIK সম্পর্কে</string>
     <string name="settings_version">সংস্করণ %s</string>
     <string name="settings_logging_enabled">ডিবাগ লগিং চালু করা হয়ছে</string>
     <string name="settings_logging_disabled">ডিবাগ লগিং বন্ধ করা হয়ছে</string>
@@ -257,8 +261,7 @@
     <string name="blocking_drop_summary">অবরোধকৃত প্রেরকদের বার্তা লুকানোর জায়গায় ফেলে দাও</string>
     <string name="blocking_conversations">অবরুদ্ধ কথাবার্তা</string>
     <string name="blocking_manager_title">অবরুদ্ধকরণ ব্যবস্থাপক</string>
-    <string name="blocking_manager_qksms_title">QKSMS</string>
-    <string name="blocking_manager_qksms_summary">QKSMS-এর অন্তর্ভুক্ত অবরোধী সক্ষমতা(blocking)</string>
+    <string name="blocking_manager_qksms_summary">QUIK-এর অন্তর্ভুক্ত অবরোধী সক্ষমতা(blocking)</string>
     <string name="blocking_manager_call_blocker_summary">স্প্যাম বার্তা, নম্বর &amp; অজানা কল অবরোধ তালিকা দিয়ে থামাও &amp; সময়সূচী</string>
     <string name="blocking_manager_call_control_summary">তোমার কল আর বার্তা একটাই সুবিধাজনক জায়গা থেকে ফিল্টার করো বা ছাঁকো! Community IQ™ দিয়ে অবাঞ্ছিত বার্তা আটকানো যায় সমাজে পরিচিত স্প্যামারদের থেকে</string>
     <string name="blocking_manager_sia_summary">স্বয়ংক্রিয়ভাবে \"Should I Answer\"(আমার কি উত্তর দেয়া উচিত?) অ্যাপ্লিকেশন ব্যবহার করে অযাচিত নম্বর-এর বার্তাগুলি ফিল্টার করো</string>
@@ -296,10 +299,10 @@
     <string name="qksms_plus_upgrade">সারা জীবনের জন্য আপগ্রেড করুন %1$s %2$s দিয়ে</string>
     <!-- Substitutions are for price and currency. Ex: Unlock + donate for $4.99 USD -->
     <string name="qksms_plus_upgrade_donate">%1$s %2$s দান করুন, + আনলক করুন</string>
-    <string name="qksms_plus_thanks_title">QKSMS সমর্থনের জন্য আপনাকে ধন্যবাদ!</string>
-    <string name="qksms_plus_thanks_summary">আপনি এখন QKSMS+-এর সব বৈশিষ্ট্যেের সুবিধা পাচ্ছেন</string>
+    <string name="qksms_plus_thanks_title">QUIK সমর্থনের জন্য আপনাকে ধন্যবাদ!</string>
+    <string name="qksms_plus_thanks_summary">আপনি এখন QUIK+-এর সব বৈশিষ্ট্যেের সুবিধা পাচ্ছেন</string>
     <string name="qksms_plus_error">একটি ত্রুটি আছে, আবার চেষ্টা করো।</string>
-    <string name="qksms_plus_free_title">F-Droid ব্যবহারকারীরা QKSMS+ বিনামূল্যে ব্যবহার করতে পারবেন! যদি আপনি উন্নয়ন সমর্থন করতে মুক্ত মনে অনুদান করুন।</string>
+    <string name="qksms_plus_free_title">F-Droid ব্যবহারকারীরা QUIK+ বিনামূল্যে ব্যবহার করতে পারবেন! যদি আপনি উন্নয়ন সমর্থন করতে মুক্ত মনে অনুদান করুন।</string>
     <string name="qksms_plus_donate">পেপাল এর মাধ্যমে দান করুন</string>
     <string name="qksms_plus_coming_soon">শীঘ্রই আসছে</string>
     <string name="qksms_plus_themes_title">প্রিমিয়াম থিম</string>
@@ -321,8 +324,8 @@
     <string name="qksms_plus_respond_title">স্বয়ংক্রিয়-উত্তর</string>
     <string name="qksms_plus_respond_summary">আগত বার্তার জন্য স্বয়ংক্রিয়ভাবে পূর্বনির্ধারিত প্রতিক্রিয়া পাঠাও</string>
     <string name="qksms_plus_more_title">আরও</string>
-    <string name="qksms_plus_more_summary">QKSMS সক্রিয় উন্নয়ন অধীনে এবং QKSMS+ এর সকাল ভবিষ্যত ফিচার আপনার কেনা অ্যাপেে অন্তর্ভুক্ত থাকবে!</string>
-    <string name="widget_loading">লোড হচ্ছে&#8230;</string>
+    <string name="qksms_plus_more_summary">QUIK সক্রিয় উন্নয়ন অধীনে এবং QUIK+ এর সকাল ভবিষ্যত ফিচার আপনার কেনা অ্যাপেে অন্তর্ভুক্ত থাকবে!</string>
+    <string name="widget_loading">লোড হচ্ছে…</string>
     <string name="widget_more">আরও আলাপ দেখো</string>
     <string name="qkreply_menu_read">পড়া হয়েছে</string>
     <string name="qkreply_menu_call">কল করুন</string>
@@ -352,7 +355,7 @@
     <string name="button_set">সেট করুন</string>
     <string name="button_undo">বাতিল করো</string>
     <string name="toast_copied">অনুলিপি করা হয়েছে</string>
-    <string name="toast_qksms_plus">এই ব্যবহার করতে আপনাকে অবশ্যই QKSMS + আনলক করতে হবে</string>
+    <string name="toast_qksms_plus">এই ব্যবহার করতে আপনাকে অবশ্যই QUIK + আনলক করতে হবে</string>
     <plurals name="notification_new_messages">
         <item quantity="one">নতুন বার্তা</item>
         <item quantity="other">%sটি নতুন বার্তা</item>

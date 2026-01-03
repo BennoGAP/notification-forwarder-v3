@@ -29,12 +29,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import dagger.android.AndroidInjection
 import org.groebl.sms.R
 import org.groebl.sms.common.base.QkActivity
 import org.groebl.sms.common.util.DateFormatter
 import org.groebl.sms.common.util.extensions.setVisible
 import org.groebl.sms.model.MmsPart
-import dagger.android.AndroidInjection
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject

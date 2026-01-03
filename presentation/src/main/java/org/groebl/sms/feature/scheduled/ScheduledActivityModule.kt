@@ -19,10 +19,11 @@
 package org.groebl.sms.feature.scheduled
 
 import androidx.lifecycle.ViewModel
-import org.groebl.sms.injection.ViewModelKey
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoMap
+import org.groebl.sms.injection.ViewModelKey
+import javax.inject.Named
 
 @Module
 class ScheduledActivityModule {
@@ -31,5 +32,10 @@ class ScheduledActivityModule {
     @IntoMap
     @ViewModelKey(ScheduledViewModel::class)
     fun provideScheduledViewModel(viewModel: ScheduledViewModel): ViewModel = viewModel
+
+    @Provides
+    @Named("conversationId")
+    fun getConversationId(activity: ScheduledActivity):
+            Long? = activity.intent.extras?.getLong("conversationId")
 
 }

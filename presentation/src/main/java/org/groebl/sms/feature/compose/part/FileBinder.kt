@@ -20,25 +20,27 @@ package org.groebl.sms.feature.compose.part
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.view.Gravity
-import android.widget.FrameLayout
 import org.groebl.sms.R
+import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.base.QkViewHolder
 import org.groebl.sms.common.util.Colors
 import org.groebl.sms.common.util.extensions.resolveThemeColor
 import org.groebl.sms.common.util.extensions.setBackgroundTint
 import org.groebl.sms.common.util.extensions.setTint
+import org.groebl.sms.extensions.mapNotNull
 import org.groebl.sms.feature.compose.BubbleUtils
 import org.groebl.sms.model.Message
 import org.groebl.sms.model.MmsPart
-import org.groebl.sms.util.Preferences
+import org.groebl.sms.util.tryOrNull
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.mms_file_list_item.*
 import javax.inject.Inject
 
-class FileBinder @Inject constructor(colors: Colors, private val context: Context, private val prefs: Preferences) : PartBinder() {
+class FileBinder @Inject constructor(colors: Colors, private val context: Context) : PartBinder() {
+
+    @Inject lateinit var navigator: Navigator
 
     override val partLayout = R.layout.mms_file_list_item
     override var theme = colors.theme()
@@ -54,14 +56,16 @@ class FileBinder @Inject constructor(colors: Colors, private val context: Contex
         canGroupWithPrevious: Boolean,
         canGroupWithNext: Boolean
     ) {
-        BubbleUtils.getBubble(false, canGroupWithPrevious, canGroupWithNext, message.isMe(), style = prefs.bubbleStyle.get())
+        BubbleUtils.getBubble(false, canGroupWithPrevious, canGroupWithNext, message.isMe())
                 .let(holder.fileBackground::setBackgroundResource)
 
-        holder.containerView.setOnClickListener { clicks.onNext(part.id) }
-
-        Observable.just(part.getUri())
-                .map(context.contentResolver::openInputStream)
-                .map { inputStream -> inputStream.use { it.available() } }
+        tryOrNull(true) {
+            Observable.just(part.getUri())
+                .mapNotNull { uri ->
+                    tryOrNull(true) {
+                        context.contentResolver.openInputStream(uri)?.use { it.available() }
+                    }
+                }
                 .map { bytes ->
                     when (bytes) {
                         in 0..999 -> "$bytes B"
@@ -74,17 +78,15 @@ class FileBinder @Inject constructor(colors: Colors, private val context: Contex
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { size -> holder.size.text = size }
 
-        holder.filename.text = part.name
+            holder.filename.text = part.getBestFilename()
+        }
 
-        val params = holder.fileBackground.layoutParams as FrameLayout.LayoutParams
         if (!message.isMe()) {
-            holder.fileBackground.layoutParams = params.apply { gravity = Gravity.START }
             holder.fileBackground.setBackgroundTint(theme.theme)
             holder.icon.setTint(theme.textPrimary)
             holder.filename.setTextColor(theme.textPrimary)
             holder.size.setTextColor(theme.textTertiary)
         } else {
-            holder.fileBackground.layoutParams = params.apply { gravity = Gravity.END }
             holder.fileBackground.setBackgroundTint(holder.containerView.context.resolveThemeColor(R.attr.bubbleColor))
             holder.icon.setTint(holder.containerView.context.resolveThemeColor(android.R.attr.textColorSecondary))
             holder.filename.setTextColor(holder.containerView.context.resolveThemeColor(android.R.attr.textColorPrimary))

@@ -19,7 +19,6 @@
 package org.groebl.sms.feature.compose.part
 
 import android.content.Context
-import com.bumptech.glide.Glide
 import org.groebl.sms.R
 import org.groebl.sms.common.base.QkViewHolder
 import org.groebl.sms.common.util.Colors
@@ -29,8 +28,9 @@ import org.groebl.sms.extensions.isImage
 import org.groebl.sms.extensions.isVideo
 import org.groebl.sms.model.Message
 import org.groebl.sms.model.MmsPart
-import kotlinx.android.synthetic.main.mms_image_preview_list_item.*
+import org.groebl.sms.util.GlideApp
 import org.groebl.sms.util.tryOrNull
+import kotlinx.android.synthetic.main.mms_image_preview_list_item.*
 import javax.inject.Inject
 
 class ImageBinder @Inject constructor(colors: Colors, private val context: Context) : PartBinder() {
@@ -58,7 +58,7 @@ class ImageBinder @Inject constructor(colors: Colors, private val context: Conte
         }
 
         tryOrNull(true) {
-            Glide.with(context).load(part.getUri()).fitCenter().into(holder.thumbnail)
+            GlideApp.with(context).load(part.getUri()).fitCenter().into(holder.thumbnail)
         }
     }
 

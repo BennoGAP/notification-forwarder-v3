@@ -24,7 +24,8 @@ import org.groebl.sms.common.util.extensions.isSameDay
 import org.groebl.sms.common.util.extensions.isSameWeek
 import org.groebl.sms.common.util.extensions.isSameYear
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
 

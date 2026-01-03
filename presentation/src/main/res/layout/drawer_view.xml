@@ -28,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingTop="18dp"
+        android:paddingTop="8dp"
         android:paddingBottom="8dp">
 
         <LinearLayout
@@ -174,9 +174,8 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:background="@drawable/rounded_rectangle_2dp"
-            android:backgroundTint="?android:attr/divider"
-            tools:backgroundTint="@color/separatorLight">
+            android:background="@drawable/rounded_rectangle_outline_2dp"
+            android:backgroundTint="?android:attr/divider">
 
             <ImageView
                 android:id="@+id/rateIcon"
@@ -221,30 +220,27 @@
                 android:id="@+id/rateDismiss"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginEnd="4dp"
                 android:layout_marginTop="8dp"
-                android:paddingStart="16dp"
-                android:paddingTop="16dp"
+                android:padding="8dp"
+				android:background="?attr/selectableItemBackground"
                 android:paddingBottom="16dp"
                 android:text="@string/rate_dismiss"
-                android:textColor="?android:attr/textColorSecondary"
+                android:textColor="?android:attr/textColorTertiary"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@id/rateDonate"
                 app:layout_constraintTop_toBottomOf="@id/rateSummary"
                 app:textSize="secondary" />
-
             <org.groebl.sms.common.widget.QkTextView
                 android:id="@+id/rateDonate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:layout_marginEnd="4dp"
                 android:background="?attr/selectableItemBackground"
-                android:paddingLeft="8dp"
-                android:paddingTop="16dp"
-                android:paddingRight="8dp"
-                android:paddingBottom="16dp"
+                android:padding="8dp"
                 android:text="@string/rate_donate"
-                android:textColor="?android:attr/textColorPrimary"
+                android:textColor="?android:attr/textColorSecondary"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@id/rateOkay"
                 app:layout_constraintTop_toBottomOf="@id/rateSummary"
@@ -255,11 +251,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="16dp"
                 android:background="?attr/selectableItemBackground"
-                android:padding="16dp"
+                android:padding="8dp"
                 android:text="@string/rate_rate"
-                android:textColor="?android:attr/textColorPrimary"
+                android:textColor="?android:attr/textColorSecondary"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rateSummary"

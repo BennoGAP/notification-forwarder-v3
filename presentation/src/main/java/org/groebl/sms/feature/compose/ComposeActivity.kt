@@ -33,7 +33,6 @@ import android.os.Bundle
 import android.os.SystemClock
 import android.provider.ContactsContract
 import android.provider.MediaStore
-import android.speech.tts.TextToSpeech
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import android.text.format.DateFormat
@@ -44,11 +43,9 @@ import android.view.DragEvent.ACTION_DROP
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import android.widget.SeekBar
-import androidx.activity.result.contract.ActivityResultContracts
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -79,7 +76,6 @@ import org.groebl.sms.common.util.extensions.setVisible
 import org.groebl.sms.common.util.extensions.showKeyboard
 import org.groebl.sms.common.widget.MicInputCloudView
 import org.groebl.sms.common.widget.QkEditText
-import org.groebl.sms.common.widget.TextInputDialog
 import org.groebl.sms.extensions.mapNotNull
 import org.groebl.sms.feature.compose.editing.ChipsAdapter
 import org.groebl.sms.feature.contacts.ContactsActivity
@@ -94,11 +90,14 @@ import io.reactivex.subjects.Subject
 import kotlinx.android.synthetic.main.compose_activity.attach
 import kotlinx.android.synthetic.main.compose_activity.attachAFileIcon
 import kotlinx.android.synthetic.main.compose_activity.attachAFileLabel
+import kotlinx.android.synthetic.main.compose_activity.attachAnAudioMessageIcon
+import kotlinx.android.synthetic.main.compose_activity.attachAnAudioMessageLabel
 import kotlinx.android.synthetic.main.compose_activity.attaching
-import kotlinx.android.synthetic.main.compose_activity.shadeBackground
 import kotlinx.android.synthetic.main.compose_activity.audioMsgAbort
 import kotlinx.android.synthetic.main.compose_activity.audioMsgAttach
 import kotlinx.android.synthetic.main.compose_activity.audioMsgBackground
+import kotlinx.android.synthetic.main.compose_activity.audioMsgBluetooth
+import kotlinx.android.synthetic.main.compose_activity.audioMsgDuration
 import kotlinx.android.synthetic.main.compose_activity.audioMsgPlayerBackground
 import kotlinx.android.synthetic.main.compose_activity.audioMsgPlayerPlayPause
 import kotlinx.android.synthetic.main.compose_activity.audioMsgPlayerSeekBar
@@ -115,24 +114,23 @@ import kotlinx.android.synthetic.main.compose_activity.gallery
 import kotlinx.android.synthetic.main.compose_activity.galleryLabel
 import kotlinx.android.synthetic.main.compose_activity.loading
 import kotlinx.android.synthetic.main.compose_activity.message
+import kotlinx.android.synthetic.main.compose_activity.messageAttachments
 import kotlinx.android.synthetic.main.compose_activity.messageList
 import kotlinx.android.synthetic.main.compose_activity.messagesEmpty
 import kotlinx.android.synthetic.main.compose_activity.noValidRecipients
-import kotlinx.android.synthetic.main.compose_activity.messageAttachments
-import kotlinx.android.synthetic.main.compose_activity.attachAnAudioMessageIcon
-import kotlinx.android.synthetic.main.compose_activity.attachAnAudioMessageLabel
-import kotlinx.android.synthetic.main.compose_activity.audioMsgBluetooth
-import kotlinx.android.synthetic.main.compose_activity.audioMsgDuration
 import kotlinx.android.synthetic.main.compose_activity.recordAudioMsg
 import kotlinx.android.synthetic.main.compose_activity.schedule
 import kotlinx.android.synthetic.main.compose_activity.scheduleLabel
 import kotlinx.android.synthetic.main.compose_activity.scheduledCancel
 import kotlinx.android.synthetic.main.compose_activity.scheduledGroup
 import kotlinx.android.synthetic.main.compose_activity.scheduledTime
+import kotlinx.android.synthetic.main.compose_activity.scheduledSend
 import kotlinx.android.synthetic.main.compose_activity.send
 import kotlinx.android.synthetic.main.compose_activity.sendAsGroup
 import kotlinx.android.synthetic.main.compose_activity.sendAsGroupBackground
+import kotlinx.android.synthetic.main.compose_activity.sendAsGroupSummary
 import kotlinx.android.synthetic.main.compose_activity.sendAsGroupSwitch
+import kotlinx.android.synthetic.main.compose_activity.shadeBackground
 import kotlinx.android.synthetic.main.compose_activity.sim
 import kotlinx.android.synthetic.main.compose_activity.simIndex
 import kotlinx.android.synthetic.main.compose_activity.speechToTextFrame
@@ -141,7 +139,6 @@ import kotlinx.android.synthetic.main.compose_activity.speechToTextIconBorder
 import kotlinx.android.synthetic.main.compose_activity.toolbarSubtitle
 import kotlinx.android.synthetic.main.compose_activity.toolbarTitle
 import kotlinx.android.synthetic.main.main_activity.toolbar
-import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -150,7 +147,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
-class ComposeActivity : QkThemedActivity(), ComposeView, TextToSpeech.OnInitListener {
+class ComposeActivity : QkThemedActivity(), ComposeView {
 
     @Inject lateinit var composeAttachmentAdapter: ComposeAttachmentAdapter
     @Inject lateinit var chipsAdapter: ChipsAdapter
@@ -162,7 +159,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView, TextToSpeech.OnInitList
     override val activityVisibleIntent: Subject<Boolean> = PublishSubject.create()
     override val chipsSelectedIntent: Subject<HashMap<String, String?>> = PublishSubject.create()
     override val chipDeletedIntent: Subject<Recipient> by lazy { chipsAdapter.chipDeleted }
-    override val menuReadyIntent: Observable<Unit> = menu.map { Unit }
+    override val menuReadyIntent: Observable<Unit> = menu.map { }
     override val optionsItemIntent: Subject<Int> = PublishSubject.create()
     override val contextItemIntent: Subject<MenuItem> = PublishSubject.create()
     override val scheduleAction: Subject<Boolean> = PublishSubject.create()
@@ -170,24 +167,24 @@ class ComposeActivity : QkThemedActivity(), ComposeView, TextToSpeech.OnInitList
     override val messagePartClickIntent: Subject<Long> by lazy { messageAdapter.partClicks }
     override val messagePartContextMenuRegistrar: Subject<View> by lazy { messageAdapter.partContextMenuRegistrar }
     override val messagesSelectedIntent by lazy { messageAdapter.selectionChanges }
-    override val cancelSendingIntent: Subject<Long> by lazy { messageAdapter.cancelSendingClicks }
-    override val sendNowIntent: Subject<Long> by lazy { messageAdapter.sendNowClicks }
+    override val cancelDelayedIntent: Subject<Long> by lazy { messageAdapter.cancelSendingClicks }
+    override val sendDelayedNowIntent: Subject<Long> by lazy { messageAdapter.sendNowClicks }
     override val resendIntent: Subject<Long> by lazy { messageAdapter.resendClicks }
     override val attachmentDeletedIntent: Subject<Attachment> by lazy { composeAttachmentAdapter.attachmentDeleted }
     override val textChangedIntent by lazy { message.textChanges() }
-    override val attachIntent by lazy { Observable.merge(attach.clicks(), shadeBackground.clicks()) }
-    override val cameraIntent by lazy { Observable.merge(camera.clicks(), cameraLabel.clicks()) }
-    override val attachImageFileIntent by lazy { Observable.merge(gallery.clicks(), galleryLabel.clicks()) }
-    override val attachAnyFileIntent by lazy { Observable.merge(attachAFileIcon.clicks(), attachAFileLabel.clicks()) }
-    override val scheduleIntent by lazy { Observable.merge(schedule.clicks(), scheduleLabel.clicks()) }
-    override val attachContactIntent by lazy { Observable.merge(contact.clicks(), contactLabel.clicks()) }
+    override val attachIntent: Observable<Unit> by lazy { Observable.merge(attach.clicks(), shadeBackground.clicks()) }
+    override val cameraIntent: Observable<Unit> by lazy { Observable.merge(camera.clicks(), cameraLabel.clicks()) }
+    override val attachImageFileIntent: Observable<Unit> by lazy { Observable.merge(gallery.clicks(), galleryLabel.clicks()) }
+    override val attachAnyFileIntent: Observable<Unit> by lazy { Observable.merge(attachAFileIcon.clicks(), attachAFileLabel.clicks()) }
+    override val scheduleIntent: Observable<Unit> by lazy { Observable.merge(schedule.clicks(), scheduleLabel.clicks()) }
+    override val attachContactIntent: Observable<Unit> by lazy { Observable.merge(contact.clicks(), contactLabel.clicks()) }
     override val attachAnyFileSelectedIntent: Subject<Uri> = PublishSubject.create()
     override val contactSelectedIntent: Subject<Uri> = PublishSubject.create()
     override val inputContentIntent by lazy { message.inputContentSelected }
     override val scheduleSelectedIntent: Subject<Long> = PublishSubject.create()
     override val changeSimIntent by lazy { sim.clicks() }
     override val scheduleCancelIntent by lazy { scheduledCancel.clicks() }
-    override val sendIntent by lazy { send.clicks() }
+    override val sendIntent by lazy {  Observable.merge(send.clicks(), scheduledSend.clicks()) }
     override val backPressedIntent: Subject<Unit> = PublishSubject.create()
     override val confirmDeleteIntent: Subject<List<Long>> = PublishSubject.create()
     override val clearCurrentMessageIntent: Subject<Boolean> = PublishSubject.create()
@@ -195,7 +192,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView, TextToSpeech.OnInitList
     override val speechRecogniserIntent by lazy { speechToTextIcon.clicks() }
     override val shadeIntent by lazy { shadeBackground.clicks() }
     override val recordAudioStartStopRecording: Subject<Boolean> = PublishSubject.create()
-    override val recordAnAudioMessage by lazy {
+    override val recordAnAudioMessage: Observable<Unit> by lazy {
         Observable.merge(recordAudioMsg.clicks(),
             attachAnAudioMessageIcon.clicks(),
             attachAnAudioMessageLabel.clicks())
@@ -214,7 +211,6 @@ class ComposeActivity : QkThemedActivity(), ComposeView, TextToSpeech.OnInitList
     private val viewModel by lazy { ViewModelProviders.of(this, viewModelFactory)[ComposeViewModel::class.java] }
 
     private var cameraDestination: Uri? = null
-    private var tts: TextToSpeech? = null
 
     private fun getSeekBarUpdater(): ObservableSubscribeProxy<Long> {
         return Observable.interval(500, TimeUnit.MILLISECONDS)
@@ -257,7 +253,6 @@ class ComposeActivity : QkThemedActivity(), ComposeView, TextToSpeech.OnInitList
                     loading.setTint(it.theme)
 
                     // entire attach menu
-                    send.setBackgroundTint(it.theme); send.setTint(it.textPrimary)
                     attach.setBackgroundTint(it.theme); attach.setTint(it.textPrimary)
                     contact.setBackgroundTint(it.theme); contact.setTint(it.textPrimary)
                     contactLabel.setBackgroundTint(it.theme); contactLabel.setTint(it.textPrimary)
@@ -417,9 +412,6 @@ class ComposeActivity : QkThemedActivity(), ComposeView, TextToSpeech.OnInitList
             )
 
             window.callback = ComposeWindowCallback(window.callback, this)
-
-        // Set tts info
-        tts = TextToSpeech(this, this)
     }
 
     override fun onStart() {
@@ -443,11 +435,6 @@ class ComposeActivity : QkThemedActivity(), ComposeView, TextToSpeech.OnInitList
     }
 
     override fun onDestroy() {
-        if (tts != null) {
-            tts!!.stop()
-            tts!!.shutdown()
-        }
-
         super.onDestroy()
 
         // stop any playing audio
@@ -482,6 +469,8 @@ class ComposeActivity : QkThemedActivity(), ComposeView, TextToSpeech.OnInitList
         // Don't set the adapters unless needed
         if (state.editingMode && chips.adapter == null) chips.adapter = chipsAdapter
 
+        toolbar.menu.findItem(R.id.viewScheduledMessages)?.isVisible = !state.editingMode && state.selectedMessages == 0
+                && state.query.isEmpty() && state.hasScheduledMessages
         toolbar.menu.findItem(R.id.select_all)?.isVisible = !state.editingMode && (messageAdapter.itemCount > 1) && state.selectedMessages != 0
         toolbar.menu.findItem(R.id.add)?.isVisible = state.editingMode
         toolbar.menu.findItem(R.id.call)?.isVisible = !state.editingMode && state.selectedMessages == 0
@@ -490,8 +479,8 @@ class ComposeActivity : QkThemedActivity(), ComposeView, TextToSpeech.OnInitList
                 && state.query.isEmpty()
         toolbar.menu.findItem(R.id.copy)?.isVisible =
             !state.editingMode && state.selectedMessages > 0 && state.selectedMessagesHaveText
-        toolbar.menu.findItem(R.id.share)?.isVisible = false
-        //    !state.editingMode && state.selectedMessages > 0 && state.selectedMessagesHaveText
+        toolbar.menu.findItem(R.id.share)?.isVisible =
+            !state.editingMode && state.selectedMessages > 0 && state.selectedMessagesHaveText
         toolbar.menu.findItem(R.id.details)?.isVisible = !state.editingMode && state.selectedMessages == 1
         toolbar.menu.findItem(R.id.delete)?.isVisible = !state.editingMode && ((state.selectedMessages > 0) || state.canSend)
         toolbar.menu.findItem(R.id.forward)?.isVisible = !state.editingMode && state.selectedMessages == 1
@@ -499,14 +488,17 @@ class ComposeActivity : QkThemedActivity(), ComposeView, TextToSpeech.OnInitList
         toolbar.menu.findItem(R.id.previous)?.isVisible = state.selectedMessages == 0 && state.query.isNotEmpty()
         toolbar.menu.findItem(R.id.next)?.isVisible = state.selectedMessages == 0 && state.query.isNotEmpty()
         toolbar.menu.findItem(R.id.clear)?.isVisible = state.selectedMessages == 0 && state.query.isNotEmpty()
-        toolbar.menu.findItem(R.id.speech)?.isVisible = !state.editingMode && state.selectedMessages == 1
 
         chipsAdapter.data = state.selectedChips
 
         loading.setVisible(state.loading)
 
-        sendAsGroup.setVisible(state.editingMode && state.selectedChips.size >= 2)
+        sendAsGroup.setVisible(state.recipientCount > 1)
         sendAsGroupSwitch.isChecked = state.sendAsGroup
+        sendAsGroupSummary.setText(
+            if (sendAsGroupSwitch.isChecked) R.string.compose_send_group_summary_on
+            else R.string.compose_send_group_summary_off
+        )
 
         messageList.setVisible(!state.editingMode || state.sendAsGroup || state.selectedChips.size == 1)
         messageAdapter.data = state.messages
@@ -543,22 +535,14 @@ class ComposeActivity : QkThemedActivity(), ComposeView, TextToSpeech.OnInitList
         counter.text = state.remaining
         counter.setVisible(counter.text.isNotBlank())
 
-        val simColor = when (state.subscription?.simSlotIndex?.plus(1)?.toString()) {
-            "1" -> colors.colorForSim(this, 1)
-            "2" -> colors.colorForSim(this, 2)
-            "3" -> colors.colorForSim(this, 3)
-            else -> colors.colorForSim(this, 1)
-        }
-        if (prefs.simColor.get()) {
-            sim.setTint(simColor)
-        }
         sim.setVisible(state.subscription != null)
         sim.contentDescription = getString(R.string.compose_sim_cd, state.subscription?.displayName)
         simIndex.text = state.subscription?.simSlotIndex?.plus(1)?.toString()
 
-        // show either send or audio msg record button
-        send.visibility = if (state.canSend && !state.loading) View.VISIBLE else View.INVISIBLE
+        // show either send, audio msg record, or sendScheduled button
+        send.visibility = if (state.canSend && !state.loading && state.scheduled == 0L) View.VISIBLE else View.INVISIBLE
         recordAudioMsg.visibility = if (state.canSend && !state.loading) View.INVISIBLE else View.VISIBLE
+        scheduledSend.visibility = if (state.canSend && (state.scheduled != 0L) && !state.loading) View.VISIBLE else View.INVISIBLE
 
         // if not in editing mode, and there are no non-me participants that can be sent to,
         // hide controls that allow constructing a reply and inform user no valid recipients
@@ -619,10 +603,6 @@ class ComposeActivity : QkThemedActivity(), ComposeView, TextToSpeech.OnInitList
             .show()
     }
 
-    override fun speechText(text: String) {
-        tts!!.speak(text, TextToSpeech.QUEUE_FLUSH, null, "")
-    }
-
     override fun showMessageLinkAskDialog(uri: Uri) {
         AlertDialog.Builder(this)
             .setTitle(R.string.messageLinkHandling_dialog_title)
@@ -660,8 +640,8 @@ class ComposeActivity : QkThemedActivity(), ComposeView, TextToSpeech.OnInitList
 
     override fun requestDatePicker() {
         val calendar = Calendar.getInstance()
-        DatePickerDialog(this, DatePickerDialog.OnDateSetListener { _, year, month, day ->
-            TimePickerDialog(this, TimePickerDialog.OnTimeSetListener { _, hour, minute ->
+        DatePickerDialog(this, { _, year, month, day ->
+            TimePickerDialog(this, { _, hour, minute ->
                 calendar.set(Calendar.YEAR, year)
                 calendar.set(Calendar.MONTH, month)
                 calendar.set(Calendar.DAY_OF_MONTH, day)
@@ -680,7 +660,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView, TextToSpeech.OnInitList
         val intent = Intent(Intent.ACTION_PICK)
             .setType(ContactsContract.Contacts.CONTENT_TYPE)
 
-        startActivityForResult(Intent.createChooser(intent, null), ComposeView.AttachContactRequestCode)
+        startActivityForResult(Intent.createChooser(intent, null), ComposeView.ATTACH_CONTACT_REQUEST_CODE)
     }
 
     override fun showContacts(sharing: Boolean, chips: List<Recipient>) {
@@ -689,7 +669,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView, TextToSpeech.OnInitList
         val intent = Intent(this, ContactsActivity::class.java)
             .putExtra(ContactsActivity.SHARING_KEY, sharing)
             .putExtra(ContactsActivity.CHIPS_KEY, serialized)
-        startActivityForResult(intent, ComposeView.SelectContactRequestCode)
+        startActivityForResult(intent, ComposeView.SELECT_CONTACT_REQUEST_CODE)
     }
 
     override fun startSpeechRecognition() {
@@ -698,7 +678,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView, TextToSpeech.OnInitList
                 putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
             }
             try {
-                startActivityForResult(intent, ComposeView.SpeechRecognitionRequestCode)
+                startActivityForResult(intent, ComposeView.SPEECH_RECOGNITION_REQUEST_CODE)
             } catch (e: ActivityNotFoundException) {
                 Toast.makeText(this, getString(R.string.error_stt_toast), Toast.LENGTH_SHORT).show()
             }
@@ -722,20 +702,17 @@ class ComposeActivity : QkThemedActivity(), ComposeView, TextToSpeech.OnInitList
 
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             .putExtra(MediaStore.EXTRA_OUTPUT, cameraDestination)
-        startActivityForResult(Intent.createChooser(intent, null), ComposeView.TakePhotoRequestCode)
+        startActivityForResult(Intent.createChooser(intent, null), ComposeView.TAKE_PHOTOS_REQUEST_CODE)
     }
 
-    override fun requestSAFContent(mimeType: String, requestCode: Int) {
-        startActivityForResult(
-            Intent.createChooser(
-                Intent(Intent.ACTION_GET_CONTENT)
-                    .putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-                    .putExtra(Intent.EXTRA_LOCAL_ONLY, false)
-                    .setType(mimeType),
-                resources.getString(R.string.attachmnent_pick_title)
-            ),
-            requestCode
-        )
+    override fun requestGallery(mimeType: String, requestCode: Int) {
+        val intent = Intent(Intent.ACTION_PICK)
+            .putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+            .addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION)
+            .putExtra(Intent.EXTRA_LOCAL_ONLY, false)
+            .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            .setType(mimeType)
+        startActivityForResult(Intent.createChooser(intent, null), requestCode)
     }
 
     override fun setDraft(draft: String) {
@@ -752,7 +729,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView, TextToSpeech.OnInitList
 
     override fun showDeleteDialog(messages: List<Long>) {
         val count = messages.size
-        android.app.AlertDialog.Builder(this)
+        AlertDialog.Builder(this)
             .setTitle(R.string.dialog_delete_title)
             .setMessage(resources.getQuantityString(R.plurals.dialog_delete_chat, count, count))
             .setPositiveButton(R.string.button_delete) { _, _ -> confirmDeleteIntent.onNext(messages) }
@@ -761,11 +738,11 @@ class ComposeActivity : QkThemedActivity(), ComposeView, TextToSpeech.OnInitList
     }
 
     override fun showClearCurrentMessageDialog() {
-        android.app.AlertDialog.Builder(this)
+        AlertDialog.Builder(this)
             .setTitle(R.string.dialog_clear_compose_title)
             .setMessage(R.string.dialog_clear_compose)
             .setPositiveButton(R.string.button_clear) { _, _ ->
-                clearCurrentMessageIntent.onNext(false)
+                clearCurrentMessageIntent.onNext(true)
             }
             .setNegativeButton(R.string.button_cancel, null)
             .show()
@@ -805,17 +782,17 @@ class ComposeActivity : QkThemedActivity(), ComposeView, TextToSpeech.OnInitList
             return
 
         when (requestCode) {
-            ComposeView.SelectContactRequestCode -> {
+            ComposeView.SELECT_CONTACT_REQUEST_CODE -> {
                 chipsSelectedIntent.onNext(data?.getSerializableExtra(ContactsActivity.CHIPS_KEY)
                     ?.let { serializable -> serializable as? HashMap<String, String?> }
                     ?: hashMapOf())
             }
 
-            ComposeView.TakePhotoRequestCode -> {
+            ComposeView.TAKE_PHOTOS_REQUEST_CODE -> {
                 cameraDestination?.let(attachAnyFileSelectedIntent::onNext)
             }
 
-            ComposeView.AttachAFileRequestCode -> {
+            ComposeView.ATTACH_FILE_REQUEST_CODE -> {
                 data?.clipData?.itemCount
                     ?.let { count -> 0 until count }
                     ?.mapNotNull { i -> data.clipData?.getItemAt(i)?.uri }
@@ -823,11 +800,11 @@ class ComposeActivity : QkThemedActivity(), ComposeView, TextToSpeech.OnInitList
                     ?: data?.data?.let(attachAnyFileSelectedIntent::onNext)
             }
 
-            ComposeView.AttachContactRequestCode -> {
+            ComposeView.ATTACH_CONTACT_REQUEST_CODE -> {
                 data?.data?.let(contactSelectedIntent::onNext)
             }
 
-            ComposeView.SpeechRecognitionRequestCode -> {
+            ComposeView.SPEECH_RECOGNITION_REQUEST_CODE -> {
                 // check returned results are good
                 val match = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
                 if ((match !== null) && (match.size > 0) && (!match[0].isNullOrEmpty())) {
@@ -847,29 +824,16 @@ class ComposeActivity : QkThemedActivity(), ComposeView, TextToSpeech.OnInitList
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.putParcelable(ComposeView.CameraDestinationKey, cameraDestination)
+        outState.putParcelable(ComposeView.CAMERA_DESTINATION_KEY, cameraDestination)
         super.onSaveInstanceState(outState)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        cameraDestination = savedInstanceState.getParcelable(ComposeView.CameraDestinationKey)
+        cameraDestination = savedInstanceState.getParcelable(ComposeView.CAMERA_DESTINATION_KEY)
         super.onRestoreInstanceState(savedInstanceState)
     }
 
     override fun onBackPressed() = backPressedIntent.onNext(Unit)
-
-    // Text to speech
-    override fun onInit(status: Int) {
-        if (status == TextToSpeech.SUCCESS) {
-            val result = tts!!.setLanguage(Locale.getDefault())
-
-            if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                Timber.i("TTS: The default language is not supported !")
-            }
-        } else {
-            Timber.i("TTS: Initialisation failed!")
-        }
-    }
 
     override fun focusMessage() {
         message.requestFocus()

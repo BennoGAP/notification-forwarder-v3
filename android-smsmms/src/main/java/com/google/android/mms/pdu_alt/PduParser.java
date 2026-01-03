@@ -16,15 +16,19 @@
 
 package com.google.android.mms.pdu_alt;
 
+import com.android.mms.util.ExternalLogger;
 import com.google.android.mms.ContentType;
 import com.google.android.mms.InvalidHeaderValueException;
-import timber.log.Timber;
+
+import android.util.Log;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.HashMap;
+
+import timber.log.Timber;
 
 public class PduParser {
     /**
@@ -79,6 +83,8 @@ public class PduParser {
     /**
      * The log tag.
      */
+    private static final String LOG_TAG = "PduParser";
+    private static final boolean DEBUG = false;
     private static final boolean LOCAL_LOGV = false;
 
     /**
@@ -200,7 +206,7 @@ public class PduParser {
                     // multipart/signed
                     return retrieveConf;
                 } else {
-                    Timber.v("Unsupported ContentType: " + ctTypeStr);
+                    ExternalLogger.logMessage(LOG_TAG, "Unsupported ContentType: " + ctTypeStr);
                 }
                 return null;
             case PduHeaders.MESSAGE_TYPE_DELIVERY_IND:
@@ -332,7 +338,8 @@ public class PduParser {
                 {
                     int value = extractByteValue(pduDataStream);
                     if (LOCAL_LOGV) {
-                        Timber.v("parseHeaders: byte: " + headerField + " value: " + value);
+                        Timber.v("parseHeaders: byte: " + headerField + " value: " +
+                                value);
                     }
 
                     try {
@@ -798,7 +805,8 @@ public class PduParser {
                     if (null != contentType) {
                         try {
                             if (LOCAL_LOGV) {
-                                Timber.v("parseHeaders: CONTENT_TYPE: " + headerField + contentType.toString());
+                                Timber.v("parseHeaders: CONTENT_TYPE: " + headerField +
+                                        contentType.toString());
                             }
                             headers.setTextString(contentType, PduHeaders.CONTENT_TYPE);
                         } catch(NullPointerException e) {
@@ -1470,7 +1478,7 @@ public class PduParser {
                             map.put(PduPart.P_CHARSET, charsetInt);
                         } catch (UnsupportedEncodingException e) {
                             // Not a well-known charset, use "*".
-                            Timber.e(e, Arrays.toString(charsetStr));
+                            Timber.e(Arrays.toString(charsetStr), e);
                             map.put(PduPart.P_CHARSET, CharacterSets.ANY_CHARSET);
                         }
                     } else {

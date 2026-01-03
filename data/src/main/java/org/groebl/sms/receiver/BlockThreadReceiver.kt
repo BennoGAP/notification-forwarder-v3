@@ -18,14 +18,15 @@
  */
 package org.groebl.sms.receiver
 
+import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import dagger.android.AndroidInjection
 import org.groebl.sms.blocking.BlockingClient
 import org.groebl.sms.interactor.MarkBlocked
 import org.groebl.sms.repository.ConversationRepository
 import org.groebl.sms.util.Preferences
-import dagger.android.AndroidInjection
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import javax.inject.Inject
@@ -37,6 +38,7 @@ class BlockThreadReceiver : BroadcastReceiver() {
     @Inject lateinit var markBlocked: MarkBlocked
     @Inject lateinit var prefs: Preferences
 
+    @SuppressLint("CheckResult")
     override fun onReceive(context: Context, intent: Intent) {
         AndroidInjection.inject(this, context)
 
@@ -57,8 +59,14 @@ class BlockThreadReceiver : BroadcastReceiver() {
                     MarkBlocked.Params(listOf(threadId), prefs.blockingManager.get(), null)
                 )
             )
-            .subscribe { goAsync().finish() }
-            .dispose()
+            .subscribe(
+                {
+                    goAsync().finish()
+                },
+                { error ->
+                    Timber.e("BlockThreadReceiver", "blocking failed")
+                    goAsync().finish()
+                }
+            )
     }
-
 }

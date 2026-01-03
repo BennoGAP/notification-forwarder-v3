@@ -19,9 +19,18 @@
 package org.groebl.sms.worker
 
 import android.content.Context
+import androidx.work.ForegroundInfo
 import androidx.work.Worker
 import androidx.work.WorkerParameters
-import org.groebl.sms.interactor.ReceiveSms
+import org.groebl.sms.blocking.BlockingClient
+import org.groebl.sms.interactor.UpdateBadge
+import org.groebl.sms.manager.NotificationManager
+import org.groebl.sms.manager.ShortcutManager
+import org.groebl.sms.repository.ContactRepository
+import org.groebl.sms.repository.ConversationRepository
+import org.groebl.sms.repository.MessageContentFilterRepository
+import org.groebl.sms.repository.MessageRepository
+import org.groebl.sms.util.Preferences
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -31,23 +40,100 @@ class ReceiveSmsWorker(appContext: Context, workerParams: WorkerParameters)
         const val INPUT_DATA_KEY_MESSAGE_ID = "messageId"
     }
 
-    @Inject lateinit var receiveSms: ReceiveSms
+    @Inject lateinit var conversationRepo: ConversationRepository
+    @Inject lateinit var blockingClient: BlockingClient
+    @Inject lateinit var prefs: Preferences
+    @Inject lateinit var messageRepo: MessageRepository
+    @Inject lateinit var notificationManager: NotificationManager
+    @Inject lateinit var updateBadge: UpdateBadge
+    @Inject lateinit var shortcutManager: ShortcutManager
+	@Inject lateinit var filterRepo: MessageContentFilterRepository
+    @Inject lateinit var contactsRepo: ContactRepository
 
     override fun doWork(): Result {
         Timber.v("started")
 
         val messageId = inputData.getLong(INPUT_DATA_KEY_MESSAGE_ID, -1)
-        if (messageId == -1L) {
-            Timber.v("failed. message id was -1")
+        if (messageId < 0) {
+            Timber.v("failed. message id was {messageId}")
             return Result.failure(inputData)
         }
 
-        // process the new message
-        receiveSms.execute(messageId)
+        val message = messageRepo.getMessage(messageId) ?: return Result.failure(inputData)
+
+        val action = blockingClient.shouldBlock(message.address).blockingGet()
+
+        when {
+            ((action is BlockingClient.Action.Block) && prefs.drop.get()) -> {
+                // blocked and 'drop blocked' remove from db and don't continue
+                Timber.v("address is blocked and drop blocked is on. dropped")
+                messageRepo.deleteMessages(listOf(message.id))
+                return Result.failure(inputData)
+            }
+
+            action is BlockingClient.Action.Block -> {
+                // blocked
+                Timber.v("address is blocked")
+                messageRepo.markRead(listOf(message.threadId))
+                conversationRepo.markBlocked(
+                    listOf(message.threadId),
+                    prefs.blockingManager.get(),
+                    action.reason
+                )
+            }
+
+            action is BlockingClient.Action.Unblock -> {
+                // unblock
+                Timber.v("unblock conversation if blocked")
+                conversationRepo.markUnblocked(message.threadId)
+            }
+        }
+		
+		val messageFilterAction = filterRepo.isBlocked(message.getText(), message.address, contactsRepo)
+        if (messageFilterAction) {
+            Timber.v("message dropped based on content filters")
+            messageRepo.deleteMessages(listOf(message.id))
+            return Result.failure(inputData)
+        }
+
+        // update and fetch conversation
+        conversationRepo.updateConversations(listOf(message.threadId))
+        val conversation = conversationRepo.getOrCreateConversation(message.threadId)
+            ?: return Result.failure(inputData)
+
+        // don't notify (continue) for blocked conversations
+        if (conversation.blocked) {
+            Timber.v("no notifications for blocked")
+            return Result.failure(inputData)
+        }
+
+        // unarchive conversation if necessary
+        if (conversation.archived) {
+            Timber.v("conversation unarchived")
+            conversationRepo.markUnarchived(listOf(conversation.id))
+        }
+
+        // update/create notification
+        Timber.v("update/create notification")
+        notificationManager.update(conversation.id)
+
+        // update shortcuts
+        Timber.v("update shortcuts")
+        shortcutManager.updateShortcuts()
+        shortcutManager.reportShortcutUsed(conversation.id)
+
+        // update the badge and widget
+        Timber.v("update badge and widget")
+        updateBadge.execute(Unit)
 
         Timber.v("finished")
 
         return Result.success()
     }
+
+    override fun getForegroundInfo() = ForegroundInfo(
+        0,
+        notificationManager.getForegroundNotificationForWorkersOnOlderAndroids()
+    )
 
 }

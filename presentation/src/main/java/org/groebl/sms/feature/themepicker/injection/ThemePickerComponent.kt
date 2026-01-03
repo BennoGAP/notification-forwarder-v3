@@ -18,9 +18,9 @@
  */
 package org.groebl.sms.feature.themepicker.injection
 
+import dagger.Subcomponent
 import org.groebl.sms.feature.themepicker.ThemePickerController
 import org.groebl.sms.injection.scope.ControllerScope
-import dagger.Subcomponent
 
 @ControllerScope
 @Subcomponent(modules = [ThemePickerModule::class])

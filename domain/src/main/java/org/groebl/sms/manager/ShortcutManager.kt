@@ -18,7 +18,6 @@
  */
 package org.groebl.sms.manager
 
-import android.content.pm.ShortcutInfo
 import androidx.core.content.pm.ShortcutInfoCompat
 
 interface ShortcutManager {

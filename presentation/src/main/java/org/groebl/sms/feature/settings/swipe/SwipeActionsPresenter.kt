@@ -20,13 +20,12 @@ package org.groebl.sms.feature.settings.swipe
 
 import android.content.Context
 import androidx.annotation.DrawableRes
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
 import org.groebl.sms.R
 import org.groebl.sms.common.base.QkPresenter
 import org.groebl.sms.util.Preferences
-import com.uber.autodispose.android.lifecycle.scope
-import com.uber.autodispose.autoDisposable
 import io.reactivex.rxkotlin.plusAssign
-import io.reactivex.rxkotlin.withLatestFrom
 import javax.inject.Inject
 
 class SwipeActionsPresenter @Inject constructor(

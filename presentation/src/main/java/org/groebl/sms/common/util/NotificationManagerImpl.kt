@@ -30,15 +30,12 @@ import android.media.AudioAttributes
 import android.net.Uri
 import android.os.Build
 import android.os.PowerManager
-import android.provider.ContactsContract
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.Person
 import androidx.core.app.RemoteInput
 import androidx.core.app.TaskStackBuilder
 import androidx.core.content.getSystemService
-import androidx.core.graphics.drawable.IconCompat
-import com.bumptech.glide.Glide
 import org.groebl.sms.R
 import org.groebl.sms.common.util.extensions.dpToPx
 import org.groebl.sms.common.util.extensions.fromRecipient
@@ -51,20 +48,21 @@ import org.groebl.sms.manager.ShortcutManager
 import org.groebl.sms.mapper.CursorToPartImpl
 import org.groebl.sms.receiver.BlockThreadReceiver
 import org.groebl.sms.receiver.DeleteMessagesReceiver
-import org.groebl.sms.receiver.MarkArchivedReceiver
-import org.groebl.sms.receiver.MarkReadReceiver
-import org.groebl.sms.receiver.MarkSeenReceiver
+import org.groebl.sms.receiver.MessageMarkReceiver
 import org.groebl.sms.receiver.RemoteMessagingReceiver
 import org.groebl.sms.receiver.SpeakThreadsReceiver
 import org.groebl.sms.repository.ContactRepository
 import org.groebl.sms.repository.ConversationRepository
 import org.groebl.sms.repository.MessageRepository
+import org.groebl.sms.util.GlideApp
 import org.groebl.sms.util.PhoneNumberUtils
 import org.groebl.sms.util.Preferences
 import org.groebl.sms.util.tryOrNull
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
+import androidx.core.net.toUri
+import org.groebl.sms.receiver.ResendMessageReceiver
 
 @Singleton
 class NotificationManagerImpl @Inject constructor(
@@ -92,6 +90,21 @@ class NotificationManagerImpl @Inject constructor(
         // Make sure the default channel has been initialized
         createNotificationChannel()
     }
+
+    // Required for running workers on Android 12 and older
+    override fun getForegroundNotificationForWorkersOnOlderAndroids() =
+        NotificationCompat.Builder(context, DEFAULT_CHANNEL_ID)
+            .setContentTitle(context.getString(R.string.notification_foreground_worker_title))
+            .setContentText(context.getString(R.string.notification_foreground_worker_text))
+            .setShowWhen(false)
+            .setWhen(System.currentTimeMillis())
+            .setSmallIcon(R.drawable.ic_notification_worker)
+            .setColor(colors.theme().theme)
+            .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+            .setPriority(NotificationCompat.PRIORITY_MIN)
+            .setOngoing(true)
+			.setSilent(true)
+            .build()
 
     /**
      * Updates the notification for a particular conversation
@@ -129,7 +142,9 @@ class NotificationManagerImpl @Inject constructor(
                 .addNextIntent(contentIntent)
         val contentPI = taskStackBuilder.getPendingIntent(threadId.toInt(), PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
-        val seenIntent = Intent(context, MarkSeenReceiver::class.java).putExtra("threadId", threadId)
+        val seenIntent = Intent(context, MessageMarkReceiver::class.java)
+            .putExtra("threadId", threadId)
+            .putExtra("type", MessageMarkReceiver.MarkType.Seen.ordinal)
         val seenPI = PendingIntent.getBroadcast(context, threadId.toInt(), seenIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
@@ -149,6 +164,7 @@ class NotificationManagerImpl @Inject constructor(
                 .setSmallIcon(R.drawable.ic_notification)
                 .setNumber(messages.size)
                 .setAutoCancel(true)
+				.setOnlyAlertOnce(true)
                 .setContentIntent(contentPI)
                 .setDeleteIntent(seenPI)
                 .setLights(Color.WHITE, 500, 2000)
@@ -210,7 +226,7 @@ class NotificationManagerImpl @Inject constructor(
         val avatar = conversation.recipients.takeIf { it.size == 1 }
                 ?.first()?.contact?.photoUri
                 ?.let { photoUri ->
-                    Glide.with(context)
+                    GlideApp.with(context)
                             .asBitmap()
                             .circleCrop()
                             .load(photoUri)
@@ -256,7 +272,9 @@ class NotificationManagerImpl @Inject constructor(
                 .mapNotNull { action ->
                     when (action) {
                         Preferences.NOTIFICATION_ACTION_ARCHIVE -> {
-                            val intent = Intent(context, MarkArchivedReceiver::class.java).putExtra("threadId", threadId)
+                            val intent = Intent(context, MessageMarkReceiver::class.java)
+                                .putExtra("threadId", threadId)
+                                .putExtra("type", MessageMarkReceiver.MarkType.Archived.ordinal)
                             val pi = PendingIntent.getBroadcast(context, threadId.toInt(), intent,
                                     PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
                             NotificationCompat.Action.Builder(R.drawable.ic_archive_white_24dp, actionLabels[action], pi)
@@ -283,7 +301,9 @@ class NotificationManagerImpl @Inject constructor(
                         }
 
                         Preferences.NOTIFICATION_ACTION_READ -> {
-                            val intent = Intent(context, MarkReadReceiver::class.java).putExtra("threadId", threadId)
+                            val intent = Intent(context, MessageMarkReceiver::class.java)
+                                .putExtra("threadId", threadId)
+                                .putExtra("type", MessageMarkReceiver.MarkType.Read.ordinal)
                             val pi = PendingIntent.getBroadcast(context, threadId.toInt(), intent,
                                     PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
                             NotificationCompat.Action.Builder(R.drawable.ic_check_white_24dp, actionLabels[action], pi)
@@ -306,7 +326,7 @@ class NotificationManagerImpl @Inject constructor(
                         Preferences.NOTIFICATION_ACTION_CALL -> {
                             val address = conversation.recipients[0]?.address
                             val intentAction = if (permissions.hasCalling()) Intent.ACTION_CALL else Intent.ACTION_DIAL
-                            val intent = Intent(intentAction, Uri.parse("tel:$address"))
+                            val intent = Intent(intentAction, "tel:$address".toUri())
                             val pi = PendingIntent.getActivity(context, threadId.toInt(), intent,
                                     PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
                             NotificationCompat.Action.Builder(R.drawable.ic_call_white_24dp, actionLabels[action], pi)
@@ -373,9 +393,29 @@ class NotificationManagerImpl @Inject constructor(
             .addNextIntent(contentIntent)
         val contentPI = taskStackBuilder.getPendingIntent(threadId.toInt(), PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
+        //Action for resending a failed message
+        val resendIntent = Intent(context, ResendMessageReceiver::class.java).apply {
+            putExtra("id", message.id)
+        }
+        val resendPendingIntent = PendingIntent.getBroadcast(
+            context,
+            message.id.toInt(),
+            resendIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val resendAction = NotificationCompat.Action.Builder(
+            R.drawable.ic_send_black_24dp,
+            context.getString(R.string.notification_message_failed_action),
+            resendPendingIntent
+        )
+            .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_NONE)
+            .build()
+
         val notification = NotificationCompat.Builder(context, getChannelIdForNotification(threadId))
                 .setContentTitle(context.getString(R.string.notification_message_failed_title))
                 .setContentText(context.getString(R.string.notification_message_failed_text, conversation.getTitle()))
+                .addAction(resendAction)
                 .setColor(colors.theme(lastRecipient).theme)
                 .setPriority(NotificationManagerCompat.IMPORTANCE_MAX)
                 .setSmallIcon(R.drawable.ic_notification_failed)
@@ -506,6 +546,10 @@ class NotificationManagerImpl @Inject constructor(
                 .setPriority(NotificationCompat.PRIORITY_MIN)
                 .setProgress(0, 0, true)
                 .setOngoing(true)
+    }
+
+    override fun cancel(i: Int) {
+        notificationManager.cancel(i)
     }
 
 }

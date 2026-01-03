@@ -24,7 +24,7 @@ import io.reactivex.Flowable
 import javax.inject.Inject
 
 class PerformRestore @Inject constructor(
-        private val backupRepo: BackupRepository
+    private val backupRepo: BackupRepository
 ) : Interactor<Uri>() {
 
     override fun buildObservable(params: Uri): Flowable<*> {

@@ -24,19 +24,9 @@ import android.graphics.Path
 import android.graphics.RectF
 import android.util.AttributeSet
 import org.groebl.sms.common.util.extensions.dpToPx
-import org.groebl.sms.injection.appComponent
-import org.groebl.sms.util.Preferences
-import javax.inject.Inject
 
 class BubbleImageView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null)
     : androidx.appcompat.widget.AppCompatImageView(context, attrs) {
-
-    @Inject lateinit var prefs: Preferences
-
-    init {
-        appComponent.inject(this)
-    }
-
     enum class Style(val topLeft: Boolean, val topRight: Boolean, val bottomRight: Boolean, val bottomLeft: Boolean) {
 
         ONLY(true, true, true, true),
@@ -56,18 +46,8 @@ class BubbleImageView @JvmOverloads constructor(context: Context, attrs: Attribu
         }
 
     private val path = Path()
-    private val radiusSmall = when (prefs.bubbleStyle.get()) {
-        Preferences.BUBBLE_STYLE_IOS -> 10.dpToPx(context).toFloat()
-        Preferences.BUBBLE_STYLE_SIMPLE -> 18.dpToPx(context).toFloat()
-        Preferences.BUBBLE_STYLE_TRIANGLE -> 18.dpToPx(context).toFloat()
-        else -> 4.dpToPx(context).toFloat()
-    }
-    private val radiusLarge = when (prefs.bubbleStyle.get()) {
-        Preferences.BUBBLE_STYLE_IOS -> 10.dpToPx(context).toFloat()
-        Preferences.BUBBLE_STYLE_SIMPLE -> 18.dpToPx(context).toFloat()
-        Preferences.BUBBLE_STYLE_TRIANGLE -> 18.dpToPx(context).toFloat()
-        else -> 18.dpToPx(context).toFloat()
-    }
+    private val radiusSmall = 4.dpToPx(context).toFloat()
+    private val radiusLarge = 18.dpToPx(context).toFloat()
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)

@@ -22,6 +22,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+
     <org.groebl.sms.common.widget.QkTextView
         android:id="@+id/snackbarTitle"
         android:layout_width="0dp"
@@ -36,12 +37,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:textSize="primary"
         tools:text="Love texting again" />
+
     <org.groebl.sms.common.widget.QkTextView
         android:id="@+id/snackbarMessage"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="2dp"
         android:paddingBottom="16dp"
         android:textColor="?android:attr/textColorSecondary"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -50,6 +51,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:textSize="secondary"
         tools:text="Make this your default SMS app" />
+
     <org.groebl.sms.common.widget.QkTextView
         android:id="@+id/snackbarButton"
         android:layout_width="wrap_content"
@@ -66,4 +68,5 @@
         app:textColor="theme"
         app:textSize="secondary"
         tools:text="Change" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

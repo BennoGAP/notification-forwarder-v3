@@ -113,8 +113,6 @@ class ContactRepositoryImpl @Inject constructor(
                 .filter { it.isLoaded }
                 .filter { it.isValid }
                 .map { realm.copyFromRealm(it) }
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .observeOn(Schedulers.io())
                 .map { contacts ->
                     if (mobileOnly) {
                         contacts.map { contact ->
@@ -140,6 +138,7 @@ class ContactRepositoryImpl @Inject constructor(
                         }
                     }
                 }
+				.subscribeOn(Schedulers.io())
     }
 
     override fun getUnmanagedContactGroups(): Observable<List<ContactGroup>> {
@@ -169,6 +168,16 @@ class ContactRepositoryImpl @Inject constructor(
                 }
             }
         }
+    }
+
+    override fun isContact(address: String): Boolean {
+        val uri : Uri
+        if (address.contains('@')) {
+            uri = Uri.withAppendedPath(Email.CONTENT_FILTER_URI, Uri.encode(address))
+        } else {
+            uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(address))
+        }
+        return context.contentResolver.query(uri, arrayOf(BaseColumns._ID), null, null, null)?.count!! > 0
     }
 
 }

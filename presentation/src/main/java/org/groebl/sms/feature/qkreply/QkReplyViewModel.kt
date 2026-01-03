@@ -19,6 +19,8 @@
 package org.groebl.sms.feature.qkreply
 
 import android.telephony.SmsMessage
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
 import org.groebl.sms.R
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.base.QkViewModel
@@ -27,13 +29,11 @@ import org.groebl.sms.extensions.asObservable
 import org.groebl.sms.extensions.mapNotNull
 import org.groebl.sms.interactor.DeleteMessages
 import org.groebl.sms.interactor.MarkRead
-import org.groebl.sms.interactor.SendMessage
+import org.groebl.sms.interactor.SendNewMessage
 import org.groebl.sms.model.Message
 import org.groebl.sms.repository.ConversationRepository
 import org.groebl.sms.repository.MessageRepository
 import org.groebl.sms.util.ActiveSubscriptionObservable
-import com.uber.autodispose.android.lifecycle.scope
-import com.uber.autodispose.autoDisposable
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.withLatestFrom
@@ -52,7 +52,7 @@ class QkReplyViewModel @Inject constructor(
     private val markRead: MarkRead,
     private val messageRepo: MessageRepository,
     private val navigator: Navigator,
-    private val sendMessage: SendMessage,
+    private val sendNewMessage: SendNewMessage,
     private val subscriptionManager: SubscriptionManagerCompat
 ) : QkViewModel<QkReplyView, QkReplyState>(QkReplyState(threadId = threadId)) {
 
@@ -69,7 +69,7 @@ class QkReplyViewModel @Inject constructor(
 
     init {
         disposables += markRead
-        disposables += sendMessage
+        disposables += sendNewMessage
 
         // When the set of messages changes, update the state
         // If we're ever showing an empty set of messages, then it's time to shut down to activity
@@ -215,9 +215,10 @@ class QkReplyViewModel @Inject constructor(
                 .withLatestFrom(view.textChangedIntent) { _, body -> body }
                 .map { body -> body.toString() }
                 .withLatestFrom(state, conversation) { body, state, conversation ->
-                    val subId = state.subscription?.subscriptionId ?: -1
-                    val addresses = conversation.recipients.map { it.address }
-                    sendMessage.execute(SendMessage.Params(subId, threadId, addresses, body))
+                    sendNewMessage.execute(SendNewMessage.Params(
+                        state.subscription?.subscriptionId ?: -1, 0,
+                        conversation.recipients.map { it.address }, body, conversation.sendAsGroup
+                    ))
                     view.setDraft("")
                 }
                 .doOnNext {

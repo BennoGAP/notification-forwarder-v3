@@ -21,17 +21,16 @@ package org.groebl.sms.feature.notificationprefs
 import android.content.Context
 import android.media.RingtoneManager
 import android.net.Uri
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
 import org.groebl.sms.R
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.base.QkViewModel
 import org.groebl.sms.extensions.mapNotNull
 import org.groebl.sms.repository.ConversationRepository
 import org.groebl.sms.util.Preferences
-import com.uber.autodispose.android.lifecycle.scope
-import com.uber.autodispose.autoDisposable
 import io.reactivex.Flowable
 import io.reactivex.rxkotlin.plusAssign
-import io.reactivex.rxkotlin.withLatestFrom
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 import javax.inject.Named
@@ -105,9 +104,9 @@ class NotificationPrefsViewModel @Inject constructor(
         super.bindView(view)
 
         view.preferenceClickIntent
-            .autoDisposable(view.scope())
-            .subscribe { preferenceView ->
-                when (preferenceView.id) {
+                .autoDisposable(view.scope())
+                .subscribe { preferenceView ->
+                    when (preferenceView.id) {
                         R.id.notificationsO -> navigator.showNotificationChannel(threadId)
 
                         R.id.notifications -> notifications.set(!notifications.get())

@@ -18,9 +18,12 @@
  */
 package org.groebl.sms.manager
 
+import android.app.Notification
 import androidx.core.app.NotificationCompat
 
 interface NotificationManager {
+
+    fun getForegroundNotificationForWorkersOnOlderAndroids(): Notification
 
     fun update(threadId: Long)
 
@@ -31,5 +34,7 @@ interface NotificationManager {
     fun buildNotificationChannelId(threadId: Long): String
 
     fun getNotificationForBackup(): NotificationCompat.Builder
+
+    fun cancel(i: Int)
 
 }

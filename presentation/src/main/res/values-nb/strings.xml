@@ -16,8 +16,7 @@
   ~
   ~ You should have received a copy of the GNU General Public License
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
+  --><resources>
     <string name="shortcut_compose_long_label">Ny samtale</string>
     <string name="shortcut_compose_short_label">Skriv</string>
     <string name="shortcut_compose_disabled_message">Snarvei deaktivert</string>
@@ -25,15 +24,15 @@
     <string name="title_settings">Innstillinger</string>
     <string name="title_notification_prefs">Varsler</string>
     <string name="title_theme">Drakt</string>
-    <string name="title_conversations">Søk i innboks &#8230;</string>
+    <string name="title_conversations">Søk i innboks …</string>
     <string name="title_compose">Skriv navn eller nummer</string>
     <string name="setup_skip">Hopp over</string>
     <string name="setup_next">Fortsett</string>
     <string name="menu_add_person">Add person</string>
     <string name="menu_call">Ring</string>
     <string name="menu_info">Detaljer</string>
-    <string name="menu_save">Lagre til galleri</string>
-    <string name="menu_share">Share</string>
+    <string name="menu_mms_part_save">Lagre til galleri</string>
+    <string name="compose_menu_share">Share</string>
     <string name="main_drawer_open_cd">Åpne navigasjonsskuff</string>
     <string name="main_title_selected">%d valgt</string>
     <string name="main_menu_clear">Tøm</string>
@@ -46,7 +45,7 @@
     <string name="main_menu_read">Mark read</string>
     <string name="main_menu_unread">Mark unread</string>
     <string name="main_menu_block">Blokker</string>
-    <string name="main_syncing">Synkroniserer meldinger&#8230;</string>
+    <string name="main_syncing">Synkroniserer meldinger…</string>
     <string name="main_sender_you">Du: %s</string>
     <string name="main_message_results_title">Resultater i meldinger</string>
     <string name="main_message_results">%d meldinger</string>
@@ -55,12 +54,12 @@
     <string name="archived_empty_text">Arkiverte samtaler vises her</string>
     <string name="main_fab_cd">Start ny samtale</string>
     <string name="main_default_sms_title">Elsk teksting igjen</string>
-    <string name="main_default_sms_message">Gjør QKSMS til standard SMS-app</string>
+    <string name="main_default_sms_message">Gjør QUIK til standard SMS-app</string>
     <string name="main_default_sms_change">Endre</string>
     <string name="main_permission_required">Tillatelse kreves</string>
-    <string name="main_permission_sms">QKSMS trenger tillatelse til å sende og vise tekstmeldinger</string>
-    <string name="main_permission_contacts">QKSMS trenger tillatelse til å lese kontaktene dine</string>
-    <string name="main_permission_notifications">QKSMS needs permission to display notifications</string>
+    <string name="main_permission_sms">QUIK trenger tillatelse til å sende og vise tekstmeldinger</string>
+    <string name="main_permission_contacts">QUIK trenger tillatelse til å lese kontaktene dine</string>
+    <string name="main_permission_notifications">QUIK needs permission to display notifications</string>
     <string name="main_permission_allow">Tillat</string>
     <string name="drawer_inbox">Innboks</string>
     <string name="drawer_archived">Arkivert</string>
@@ -71,7 +70,7 @@
     <string name="drawer_help">Hjelp og tilbakemelding</string>
     <string name="drawer_invite">Inviter venner</string>
     <string name="drawer_plus_banner_summary">Aktiver fantastiske nye funksjoner og støtt utviklingen</string>
-    <string name="rate_title">Liker du QKSMS?</string>
+    <string name="rate_title">Liker du QUIK?</string>
     <string name="rate_summary">Del litt kjærlighet og vurder oss på Google Play!</string>
     <string name="rate_okay">Ok!</string>
     <string name="rate_dismiss">Avvis</string>
@@ -97,7 +96,7 @@
     <string name="compose_vcard_label">Kontakt</string>
     <string name="compose_scheduled_for">Planlagt for</string>
     <string name="compose_scheduled_future">Valgt tid må være i fremtid.</string>
-    <string name="compose_scheduled_plus">Du må ha QKSMS+ for å kunne bruke planlagte meldinger</string>
+    <string name="compose_scheduled_plus">Du må ha QUIK+ for å kunne bruke planlagte meldinger</string>
     <string name="compose_scheduled_toast">Lagt til planlagte meldinger</string>
     <string name="compose_hint">Skriv en melding</string>
     <string name="compose_menu_copy">Kopier tekst</string>
@@ -127,7 +126,7 @@
     <string name="compose_sim_changed_toast">SIM %1$d (%2$s) selected</string>
     <string name="compose_sim_cd">%s er valgt, velg annet SIM-kort</string>
     <string name="compose_send_cd">Send melding</string>
-    <string name="message_status_sending">Sender &#8230;</string>
+    <string name="message_status_sending">Sender …</string>
     <string name="message_status_delivered">Levert %s</string>
     <string name="message_status_failed">Feil ved sending. Trykk for å prøve igjen</string>
     <string name="info_title">Detaljer</string>
@@ -145,15 +144,15 @@
     <string name="backup_title">Sikret</string>
     <string name="backup_backing_up">Sikkerhetskopierer meldinger</string>
     <string name="backup_restoring">Gjenoppretter fra sikkerhetskopi</string>
-    <string name="backup_loading">Henter &#8230;</string>
+    <string name="backup_loading">Henter …</string>
     <string name="backup_never">Aldri</string>
     <string name="backup_location_title">Backup location</string>
     <string name="backup_location_summary">Set folder</string>
     <string name="backup_restore_title">Gjenopprett</string>
     <string name="backup_restore_summary">Velg en sikkerhetskopi</string>
-    <string name="backup_restore_error_plus">Vennligst aktiver QKSMS+ for å bruke sikkerhetskopiering og gjenoppretting</string>
-    <string name="backup_restore_error_backup">Sikkerhetskopiering pågår &#8230;</string>
-    <string name="backup_restore_error_restore">Gjenoppretting pågår &#8230;</string>
+    <string name="backup_restore_error_plus">Vennligst aktiver QUIK+ for å bruke sikkerhetskopiering og gjenoppretting</string>
+    <string name="backup_restore_error_backup">Sikkerhetskopiering pågår …</string>
+    <string name="backup_restore_error_restore">Gjenoppretting pågår …</string>
     <string name="backup_restore_confirm_title">Gjenopprett fra sikkerhetskopi</string>
     <string name="backup_restore_stop_title">Avbryt gjenoppretting</string>
     <string name="backup_restore_stop_message">Meldinger som allerede er gjenopprettet vil forbli på din enhet</string>
@@ -167,10 +166,10 @@
     <string name="backup_restore_dialog_empty">Fant ingen sikkerhetskopier</string>
     <string name="backup_disclaimer">Per idag er bare mulig å sikkerhetskopiere SMS. MMS og planlagte sikkerhetskopier kommer snart.</string>
     <string name="backup_now">Sikkerhetskopier nå</string>
-    <string name="backup_progress_parsing">Ser gjennom sikkerhetskopien &#8230;</string>
-    <string name="backup_progress_running">%1$d/%2$d meldinger</string>
-    <string name="backup_progress_saving">Lagrer sikkerhetskopi &#8230;</string>
-    <string name="backup_progress_syncing">Synkroniserer meldinger &#8230;</string>
+    <string name="backup_progress_parsing">Ser gjennom sikkerhetskopien …</string>
+    <string name="backup_progress_running">%d/%d meldinger</string>
+    <string name="backup_progress_saving">Lagrer sikkerhetskopi …</string>
+    <string name="backup_progress_syncing">Synkroniserer meldinger …</string>
     <string name="backup_progress_finished">Ferdig!</string>
     <string name="backup_notification_channel_name">Sikkerhetskopiering og gjenoppretting</string>
     <string name="scheduled_title">Planlagt</string>
@@ -182,6 +181,11 @@
     <string name="scheduled_empty_message_3_timestamp">Sender den 23. desember</string>
     <string name="scheduled_compose_cd">Planlegg en melding</string>
     <string name="scheduled_options_title">Planlagt melding</string>
+    <string-array name="scheduled_options">
+        <item>Send nå</item>
+        <item>Copy text</item>
+        <item>Delete</item>
+    </string-array>
     <string name="settings_category_appearance">Utseende</string>
     <string name="settings_category_general">Generelt</string>
     <string name="settings_category_qkreply">Raskt svar</string>
@@ -247,7 +251,7 @@
     <string name="settings_mms_size_title">Komprimer MMS-vedlegg</string>
     <string name="settings_sync_title">Synkroniser meldinger</string>
     <string name="settings_sync_summary">Resynkroniser meldinger med Androids interne meldingslager</string>
-    <string name="settings_about_title">Om QKSMS</string>
+    <string name="settings_about_title">Om QUIK</string>
     <string name="settings_version">Versjon %s</string>
     <string name="settings_logging_enabled">Feillogg aktivert</string>
     <string name="settings_logging_disabled">Feillogg deaktivert</string>
@@ -257,8 +261,7 @@
     <string name="blocking_drop_summary">Forkast meldinger fra blokkerte sendere istedenfor å skjule dem</string>
     <string name="blocking_conversations">Blokkerte samtaler</string>
     <string name="blocking_manager_title">Blokkeringer</string>
-    <string name="blocking_manager_qksms_title">QKSMS</string>
-    <string name="blocking_manager_qksms_summary">Innebygd blokkeringsfunksjon i QKSMS</string>
+    <string name="blocking_manager_qksms_summary">Innebygd blokkeringsfunksjon i QUIK</string>
     <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist &amp; Schedule</string>
     <string name="blocking_manager_call_control_summary">Filtrer anrop og meldinger automatisk. Fellesskapets intelligens™ hjelper med å forhindre uønskede henvendelser fra plageånder</string>
     <string name="blocking_manager_sia_summary">Filtrer meldinger fra ukjente numre automatisk med \"Skal jeg svare\"-appen</string>
@@ -296,10 +299,10 @@
     <string name="qksms_plus_upgrade">Oppdateringer på livstid for %1$s %2$s</string>
     <!-- Substitutions are for price and currency. Ex: Unlock + donate for $4.99 USD -->
     <string name="qksms_plus_upgrade_donate">Aktiver + donér for %1$s %2$s</string>
-    <string name="qksms_plus_thanks_title">Takk for at du støtter QKSMS!</string>
-    <string name="qksms_plus_thanks_summary">Du har nå tilgang til alle funksjoner i QKSMS+</string>
+    <string name="qksms_plus_thanks_title">Takk for at du støtter QUIK!</string>
+    <string name="qksms_plus_thanks_summary">Du har nå tilgang til alle funksjoner i QUIK+</string>
     <string name="qksms_plus_error">An error has occurred, please try again</string>
-    <string name="qksms_plus_free_title">QKSMS+ er gratis for F-Droid-brukere. Om du ønsker å støtte utviklingen, kan du gjerne donere.</string>
+    <string name="qksms_plus_free_title">QUIK+ er gratis for F-Droid-brukere. Om du ønsker å støtte utviklingen, kan du gjerne donere.</string>
     <string name="qksms_plus_donate">Donér med PayPal</string>
     <string name="qksms_plus_coming_soon">Kommer snart</string>
     <string name="qksms_plus_themes_title">Premium drakter</string>
@@ -321,8 +324,8 @@
     <string name="qksms_plus_respond_title">Auto-svar</string>
     <string name="qksms_plus_respond_summary">Svar på innkommende meldinger automatisk med et forhåndsdefinert svar</string>
     <string name="qksms_plus_more_title">Mer</string>
-    <string name="qksms_plus_more_summary">QKSMS er i stadig utvikling og ditt kjøp inkluderer alle fremtidige QKSMS+ funksjoner!</string>
-    <string name="widget_loading">Laster inn &#8230;</string>
+    <string name="qksms_plus_more_summary">QUIK er i stadig utvikling og ditt kjøp inkluderer alle fremtidige QUIK+ funksjoner!</string>
+    <string name="widget_loading">Laster inn …</string>
     <string name="widget_more">Last inn flere samtaler</string>
     <string name="qkreply_menu_read">Mark read</string>
     <string name="qkreply_menu_call">Ring</string>
@@ -352,7 +355,7 @@
     <string name="button_set">Angi</string>
     <string name="button_undo">Angre</string>
     <string name="toast_copied">Kopiert</string>
-    <string name="toast_qksms_plus">Du må aktivere QKSMS+ for å bruke dette</string>
+    <string name="toast_qksms_plus">Du må aktivere QUIK+ for å bruke dette</string>
     <plurals name="notification_new_messages">
         <item quantity="one">Ny melding</item>
         <item quantity="other">%s nye meldinger</item>

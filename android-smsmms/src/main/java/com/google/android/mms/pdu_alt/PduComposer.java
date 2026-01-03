@@ -80,6 +80,7 @@ public class PduComposer {
      * Block size when read data from InputStream.
      */
     static private final int PDU_COMPOSER_BLOCK_SIZE = 1024;
+    private static final String TAG = "PduComposer";
 
     /**
      * The output message.

@@ -1,6 +1,8 @@
 package org.groebl.sms.feature.blocking.manager
 
 import android.content.Context
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
 import org.groebl.sms.R
 import org.groebl.sms.blocking.BlockingClient
 import org.groebl.sms.blocking.CallBlockerBlockingClient
@@ -9,11 +11,8 @@ import org.groebl.sms.blocking.QksmsBlockingClient
 import org.groebl.sms.blocking.ShouldIAnswerBlockingClient
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.base.QkPresenter
-import org.groebl.sms.manager.AnalyticsManager
 import org.groebl.sms.repository.ConversationRepository
 import org.groebl.sms.util.Preferences
-import com.uber.autodispose.android.lifecycle.scope
-import com.uber.autodispose.autoDisposable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.plusAssign
@@ -21,7 +20,6 @@ import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class BlockingManagerPresenter @Inject constructor(
-    private val analytics: AnalyticsManager,
     private val callBlocker: CallBlockerBlockingClient,
     private val callControl: CallControlBlockingClient,
     private val context: Context,
@@ -46,10 +44,10 @@ class BlockingManagerPresenter @Inject constructor(
         super.bindIntents(view)
 
         view.activityResumed()
-            .map { callBlocker.isAvailable() }
-            .distinctUntilChanged()
-            .autoDisposable(view.scope())
-            .subscribe { available -> newState { copy(callBlockerInstalled = available) } }
+                .map { callBlocker.isAvailable() }
+                .distinctUntilChanged()
+                .autoDisposable(view.scope())
+                .subscribe { available -> newState { copy(callBlockerInstalled = available) } }
 
         view.activityResumed()
                 .map { callControl.isAvailable() }
@@ -69,32 +67,28 @@ class BlockingManagerPresenter @Inject constructor(
                 .switchMap { numbers -> qksms.block(numbers).andThen(Observable.just(Unit)) } // Hack
                 .autoDisposable(view.scope())
                 .subscribe {
-                    analytics.setUserProperty("Blocking Manager", "SMS")
                     prefs.blockingManager.set(Preferences.BLOCKING_MANAGER_QKSMS)
                 }
 
         view.callBlockerClicked()
-            .filter {
-                val installed = callBlocker.isAvailable()
-                if (!installed) {
-                    analytics.track("Install Call Blocker")
-                    navigator.installCallBlocker()
-                }
+                .filter {
+                    val installed = callBlocker.isAvailable()
+                    if (!installed) {
+                        navigator.installCallBlocker()
+                    }
 
-                val enabled = prefs.blockingManager.get() == Preferences.BLOCKING_MANAGER_CB
-                installed && !enabled
-            }
-            .autoDisposable(view.scope())
-            .subscribe {
-                analytics.setUserProperty("Blocking Manager", "Call Blocker")
-                prefs.blockingManager.set(Preferences.BLOCKING_MANAGER_CB)
-            }
+                    val enabled = prefs.blockingManager.get() == Preferences.BLOCKING_MANAGER_CB
+                    installed && !enabled
+                }
+                .autoDisposable(view.scope())
+                .subscribe {
+                    prefs.blockingManager.set(Preferences.BLOCKING_MANAGER_CB)
+                }
 
         view.callControlClicked()
                 .filter {
                     val installed = callControl.isAvailable()
                     if (!installed) {
-                        analytics.track("Install Call Control")
                         navigator.installCallControl()
                     }
 
@@ -115,11 +109,10 @@ class BlockingManagerPresenter @Inject constructor(
                 .filter { it }
                 .observeOn(Schedulers.io())
                 .map { getAddressesToBlock(callControl) } // This sucks. Can't wait to use coroutines
-            .switchMap { numbers -> callControl.block(numbers).andThen(Observable.just(Unit)) } // Hack
+                .switchMap { numbers -> callControl.block(numbers).andThen(Observable.just(Unit)) } // Hack
                 .autoDisposable(view.scope())
                 .subscribe {
                     callControl.shouldBlock("callcontrol").blockingGet()
-                    analytics.setUserProperty("Blocking Manager", "Call Control")
                     prefs.blockingManager.set(Preferences.BLOCKING_MANAGER_CC)
                 }
 
@@ -127,7 +120,6 @@ class BlockingManagerPresenter @Inject constructor(
                 .filter {
                     val installed = shouldIAnswer.isAvailable()
                     if (!installed) {
-                        analytics.track("Install SIA")
                         navigator.installSia()
                     }
 
@@ -136,13 +128,12 @@ class BlockingManagerPresenter @Inject constructor(
                 }
                 .autoDisposable(view.scope())
                 .subscribe {
-                    analytics.setUserProperty("Blocking Manager", "SIA")
                     prefs.blockingManager.set(Preferences.BLOCKING_MANAGER_SIA)
                 }
     }
 
     private fun getAddressesToBlock(client: BlockingClient) = conversationRepo.getBlockedConversations()
-            .fold(listOf<String>(), { numbers, conversation -> numbers + conversation.recipients.map { it.address } })
-            .filter { number -> client.isBlacklisted(number).blockingGet() !is BlockingClient.Action.Block }
+        .fold(listOf<String>()) { numbers, conversation -> numbers + conversation.recipients.map { it.address } }
+        .filter { number -> client.isBlacklisted(number).blockingGet() !is BlockingClient.Action.Block }
 
 }

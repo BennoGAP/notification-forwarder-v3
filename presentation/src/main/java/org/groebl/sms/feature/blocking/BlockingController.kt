@@ -18,7 +18,6 @@
  */
 package org.groebl.sms.feature.blocking
 
-import android.content.res.ColorStateList
 import android.view.View
 import com.bluelinelabs.conductor.RouterTransaction
 import com.jakewharton.rxbinding2.view.clicks
@@ -27,19 +26,12 @@ import org.groebl.sms.common.QkChangeHandler
 import org.groebl.sms.common.base.QkController
 import org.groebl.sms.common.util.Colors
 import org.groebl.sms.common.util.extensions.animateLayoutChanges
-import org.groebl.sms.common.util.extensions.resolveThemeColor
 import org.groebl.sms.feature.blocking.manager.BlockingManagerController
 import org.groebl.sms.feature.blocking.messages.BlockedMessagesController
 import org.groebl.sms.feature.blocking.numbers.BlockedNumbersController
-import org.groebl.sms.feature.blocking.regexps.BlockedRegexpsController
+import org.groebl.sms.feature.blocking.filters.MessageContentFiltersController
 import org.groebl.sms.injection.appComponent
-import org.groebl.sms.model.BlockedNumber
-import org.groebl.sms.model.BlockedRegex
-import org.groebl.sms.model.Conversation
-import io.realm.OrderedRealmCollection
-import io.realm.Realm
 import kotlinx.android.synthetic.main.blocking_controller.*
-import kotlinx.android.synthetic.main.settings_chevron_widget.view.*
 import kotlinx.android.synthetic.main.settings_switch_widget.view.*
 import javax.inject.Inject
 
@@ -47,8 +39,8 @@ class BlockingController : QkController<BlockingView, BlockingState, BlockingPre
 
     override val blockingManagerIntent by lazy { blockingManager.clicks() }
     override val blockedNumbersIntent by lazy { blockedNumbers.clicks() }
+    override val messageContentFiltersIntent by lazy { messageContentFilters.clicks() }
     override val blockedMessagesIntent by lazy { blockedMessages.clicks() }
-    override val blockedRegexpsIntent by lazy { blockedRegexps.clicks() }
     override val dropClickedIntent by lazy { drop.clicks() }
 
     @Inject lateinit var colors: Colors
@@ -70,35 +62,12 @@ class BlockingController : QkController<BlockingView, BlockingState, BlockingPre
         presenter.bindIntents(this)
         setTitle(R.string.blocking_title)
         showBackButton(true)
-
-        val states = arrayOf(
-            intArrayOf(android.R.attr.state_activated),
-            intArrayOf(-android.R.attr.state_activated))
-        val textTertiary = view.context.resolveThemeColor(android.R.attr.textColorTertiary)
-        val imageTintList = ColorStateList(states, intArrayOf(colors.theme().theme, textTertiary))
-
-        blockedNumbers.chevron.imageTintList = imageTintList
-        blockedRegexps.chevron.imageTintList = imageTintList
-        blockedMessages.chevron.imageTintList = imageTintList
     }
 
     override fun render(state: BlockingState) {
-        blockedNumbers.chevron.setImageResource(R.drawable.ic_chevron_right_black_24dp)
-        blockedRegexps.chevron.setImageResource(R.drawable.ic_chevron_right_black_24dp)
-        blockedMessages.chevron.setImageResource(R.drawable.ic_chevron_right_black_24dp)
-
-        blockingManager.value = state.blockingManager
+        blockingManager.summary = state.blockingManager
         drop.checkbox.isChecked = state.dropEnabled
         blockedMessages.isEnabled = !state.dropEnabled
-
-        val blockedNumber: OrderedRealmCollection<BlockedNumber> = Realm.getDefaultInstance().use { realm -> realm.where(BlockedNumber::class.java).findAll() }
-        blockedNumbers.value = if (state.blockingManager == activity!!.getString(R.string.blocking_manager_qksms_title_new)) blockedNumber.size.toString() else ""
-
-        val blockedRegexp: OrderedRealmCollection<BlockedRegex> = Realm.getDefaultInstance().use { realm -> realm.where(BlockedRegex::class.java).findAll() }
-        blockedRegexps.value = if (state.blockingManager == activity!!.getString(R.string.blocking_manager_qksms_title_new)) blockedRegexp.size.toString() else ""
-
-        val blockedConversation: OrderedRealmCollection<Conversation> = Realm.getDefaultInstance().use { realm -> realm.where(Conversation::class.java).equalTo("blocked", true).findAll() }
-        blockedMessages.value = blockedConversation.size.toString()
     }
 
     override fun openBlockedNumbers() {
@@ -107,8 +76,8 @@ class BlockingController : QkController<BlockingView, BlockingState, BlockingPre
                 .popChangeHandler(QkChangeHandler()))
     }
 
-    override fun openBlockedRegexps() {
-        router.pushController(RouterTransaction.with(BlockedRegexpsController())
+    override fun openMessageContentFilters() {
+        router.pushController(RouterTransaction.with(MessageContentFiltersController())
             .pushChangeHandler(QkChangeHandler())
             .popChangeHandler(QkChangeHandler()))
     }

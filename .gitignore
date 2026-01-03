@@ -57,3 +57,9 @@ output-metadata.json
 freeline.py
 freeline/
 freeline_project_description.json
+
+# secrets
+my-release-key.keystore
+my-release-key.keystore.base64
+.secrets
+android-keystore/keystore.b64

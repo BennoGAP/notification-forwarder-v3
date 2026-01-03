@@ -19,10 +19,10 @@
 package org.groebl.sms.feature.notificationprefs
 
 import androidx.lifecycle.ViewModel
-import org.groebl.sms.injection.ViewModelKey
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoMap
+import org.groebl.sms.injection.ViewModelKey
 import javax.inject.Named
 
 @Module

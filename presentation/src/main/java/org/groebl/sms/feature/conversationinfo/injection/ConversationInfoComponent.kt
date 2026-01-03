@@ -18,9 +18,9 @@
  */
 package org.groebl.sms.feature.conversationinfo.injection
 
+import dagger.Subcomponent
 import org.groebl.sms.feature.conversationinfo.ConversationInfoController
 import org.groebl.sms.injection.scope.ControllerScope
-import dagger.Subcomponent
 
 @ControllerScope
 @Subcomponent(modules = [ConversationInfoModule::class])

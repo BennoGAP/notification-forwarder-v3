@@ -22,11 +22,10 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import org.groebl.sms.util.Preferences
-import org.groebl.sms.R
-import org.groebl.sms.common.util.extensions.resolveThemeColor
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
 import kotlinx.android.synthetic.main.toolbar.*
@@ -65,6 +64,12 @@ abstract class QkActivity : AppCompatActivity() {
         title = title // The title may have been set before layout inflation
     }
 
+    override fun setContentView(view: View?) {
+        super.setContentView(view)
+        setSupportActionBar(toolbar)
+        title = title // The title may have been set before layout inflation
+    }
+
     override fun setTitle(titleId: Int) {
         title = getString(titleId)
     }
@@ -84,8 +89,6 @@ abstract class QkActivity : AppCompatActivity() {
 
     protected open fun showBackButton(show: Boolean) {
         supportActionBar?.setDisplayHomeAsUpEnabled(show)
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_24dp)
-        toolbar.navigationIcon?.setTint(resolveThemeColor(android.R.attr.textColorSecondary))
     }
 
     private fun disableScreenshots(disableScreenshots: Boolean) {

@@ -40,17 +40,17 @@ abstract class QkViewModel<in View : QkView<State>, State: Any>(initialState: St
         // If we accidentally push a realm object into the state on the wrong thread, switching
         // to mainThread right here should immediately alert us of the issue
         disposables += stateReducer
-                .observeOn(AndroidSchedulers.mainThread())
-                .scan(initialState) { state, reducer -> reducer(state) }
-                .subscribe(state::onNext)
+            .observeOn(AndroidSchedulers.mainThread())
+            .scan(initialState) { state, reducer -> reducer(state) }
+            .subscribe(state::onNext)
     }
 
     @CallSuper
     open fun bindView(view: View) {
         state
-                .observeOn(AndroidSchedulers.mainThread())
-                .autoDisposable(view.scope())
-                .subscribe(view::render)
+            .observeOn(AndroidSchedulers.mainThread())
+            .autoDisposable(view.scope())
+            .subscribe(view::render)
     }
 
     protected fun newState(reducer: State.() -> State) = stateReducer.onNext(reducer)

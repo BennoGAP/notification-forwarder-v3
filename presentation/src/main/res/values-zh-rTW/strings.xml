@@ -16,8 +16,7 @@
   ~
   ~ You should have received a copy of the GNU General Public License
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
+  --><resources>
     <string name="shortcut_compose_long_label">新對話</string>
     <string name="shortcut_compose_short_label">撰寫</string>
     <string name="shortcut_compose_disabled_message">捷徑已停用</string>
@@ -25,15 +24,15 @@
     <string name="title_settings">設定</string>
     <string name="title_notification_prefs">通知</string>
     <string name="title_theme">主題</string>
-    <string name="title_conversations">在收件箱中搜尋...</string>
+    <string name="title_conversations">在收件箱中搜尋…</string>
     <string name="title_compose">輸入名字或號碼</string>
     <string name="setup_skip">跳過</string>
     <string name="setup_next">繼續</string>
     <string name="menu_add_person">增加傳送人</string>
     <string name="menu_call">致電</string>
     <string name="menu_info">詳細資訊</string>
-    <string name="menu_save">儲存到圖庫</string>
-    <string name="menu_share">分享</string>
+    <string name="menu_mms_part_save">儲存到圖庫</string>
+    <string name="compose_menu_share">分享</string>
     <string name="main_drawer_open_cd">開啟導航抽屜</string>
     <string name="main_title_selected">已選擇 %d 項</string>
     <string name="main_menu_clear">清除</string>
@@ -55,12 +54,12 @@
     <string name="archived_empty_text">您封存的對話將出現在這裡</string>
     <string name="main_fab_cd">開始新對話</string>
     <string name="main_default_sms_title">再次愛上發訊息</string>
-    <string name="main_default_sms_message">將 QKSMS 設為預設簡訊應用程式</string>
+    <string name="main_default_sms_message">將 QUIK 設為預設簡訊應用程式</string>
     <string name="main_default_sms_change">變更</string>
     <string name="main_permission_required">需要權限</string>
-    <string name="main_permission_sms">需要允許 QKSMS 傳送和檢視簡訊</string>
-    <string name="main_permission_contacts">需要允許 QKSMS 檢視您的聯絡人</string>
-    <string name="main_permission_notifications">需要允許 QKSMS 顯示通知</string>
+    <string name="main_permission_sms">需要允許 QUIK 傳送和檢視簡訊</string>
+    <string name="main_permission_contacts">需要允許 QUIK 檢視您的聯絡人</string>
+    <string name="main_permission_notifications">需要允許 QUIK 顯示通知</string>
     <string name="main_permission_allow">允許</string>
     <string name="drawer_inbox">收件箱</string>
     <string name="drawer_archived">封存</string>
@@ -71,7 +70,7 @@
     <string name="drawer_help">幫助與回饋</string>
     <string name="drawer_invite">邀請朋友</string>
     <string name="drawer_plus_banner_summary">解鎖驚人的新特性並支持開發</string>
-    <string name="rate_title">喜歡 QKSMS嗎？</string>
+    <string name="rate_title">喜歡 QUIK嗎？</string>
     <string name="rate_summary">在 Google Play 分享您的感受，並給我們評分！</string>
     <string name="rate_okay">好！</string>
     <string name="rate_dismiss">放棄</string>
@@ -94,9 +93,9 @@
     <string name="compose_send_group_summary">收件人和回復對每個人都是可見的</string>
     <string name="compose_messages_empty">這是您談話的開始。說點好聽的吧！</string>
     <string name="compose_vcard_label">聯絡人卡片</string>
-    <string name="compose_scheduled_for">排程於</string>
+    <string name="compose_scheduled_for">排程於：</string>
     <string name="compose_scheduled_future">所選時間必須是未來時間！</string>
-    <string name="compose_scheduled_plus">您必須解鎖 QKSMS+ 以使用排程簡訊</string>
+    <string name="compose_scheduled_plus">您必須解鎖 QUIK+ 以使用排程簡訊</string>
     <string name="compose_scheduled_toast">已新增至排程訊息</string>
     <string name="compose_hint">寫一條訊息…</string>
     <string name="compose_menu_copy">複製文字</string>
@@ -150,7 +149,7 @@
     <string name="backup_location_summary">設定資料夾</string>
     <string name="backup_restore_title">還原</string>
     <string name="backup_restore_summary">選擇備份</string>
-    <string name="backup_restore_error_plus">請解鎖 QKSMS+ 以使用備份和還原功能</string>
+    <string name="backup_restore_error_plus">請解鎖 QUIK+ 以使用備份和還原功能</string>
     <string name="backup_restore_error_backup">正在備份…</string>
     <string name="backup_restore_error_restore">正在還原…</string>
     <string name="backup_restore_confirm_title">從備份還原</string>
@@ -167,7 +166,7 @@
     <string name="backup_disclaimer">目前只有簡訊支援備份和還原，多媒體和排程簡訊備份將在不久後加入！</string>
     <string name="backup_now">立即備份</string>
     <string name="backup_progress_parsing">正在解析備份…</string>
-    <string name="backup_progress_running">%1$d/%2$d 條訊息</string>
+    <string name="backup_progress_running">%d/%d 條訊息</string>
     <string name="backup_progress_saving">正在儲存備份…</string>
     <string name="backup_progress_syncing">正在同步訊息…</string>
     <string name="backup_progress_finished">完成！</string>
@@ -176,11 +175,16 @@
     <string name="scheduled_empty_description">在您指定的時間自動傳送訊息</string>
     <string name="scheduled_empty_message_1">嘿，您的生日是什麼時候？</string>
     <string name="scheduled_empty_message_2">是 12 月 23 日</string>
-    <string name="scheduled_empty_message_3">生日快樂！看看我是一個多麼棒的朋友，我還記得你的生日！</string>
+    <string name="scheduled_empty_message_3">生日快樂！看看我是一個多麼棒的朋友，我還記得你的生日</string>
     <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
-    <string name="scheduled_empty_message_3_timestamp">在 12 月 23 日傳送&#x200A;</string>
+    <string name="scheduled_empty_message_3_timestamp">在 12 月 23 日傳送 </string>
     <string name="scheduled_compose_cd">新增排程訊息</string>
     <string name="scheduled_options_title">排程訊息</string>
+    <string-array name="scheduled_options">
+        <item>立即傳送</item>
+        <item>複製文字</item>
+        <item>刪除</item>
+    </string-array>
     <string name="settings_category_appearance">外觀</string>
     <string name="settings_category_general">一般</string>
     <string name="settings_category_qkreply">快速答覆</string>
@@ -245,7 +249,7 @@
     <string name="settings_mms_size_title">自動壓縮 MMS 附件</string>
     <string name="settings_sync_title">同步訊息</string>
     <string name="settings_sync_summary">重新與 Android 原生訊息資料庫進行同步</string>
-    <string name="settings_about_title">關於 QKSMS</string>
+    <string name="settings_about_title">關於 QUIK</string>
     <string name="settings_version">版本 %s</string>
     <string name="settings_logging_enabled">除錯日誌已啟用</string>
     <string name="settings_logging_disabled">除錯日誌已停用</string>
@@ -255,8 +259,7 @@
     <string name="blocking_drop_summary">直接刪除封鎖的簡訊，而非只有隱藏簡訊</string>
     <string name="blocking_conversations">封鎖的對話</string>
     <string name="blocking_manager_title">封鎖管理器</string>
-    <string name="blocking_manager_qksms_title">QKSMS</string>
-    <string name="blocking_manager_qksms_summary">QKSMS 內建封鎖功能</string>
+    <string name="blocking_manager_qksms_summary">QUIK 內建封鎖功能</string>
     <string name="blocking_manager_call_blocker_summary">使用黑名單與排程封鎖垃圾訊息、號碼和未知來電</string>
     <string name="blocking_manager_call_control_summary">自動過濾來電與簡訊！Community IQ™ 能讓你遠離不想要的垃圾簡訊</string>
     <string name="blocking_manager_sia_summary">使用「Should I Answer」應用程式過濾未知號碼的訊息</string>
@@ -294,10 +297,10 @@
     <string name="qksms_plus_upgrade">終身升級只需 %1$s %2$s</string>
     <!-- Substitutions are for price and currency. Ex: Unlock + donate for $4.99 USD -->
     <string name="qksms_plus_upgrade_donate">解鎖並捐贈只需 %1$s %2$s</string>
-    <string name="qksms_plus_thanks_title">感謝您對 QKSMS 的支持！</string>
-    <string name="qksms_plus_thanks_summary">現在您可以使用 QKSMS+ 的全部功能！</string>
+    <string name="qksms_plus_thanks_title">感謝您對 QUIK 的支持！</string>
+    <string name="qksms_plus_thanks_summary">現在您可以使用 QUIK+ 的全部功能</string>
     <string name="qksms_plus_error">發生錯誤，請再試一次</string>
-    <string name="qksms_plus_free_title">F-Droid 使用者可免費使用 QKSMS+！如果您想支持開發，可以隨意捐款。</string>
+    <string name="qksms_plus_free_title">F-Droid 使用者可免費使用 QUIK+！如果您想支持開發，可以隨意捐款。</string>
     <string name="qksms_plus_donate">使用PayPal 捐贈</string>
     <string name="qksms_plus_coming_soon">即將推出</string>
     <string name="qksms_plus_themes_title">高級主題</string>
@@ -319,7 +322,7 @@
     <string name="qksms_plus_respond_title">自動回覆</string>
     <string name="qksms_plus_respond_summary">使用預設回應自動回覆收到的訊息</string>
     <string name="qksms_plus_more_title">更多</string>
-    <string name="qksms_plus_more_summary">QKSMS 正在積極開發中，您的購買將包含後續 QKSMS+ 的所有功能！</string>
+    <string name="qksms_plus_more_summary">QUIK 正在積極開發中，您的購買將包含後續 QUIK+ 的所有功能！</string>
     <string name="widget_loading">載入中…</string>
     <string name="widget_more">檢視更多對話</string>
     <string name="qkreply_menu_read">標示已讀</string>
@@ -350,7 +353,7 @@
     <string name="button_set">設定</string>
     <string name="button_undo">復原</string>
     <string name="toast_copied">已複製</string>
-    <string name="toast_qksms_plus">您必須解鎖 QKSMS+ 才能使用此功能</string>
+    <string name="toast_qksms_plus">您必須解鎖 QUIK+ 才能使用此功能</string>
     <plurals name="notification_new_messages">
         <item quantity="one">新訊息</item>
         <item quantity="other">%s 條新訊息</item>
@@ -363,27 +366,23 @@
         <item>總是啟用</item>
         <item>自動</item>
     </string-array>
-
     <string-array name="notification_preview_options">
         <item>顯示姓名和訊息</item>
         <item>只顯示姓名</item>
         <item>隱藏內容</item>
     </string-array>
-
     <string-array name="text_sizes">
         <item>小</item>
         <item>一般</item>
         <item>大</item>
         <item>更大</item>
     </string-array>
-
     <string-array name="delayed_sending_labels">
         <item>無延遲</item>
         <item>3 秒</item>
         <item>5 秒</item>
         <item>10 秒</item>
     </string-array>
-
     <string-array name="mms_sizes">
         <item>自動</item>
         <item>100KB</item>
@@ -394,7 +393,6 @@
         <item>2000KB</item>
         <item>無壓縮</item>
     </string-array>
-
     <string-array name="qk_responses">
         <item>好的</item>
         <item>請稍等片刻</item>
@@ -409,5 +407,82 @@
         <item>笑死</item>
         <item>沒關係</item>
     </string-array>
-
+    <string name="menu_mms_part_share">分享</string>
+    <string name="menu_mms_part_forward">轉寄</string>
+    <string name="menu_mms_part_open">在外部開啟</string>
+    <string name="main_menu_select_all">全選</string>
+    <string name="main_menu_send_now">立即發送</string>
+    <string name="main_menu_edit_message">編輯訊息</string>
+    <string name="main_menu_rename_conversation">重新命名對話</string>
+    <string name="main_sender_draft">草稿：%s</string>
+    <string name="scheduled_menu_send_now">立即發送</string>
+    <string name="scheduled_menu_edit_message">編輯訊息</string>
+    <plurals name="dialog_delete_chat">
+        <item quantity="other">確定要刪除 %d 則訊息嗎？</item>
+    </plurals>
+    <plurals name="dialog_send_now">
+        <item quantity="other">確定要立即傳送 %d 則訊息嗎？</item>
+    </plurals>
+    <string name="dialog_edit_scheduled_message_title">編輯訊息</string>
+    <string name="dialog_edit_scheduled_message">編輯此訊息將會把它從排程中移除。\n\n請務必在下一個畫面重新提交，否則將會遺失。\n\n要繼續嗎？</string>
+    <string name="dialog_edit_scheduled_message_positive_button">是的，編輯訊息</string>
+    <string name="dialog_clear_compose_title">清除訊息</string>
+    <string name="dialog_clear_compose">要清除這則訊息嗎？此操作將無法復原。</string>
+    <string name="compose_scheduled_view">已為此對話的排程訊息</string>
+    <string name="compose_no_valid_recipients">無法傳送給其他參與者</string>
+    <string name="compose_menu_show_status">顯示狀態</string>
+    <string name="compose_attach_file_cd">附加任何檔案</string>
+    <string name="compose_audio_message_cd">錄製語音訊息</string>
+    <string name="compose_schedule_cancel_cd">取消已排程的訊息</string>
+    <string name="compose_record_audio_msg_cd">錄製語音訊息</string>
+    <string name="compose_record_audio_msg_abort_cd">取消語音訊息</string>
+    <string name="compose_record_audio_msg_attach_cd">附加語音訊息</string>
+    <string name="compose_record_audio_msg_play_pause_cd">播放或暫停語音訊息</string>
+    <string name="compose_message_cancel">取消</string>
+    <string name="compose_message_send_now">立即發送</string>
+    <string name="compose_message_sim">SIM 卡號碼</string>
+    <string name="compose_message_item">訊息項目</string>
+    <string name="compose_message_attachment">附件</string>
+    <string name="compose_toast_drag_stt">將語音轉文字按鈕移動到任何位置</string>
+    <string name="message_body_too_long_to_display">⚠ 訊息過長。請複製或儲存以查看完整內容</string>
+    <string name="clipboard_too_large_to_copy">資料大小超過剪貼簿限制</string>
+    <string name="clipboard_unable_to_copy_to">無法複製到剪貼簿</string>
+    <string name="scheduled_send_cd">排程傳送此訊息</string>
+    <string name="attachment_missing">缺少附件</string>
+    <string name="settings_system_show_stt_title">顯示語音轉文字按鈕</string>
+    <string name="settings_notification_previews_summary">顯示名稱與訊息</string>
+    <string name="settings_notification_silent_title">非聯絡人時靜音</string>
+    <string name="settings_notification_silent_summary">將非聯絡人訊息的通知設為靜音</string>
+    <string name="settings_unread_at_top_title">將未讀訊息置頂</string>
+    <string name="settings_unread_at_top_summary">置頂顯示未讀的對話</string>
+    <string name="settings_mms_weblink_title">訊息中的連結處理</string>
+    <string name="settings_disable_screenshots_title">停用螢幕截圖</string>
+    <string name="settings_diable_screenshots_summary">防止作業系統與其他應用程式擷取此應用程式的螢幕截圖。</string>
+    <string name="message_content_filters_title">訊息內容篩選器</string>
+    <string name="message_content_filters_empty">訊息內容篩選器將會顯示在此處</string>
+    <string name="message_content_filters_add_cd">建立新篩選器</string>
+    <string name="message_content_filters_dialog_title">捨棄符合的訊息</string>
+    <string name="message_content_filters_dialog_hint">字詞、片語或正規表示式</string>
+    <string name="message_content_filters_dialog_case_switch">區分大小寫</string>
+    <string name="message_content_filters_dialog_regex_switch">正規表示式</string>
+    <string name="message_content_filters_dialog_create">建立</string>
+    <string name="message_content_filters_dialog_contacts_switch">包含聯絡人</string>
+    <string name="all_conversations_widget_title">所有對話</string>
+    <string name="button_clear">清除</string>
+    <plurals name="toast_archived">
+        <item quantity="other">已封存 %d 個對話</item>
+    </plurals>
+    <plurals name="toast_unarchived">
+        <item quantity="other">已取消封存 %d 個對話</item>
+    </plurals>
+    <string name="notification_message_failed_action">重新傳送</string>
+    <string name="speak_no_messages">沒有訊息</string>
+    <string name="speak_unseen_messages">朗讀未讀訊息</string>
+    <string name="messageLinkHandling_dialog_title">外部連結警告</string>
+    <string name="messageLinkHandling_dialog_body">部分連結可能不安全，或會將您意外重新導向。請在繼續前先檢視以下連結：\n\n%1$s\n\n要繼續嗎？</string>
+    <string name="messageLinkHandling_dialog_positive">是的，開啟連結</string>
+    <string name="messageLinkHandling_dialog_negative">否</string>
+    <string name="error_stt_toast">抱歉，載入語音轉文字提供者時發生錯誤。</string>
+    <string name="stt_toast_extra_prompt">朗讀你的訊息</string>
+    <string name="messages_text_share_file_error">糟糕！分享時發生錯誤</string>
 </resources>

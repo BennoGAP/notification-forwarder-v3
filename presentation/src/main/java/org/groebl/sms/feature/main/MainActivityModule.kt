@@ -19,13 +19,12 @@
 package org.groebl.sms.feature.main
 
 import androidx.lifecycle.ViewModel
-import org.groebl.sms.injection.ViewModelKey
-import org.groebl.sms.injection.scope.ActivityScope
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoMap
+import org.groebl.sms.injection.ViewModelKey
+import org.groebl.sms.injection.scope.ActivityScope
 import io.reactivex.disposables.CompositeDisposable
-import javax.inject.Named
 
 @Module
 class MainActivityModule {
@@ -33,11 +32,6 @@ class MainActivityModule {
     @Provides
     @ActivityScope
     fun provideCompositeDiposableLifecycle(): CompositeDisposable = CompositeDisposable()
-
-    @Provides
-    @Named("threadId")
-    fun provideThreadId(activity: MainActivity): Long = activity.intent.extras?.getLong("threadId")
-        ?: 0L
 
     @Provides
     @IntoMap

@@ -19,6 +19,8 @@
 package org.groebl.sms.feature.settings
 
 import android.content.Context
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
 import org.groebl.sms.R
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.base.QkPresenter
@@ -27,37 +29,30 @@ import org.groebl.sms.common.util.DateFormatter
 import org.groebl.sms.common.util.extensions.makeToast
 import org.groebl.sms.interactor.DeleteOldMessages
 import org.groebl.sms.interactor.SyncMessages
-import org.groebl.sms.manager.AnalyticsManager
-import org.groebl.sms.manager.WidgetManager
 import org.groebl.sms.repository.MessageRepository
 import org.groebl.sms.repository.SyncRepository
 import org.groebl.sms.service.AutoDeleteService
 import org.groebl.sms.util.NightModeManager
 import org.groebl.sms.util.Preferences
-import com.uber.autodispose.android.lifecycle.scope
-import com.uber.autodispose.autoDisposable
 import io.reactivex.rxkotlin.plusAssign
-import io.reactivex.rxkotlin.withLatestFrom
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.runBlocking
 import timber.log.Timber
-import java.util.*
+import java.util.Calendar
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class SettingsPresenter @Inject constructor(
-        colors: Colors,
-        syncRepo: SyncRepository,
-        private val analytics: AnalyticsManager,
-        private val context: Context,
-        private val dateFormatter: DateFormatter,
-        private val deleteOldMessages: DeleteOldMessages,
-        private val messageRepo: MessageRepository,
-        private val navigator: Navigator,
-        private val nightModeManager: NightModeManager,
-        private val widgetManager: WidgetManager,
-        private val prefs: Preferences,
-        private val syncMessages: SyncMessages
+    colors: Colors,
+    syncRepo: SyncRepository,
+    private val context: Context,
+    private val dateFormatter: DateFormatter,
+    private val deleteOldMessages: DeleteOldMessages,
+    private val messageRepo: MessageRepository,
+    private val navigator: Navigator,
+    private val nightModeManager: NightModeManager,
+    private val prefs: Preferences,
+    private val syncMessages: SyncMessages
 ) : QkPresenter<SettingsView, SettingsState>(SettingsState(
         nightModeId = prefs.nightMode.get()
 )) {
@@ -87,9 +82,6 @@ class SettingsPresenter @Inject constructor(
         disposables += prefs.black.asObservable()
                 .subscribe { black -> newState { copy(black = black) } }
 
-        disposables += prefs.gray.asObservable()
-                .subscribe { gray -> newState { copy(gray = gray) } }
-
         disposables += prefs.notifications().asObservable()
                 .subscribe { enabled -> newState { copy(notificationsEnabled = enabled) } }
 
@@ -101,7 +93,7 @@ class SettingsPresenter @Inject constructor(
                 .subscribe { id -> newState { copy(sendDelaySummary = delayedSendingLabels[id], sendDelayId = id) } }
 
         disposables += prefs.delivery.asObservable()
-                .subscribe { enabled -> newState { copy(deliveryEnabled = enabled) } }
+            .subscribe { enabled -> newState { copy(deliveryEnabled = enabled) } }
 
         disposables += prefs.unreadAtTop.asObservable()
             .subscribe { enabled -> newState { copy(unreadAtTopEnabled = enabled) } }
@@ -118,15 +110,8 @@ class SettingsPresenter @Inject constructor(
         disposables += prefs.autoColor.asObservable()
                 .subscribe { autoColor -> newState { copy(autoColor = autoColor) } }
 
-        disposables += prefs.grayAvatar.asObservable()
-                .subscribe { grayAvatar -> newState { copy(grayAvatar = grayAvatar) }
-                    widgetManager.updateTheme()}
-
-        disposables += prefs.separator.asObservable()
-                .subscribe { separator -> newState { copy(separator = separator) } }
-
         disposables += prefs.systemFont.asObservable()
-                .subscribe { enabled -> newState { copy(systemFontEnabled = enabled) } }
+            .subscribe { enabled -> newState { copy(systemFontEnabled = enabled) } }
 
         disposables += prefs.showStt.asObservable()
             .subscribe { enabled -> newState { copy(showStt = enabled) } }
@@ -202,12 +187,6 @@ class SettingsPresenter @Inject constructor(
 
                         R.id.black -> prefs.black.set(!prefs.black.get())
 
-                        R.id.gray -> prefs.gray.set(!prefs.gray.get())
-
-                        R.id.speechBubble -> view.showSpeechBubble()
-
-                        R.id.simConfigure -> view.showSimConfigure()
-
                         R.id.autoEmoji -> prefs.autoEmoji.set(!prefs.autoEmoji.get())
 
                         R.id.notifications -> navigator.showNotificationSettings()
@@ -225,26 +204,8 @@ class SettingsPresenter @Inject constructor(
                         R.id.textSize -> view.showTextSizePicker()
 
                         R.id.autoColor -> {
-                            if (prefs.autoColor.get()) {
-                                prefs.autoColor.set(false)
-                            }
-                            else {
-                                prefs.autoColor.set(true)
-                                prefs.grayAvatar.set(false)
-                            }
+                            prefs.autoColor.set(!prefs.autoColor.get())
                         }
-
-                        R.id.grayAvatar -> {
-                            if (prefs.grayAvatar.get()) {
-                                prefs.grayAvatar.set(false)
-                            }
-                            else {
-                                prefs.grayAvatar.set(true)
-                                prefs.autoColor.set(false)
-                            }
-                        }
-
-                        R.id.separator -> prefs.separator.set(!prefs.separator.get())
 
                         R.id.systemFont -> prefs.systemFont.set(!prefs.systemFont.get())
 
@@ -265,10 +226,10 @@ class SettingsPresenter @Inject constructor(
                         R.id.mmsSize -> view.showMmsSizePicker()
 
                         R.id.optOut -> prefs.optOut.set(!prefs.optOut.get())
+
                         R.id.messsageLinkHandling -> view.showMessageLinkHandlingDialogPicker()
 
                         R.id.disableScreenshots -> prefs.disableScreenshots.set(!prefs.disableScreenshots.get())
-
 
                         R.id.sync -> syncMessages.execute(Unit)
 

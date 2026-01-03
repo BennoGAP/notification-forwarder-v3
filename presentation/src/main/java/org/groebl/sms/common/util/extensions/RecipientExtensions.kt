@@ -6,30 +6,35 @@ import android.graphics.Bitmap
 import android.graphics.Path
 import android.provider.ContactsContract
 import android.util.TypedValue
+import android.view.ContextThemeWrapper
 import android.view.Gravity
 import android.view.LayoutInflater
-import android.view.View.*
+import android.view.View.GONE
+import android.view.View.MeasureSpec
+import android.view.View.VISIBLE
 import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.core.app.Person
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.drawable.IconCompat
 import androidx.core.widget.TextViewCompat
-import com.bumptech.glide.Glide
 import org.groebl.sms.R
 import org.groebl.sms.common.util.Colors
 import org.groebl.sms.common.widget.QkTextView
 import org.groebl.sms.model.Recipient
+import org.groebl.sms.util.GlideApp
 import org.groebl.sms.util.tryOrNull
 import timber.log.Timber
 
+
 fun Recipient.getThemedIcon(context: Context, theme: Colors.Theme, width: Int, height: Int): IconCompat {
     var icon : IconCompat? = null
-    if(contact != null) {
-        val req = Glide.with(context)
+    val photoUri = contact?.photoUri
+    if (photoUri != null) {
+        val req = GlideApp.with(context)
             .asBitmap()
             .circleCrop()
-            .load(contact!!.photoUri)
+            .load(photoUri)
             .submit(width, height)
 
         val bitmap = tryOrNull { req.get() }
@@ -38,11 +43,12 @@ fun Recipient.getThemedIcon(context: Context, theme: Colors.Theme, width: Int, h
         else
             icon = IconCompat.createWithBitmap(bitmap)
     }
-    if(icon == null) {
+    if (icon == null) {
         // If there is no contact or no photo, create the default icon using the avatar_view layout
         try {
-            val inflater = LayoutInflater.from(context)
-            val container = FrameLayout(context)
+            val themedContext = ContextThemeWrapper(context, R.style.AppTheme)
+            val inflater = LayoutInflater.from(themedContext)
+            val container = FrameLayout(themedContext)
             container.layoutParams = FrameLayout.LayoutParams(width, height)
             val view = inflater.inflate(R.layout.avatar_view, container)
             val textView = view.findViewById<QkTextView>(R.id.initial)
@@ -58,7 +64,7 @@ fun Recipient.getThemedIcon(context: Context, theme: Colors.Theme, width: Int, h
             iconView.layoutParams = FrameLayout.LayoutParams((width * 0.5).toInt(), (height * 0.5).toInt(),
                 Gravity.CENTER)
 
-            if(contact != null) {
+            if (contact != null) {
                 val initials = contact!!.name
                     .substringBefore(',')
                     .split(" ")

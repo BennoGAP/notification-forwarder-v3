@@ -20,18 +20,17 @@ package org.groebl.sms.common.widget
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.View
+import android.view.LayoutInflater
 import android.widget.FrameLayout
-import com.bumptech.glide.Glide
 import org.groebl.sms.R
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.util.Colors
 import org.groebl.sms.common.util.extensions.setBackgroundTint
 import org.groebl.sms.common.util.extensions.setTint
+import org.groebl.sms.databinding.AvatarViewBinding
 import org.groebl.sms.injection.appComponent
 import org.groebl.sms.model.Recipient
-import org.groebl.sms.util.Preferences
-import kotlinx.android.synthetic.main.avatar_view.view.*
+import org.groebl.sms.util.GlideApp
 import javax.inject.Inject
 
 class AvatarView @JvmOverloads constructor(
@@ -40,13 +39,13 @@ class AvatarView @JvmOverloads constructor(
 
     @Inject lateinit var colors: Colors
     @Inject lateinit var navigator: Navigator
-    @Inject lateinit var prefs: Preferences
 
     private var lookupKey: String? = null
     private var fullName: String? = null
     private var photoUri: String? = null
     private var lastUpdated: Long? = null
     private var theme: Colors.Theme
+    private var layout: AvatarViewBinding
 
     init {
         if (!isInEditMode) {
@@ -55,13 +54,13 @@ class AvatarView @JvmOverloads constructor(
 
         theme = colors.theme()
 
-        View.inflate(context, R.layout.avatar_view, this)
+        layout = AvatarViewBinding.inflate(LayoutInflater.from(context), this)
         setBackgroundResource(R.drawable.circle)
         clipToOutline = true
     }
 
     /**
-     * Use the [contact] information to display the avatar.
+     * Use the contact information to display the avatar.
      */
     fun setRecipient(recipient: Recipient?) {
         lookupKey = recipient?.contact?.lookupKey
@@ -82,11 +81,9 @@ class AvatarView @JvmOverloads constructor(
 
     private fun updateView() {
         // Apply theme
-        if (!prefs.grayAvatar.get()) {
-            setBackgroundTint(theme.theme)
-        }
-        initial.setTextColor(theme.textPrimary)
-        icon.setTint(theme.textPrimary)
+        setBackgroundTint(theme.theme)
+        layout.initial.setTextColor(theme.textPrimary)
+        layout.icon.setTint(theme.textPrimary)
 
         val initials = fullName
                 ?.substringBefore(',')
@@ -97,18 +94,18 @@ class AvatarView @JvmOverloads constructor(
                 .map { initial -> initial.toString() }
 
         if (initials.isNotEmpty()) {
-            initial.text = if (initials.size > 1) initials.first() + initials.last() else initials.first()
-            icon.visibility = GONE
+            layout.initial.text = if (initials.size > 1) initials.first() + initials.last() else initials.first()
+            layout.icon.visibility = GONE
         } else {
-            initial.text = null
-            icon.visibility = VISIBLE
+            layout.initial.text = null
+            layout.icon.visibility = VISIBLE
         }
 
-        photo.setImageDrawable(null)
+        layout.photo.setImageDrawable(null)
         photoUri?.let { photoUri ->
-            Glide.with(photo)
+            GlideApp.with(layout.photo)
                     .load(photoUri)
-                    .into(photo)
+                    .into(layout.photo)
         }
     }
 }

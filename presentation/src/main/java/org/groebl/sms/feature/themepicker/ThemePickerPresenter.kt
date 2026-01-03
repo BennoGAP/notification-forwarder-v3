@@ -21,13 +21,12 @@ package org.groebl.sms.feature.themepicker
 import com.f2prateek.rx.preferences2.Preference
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
-import io.reactivex.rxkotlin.Observables
-import io.reactivex.rxkotlin.withLatestFrom
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.base.QkPresenter
 import org.groebl.sms.common.util.Colors
 import org.groebl.sms.manager.WidgetManager
 import org.groebl.sms.util.Preferences
+import io.reactivex.rxkotlin.Observables
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -50,31 +49,6 @@ class ThemePickerPresenter @Inject constructor(
 
         // Update the theme when a material theme is clicked
         view.themeSelected()
-                .autoDisposable(view.scope())
-                .subscribe { color ->
-                    theme.set(color)
-                    if (recipientId == 0L) {
-                        widgetManager.updateTheme()
-                    }
-                }
-
-        val color1 : Int = android.graphics.Color.parseColor("#ff453a")
-        val color2 : Int = android.graphics.Color.parseColor("#ff3b30")
-        val color3 : Int = android.graphics.Color.parseColor("#ff9f0a")
-        val color4 : Int = android.graphics.Color.parseColor("#ff9500")
-        val color5 : Int = android.graphics.Color.parseColor("#ffd60a")
-        val cols = listOf(color1, color2, color3, color4, color5)
-        for(col in cols)
-        view.themeIosSelected()
-                .autoDisposable(view.scope())
-                .subscribe { color ->
-                    theme.set(color)
-                    if (recipientId == 0L) {
-                        widgetManager.updateTheme()
-                    }
-                }
-
-        view.themeMessagesSelected()
                 .autoDisposable(view.scope())
                 .subscribe { color ->
                     theme.set(color)

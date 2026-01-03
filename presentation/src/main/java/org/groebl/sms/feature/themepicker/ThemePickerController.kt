@@ -21,6 +21,7 @@ package org.groebl.sms.feature.themepicker
 import android.animation.ObjectAnimator
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding2.view.clicks
 import org.groebl.sms.R
 import org.groebl.sms.common.base.QkController
@@ -31,6 +32,8 @@ import org.groebl.sms.common.util.extensions.setVisible
 import org.groebl.sms.feature.themepicker.injection.ThemePickerModule
 import org.groebl.sms.injection.appComponent
 import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.Subject
 import kotlinx.android.synthetic.main.theme_picker_controller.*
 import kotlinx.android.synthetic.main.theme_picker_hsv.*
 import javax.inject.Inject
@@ -43,8 +46,6 @@ class ThemePickerController(
 
     @Inject lateinit var colors: Colors
     @Inject lateinit var themeAdapter: ThemeAdapter
-    @Inject lateinit var themeIosAdapter: ThemeIosAdapter
-    @Inject lateinit var themeMessagesAdapter: ThemeMessagesAdapter
     @Inject lateinit var themePagerAdapter: ThemePagerAdapter
 
     init {
@@ -58,7 +59,7 @@ class ThemePickerController(
     }
 
     override fun onViewCreated() {
-        pager.offscreenPageLimit = 4
+        pager.offscreenPageLimit = 1
         pager.adapter = themePagerAdapter
         tabs.pager = pager
 
@@ -66,16 +67,6 @@ class ThemePickerController(
 
         materialColors.layoutManager = LinearLayoutManager(activity)
         materialColors.adapter = themeAdapter
-
-        themeIosAdapter.data = colors.iosColors
-
-        iosColors.layoutManager = LinearLayoutManager(activity)
-        iosColors.adapter = themeIosAdapter
-
-        themeMessagesAdapter.data = colors.messagesColors
-
-        messagesColors.layoutManager = LinearLayoutManager(activity)
-        messagesColors.adapter = themeMessagesAdapter
     }
 
     override fun onAttach(view: View) {
@@ -83,6 +74,7 @@ class ThemePickerController(
         presenter.bindIntents(this)
         setTitle(R.string.title_theme)
         showBackButton(true)
+
         themedActivity?.supportActionBar?.let { toolbar ->
             ObjectAnimator.ofFloat(toolbar, "elevation", toolbar.elevation, 0f).start()
         }
@@ -98,10 +90,6 @@ class ThemePickerController(
 
     override fun themeSelected(): Observable<Int> = themeAdapter.colorSelected
 
-    override fun themeIosSelected(): Observable<Int> = themeIosAdapter.colorSelected
-
-    override fun themeMessagesSelected(): Observable<Int> = themeMessagesAdapter.colorSelected
-
     override fun hsvThemeSelected(): Observable<Int> = picker.selectedColor
 
     override fun clearHsvThemeClicks(): Observable<*> = clear.clicks()
@@ -116,16 +104,11 @@ class ThemePickerController(
         applyGroup.setVisible(state.applyThemeVisible)
         apply.setBackgroundTint(state.newColor)
         apply.setTextColor(state.newTextColor)
-        // TODO ???
-        clear.setBackgroundTint(state.newColor)
-        clear.setTextColor(state.newTextColor)
     }
 
     override fun setCurrentTheme(color: Int) {
         picker.setColor(color)
         themeAdapter.selectedColor = color
-        themeIosAdapter.selectedColor = color
-        themeMessagesAdapter.selectedColor = color
     }
 
 }

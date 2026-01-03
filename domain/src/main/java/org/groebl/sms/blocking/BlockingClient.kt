@@ -70,13 +70,6 @@ interface BlockingClient {
     fun isBlacklisted(address: String): Single<Action>
 
     /**
-     * Returns the recommendation action to perform given a message from the [content]
-     */
-    fun getActionFromContent(content: String): Single<Action> = Single.fromCallable {
-        BlockingClient.Action.Unblock
-    }
-
-    /**
      * Blocks the numbers or opens the manager
      */
     fun block(addresses: List<String>): Completable
@@ -85,20 +78,6 @@ interface BlockingClient {
      * Unblocks the numbers or opens the manager
      */
     fun unblock(addresses: List<String>): Completable
-
-    /**
-     * Blocks the regexps
-     */
-    fun blockRegexps(regexps: List<String>): Completable = Completable.fromCallable {
-        // Do nothing by default
-    }
-
-    /**
-     * Unblocks the regexps
-     */
-    fun unblockRegexps(regexps: List<String>): Completable = Completable.fromCallable {
-        // Do nothing by default
-    }
 
     /**
      * Opens the settings page for the blocking manager

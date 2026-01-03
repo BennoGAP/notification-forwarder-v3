@@ -35,14 +35,7 @@ class QksmsBlockingClient @Inject constructor(
 
     override fun isBlacklisted(address: String): Single<BlockingClient.Action> = Single.fromCallable {
         when (blockingRepo.isBlocked(address)) {
-            true -> BlockingClient.Action.Block("address")
-            false -> BlockingClient.Action.Unblock
-        }
-    }
-
-    override fun getActionFromContent(content: String): Single<BlockingClient.Action> = Single.fromCallable {
-        when (blockingRepo.isBlockedContent(content)) {
-            true -> BlockingClient.Action.Block("message")
+            true -> BlockingClient.Action.Block()
             false -> BlockingClient.Action.Unblock
         }
     }
@@ -53,14 +46,6 @@ class QksmsBlockingClient @Inject constructor(
 
     override fun unblock(addresses: List<String>): Completable = Completable.fromCallable {
         blockingRepo.unblockNumbers(*addresses.toTypedArray())
-    }
-
-    override fun blockRegexps(regexps: List<String>): Completable = Completable.fromCallable  {
-        blockingRepo.blockRegex(*regexps.toTypedArray())
-    }
-
-    override fun unblockRegexps(regexps: List<String>): Completable = Completable.fromCallable  {
-        blockingRepo.unblockRegexps(*regexps.toTypedArray())
     }
 
     override fun openSettings() = Unit // TODO: Do this here once we implement AndroidX navigation

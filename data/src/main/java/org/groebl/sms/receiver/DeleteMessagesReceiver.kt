@@ -21,13 +21,12 @@ package org.groebl.sms.receiver
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import org.groebl.sms.interactor.DeleteMessages
 import dagger.android.AndroidInjection
+import org.groebl.sms.interactor.DeleteMessages
 import timber.log.Timber
 import javax.inject.Inject
 
 class DeleteMessagesReceiver : BroadcastReceiver() {
-
     @Inject lateinit var deleteMessages: DeleteMessages
 
     override fun onReceive(context: Context, intent: Intent) {

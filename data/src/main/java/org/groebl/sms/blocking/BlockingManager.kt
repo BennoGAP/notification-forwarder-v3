@@ -34,15 +34,9 @@ class BlockingManager @Inject constructor(
 
     override fun isBlacklisted(address: String): Single<BlockingClient.Action> = client.isBlacklisted(address)
 
-    override fun getActionFromContent(content: String): Single<BlockingClient.Action> = client.getActionFromContent(content)
-
     override fun block(addresses: List<String>): Completable = client.block(addresses)
 
     override fun unblock(addresses: List<String>): Completable = client.unblock(addresses)
-
-    override fun blockRegexps(regexps: List<String>): Completable = client.blockRegexps(regexps)
-
-    override fun unblockRegexps(regexps: List<String>): Completable = client.unblockRegexps(regexps)
 
     override fun openSettings() = client.openSettings()
 

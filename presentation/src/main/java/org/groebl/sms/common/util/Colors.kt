@@ -20,7 +20,6 @@ package org.groebl.sms.common.util
 
 import android.content.Context
 import android.graphics.Color
-import androidx.annotation.ColorRes
 import androidx.core.content.res.getColorOrThrow
 import org.groebl.sms.R
 import org.groebl.sms.common.util.extensions.getColorCompat
@@ -65,22 +64,6 @@ class Colors @Inject constructor(
         R.array.material_brown,
         R.array.material_gray,
         R.array.material_blue_gray)
-            .map { res -> context.resources.obtainTypedArray(res) }
-            .map { typedArray -> (0 until typedArray.length()).map(typedArray::getColorOrThrow) }
-
-    val iosColors: List<List<Int>> = listOf(
-            R.array.ios1_color,
-            R.array.ios2_color,
-            R.array.ios3_color,
-            R.array.ios4_color)
-            .map { res -> context.resources.obtainTypedArray(res) }
-            .map { typedArray -> (0 until typedArray.length()).map(typedArray::getColorOrThrow) }
-
-    val messagesColors: List<List<Int>> = listOf(
-            R.array.Messages1_color,
-            R.array.Messages2_color,
-            R.array.Messages3_color,
-            R.array.Messages4_color)
             .map { res -> context.resources.obtainTypedArray(res) }
             .map { typedArray -> (0 until typedArray.length()).map(typedArray::getColorOrThrow) }
 
@@ -154,38 +137,4 @@ class Colors @Inject constructor(
         val index = recipient.address.hashCode().absoluteValue % randomColors.size
         return randomColors[index]
     }
-
-    @ColorRes
-    fun colorForSim(context: Context, index: Int) =
-        if (index == 1) {
-            when (prefs.sim1Color.get()) {
-                Preferences.SIM_COLOR_BLUE -> context.getColorCompat(R.color.sim1)
-                Preferences.SIM_COLOR_GREEN -> context.getColorCompat(R.color.sim2)
-                Preferences.SIM_COLOR_YELLOW -> context.getColorCompat(R.color.sim3)
-                Preferences.SIM_COLOR_RED -> context.getColorCompat(R.color.sim4)
-                Preferences.SIM_COLOR_PURPLE -> context.getColorCompat(R.color.sim5)
-                Preferences.SIM_COLOR_MAGENTA -> context.getColorCompat(R.color.sim6)
-                else -> context.getColorCompat(R.color.sim1)
-            }
-        } else if (index == 2) {
-            when (prefs.sim2Color.get()) {
-                Preferences.SIM_COLOR_BLUE -> context.getColorCompat(R.color.sim1)
-                Preferences.SIM_COLOR_GREEN -> context.getColorCompat(R.color.sim2)
-                Preferences.SIM_COLOR_YELLOW -> context.getColorCompat(R.color.sim3)
-                Preferences.SIM_COLOR_RED -> context.getColorCompat(R.color.sim4)
-                Preferences.SIM_COLOR_PURPLE -> context.getColorCompat(R.color.sim5)
-                Preferences.SIM_COLOR_MAGENTA -> context.getColorCompat(R.color.sim6)
-                else -> context.getColorCompat(R.color.sim2)
-            }
-        } else {
-            when (prefs.sim3Color.get()) {
-                Preferences.SIM_COLOR_BLUE -> context.getColorCompat(R.color.sim1)
-                Preferences.SIM_COLOR_GREEN -> context.getColorCompat(R.color.sim2)
-                Preferences.SIM_COLOR_YELLOW -> context.getColorCompat(R.color.sim3)
-                Preferences.SIM_COLOR_RED -> context.getColorCompat(R.color.sim4)
-                Preferences.SIM_COLOR_PURPLE -> context.getColorCompat(R.color.sim5)
-                Preferences.SIM_COLOR_MAGENTA -> context.getColorCompat(R.color.sim6)
-                else -> context.getColorCompat(R.color.sim3)
-            }
-        }
 }

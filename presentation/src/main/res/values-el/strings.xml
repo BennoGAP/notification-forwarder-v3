@@ -16,8 +16,7 @@
   ~
   ~ You should have received a copy of the GNU General Public License
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
+  --><resources>
     <string name="shortcut_compose_long_label">Νέα συζήτηση</string>
     <string name="shortcut_compose_short_label">Σύνταξη</string>
     <string name="shortcut_compose_disabled_message">Η συντόμευση απενεργοποιήθηκε</string>
@@ -25,15 +24,15 @@
     <string name="title_settings">Ρυθμίσεις</string>
     <string name="title_notification_prefs">Ειδοποιήσεις</string>
     <string name="title_theme">Θέμα εμφάνισης</string>
-    <string name="title_conversations">Αναζήτηση στα εισερχόμενα&#8230;</string>
+    <string name="title_conversations">Αναζήτηση στα εισερχόμενα…</string>
     <string name="title_compose">Πληκτρολογήστε ένα όνομα ή αριθμό</string>
     <string name="setup_skip">Παράλειψη</string>
     <string name="setup_next">Συνέχεια</string>
     <string name="menu_add_person">Προσθήκη ατόμου</string>
     <string name="menu_call">Κλήση</string>
     <string name="menu_info">Λεπτομέρειες</string>
-    <string name="menu_save">Αποθήκευση στη συλλογή</string>
-    <string name="menu_share">Κοινή χρήση</string>
+    <string name="menu_mms_part_save">Αποθήκευση στη συλλογή</string>
+    <string name="compose_menu_share">Κοινή χρήση</string>
     <string name="main_drawer_open_cd">Άνοιγμα πλαισίου πλοήγησης</string>
     <string name="main_title_selected">Επιλεγμένα: %d</string>
     <string name="main_menu_clear">Εκκαθάριση</string>
@@ -46,7 +45,7 @@
     <string name="main_menu_read">Mark read</string>
     <string name="main_menu_unread">Mark unread</string>
     <string name="main_menu_block">Φραγή</string>
-    <string name="main_syncing">Συγχρονισμός μηνυμάτων&#8230;</string>
+    <string name="main_syncing">Συγχρονισμός μηνυμάτων…</string>
     <string name="main_sender_you">Εσείς: %s</string>
     <string name="main_message_results_title">Αποτελέσματα στα μηνύματα</string>
     <string name="main_message_results">Μηνύματα: %d</string>
@@ -55,12 +54,12 @@
     <string name="archived_empty_text">Οι αρχειοθετημένες συζητήσεις σας θα εμφανίζονται εδώ</string>
     <string name="main_fab_cd">Έναρξη νέας συνομιλίας</string>
     <string name="main_default_sms_title">Αγαπήστε και πάλι τα SMS</string>
-    <string name="main_default_sms_message">Ορίστε το QKSMS ως προκαθορισμένη εφαρμογή SMS</string>
+    <string name="main_default_sms_message">Ορίστε το QUIK ως προκαθορισμένη εφαρμογή SMS</string>
     <string name="main_default_sms_change">Αλλαγή</string>
     <string name="main_permission_required">Απαιτείται άδεια</string>
-    <string name="main_permission_sms">Το QKSMS απαιτεί την άδεια αποστολής και ανάγνωσης μηνυμάτων SMS</string>
-    <string name="main_permission_contacts">Το QKSMS απαιτεί την άδεια ανάγνωσης των επαφών σας</string>
-    <string name="main_permission_notifications">QKSMS needs permission to display notifications</string>
+    <string name="main_permission_sms">Το QUIK απαιτεί την άδεια αποστολής και ανάγνωσης μηνυμάτων SMS</string>
+    <string name="main_permission_contacts">Το QUIK απαιτεί την άδεια ανάγνωσης των επαφών σας</string>
+    <string name="main_permission_notifications">QUIK needs permission to display notifications</string>
     <string name="main_permission_allow">Να επιτραπεί</string>
     <string name="drawer_inbox">Εισερχόμενα</string>
     <string name="drawer_archived">Αρχείο</string>
@@ -71,7 +70,7 @@
     <string name="drawer_help">Βοήθεια &amp; αποστολή σχολίων</string>
     <string name="drawer_invite">Πρόσκληση φίλων</string>
     <string name="drawer_plus_banner_summary">Ξεκλειδώστε φανταστικές νέες λειτουργίες και συμβάλετε στην ανάπτυξη</string>
-    <string name="rate_title">Σας αρέσει το QKSMS;</string>
+    <string name="rate_title">Σας αρέσει το QUIK;</string>
     <string name="rate_summary">Δείξτε μας την αγάπη σας και βαθμολογήστε μας στο Google Play!</string>
     <string name="rate_okay">ΕΝΤΑΞΕΙ!</string>
     <string name="rate_dismiss">ΠΑΡΑΛΕΙΨΗ</string>
@@ -97,9 +96,9 @@
     <string name="compose_vcard_label">Κάρτα επαφής</string>
     <string name="compose_scheduled_for">Προγραμματίστηκε για</string>
     <string name="compose_scheduled_future">Η χρονική στιγμή πρέπει να βρίσκεται στο μέλλον!</string>
-    <string name="compose_scheduled_plus">Πρέπει να ξεκλειδώσετε το QKSMS+ για να αποκτήσετε τη δυνατότητα προγραμματισμού μηνυμάτων</string>
+    <string name="compose_scheduled_plus">Πρέπει να ξεκλειδώσετε το QUIK+ για να αποκτήσετε τη δυνατότητα προγραμματισμού μηνυμάτων</string>
     <string name="compose_scheduled_toast">Προστέθηκε στα προγραμματισμένα μηνύματα</string>
-    <string name="compose_hint">Γράψτε ένα μήνυμα&#8230;</string>
+    <string name="compose_hint">Γράψτε ένα μήνυμα…</string>
     <string name="compose_menu_copy">Αντιγραφή κειμένου</string>
     <string name="compose_menu_forward">Προώθηση</string>
     <string name="compose_menu_delete">Διαγραφή</string>
@@ -127,7 +126,7 @@
     <string name="compose_sim_changed_toast">SIM %1$d (%2$s) selected</string>
     <string name="compose_sim_cd">Επελέγη το %s, αλλάξτε την κάρτα SIM</string>
     <string name="compose_send_cd">Αποστολή μηνύματος</string>
-    <string name="message_status_sending">Αποστολή&#8230;</string>
+    <string name="message_status_sending">Αποστολή…</string>
     <string name="message_status_delivered">Παραδόθηκε: %s</string>
     <string name="message_status_failed">Αποτυχία αποστολής. Πατήστε για νέα προσπάθεια</string>
     <string name="info_title">Λεπτομέρειες</string>
@@ -145,15 +144,15 @@
     <string name="backup_title">Αντίγραφα ασφαλείας και επαναφορά</string>
     <string name="backup_backing_up">Δημιουργία αντιγράφου ασφαλείας μηνυμάτων</string>
     <string name="backup_restoring">Επαναφορά αντιγράφου ασφαλείας μηνυμάτων</string>
-    <string name="backup_loading">Φόρτωση&#8230;</string>
+    <string name="backup_loading">Φόρτωση…</string>
     <string name="backup_never">Ποτέ</string>
     <string name="backup_location_title">Backup location</string>
     <string name="backup_location_summary">Set folder</string>
     <string name="backup_restore_title">Επαναφορά</string>
     <string name="backup_restore_summary">Επιλέξτε ένα αντίγραφο ασφαλείας</string>
-    <string name="backup_restore_error_plus">Παρακαλώ ξεκλειδώστε το QKSMS+ για τη δημιουργία και επαναφορά αντιγράφων ασφαλείας</string>
-    <string name="backup_restore_error_backup">Δημιουργία αντιγράφου ασφαλείας&#8230;</string>
-    <string name="backup_restore_error_restore">Επαναφορά αντιγράφου ασφαλείας&#8230;</string>
+    <string name="backup_restore_error_plus">Παρακαλώ ξεκλειδώστε το QUIK+ για τη δημιουργία και επαναφορά αντιγράφων ασφαλείας</string>
+    <string name="backup_restore_error_backup">Δημιουργία αντιγράφου ασφαλείας…</string>
+    <string name="backup_restore_error_restore">Επαναφορά αντιγράφου ασφαλείας…</string>
     <string name="backup_restore_confirm_title">Επαναφορά αντιγράφου ασφαλείας</string>
     <string name="backup_restore_stop_title">Διακοπή επαναφοράς</string>
     <string name="backup_restore_stop_message">Τα μηνύματα που έχουν ήδη ανακτηθεί θα παραμείνουν στη συσκευή σας</string>
@@ -167,10 +166,10 @@
     <string name="backup_restore_dialog_empty">Δεν βρέθηκαν αντίγραφα ασφαλείας</string>
     <string name="backup_disclaimer">Προς το παρόν, μπορούν να δημιουργηθούν αντίγραφα ασφαλείας μόνο για SMS. Η υποστήριξη MMS και ο προγραμματισμός αντιγράφων ασφαλείας θα προστεθούν σύντομα!</string>
     <string name="backup_now">Δημιουργία αντιγράφου τώρα</string>
-    <string name="backup_progress_parsing">Ανάγνωση αντιγράφου ασφαλείας&#8230;</string>
-    <string name="backup_progress_running">%1$d/%2$d μηνύματα</string>
-    <string name="backup_progress_saving">Αποθήκευση αντιγράφου ασφαλείας&#8230;</string>
-    <string name="backup_progress_syncing">Συγχρονισμός μηνυμάτων&#8230;</string>
+    <string name="backup_progress_parsing">Ανάγνωση αντιγράφου ασφαλείας…</string>
+    <string name="backup_progress_running">%d/%d μηνύματα</string>
+    <string name="backup_progress_saving">Αποθήκευση αντιγράφου ασφαλείας…</string>
+    <string name="backup_progress_syncing">Συγχρονισμός μηνυμάτων…</string>
     <string name="backup_progress_finished">Ολοκληρώθηκε!</string>
     <string name="backup_notification_channel_name">Αντίγραφα ασφαλείας και επαναφορά</string>
     <string name="scheduled_title">Προγραμματισμένα</string>
@@ -182,6 +181,11 @@
     <string name="scheduled_empty_message_3_timestamp">Αποστολή στις 23 Δεκεμβρίου</string>
     <string name="scheduled_compose_cd">Προγραμματισμός μηνύματος</string>
     <string name="scheduled_options_title">Προγραμματισμένο μήνυμα</string>
+    <string-array name="scheduled_options">
+        <item>Αποστολή τώρα</item>
+        <item>Αντιγραφή κειμένου</item>
+        <item>Διαγραφή</item>
+    </string-array>
     <string name="settings_category_appearance">Εμφάνιση</string>
     <string name="settings_category_general">Γενικά</string>
     <string name="settings_category_qkreply">Γρήγορη απάντηση</string>
@@ -244,10 +248,10 @@
     </plurals>
     <string name="settings_long_as_mms_title">Send long messages as MMS</string>
     <string name="settings_long_as_mms_summary">If your longer text messages are failing to send, or sending in the wrong order, you can send them as MMS messages instead. Additional charges may apply</string>
-    <string name="settings_mms_size_title">Auto-compress MMS attachments</string>
+    <string name="settings_mms_size_title">Auto-compress MMS image attachments</string>
     <string name="settings_sync_title">Συγχρονισμός μηνυμάτων</string>
     <string name="settings_sync_summary">Επανασυγχρονισμός μηνυμάτων με τη βάση δεδομένων SMS του Android</string>
-    <string name="settings_about_title">Σχετικά με το QKSMS</string>
+    <string name="settings_about_title">Σχετικά με το QUIK</string>
     <string name="settings_version">Έκδοση %s</string>
     <string name="settings_logging_enabled">Η καταγραφή σφαλμάτων ενεργοποιήθηκε</string>
     <string name="settings_logging_disabled">Η καταγραφή σφαλμάτων απενεργοποιήθηκε</string>
@@ -257,8 +261,7 @@
     <string name="blocking_drop_summary">Απόρριψη αντί για απόκρυψη μηνυμάτων από αποστολείς σε φραγή</string>
     <string name="blocking_conversations">Συζητήσεις σε φραγή</string>
     <string name="blocking_manager_title">Διαχειριστής φραγής</string>
-    <string name="blocking_manager_qksms_title">QKSMS</string>
-    <string name="blocking_manager_qksms_summary">Ενσωματωμένη λειτουργία φραγής του QKSMS</string>
+    <string name="blocking_manager_qksms_summary">Ενσωματωμένη λειτουργία φραγής του QUIK</string>
     <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist &amp; Schedule</string>
     <string name="blocking_manager_call_control_summary">Automatically filter your calls and messages in one convenient place! Community IQ™ allows you to prevent unwanted messages from community known spammers</string>
     <string name="blocking_manager_sia_summary">Automatically filter messages from unsolicited numbers by using the \"Should I Answer\" app</string>
@@ -296,10 +299,10 @@
     <string name="qksms_plus_upgrade">Lifetime upgrade for %1$s %2$s</string>
     <!-- Substitutions are for price and currency. Ex: Unlock + donate for $4.99 USD -->
     <string name="qksms_plus_upgrade_donate">Unlock + donate for %1$s %2$s</string>
-    <string name="qksms_plus_thanks_title">Thank you for supporting QKSMS!</string>
-    <string name="qksms_plus_thanks_summary">You now have access to all QKSMS+ features</string>
+    <string name="qksms_plus_thanks_title">Thank you for supporting QUIK!</string>
+    <string name="qksms_plus_thanks_summary">You now have access to all QUIK+ features</string>
     <string name="qksms_plus_error">An error has occurred, please try again</string>
-    <string name="qksms_plus_free_title">QKSMS+ is free for F-Droid users! If you\'d like to support development, a donation would be highly appreciated.</string>
+    <string name="qksms_plus_free_title">QUIK+ is free for F-Droid users! If you\'d like to support development, a donation would be highly appreciated.</string>
     <string name="qksms_plus_donate">Δωρεά μέσω PayPal</string>
     <string name="qksms_plus_coming_soon">Έρχεται σύντομα</string>
     <string name="qksms_plus_themes_title">Premium themes</string>
@@ -321,8 +324,8 @@
     <string name="qksms_plus_respond_title">Auto-respond</string>
     <string name="qksms_plus_respond_summary">Automatically respond to incoming messages with a preset response</string>
     <string name="qksms_plus_more_title">More</string>
-    <string name="qksms_plus_more_summary">QKSMS is under active development, and your purchase will include all future QKSMS+ features!</string>
-    <string name="widget_loading">Loading&#8230;</string>
+    <string name="qksms_plus_more_summary">QUIK is under active development, and your purchase will include all future QUIK+ features!</string>
+    <string name="widget_loading">Loading…</string>
     <string name="widget_more">View more conversations</string>
     <string name="qkreply_menu_read">Mark read</string>
     <string name="qkreply_menu_call">Call</string>
@@ -352,7 +355,7 @@
     <string name="button_set">Set</string>
     <string name="button_undo">Undo</string>
     <string name="toast_copied">Copied</string>
-    <string name="toast_qksms_plus">You must unlock QKSMS+ to use this</string>
+    <string name="toast_qksms_plus">You must unlock QUIK+ to use this</string>
     <plurals name="notification_new_messages">
         <item quantity="one">New message</item>
         <item quantity="other">%s new messages</item>

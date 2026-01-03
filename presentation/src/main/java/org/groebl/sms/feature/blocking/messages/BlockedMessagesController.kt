@@ -18,12 +18,12 @@
  */
 package org.groebl.sms.feature.blocking.messages
 
-import android.app.AlertDialog
 import android.content.Context
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import org.groebl.sms.R
 import org.groebl.sms.common.base.QkController
 import org.groebl.sms.common.util.Colors
@@ -107,7 +107,7 @@ class BlockedMessagesController : QkController<BlockedMessagesView, BlockedMessa
 
     override fun showDeleteDialog(conversations: List<Long>) {
         val count = conversations.size
-        AlertDialog.Builder(activity)
+        AlertDialog.Builder(activity!!)
                 .setTitle(R.string.dialog_delete_title)
                 .setMessage(resources?.getQuantityString(R.plurals.dialog_delete_message, count, count))
                 .setPositiveButton(R.string.button_delete) { _, _ -> confirmDeleteIntent.onNext(conversations) }

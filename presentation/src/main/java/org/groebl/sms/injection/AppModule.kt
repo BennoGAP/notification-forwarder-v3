@@ -40,9 +40,53 @@ import org.groebl.sms.feature.conversationinfo.injection.ConversationInfoCompone
 import org.groebl.sms.feature.themepicker.injection.ThemePickerComponent
 import org.groebl.sms.listener.ContactAddedListener
 import org.groebl.sms.listener.ContactAddedListenerImpl
-import org.groebl.sms.manager.*
-import org.groebl.sms.mapper.*
-import org.groebl.sms.repository.*
+import org.groebl.sms.manager.ActiveConversationManager
+import org.groebl.sms.manager.ActiveConversationManagerImpl
+import org.groebl.sms.manager.AlarmManager
+import org.groebl.sms.manager.AlarmManagerImpl
+import org.groebl.sms.manager.BillingManager
+import org.groebl.sms.manager.KeyManager
+import org.groebl.sms.manager.KeyManagerImpl
+import org.groebl.sms.manager.NotificationManager
+import org.groebl.sms.manager.PermissionManager
+import org.groebl.sms.manager.PermissionManagerImpl
+import org.groebl.sms.manager.RatingManager
+import org.groebl.sms.manager.ShortcutManager
+import org.groebl.sms.manager.WidgetManager
+import org.groebl.sms.manager.WidgetManagerImpl
+import org.groebl.sms.mapper.CursorToContact
+import org.groebl.sms.mapper.CursorToContactGroup
+import org.groebl.sms.mapper.CursorToContactGroupImpl
+import org.groebl.sms.mapper.CursorToContactGroupMember
+import org.groebl.sms.mapper.CursorToContactGroupMemberImpl
+import org.groebl.sms.mapper.CursorToContactImpl
+import org.groebl.sms.mapper.CursorToConversation
+import org.groebl.sms.mapper.CursorToConversationImpl
+import org.groebl.sms.mapper.CursorToMessage
+import org.groebl.sms.mapper.CursorToMessageImpl
+import org.groebl.sms.mapper.CursorToPart
+import org.groebl.sms.mapper.CursorToPartImpl
+import org.groebl.sms.mapper.CursorToRecipient
+import org.groebl.sms.mapper.CursorToRecipientImpl
+import org.groebl.sms.mapper.RatingManagerImpl
+import org.groebl.sms.repository.BackupRepository
+import org.groebl.sms.repository.BackupRepositoryImpl
+import org.groebl.sms.repository.BlockingRepository
+import org.groebl.sms.repository.BlockingRepositoryImpl
+import org.groebl.sms.repository.ContactRepository
+import org.groebl.sms.repository.ContactRepositoryImpl
+import org.groebl.sms.repository.ConversationRepository
+import org.groebl.sms.repository.ConversationRepositoryImpl
+import org.groebl.sms.repository.EmojiReactionRepository
+import org.groebl.sms.repository.EmojiReactionRepositoryImpl
+import org.groebl.sms.repository.MessageContentFilterRepository
+import org.groebl.sms.repository.MessageContentFilterRepositoryImpl
+import org.groebl.sms.repository.MessageRepository
+import org.groebl.sms.repository.MessageRepositoryImpl
+import org.groebl.sms.repository.ScheduledMessageRepository
+import org.groebl.sms.repository.ScheduledMessageRepositoryImpl
+import org.groebl.sms.repository.SyncRepository
+import org.groebl.sms.repository.SyncRepositoryImpl
 import org.groebl.sms.worker.InjectionWorkerFactory
 import javax.inject.Singleton
 
@@ -98,9 +142,6 @@ class AppModule(private var application: Application) {
     fun provideAlarmManager(manager: AlarmManagerImpl): AlarmManager = manager
 
     @Provides
-    fun provideAnalyticsManager(manager: AnalyticsManagerImpl): AnalyticsManager = manager
-
-    @Provides
     fun blockingClient(manager: BlockingManager): BlockingClient = manager
 
     @Provides
@@ -153,6 +194,9 @@ class AppModule(private var application: Application) {
     fun provideBlockingRepository(repository: BlockingRepositoryImpl): BlockingRepository = repository
 
     @Provides
+    fun provideMessageContentFilterRepository(repository: MessageContentFilterRepositoryImpl): MessageContentFilterRepository = repository
+
+    @Provides
     fun provideContactRepository(repository: ContactRepositoryImpl): ContactRepository = repository
 
     @Provides
@@ -166,6 +210,9 @@ class AppModule(private var application: Application) {
 
     @Provides
     fun provideSyncRepository(repository: SyncRepositoryImpl): SyncRepository = repository
+
+    @Provides
+    fun provideEmojiReactionRepository(repository: EmojiReactionRepositoryImpl): EmojiReactionRepository = repository
 
     // worker factory
     @Provides

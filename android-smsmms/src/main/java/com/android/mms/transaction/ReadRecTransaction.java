@@ -16,18 +16,20 @@
 
 package com.android.mms.transaction;
 
+import java.io.IOException;
+
 import android.content.Context;
 import android.net.Uri;
 import android.provider.Telephony.Mms.Sent;
+import timber.log.Timber;
+
+import com.android.mms.logs.LogTag;
 import com.google.android.mms.MmsException;
 import com.google.android.mms.pdu_alt.EncodedStringValue;
 import com.google.android.mms.pdu_alt.PduComposer;
 import com.google.android.mms.pdu_alt.PduPersister;
 import com.google.android.mms.pdu_alt.ReadRecInd;
 import com.klinker.android.send_message.Utils;
-import timber.log.Timber;
-
-import java.io.IOException;
 
 /**
  * The ReadRecTransaction is responsible for sending read report
@@ -41,6 +43,8 @@ import java.io.IOException;
  * </ul>
  */
 public class ReadRecTransaction extends Transaction implements Runnable{
+    private static final String TAG = LogTag.TAG;
+    private static final boolean DEBUG = false;
     private static final boolean LOCAL_LOGV = false;
 
     private Thread mThread;

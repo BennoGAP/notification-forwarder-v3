@@ -23,10 +23,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 import android.net.Uri;
-import android.widget.Toast;
 import timber.log.Timber;
 
+import android.widget.Toast;
+
 public final class SqliteWrapper {
+    private static final String TAG = "SqliteWrapper";
     private static final String SQLITE_EXCEPTION_DETAIL_MESSAGE
                 = "unable to open database file";
 
@@ -70,9 +72,6 @@ public final class SqliteWrapper {
         } catch (SQLiteException e) {
             Timber.e(e, "Catch a SQLiteException when query: ");
             checkSQLiteException(context, e);
-            return null;
-        } catch (Exception e) {
-            Timber.e(e, "Catch all other Sqlite-Exceptions");
             return null;
         }
     }

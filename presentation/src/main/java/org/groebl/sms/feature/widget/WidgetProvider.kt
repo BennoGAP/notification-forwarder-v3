@@ -25,7 +25,7 @@ import android.appwidget.AppWidgetProvider
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
+import android.content.res.Configuration
 import android.os.Bundle
 import android.widget.RemoteViews
 import dagger.android.AndroidInjection
@@ -39,6 +39,7 @@ import org.groebl.sms.receiver.StartActivityFromWidgetReceiver
 import org.groebl.sms.util.Preferences
 import timber.log.Timber
 import javax.inject.Inject
+import androidx.core.net.toUri
 
 class WidgetProvider : AppWidgetProvider() {
 
@@ -49,7 +50,7 @@ class WidgetProvider : AppWidgetProvider() {
         AndroidInjection.inject(this, context)
 
         when (intent.action) {
-            WidgetManager.ACTION_NOTIFY_DATASET_CHANGED -> updateData(context)
+            "${context.packageName}.${WidgetManager.ACTION_NOTIFY_DATASET_CHANGED}" -> updateData(context)
             else -> super.onReceive(context, intent)
         }
     }
@@ -109,22 +110,22 @@ class WidgetProvider : AppWidgetProvider() {
         Timber.v("updateWidget appWidgetId: $appWidgetId")
         val remoteViews = RemoteViews(context.packageName, R.layout.widget)
 
+        val nightModeFlags = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        val isNightMode = nightModeFlags == Configuration.UI_MODE_NIGHT_YES
+
         // Apply colors from theme
-        val night = prefs.night.get()
+        val night = prefs.night.get() || isNightMode
         val black = prefs.black.get()
-        val gray = prefs.gray.get()
 
         remoteViews.setInt(R.id.background, "setColorFilter", context.getColorCompat(when {
             night && black -> R.color.black
             night && !black -> R.color.backgroundDark
-            !night && gray -> R.color.backgroundGray
             else -> R.color.white
         }))
 
         remoteViews.setInt(R.id.toolbar, "setColorFilter", context.getColorCompat(when {
             night && black -> R.color.black
             night && !black -> R.color.backgroundDark
-            !night && gray -> R.color.backgroundGray
             else -> R.color.backgroundLight
         }))
 
@@ -133,13 +134,11 @@ class WidgetProvider : AppWidgetProvider() {
             false -> R.color.textPrimary
         }))
 
-        remoteViews.setInt(R.id.compose, "setColorFilter", colors.theme().theme)
-
         // Set adapter for conversations
         val intent = Intent(context, WidgetService::class.java)
                 .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
                 .putExtra("small_widget", smallWidget)
-        intent.data = Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME))
+        intent.data = intent.toUri(Intent.URI_INTENT_SCHEME).toUri()
         remoteViews.setRemoteAdapter(R.id.conversations, intent)
 
         // compose new message image color and on click intent

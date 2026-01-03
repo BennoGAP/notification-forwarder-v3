@@ -19,7 +19,9 @@
 package org.groebl.sms.mapper
 
 import android.database.Cursor
-import android.provider.Telephony.*
+import android.provider.Telephony.Mms
+import android.provider.Telephony.MmsSms
+import android.provider.Telephony.Sms
 import org.groebl.sms.model.Message
 import timber.log.Timber
 

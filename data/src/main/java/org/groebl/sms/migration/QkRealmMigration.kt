@@ -29,6 +29,7 @@ import io.realm.FieldAttribute
 import io.realm.RealmList
 import io.realm.RealmMigration
 import io.realm.Sort
+import timber.log.Timber
 import javax.inject.Inject
 
 class QkRealmMigration @Inject constructor(
@@ -37,7 +38,7 @@ class QkRealmMigration @Inject constructor(
 ) : RealmMigration {
 
     companion object {
-        const val SCHEMA_VERSION: Long = 13
+        const val SCHEMA_VERSION: Long = 15
     }
 
     @SuppressLint("ApplySharedPref")
@@ -267,8 +268,73 @@ class QkRealmMigration @Inject constructor(
             version++
         }
 
+        if (version == 13L) {
+            val emojiReactionTable = realm.schema.create("EmojiReaction")
+                .addField("id", Long::class.java, FieldAttribute.PRIMARY_KEY, FieldAttribute.REQUIRED)
+                .addField("reactionMessageId", Long::class.java, FieldAttribute.INDEXED, FieldAttribute.REQUIRED)
+                .addField("senderAddress", String::class.java, FieldAttribute.REQUIRED)
+                .addField("emoji", String::class.java, FieldAttribute.REQUIRED)
+                .addField("originalMessageText", String::class.java, FieldAttribute.REQUIRED)
+                .addField("threadId", Long::class.java, FieldAttribute.INDEXED, FieldAttribute.REQUIRED)
 
-        check(version >= newVersion) { "Migration missing from v$oldVersion to v$newVersion" }
+            realm.schema.get("Message")
+                ?.addField("isEmojiReaction", Boolean::class.java, FieldAttribute.REQUIRED)
+                ?.addRealmListField("emojiReactions", emojiReactionTable)
+                ?.transform { msg ->
+                    msg.setBoolean("isEmojiReaction", false)
+                }
+
+            realm.schema.create("EmojiSyncNeeded")
+                .addField("createdAt", Long::class.java, FieldAttribute.REQUIRED)
+
+            realm.createObject("EmojiSyncNeeded")
+
+            realm.schema.get("ScheduledMessage")
+                ?.addField("conversationId", Long::class.java, FieldAttribute.REQUIRED)
+            // Because there was never any property associated with which conversation/recipients a scheduled message was for,
+            // we can't update this field on a realm migration. It will be set to a default of 0
+
+            realm.schema.create("MessageContentFilter")
+                .addField("id", Long::class.java, FieldAttribute.PRIMARY_KEY, FieldAttribute.REQUIRED)
+                .addField("value", String::class.java, FieldAttribute.REQUIRED)
+                .addField("caseSensitive", Boolean::class.java, FieldAttribute.REQUIRED)
+                .addField("isRegex", Boolean::class.java, FieldAttribute.REQUIRED)
+                .addField("includeContacts", Boolean::class.java, FieldAttribute.REQUIRED)
+
+            realm.schema.get("Conversation")
+                ?.addField("draftDate", Long::class.java, FieldAttribute.REQUIRED)
+
+			realm.delete("BlockedRegex")
+
+            version++
+        }
+
+        if (version == 14L) {
+            if (realm.schema.get("Conversation")?.hasField("sendAsGroup") == false) {
+                realm.schema.get("Conversation")
+                    ?.addField("sendAsGroup", Boolean::class.java, FieldAttribute.REQUIRED)
+                    ?.transform { conversation ->
+                        conversation.setBoolean(
+                            "sendAsGroup",
+                            (conversation.getList("recipients").size > 1)
+                        )
+                    }
+            }
+            if (realm.schema.get("Message")?.hasField("sendAsGroup") == false) {
+                realm.schema.get("Message")
+                    ?.addField("sendAsGroup", Boolean::class.java, FieldAttribute.REQUIRED)
+            }
+
+            version++
+        }
+
+        // throw an exception if migration failed
+        check(version >= newVersion) {
+            "Realm migration from v$oldVersion to v$newVersion failed at v$version"
+        }
+
+        // else
+        Timber.d("Realm migration from v$oldVersion to v$newVersion succeeded")
     }
 
 }

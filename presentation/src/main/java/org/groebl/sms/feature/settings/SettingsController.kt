@@ -30,7 +30,9 @@ import androidx.core.view.isVisible
 import com.bluelinelabs.conductor.RouterTransaction
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.view.longClicks
-
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
+import org.groebl.sms.BuildConfig
 import org.groebl.sms.R
 import org.groebl.sms.common.MenuItem
 import org.groebl.sms.common.QkChangeHandler
@@ -38,32 +40,29 @@ import org.groebl.sms.common.QkDialog
 import org.groebl.sms.common.base.QkController
 import org.groebl.sms.common.util.Colors
 import org.groebl.sms.common.util.extensions.animateLayoutChanges
-import org.groebl.sms.common.util.extensions.resolveThemeColor
 import org.groebl.sms.common.util.extensions.setBackgroundTint
 import org.groebl.sms.common.util.extensions.setVisible
 import org.groebl.sms.common.widget.PreferenceView
 import org.groebl.sms.common.widget.TextInputDialog
 import org.groebl.sms.feature.settings.about.AboutController
 import org.groebl.sms.feature.settings.autodelete.AutoDeleteDialog
-import org.groebl.sms.feature.settings.simconfigure.SimConfigureController
-import org.groebl.sms.feature.settings.speechbubble.SpeechBubbleController
 import org.groebl.sms.feature.settings.swipe.SwipeActionsController
 import org.groebl.sms.feature.themepicker.ThemePickerController
 import org.groebl.sms.injection.appComponent
 import org.groebl.sms.repository.SyncRepository
 import org.groebl.sms.util.Preferences
-import com.uber.autodispose.android.lifecycle.scope
-import com.uber.autodispose.autoDisposable
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
+import kotlinx.android.synthetic.main.settings_controller.*
+import kotlinx.android.synthetic.main.settings_controller.view.*
+import kotlinx.android.synthetic.main.settings_chevron_widget.view.*
+import kotlinx.android.synthetic.main.settings_switch_widget.view.*
+import kotlinx.android.synthetic.main.settings_theme_widget.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
-import kotlinx.android.synthetic.main.settings_controller.*
-import kotlinx.android.synthetic.main.settings_switch_widget.view.*
-import kotlinx.android.synthetic.main.settings_theme_widget.*
-import kotlinx.android.synthetic.main.settings_chevron_widget.view.*
+import org.groebl.sms.common.util.extensions.resolveThemeColor
 import javax.inject.Inject
 import kotlin.coroutines.resume
 
@@ -117,7 +116,7 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
         mmsSizeDialog.adapter.setData(R.array.mms_sizes, R.array.mms_sizes_ids)
         messageLinkHandlingDialog.adapter.setData(R.array.messageLinkHandlings, R.array.messageLinkHandling_ids)
 
-        //about.summary = context.getString(R.string.settings_version, BuildConfig.VERSION_NAME)
+        about.summary = context.getString(R.string.settings_version, BuildConfig.VERSION_NAME)
     }
 
     override fun onAttach(view: View) {
@@ -133,8 +132,6 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
         val textTertiary = view.context.resolveThemeColor(android.R.attr.textColorTertiary)
         val imageTintList = ColorStateList(states, intArrayOf(colors.theme().theme, textTertiary))
 
-        speechBubble.chevron.imageTintList = imageTintList
-        simConfigure.chevron.imageTintList = imageTintList
         notifications.chevron.imageTintList = imageTintList
         swipeActions.chevron.imageTintList = imageTintList
         about.chevron.imageTintList = imageTintList
@@ -169,53 +166,45 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
     override fun render(state: SettingsState) {
         themePreview.setBackgroundTint(state.theme)
 
-        speechBubble.chevron.setImageResource(R.drawable.ic_chevron_right_black_24dp)
-        simConfigure.chevron.setImageResource(R.drawable.ic_chevron_right_black_24dp)
         notifications.chevron.setImageResource(R.drawable.ic_chevron_right_black_24dp)
         swipeActions.chevron.setImageResource(R.drawable.ic_chevron_right_black_24dp)
         about.chevron.setImageResource(R.drawable.ic_chevron_right_black_24dp)
 
-        night.value = state.nightModeSummary
+        night.summary = state.nightModeSummary
         nightModeDialog.adapter.selectedItem = state.nightModeId
         nightStart.setVisible(state.nightModeId == Preferences.NIGHT_MODE_AUTO)
-        nightStart.value = state.nightStart
+        nightStart.summary = state.nightStart
         nightEnd.setVisible(state.nightModeId == Preferences.NIGHT_MODE_AUTO)
-        nightEnd.value = state.nightEnd
+        nightEnd.summary = state.nightEnd
 
         black.setVisible(state.nightModeId != Preferences.NIGHT_MODE_OFF)
         black.checkbox.isChecked = state.black
-        gray.setVisible(state.nightModeId != Preferences.NIGHT_MODE_ON)
-        gray.checkbox.isChecked = state.gray
 
         autoEmoji.checkbox.isChecked = state.autoEmojiEnabled
 
-        delayed.value = state.sendDelaySummary
+        delayed.summary = state.sendDelaySummary
         sendDelayDialog.adapter.selectedItem = state.sendDelayId
 
         delivery.checkbox.isChecked = state.deliveryEnabled
 
         unreadAtTop.checkbox.isChecked = state.unreadAtTopEnabled
 
-        signature.value = state.signature.takeIf { it.isNotBlank() }
+        signature.summary = state.signature.takeIf { it.isNotBlank() }
                 ?: context.getString(R.string.settings_signature_summary)
 
-        textSize.value = state.textSizeSummary
+        textSize.summary = state.textSizeSummary
         textSizeDialog.adapter.selectedItem = state.textSizeId
 
         autoColor.checkbox.isChecked = state.autoColor
 
-        grayAvatar.checkbox.isChecked = state.grayAvatar
-
-        separator.checkbox.isChecked = state.separator
-
         systemFont.checkbox.isChecked = state.systemFontEnabled
+
+        showStt.checkbox.isChecked = state.showStt
 
         unicode.checkbox.isChecked = state.stripUnicodeEnabled
         mobileOnly.checkbox.isChecked = state.mobileOnly
 
-        showStt.checkbox.isChecked = state.showStt
-
-        autoDelete.value = when (state.autoDelete) {
+        autoDelete.summary = when (state.autoDelete) {
             0 -> context.getString(R.string.settings_auto_delete_never)
             else -> context.resources.getQuantityString(
                     R.plurals.settings_auto_delete_summary, state.autoDelete, state.autoDelete)
@@ -225,17 +214,25 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
 
         optOut.checkbox.isChecked = state.optOut
 
-        mmsSize.value = state.maxMmsSizeSummary
+        mmsSize.summary = state.maxMmsSizeSummary
         mmsSizeDialog.adapter.selectedItem = state.maxMmsSizeId
 
-        messsageLinkHandling.value = state.messageLinkHandlingSummary
+        messsageLinkHandling.summary = state.messageLinkHandlingSummary
         messageLinkHandlingDialog.adapter.selectedItem = state.messageLinkHandlingId
 
         disableScreenshots.checkbox.isChecked = state.disableScreenshotsEnabled
+
         when (state.syncProgress) {
             is SyncRepository.SyncProgress.Idle -> syncingProgress.isVisible = false
 
             is SyncRepository.SyncProgress.Running -> {
+                syncingProgress.isVisible = true
+                syncingProgress.max = state.syncProgress.max
+                progressAnimator.apply { setIntValues(syncingProgress.progress, state.syncProgress.progress) }.start()
+                syncingProgress.isIndeterminate = state.syncProgress.indeterminate
+            }
+
+            is SyncRepository.SyncProgress.ParsingEmojis -> {
                 syncingProgress.isVisible = true
                 syncingProgress.max = state.syncProgress.max
                 progressAnimator.apply { setIntValues(syncingProgress.progress, state.syncProgress.progress) }.start()
@@ -282,18 +279,6 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
     override fun showMmsSizePicker() = mmsSizeDialog.show(activity!!)
 
     override fun showMessageLinkHandlingDialogPicker() = messageLinkHandlingDialog.show(activity!!)
-
-    override fun showSpeechBubble() {
-        router.pushController(RouterTransaction.with(SpeechBubbleController())
-            .pushChangeHandler(QkChangeHandler())
-            .popChangeHandler(QkChangeHandler()))
-    }
-
-    override fun showSimConfigure() {
-        router.pushController(RouterTransaction.with(SimConfigureController())
-            .pushChangeHandler(QkChangeHandler())
-            .popChangeHandler(QkChangeHandler()))
-    }
 
     override fun showSwipeActions() {
         router.pushController(RouterTransaction.with(SwipeActionsController())

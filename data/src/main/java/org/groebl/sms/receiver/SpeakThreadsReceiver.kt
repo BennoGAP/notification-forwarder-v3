@@ -21,8 +21,8 @@ package org.groebl.sms.receiver
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import org.groebl.sms.interactor.SpeakThreads
 import dagger.android.AndroidInjection
+import org.groebl.sms.interactor.SpeakThreads
 import org.groebl.sms.repository.ConversationRepository
 import javax.inject.Inject
 

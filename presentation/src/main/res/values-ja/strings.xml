@@ -16,8 +16,7 @@
   ~
   ~ You should have received a copy of the GNU General Public License
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
+  --><resources>
     <string name="shortcut_compose_long_label">新しい会話</string>
     <string name="shortcut_compose_short_label">新規作成</string>
     <string name="shortcut_compose_disabled_message">ショートカットが無効です</string>
@@ -25,15 +24,15 @@
     <string name="title_settings">設定</string>
     <string name="title_notification_prefs">通知</string>
     <string name="title_theme">テーマ</string>
-    <string name="title_conversations">受信トレイを検索&#8230;</string>
+    <string name="title_conversations">受信トレイを検索…</string>
     <string name="title_compose">名前または電話番号を入力</string>
     <string name="setup_skip">スキップ</string>
     <string name="setup_next">続行</string>
     <string name="menu_add_person">人物を追加</string>
     <string name="menu_call">通話</string>
     <string name="menu_info">詳細</string>
-    <string name="menu_save">ギャラリーに保存</string>
-    <string name="menu_share">共有</string>
+    <string name="menu_mms_part_save">ギャラリーに保存</string>
+    <string name="compose_menu_share">共有</string>
     <string name="main_drawer_open_cd">ナビゲーションドロワーを開く</string>
     <string name="main_title_selected">%d 件を選択中</string>
     <string name="main_menu_clear">消去</string>
@@ -55,12 +54,12 @@
     <string name="archived_empty_text">保存した会話がここに表示されます</string>
     <string name="main_fab_cd">新しい会話を開始</string>
     <string name="main_default_sms_title">もう一度テキストメッセージが好きになる</string>
-    <string name="main_default_sms_message">QKSMS を既定の SMS アプリに設定</string>
+    <string name="main_default_sms_message">QUIK を既定の SMS アプリに設定</string>
     <string name="main_default_sms_change">変更</string>
     <string name="main_permission_required">アクセス権限を許可してください</string>
-    <string name="main_permission_sms">QKSMS は SMS メッセージを送信および表示する権限を必要とします</string>
-    <string name="main_permission_contacts">QKSMS はあなたの連絡先を閲覧する権限を必要とします</string>
-    <string name="main_permission_notifications">QKSMS は通知を表示する権限を必要とします</string>
+    <string name="main_permission_sms">QUIK は SMS メッセージを送信および表示する権限を必要とします</string>
+    <string name="main_permission_contacts">QUIK はあなたの連絡先を閲覧する権限を必要とします</string>
+    <string name="main_permission_notifications">QUIK は通知を表示する権限を必要とします</string>
     <string name="main_permission_allow">許可</string>
     <string name="drawer_inbox">受信トレイ</string>
     <string name="drawer_archived">アーカイブ済み</string>
@@ -71,7 +70,7 @@
     <string name="drawer_help">ヘルプとフィードバック</string>
     <string name="drawer_invite">友達を招待</string>
     <string name="drawer_plus_banner_summary">素敵な新機能を解放して、開発をサポート</string>
-    <string name="rate_title">QKSMS をお楽みいただいていますか？</string>
+    <string name="rate_title">QUIK をお楽みいただいていますか？</string>
     <string name="rate_summary">Google Play で愛を共有して私たちを評価してください！</string>
     <string name="rate_okay">OK！</string>
     <string name="rate_dismiss">非表示</string>
@@ -96,9 +95,9 @@
     <string name="compose_vcard_label">連絡先カード</string>
     <string name="compose_scheduled_for">送信予約</string>
     <string name="compose_scheduled_future">今より先の時間を選択してください！</string>
-    <string name="compose_scheduled_plus">メッセージの送信予約には、QKSMS+ のロックを解除する必要があります</string>
+    <string name="compose_scheduled_plus">メッセージの送信予約には、QUIK+ のロックを解除する必要があります</string>
     <string name="compose_scheduled_toast">送信予約メッセージに追加されました</string>
-    <string name="compose_hint">メッセージを書いてください&#8230;</string>
+    <string name="compose_hint">メッセージを書いてください…</string>
     <string name="compose_menu_copy">テキストをコピー</string>
     <string name="compose_menu_forward">転送</string>
     <string name="compose_menu_delete">削除</string>
@@ -126,7 +125,7 @@
     <string name="compose_sim_changed_toast">SIM %1$d (%2$s) を選択しました</string>
     <string name="compose_sim_cd">%s 選択、SIM カードを変更</string>
     <string name="compose_send_cd">メッセージを送信</string>
-    <string name="message_status_sending">送信中&#8230;</string>
+    <string name="message_status_sending">送信中…</string>
     <string name="message_status_delivered">%s を配信しました</string>
     <string name="message_status_failed">送信に失敗しました。タップすると、もう一度やり直します</string>
     <string name="info_title">詳細</string>
@@ -150,9 +149,9 @@
     <string name="backup_location_summary">フォルダーを設定</string>
     <string name="backup_restore_title">復元</string>
     <string name="backup_restore_summary">バックアップを選択</string>
-    <string name="backup_restore_error_plus">バックアップと復元を使用するには QKSMS+ のロックを解除してください</string>
-    <string name="backup_restore_error_backup">バックアップ中&#8230;</string>
-    <string name="backup_restore_error_restore">復元中&#8230;</string>
+    <string name="backup_restore_error_plus">バックアップと復元を使用するには QUIK+ のロックを解除してください</string>
+    <string name="backup_restore_error_backup">バックアップ中…</string>
+    <string name="backup_restore_error_restore">復元中…</string>
     <string name="backup_restore_confirm_title">バックアップから復元</string>
     <string name="backup_restore_stop_title">復元を停止</string>
     <string name="backup_restore_stop_message">既に復元されたメッセージはあなたのデバイスに残ります</string>
@@ -167,7 +166,7 @@
     <string name="backup_disclaimer">現在、SMS のみバックアップと復元に対応しています。 MMS 対応と定期バックアップは近日中に公開されます！</string>
     <string name="backup_now">今すぐバックアップ</string>
     <string name="backup_progress_parsing">バックアップを解析中...</string>
-    <string name="backup_progress_running">%1$d 件/%2$d 件のメッセージ</string>
+    <string name="backup_progress_running">%d 件/%d 件のメッセージ</string>
     <string name="backup_progress_saving">バックアップを保存しています...</string>
     <string name="backup_progress_syncing">メッセージを同期しています...</string>
     <string name="backup_progress_finished">終了しました！</string>
@@ -181,6 +180,11 @@
     <string name="scheduled_empty_message_3_timestamp">12 月 23 日に送信</string>
     <string name="scheduled_compose_cd">メッセージを送信予約</string>
     <string name="scheduled_options_title">送信予約されたメッセージ</string>
+    <string-array name="scheduled_options">
+        <item>今すぐ送る</item>
+        <item>テキストをコピー</item>
+        <item>削除</item>
+    </string-array>
     <string name="settings_category_appearance">外観</string>
     <string name="settings_category_general">全般</string>
     <string name="settings_category_qkreply">QK Reply</string>
@@ -245,7 +249,7 @@
     <string name="settings_mms_size_title">MMS 添付ファイルの自動圧縮</string>
     <string name="settings_sync_title">メッセージを同期</string>
     <string name="settings_sync_summary">メッセージをネイティブの Android SMS データベースと再同期します</string>
-    <string name="settings_about_title">QKSMS について</string>
+    <string name="settings_about_title">QUIK について</string>
     <string name="settings_version">バージョン %s</string>
     <string name="settings_logging_enabled">デバッグログが有効</string>
     <string name="settings_logging_disabled">デバッグログが無効</string>
@@ -255,8 +259,7 @@
     <string name="blocking_drop_summary">ブロックした送信者からの受信メッセージを非表示にする代わりにドロップします</string>
     <string name="blocking_conversations">ブロックした会話</string>
     <string name="blocking_manager_title">ブロッキングマネージャー</string>
-    <string name="blocking_manager_qksms_title">QKSMS</string>
-    <string name="blocking_manager_qksms_summary">QKSMS の内蔵ブロック機能</string>
+    <string name="blocking_manager_qksms_summary">QUIK の内蔵ブロック機能</string>
     <string name="blocking_manager_call_blocker_summary">ブラックリストにより迷惑メッセージ、番号、不明な通話をブロック</string>
     <string name="blocking_manager_call_control_summary">1 か所で便利に通話とメッセージを自動的にフィルタリングします! Community IQ™を使用すると、コミュニティで知られているスパマーからの不要なメッセージを防ぐことができます</string>
     <string name="blocking_manager_sia_summary">\"Should I Answer\" アプリを使用して、迷惑な番号からのメッセージを自動的にフィルターします</string>
@@ -292,10 +295,10 @@
     <string name="qksms_plus_upgrade">%1$s %2$s で買い切りのアップグレード</string>
     <!-- Substitutions are for price and currency. Ex: Unlock + donate for $4.99 USD -->
     <string name="qksms_plus_upgrade_donate">%1$s %2$s でロック解除と寄付</string>
-    <string name="qksms_plus_thanks_title">QKSMS を支援いただきありがとうございます！</string>
-    <string name="qksms_plus_thanks_summary">QKSMS+ のすべての機能にアクセスできます</string>
+    <string name="qksms_plus_thanks_title">QUIK を支援いただきありがとうございます！</string>
+    <string name="qksms_plus_thanks_summary">QUIK+ のすべての機能にアクセスできます</string>
     <string name="qksms_plus_error">エラーが発生しました。もう一度やり直してください</string>
-    <string name="qksms_plus_free_title">QKSMS+ は F-Droid ユーザーには無料です！開発をサポートしたい場合は、気軽に寄付をしてください。</string>
+    <string name="qksms_plus_free_title">QUIK+ は F-Droid ユーザーには無料です！開発をサポートしたい場合は、気軽に寄付をしてください。</string>
     <string name="qksms_plus_donate">PayPal で寄付</string>
     <string name="qksms_plus_coming_soon">近日登場</string>
     <string name="qksms_plus_themes_title">プレミアムテーマ</string>
@@ -317,7 +320,7 @@
     <string name="qksms_plus_respond_title">自動応答</string>
     <string name="qksms_plus_respond_summary">あらかじめ設定された応答で、受信したメッセージに自動的に返信します</string>
     <string name="qksms_plus_more_title">その他</string>
-    <string name="qksms_plus_more_summary">QKSMS は活発に開発中で、購入にはすべての将来の QKSMS+ 機能が含まれます！</string>
+    <string name="qksms_plus_more_summary">QUIK は活発に開発中で、購入にはすべての将来の QUIK+ 機能が含まれます！</string>
     <string name="widget_loading">読み込み中...</string>
     <string name="widget_more">さらに会話を表示</string>
     <string name="qkreply_menu_read">既読にする</string>
@@ -348,7 +351,7 @@
     <string name="button_set">設定</string>
     <string name="button_undo">元に戻す</string>
     <string name="toast_copied">コピーしました</string>
-    <string name="toast_qksms_plus">使用するには QKSMS+ のロックを解除する必要があります</string>
+    <string name="toast_qksms_plus">使用するには QUIK+ のロックを解除する必要があります</string>
     <plurals name="notification_new_messages">
         <item quantity="other">%s 件の新着メッセージ</item>
     </plurals>
@@ -401,4 +404,5 @@
         <item>爆笑</item>
         <item>大丈夫</item>
     </string-array>
+    <string name="menu_mms_part_share">共有</string>
 </resources>

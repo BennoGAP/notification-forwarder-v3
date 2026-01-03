@@ -26,7 +26,8 @@ import androidx.appcompat.app.AppCompatDelegate
 import org.groebl.sms.manager.WidgetManager
 import org.groebl.sms.receiver.NightModeReceiver
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton

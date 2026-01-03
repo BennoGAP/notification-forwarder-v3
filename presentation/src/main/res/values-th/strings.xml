@@ -16,8 +16,7 @@
   ~
   ~ You should have received a copy of the GNU General Public License
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
+  --><resources>
     <string name="shortcut_compose_long_label">New conversation</string>
     <string name="shortcut_compose_short_label">Compose</string>
     <string name="shortcut_compose_disabled_message">Shortcut disabled</string>
@@ -25,15 +24,15 @@
     <string name="title_settings">การตั้งค่า</string>
     <string name="title_notification_prefs">การแจ้งเตือน</string>
     <string name="title_theme">รูปแบบการแสดงผล</string>
-    <string name="title_conversations">ค้นหากล่องขาเข้า&#8230;</string>
+    <string name="title_conversations">ค้นหากล่องขาเข้า…</string>
     <string name="title_compose">พิมพ์ชื่อหรือหมายเลข</string>
     <string name="setup_skip">ข้าม</string>
     <string name="setup_next">ทำต่อ</string>
     <string name="menu_add_person">Add person</string>
     <string name="menu_call">โทร</string>
     <string name="menu_info">รายละเอียด</string>
-    <string name="menu_save">บันทึกรูปภาพ</string>
-    <string name="menu_share">Share</string>
+    <string name="menu_mms_part_save">บันทึกรูปภาพ</string>
+    <string name="compose_menu_share">Share</string>
     <string name="main_drawer_open_cd">เปิดเมนูลัด</string>
     <string name="main_title_selected">%d ถูกเลือก</string>
     <string name="main_menu_clear">ลบออก</string>
@@ -46,7 +45,7 @@
     <string name="main_menu_read">Mark read</string>
     <string name="main_menu_unread">Mark unread</string>
     <string name="main_menu_block">ปิดกั้น</string>
-    <string name="main_syncing">กำลังปรับแต่งเพิ่มประสิทธิภาพฐานข้อมูล อาจใช้เวลาสักครู่&#8230;</string>
+    <string name="main_syncing">กำลังปรับแต่งเพิ่มประสิทธิภาพฐานข้อมูล อาจใช้เวลาสักครู่…</string>
     <string name="main_sender_you">คุณ: %s</string>
     <string name="main_message_results_title">ผลลัพธ์ในข้อความ</string>
     <string name="main_message_results">%d ข้อความ</string>
@@ -55,12 +54,12 @@
     <string name="archived_empty_text">บทสนทนาของคุณที่จัดเก็บไว้จะปรากฏที่นี่</string>
     <string name="main_fab_cd">เริ่มการสนทนาใหม่</string>
     <string name="main_default_sms_title">อยากส่งข้อความอีกครั้ง</string>
-    <string name="main_default_sms_message">ทำให้ QKSMS แอป SMS ค่าเริ่มต้นของคุณ</string>
+    <string name="main_default_sms_message">ทำให้ QUIK แอป SMS ค่าเริ่มต้นของคุณ</string>
     <string name="main_default_sms_change">เปลี่ยน</string>
     <string name="main_permission_required">ต้องการใช้สิทธิ์การเข้าถึง</string>
-    <string name="main_permission_sms">QKSMS ต้องการสิทธิ์เพื่อส่ง และดูข้อความ SMS</string>
-    <string name="main_permission_contacts">QKSMS ต้องการสิทธิ์เพื่อดูรายชื่อผู้ติดต่อของคุณ</string>
-    <string name="main_permission_notifications">QKSMS needs permission to display notifications</string>
+    <string name="main_permission_sms">QUIK ต้องการสิทธิ์เพื่อส่ง และดูข้อความ SMS</string>
+    <string name="main_permission_contacts">QUIK ต้องการสิทธิ์เพื่อดูรายชื่อผู้ติดต่อของคุณ</string>
+    <string name="main_permission_notifications">QUIK needs permission to display notifications</string>
     <string name="main_permission_allow">อนุญาต</string>
     <string name="drawer_inbox">กล่องขาเข้า</string>
     <string name="drawer_archived">จัดเก็บ</string>
@@ -71,7 +70,7 @@
     <string name="drawer_help">ช่วยเหลือ &amp; ข้อคิดเห็น</string>
     <string name="drawer_invite">เชิญเพื่อน</string>
     <string name="drawer_plus_banner_summary">ปลดล็อคฟีเจอร์ใหม่ ๆ และสนับสนุนการพัฒนา</string>
-    <string name="rate_title">ชอบ QKSMS ไหม?</string>
+    <string name="rate_title">ชอบ QUIK ไหม?</string>
     <string name="rate_summary">แชร์และให้คะแนนเราบน Google Play!</string>
     <string name="rate_okay">ตกลง!</string>
     <string name="rate_dismiss">ยกเลิก</string>
@@ -96,7 +95,7 @@
     <string name="compose_vcard_label">นามบัตร</string>
     <string name="compose_scheduled_for">กำหนดการ</string>
     <string name="compose_scheduled_future">เลือกเวลาที่ต้องเป็นเวลาในอนาคต</string>
-    <string name="compose_scheduled_plus">คุณต้องปลดล็อก QKSMS + เพื่อการใช้ข้อความที่กำหนดเวลาได้</string>
+    <string name="compose_scheduled_plus">คุณต้องปลดล็อก QUIK + เพื่อการใช้ข้อความที่กำหนดเวลาได้</string>
     <string name="compose_scheduled_toast">เพิ่มข้อความที่กำหนดเวลา</string>
     <string name="compose_hint">เขียนข้อความ...</string>
     <string name="compose_menu_copy">คัดลอกข้อความ</string>
@@ -144,15 +143,15 @@
     <string name="backup_title">Backup and restore</string>
     <string name="backup_backing_up">Backing up messages</string>
     <string name="backup_restoring">Restoring from backup</string>
-    <string name="backup_loading">Loading&#8230;</string>
+    <string name="backup_loading">Loading…</string>
     <string name="backup_never">Never</string>
     <string name="backup_location_title">Backup location</string>
     <string name="backup_location_summary">Set folder</string>
     <string name="backup_restore_title">Restore</string>
     <string name="backup_restore_summary">Select a backup</string>
-    <string name="backup_restore_error_plus">Please unlock QKSMS+ to use backup and restore</string>
-    <string name="backup_restore_error_backup">Backup in progress&#8230;</string>
-    <string name="backup_restore_error_restore">Restore in progress&#8230;</string>
+    <string name="backup_restore_error_plus">Please unlock QUIK+ to use backup and restore</string>
+    <string name="backup_restore_error_backup">Backup in progress…</string>
+    <string name="backup_restore_error_restore">Restore in progress…</string>
     <string name="backup_restore_confirm_title">Restore from backup</string>
     <string name="backup_restore_stop_title">Stop restore</string>
     <string name="backup_restore_stop_message">Messages that have already been restored will remain on your device</string>
@@ -166,10 +165,10 @@
     <string name="backup_restore_dialog_empty">No backups found</string>
     <string name="backup_disclaimer">Currently, only SMS is supported by Backup and Restore. MMS support and scheduled backups will be coming soon!</string>
     <string name="backup_now">Backup now</string>
-    <string name="backup_progress_parsing">Parsing backup&#8230;</string>
-    <string name="backup_progress_running">%1$d/%2$d messages</string>
-    <string name="backup_progress_saving">Saving backup&#8230;</string>
-    <string name="backup_progress_syncing">Syncing messages&#8230;</string>
+    <string name="backup_progress_parsing">Parsing backup…</string>
+    <string name="backup_progress_running">%d/%d messages</string>
+    <string name="backup_progress_saving">Saving backup…</string>
+    <string name="backup_progress_syncing">Syncing messages…</string>
     <string name="backup_progress_finished">Finished!</string>
     <string name="backup_notification_channel_name">Backup and restore</string>
     <string name="scheduled_title">กำหนดการ</string>
@@ -181,6 +180,11 @@
     <string name="scheduled_empty_message_3_timestamp">Sending on December 23rd </string>
     <string name="scheduled_compose_cd">Schedule a message</string>
     <string name="scheduled_options_title">Scheduled message</string>
+    <string-array name="scheduled_options">
+        <item>Send now</item>
+        <item>Copy text</item>
+        <item>Delete</item>
+    </string-array>
     <string name="settings_category_appearance">ลักษณะที่ปรากฏ</string>
     <string name="settings_category_general">ทั่วไป</string>
     <string name="settings_category_qkreply">QK ตอบกลับ</string>
@@ -245,7 +249,7 @@
     <string name="settings_mms_size_title">บีบอัดสิ่งที่แนบมาใน MMS อัตโนมัติ</string>
     <string name="settings_sync_title">ซิงค์ข้อความ</string>
     <string name="settings_sync_summary">ซิงค์ข้อความของคุณกับฐานข้อมูลของ Android SMS</string>
-    <string name="settings_about_title">เกี่ยวกับ QKSMS</string>
+    <string name="settings_about_title">เกี่ยวกับ QUIK</string>
     <string name="settings_version">เวอร์ชัน: %s</string>
     <string name="settings_logging_enabled">Debug logging enabled</string>
     <string name="settings_logging_disabled">Debug logging disabled</string>
@@ -255,8 +259,7 @@
     <string name="blocking_drop_summary">Drop incoming messages from blocked senders instead of hiding them</string>
     <string name="blocking_conversations">Blocked conversations</string>
     <string name="blocking_manager_title">Blocking Manager</string>
-    <string name="blocking_manager_qksms_title">QKSMS</string>
-    <string name="blocking_manager_qksms_summary">Built-in blocking functionality in QKSMS</string>
+    <string name="blocking_manager_qksms_summary">Built-in blocking functionality in QUIK</string>
     <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist &amp; Schedule</string>
     <string name="blocking_manager_call_control_summary">Automatically filter your calls and messages in one convenient place! Community IQ™ allows you to prevent unwanted messages from community known spammers</string>
     <string name="blocking_manager_sia_summary">กรองข้อความจากหมายเลขที่ไม่พึงประสงค์ โดยใช้แอพควรตอบกลับหรือไม่</string>
@@ -292,10 +295,10 @@
     <string name="qksms_plus_upgrade">อัพเกรดตลอดอายุการใช้งานสำหรับ %1$s %2$s</string>
     <!-- Substitutions are for price and currency. Ex: Unlock + donate for $4.99 USD -->
     <string name="qksms_plus_upgrade_donate">ปลดล็อค + บริจาค %1$s %2$s</string>
-    <string name="qksms_plus_thanks_title">ขอบคุณสำหรับการสนับสนุน QKSMS</string>
-    <string name="qksms_plus_thanks_summary">ตอนนี้คุณสามารถเข้าถึงคุณสมบัติทั้งหมดของ QKSMS+ ได้แล้ว</string>
+    <string name="qksms_plus_thanks_title">ขอบคุณสำหรับการสนับสนุน QUIK</string>
+    <string name="qksms_plus_thanks_summary">ตอนนี้คุณสามารถเข้าถึงคุณสมบัติทั้งหมดของ QUIK+ ได้แล้ว</string>
     <string name="qksms_plus_error">An error has occurred, please try again</string>
-    <string name="qksms_plus_free_title">QKSMS+ เป็นบริการฟรีสำหรับผู้ใช้งาน F-Droid หากคุณต้องการสนับสนุนการพัฒนา สามารถบริจาคได้</string>
+    <string name="qksms_plus_free_title">QUIK+ เป็นบริการฟรีสำหรับผู้ใช้งาน F-Droid หากคุณต้องการสนับสนุนการพัฒนา สามารถบริจาคได้</string>
     <string name="qksms_plus_donate">บริจาคผ่าน PayPal</string>
     <string name="qksms_plus_coming_soon">เร็วๆ นี้</string>
     <string name="qksms_plus_themes_title">รูปแบบพรีเมี่ยม</string>
@@ -317,8 +320,8 @@
     <string name="qksms_plus_respond_title">ตอบกลับอัตโนมัติ</string>
     <string name="qksms_plus_respond_summary">ตอบกลับข้อความที่เข้ามาอัตโนมัติ โดยใช้ข้อความที่จัดเตรียมไว้</string>
     <string name="qksms_plus_more_title">เพิ่มเติม</string>
-    <string name="qksms_plus_more_summary">QKSMS is under active development, and your purchase will include all future QKSMS+ features!</string>
-    <string name="widget_loading">กำลังโหลด&#8230;</string>
+    <string name="qksms_plus_more_summary">QUIK is under active development, and your purchase will include all future QUIK+ features!</string>
+    <string name="widget_loading">กำลังโหลด…</string>
     <string name="widget_more">ดูการสนทนาเพิ่มเติม</string>
     <string name="qkreply_menu_read">Mark read</string>
     <string name="qkreply_menu_call">โทร</string>
@@ -348,7 +351,7 @@
     <string name="button_set">ตั้งค่า</string>
     <string name="button_undo">ย้อนกลับ</string>
     <string name="toast_copied">คัดลอกแล้ว</string>
-    <string name="toast_qksms_plus">คุณต้องปลดล็อก QKSMS+ เพื่อใช้งานคุณสมบัตินี้</string>
+    <string name="toast_qksms_plus">คุณต้องปลดล็อก QUIK+ เพื่อใช้งานคุณสมบัตินี้</string>
     <plurals name="notification_new_messages">
         <item quantity="other">มี %s ข้อความใหม่</item>
     </plurals>

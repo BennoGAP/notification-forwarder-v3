@@ -19,43 +19,38 @@
 package org.groebl.sms.feature.compose.editing
 
 import android.content.Context
-import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import androidx.recyclerview.widget.RecyclerView
-import org.groebl.sms.R
 import org.groebl.sms.common.base.QkAdapter
-import org.groebl.sms.common.base.QkViewHolder
+import org.groebl.sms.common.base.QkBindingViewHolder
 import org.groebl.sms.common.util.extensions.dpToPx
-import org.groebl.sms.common.util.extensions.resolveThemeColor
-import org.groebl.sms.common.util.extensions.setBackgroundTint
+import org.groebl.sms.databinding.ContactChipBinding
 import org.groebl.sms.model.Recipient
 import io.reactivex.subjects.PublishSubject
-import kotlinx.android.synthetic.main.contact_chip.*
 import javax.inject.Inject
 
-class ChipsAdapter @Inject constructor() : QkAdapter<Recipient, QkViewHolder>() {
+class ChipsAdapter @Inject constructor() : QkAdapter<Recipient, QkBindingViewHolder<ContactChipBinding>>() {
 
     var view: RecyclerView? = null
-    val chipDeleted: PublishSubject<Recipient> = PublishSubject.create<Recipient>()
+    val chipDeleted: PublishSubject<Recipient> = PublishSubject.create()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QkViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        val view = inflater.inflate(R.layout.contact_chip, parent, false)
-        return QkViewHolder(view).apply {
-            view.setOnClickListener {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QkBindingViewHolder<ContactChipBinding> {
+        val binding = ContactChipBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return QkBindingViewHolder(binding).apply {
+            binding.root.setOnClickListener {
                 val chip = getItem(adapterPosition)
-                showDetailedChip(view.context, chip)
+                showDetailedChip(binding.root.context, chip)
             }
         }
     }
 
-    override fun onBindViewHolder(holder: QkViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: QkBindingViewHolder<ContactChipBinding>, position: Int) {
         val recipient = getItem(position)
 
-        holder.avatar.setRecipient(recipient)
-        holder.name.text = recipient.contact?.name?.takeIf { it.isNotBlank() } ?: recipient.address
+        holder.binding.avatar.setRecipient(recipient)
+        holder.binding.name.text = recipient.contact?.name?.takeIf { it.isNotBlank() } ?: recipient.address
     }
 
     /**

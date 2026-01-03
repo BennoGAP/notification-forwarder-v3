@@ -20,7 +20,6 @@ package org.groebl.sms.feature.main
 
 import android.Manifest
 import android.animation.ObjectAnimator
-import android.app.AlertDialog
 import android.bluetooth.BluetoothManager
 import android.content.Context
 import android.content.Intent
@@ -33,6 +32,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewStub
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
@@ -43,6 +43,9 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.widget.textChanges
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
+import dagger.android.AndroidInjection
 import org.groebl.sms.R
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.androidxcompat.drawerOpen
@@ -54,14 +57,11 @@ import org.groebl.sms.common.util.extensions.scrapViews
 import org.groebl.sms.common.util.extensions.setBackgroundTint
 import org.groebl.sms.common.util.extensions.setTint
 import org.groebl.sms.common.util.extensions.setVisible
+import org.groebl.sms.common.widget.TextInputDialog
 import org.groebl.sms.feature.blocking.BlockingDialog
 import org.groebl.sms.feature.conversations.ConversationItemTouchCallback
 import org.groebl.sms.feature.conversations.ConversationsAdapter
 import org.groebl.sms.repository.SyncRepository
-import com.uber.autodispose.android.lifecycle.scope
-import com.uber.autodispose.autoDisposable
-import dagger.android.AndroidInjection
-import org.groebl.sms.common.widget.TextInputDialog
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
@@ -104,6 +104,9 @@ class MainActivity : QkThemedActivity(), MainView {
                 settings.clicks().map { NavItem.SETTINGS },
                 settings_bluetooth.clicks().map { NavItem.SETTINGS_BLUETOOTH },
                 help.clicks().map { NavItem.HELP }))
+//                plus.clicks().map { NavItem.PLUS },
+//                help.clicks().map { NavItem.HELP },
+//                invite.clicks().map { NavItem.INVITE }))
     }
     override val optionsItemIntent: Subject<Int> = PublishSubject.create()
     override val dismissRatingIntent by lazy { rateDismiss.clicks() }
@@ -176,13 +179,14 @@ class MainActivity : QkThemedActivity(), MainView {
                     val states = arrayOf(
                             intArrayOf(android.R.attr.state_activated),
                             intArrayOf(-android.R.attr.state_activated))
-                            ColorStateList(states, intArrayOf(theme.theme,
-                                resolveThemeColor(android.R.attr.textColorSecondary)
-                            ))
-                            .let { tintList ->
-                                inboxIcon.imageTintList = tintList
-                                archivedIcon.imageTintList = tintList
-                            }
+
+                    ColorStateList(states, intArrayOf(theme.theme,
+                        resolveThemeColor(android.R.attr.textColorSecondary)
+                    ))
+                        .let { tintList ->
+                            inboxIcon.imageTintList = tintList
+                            archivedIcon.imageTintList = tintList
+                        }
 
                     // Miscellaneous views
                     syncingProgress?.progressTintList = ColorStateList.valueOf(theme.theme)
@@ -229,7 +233,6 @@ class MainActivity : QkThemedActivity(), MainView {
 
             }
         }
-
     }
 
     override fun onNewIntent(intent: Intent?) =
@@ -282,11 +285,13 @@ class MainActivity : QkThemedActivity(), MainView {
             findItem(R.id.unarchive)?.isVisible =
                 state.page is Archived && selectedConversations != 0
             findItem(R.id.delete)?.isVisible = selectedConversations != 0
-            //findItem(R.id.add)?.isVisible = addContact && selectedConversations != 0
+            findItem(R.id.add)?.isVisible = addContact && selectedConversations != 0
             findItem(R.id.pin)?.isVisible = markPinned && selectedConversations != 0
             findItem(R.id.unpin)?.isVisible = !markPinned && selectedConversations != 0
-            findItem(R.id.read)?.isVisible = markRead && selectedConversations != 0
-            findItem(R.id.unread)?.isVisible = !markRead && selectedConversations != 0
+            findItem(R.id.read)?.isVisible = ( markRead && selectedConversations != 0 ) ||
+                    selectedConversations > 1
+            findItem(R.id.unread)?.isVisible = ( !markRead && selectedConversations != 0 ) ||
+                    selectedConversations > 1
             findItem(R.id.block)?.isVisible = selectedConversations != 0
             findItem(R.id.rename)?.isVisible = selectedConversations == 1
         }
@@ -369,30 +374,41 @@ class MainActivity : QkThemedActivity(), MainView {
                 syncingProgress.isIndeterminate = state.syncing.indeterminate
                 snackbar.isVisible = false
             }
+
+            is SyncRepository.SyncProgress.ParsingEmojis -> {
+                syncing.isVisible = true
+                syncingLabel.setText(getString(R.string.main_sync_emojis))
+                syncingProgress.max = state.syncing.max
+                progressAnimator.apply {
+                    setIntValues(syncingProgress.progress, state.syncing.progress)
+                }.start()
+                syncingProgress.isIndeterminate = state.syncing.indeterminate
+                snackbar.isVisible = false
+            }
         }
 
         when {
             !state.defaultSms -> {
                 snackbarTitle?.setText(R.string.main_default_sms_title)
-                snackbarMessage?.setText(R.string.main_default_sms_message_new)
+                snackbarMessage?.setText(R.string.main_default_sms_message)
                 snackbarButton?.setText(R.string.main_default_sms_change)
             }
 
             !state.smsPermission -> {
                 snackbarTitle?.setText(R.string.main_permission_required)
-                snackbarMessage?.setText(R.string.main_permission_sms_new)
+                snackbarMessage?.setText(R.string.main_permission_sms)
                 snackbarButton?.setText(R.string.main_permission_allow)
             }
 
             !state.contactPermission -> {
                 snackbarTitle?.setText(R.string.main_permission_required)
-                snackbarMessage?.setText(R.string.main_permission_contacts_new)
+                snackbarMessage?.setText(R.string.main_permission_contacts)
                 snackbarButton?.setText(R.string.main_permission_allow)
             }
 
             !state.notificationPermission -> {
                 snackbarTitle?.setText(R.string.main_permission_required)
-                snackbarMessage?.setText(R.string.main_permission_notifications_new)
+                snackbarMessage?.setText(R.string.main_permission_notifications)
                 snackbarButton?.setText(R.string.main_permission_allow)
             }
         }
@@ -471,10 +487,14 @@ class MainActivity : QkThemedActivity(), MainView {
             .setText(conversationName)
             .show()
 
-    override fun showArchivedSnackbar(countConversationsArchived: Int) =
+    override fun showArchivedSnackbar(countConversationsArchived: Int, isArchiving: Boolean) =
         Snackbar.make(
             drawerLayout,
-            resources.getQuantityString(R.plurals.toast_archived, countConversationsArchived, countConversationsArchived),
+            if (isArchiving) {
+                resources.getQuantityString(R.plurals.toast_archived, countConversationsArchived, countConversationsArchived)
+            } else {
+                resources.getQuantityString(R.plurals.toast_unarchived, countConversationsArchived, countConversationsArchived)
+            },
             if (countConversationsArchived < 10) Snackbar.LENGTH_LONG
             else Snackbar.LENGTH_INDEFINITE
         ).let {

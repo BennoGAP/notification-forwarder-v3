@@ -378,6 +378,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:icon="@drawable/ic_bluetooth_notification_24px"
+            app:widget="@layout/settings_chevron_widget"
             app:title="@string/settings_bluetooth_notification_access_title" />
 
         <org.groebl.sms.common.widget.PreferenceView

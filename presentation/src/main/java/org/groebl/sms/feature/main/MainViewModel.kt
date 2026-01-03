@@ -19,6 +19,8 @@
 package org.groebl.sms.feature.main
 
 import androidx.recyclerview.widget.ItemTouchHelper
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
 import org.groebl.sms.R
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.base.QkViewModel
@@ -32,29 +34,27 @@ import org.groebl.sms.interactor.MarkUnarchived
 import org.groebl.sms.interactor.MarkUnpinned
 import org.groebl.sms.interactor.MarkUnread
 import org.groebl.sms.interactor.MigratePreferences
+import org.groebl.sms.interactor.SpeakThreads
 import org.groebl.sms.interactor.SyncContacts
 import org.groebl.sms.interactor.SyncMessages
 import org.groebl.sms.listener.ContactAddedListener
-import org.groebl.sms.manager.BillingManager
 import org.groebl.sms.manager.PermissionManager
 import org.groebl.sms.manager.RatingManager
+import org.groebl.sms.model.EmojiSyncNeeded
 import org.groebl.sms.model.SyncLog
 import org.groebl.sms.repository.ConversationRepository
+import org.groebl.sms.repository.EmojiReactionRepository
+import org.groebl.sms.repository.MessageRepository
 import org.groebl.sms.repository.SyncRepository
 import org.groebl.sms.util.Preferences
-import com.uber.autodispose.android.lifecycle.scope
-import com.uber.autodispose.autoDisposable
-import org.groebl.sms.interactor.SpeakThreads
-import org.groebl.sms.repository.MessageRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.plusAssign
-import io.reactivex.rxkotlin.withLatestFrom
 import io.reactivex.schedulers.Schedulers
 import io.realm.Realm
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.util.*
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -77,6 +77,7 @@ class MainViewModel @Inject constructor(
     private val permissionManager: PermissionManager,
     private val prefs: Preferences,
     private val ratingManager: RatingManager,
+    private val reactions: EmojiReactionRepository,
     private val syncContacts: SyncContacts,
     private val syncMessages: SyncMessages
 ) : QkViewModel<MainView, MainState>(
@@ -113,6 +114,15 @@ class MainViewModel @Inject constructor(
         val lastSync = Realm.getDefaultInstance().use { realm -> realm.where(SyncLog::class.java)?.max("date") ?: 0 }
         if (lastSync == 0 && permissionManager.isDefaultSms() && permissionManager.hasReadSms() && permissionManager.hasContacts()) {
             syncMessages.execute(Unit)
+        }
+
+        // This is only used when we update to a version that newly supports emoji reactions
+        Realm.getDefaultInstance().executeTransactionAsync { realm ->
+            val emojiSyncNeeded = realm.where(EmojiSyncNeeded::class.java).findFirst()
+            if (emojiSyncNeeded != null) {
+                reactions.deleteAndReparseAllEmojiReactions(realm) { /* No progress ui needed here */ }
+                emojiSyncNeeded.deleteFromRealm()
+            }
         }
 
         // Sync contacts when we detect a change
@@ -215,7 +225,6 @@ class MainViewModel @Inject constructor(
                     }
                 }
 
-
         view.queryChangedIntent
                 .debounce(200, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -247,8 +256,6 @@ class MainViewModel @Inject constructor(
                             .filter { key -> key.contains("theme") }
                             .map { true }
                             .mergeWith(prefs.autoColor.asObservable().skip(1))
-                            .mergeWith(prefs.grayAvatar.asObservable().skip(1))
-                            .mergeWith(prefs.separator.asObservable().skip(1))
                             .doOnNext { view.themeChanged() }
                             .takeUntil(view.activityResumedIntent.filter { resumed -> resumed })
                 }
@@ -295,11 +302,14 @@ class MainViewModel @Inject constructor(
                             else -> newState { copy(hasError = true) }
                         }
                         NavItem.BACKUP -> navigator.showBackup()
-                        NavItem.SCHEDULED -> navigator.showScheduled()
+                        NavItem.SCHEDULED -> navigator.showScheduled(null)
                         NavItem.BLOCKING -> navigator.showBlockedConversations()
                         NavItem.SETTINGS -> navigator.showSettings()
                         NavItem.SETTINGS_BLUETOOTH -> navigator.showBluetoothSettings()
                         NavItem.HELP -> navigator.showSupport()
+//                        NavItem.PLUS -> navigator.showQksmsPlusActivity("main_menu")
+//                        NavItem.HELP -> navigator.showSupport()
+//                        NavItem.INVITE -> navigator.showInvite()
                         else -> Unit
                     }
                     drawerItem
@@ -325,7 +335,7 @@ class MainViewModel @Inject constructor(
                 .withLatestFrom(view.conversationsSelectedIntent) { _, conversations ->
                     markArchived.execute(conversations)
                     lastArchivedThreadIds = conversations.toList()
-                    view.showArchivedSnackbar(lastArchivedThreadIds.count())
+                    view.showArchivedSnackbar(lastArchivedThreadIds.count(), true)
                     view.clearSelection()
                 }
                 .autoDisposable(view.scope())
@@ -335,7 +345,7 @@ class MainViewModel @Inject constructor(
                 .filter { itemId -> itemId == R.id.unarchive }
                 .withLatestFrom(view.conversationsSelectedIntent) { _, conversations ->
                     markUnarchived.execute(conversations.toList())
-                    view.showArchivedSnackbar(conversations.count())
+                    view.showArchivedSnackbar(conversations.count(), false)
                     view.clearSelection()
                 }
                 .autoDisposable(view.scope())
@@ -417,11 +427,18 @@ class MainViewModel @Inject constructor(
             .autoDisposable(view.scope())
             .subscribe { conversation -> view.showRenameDialog(conversation.name) }
 
+//        view.plusBannerIntent
+//                .autoDisposable(view.scope())
+//                .subscribe {
+//                    newState { copy(drawerOpen = false) }
+//                    navigator.showQksmsPlusActivity("main_banner")
+//                }
 
         view.rateIntent
                 .autoDisposable(view.scope())
                 .subscribe {
                     navigator.showRating()
+                    ratingManager.rate()
                 }
 
         view.rateDonateIntent
@@ -443,7 +460,11 @@ class MainViewModel @Inject constructor(
                             ?.recipients?.first()
                             ?.takeIf { recipient -> recipient.contact == null } != null
                     val pin = conversations.sumBy { if (it.pinned) -1 else 1 } >= 0
-                    val read = conversations.sumBy { if (!it.unread) -1 else 1 } >= 0
+                    val read = when (conversations.size) {
+                        0    -> false
+                        1    -> conversations[0].unread
+                        else -> true
+                    }
                     val selected = selection.size
 
                     when (state.page) {
@@ -499,7 +520,7 @@ class MainViewModel @Inject constructor(
                         Preferences.SWIPE_ACTION_ARCHIVE ->
                             markArchived.execute(listOf(threadId)) {
                                 lastArchivedThreadIds = listOf(threadId)
-                                view.showArchivedSnackbar(1)
+                                view.showArchivedSnackbar(1, true)
                             }
                         Preferences.SWIPE_ACTION_DELETE ->
                             view.showDeleteDialog(listOf(threadId))

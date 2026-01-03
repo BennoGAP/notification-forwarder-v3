@@ -37,7 +37,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <org.groebl.sms.common.widget.QkTextView
-            android:id="@+id/name"
+        android:id="@+id/name"
         style="@style/TextPrimary"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

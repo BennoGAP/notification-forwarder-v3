@@ -82,6 +82,7 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
 
         bluetooth_allowed_apps.chevron.imageTintList = imageTintList
         bluetooth_select_device.chevron.imageTintList = imageTintList
+        bluetooth_notification_access.chevron.imageTintList = imageTintList
         bluetooth_donate.chevron.imageTintList = imageTintList
         bluetooth_about.chevron.imageTintList = imageTintList
     }
@@ -101,6 +102,7 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
     override fun render(state: BluetoothSettingsState) {
         bluetooth_allowed_apps.chevron.setImageResource(R.drawable.ic_chevron_right_black_24dp)
         bluetooth_select_device.chevron.setImageResource(R.drawable.ic_chevron_right_black_24dp)
+        bluetooth_notification_access.chevron.setImageResource(R.drawable.ic_chevron_right_black_24dp)
         bluetooth_donate.chevron.setImageResource(R.drawable.ic_chevron_right_black_24dp)
         bluetooth_about.chevron.setImageResource(R.drawable.ic_chevron_right_black_24dp)
 

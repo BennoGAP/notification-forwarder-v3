@@ -27,6 +27,8 @@ import java.util.ArrayList;
  * Encoded-string-value = Text-string | Value-length Char-set Text-string
  */
 public class EncodedStringValue implements Cloneable {
+    private static final String TAG = "EncodedStringValue";
+    private static final boolean DEBUG = false;
     private static final boolean LOCAL_LOGV = false;
 
     /**
@@ -138,7 +140,7 @@ public class EncodedStringValue implements Cloneable {
                 return new String(mData, name);
             } catch (UnsupportedEncodingException e) {
             	if (LOCAL_LOGV) {
-            		Timber.v(e, e.getMessage());
+            		Timber.v(e.getMessage(), e);
             	}
             	try {
                     return new String(mData, CharacterSets.MIMENAME_ISO_8859_1);

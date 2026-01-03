@@ -16,8 +16,7 @@
   ~
   ~ You should have received a copy of the GNU General Public License
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
+  --><resources>
     <string name="shortcut_compose_long_label">新对话</string>
     <string name="shortcut_compose_short_label">编写</string>
     <string name="shortcut_compose_disabled_message">快捷方式已禁用</string>
@@ -25,15 +24,15 @@
     <string name="title_settings">设置</string>
     <string name="title_notification_prefs">通知</string>
     <string name="title_theme">主题</string>
-    <string name="title_conversations">搜索收件箱&#8230;</string>
+    <string name="title_conversations">搜索收件箱…</string>
     <string name="title_compose">撰写</string>
     <string name="setup_skip">跳过</string>
     <string name="setup_next">继续</string>
     <string name="menu_add_person">添加人物</string>
     <string name="menu_call">致电</string>
     <string name="menu_info">详情</string>
-    <string name="menu_save">保存到图库</string>
-    <string name="menu_share">分享</string>
+    <string name="menu_mms_part_save">保存到图库</string>
+    <string name="compose_menu_share">分享</string>
     <string name="main_drawer_open_cd">打开导航栏</string>
     <string name="main_title_selected">已选择 %d 项</string>
     <string name="main_menu_clear">清除</string>
@@ -46,7 +45,7 @@
     <string name="main_menu_read">标记为已读</string>
     <string name="main_menu_unread">标记为未读</string>
     <string name="main_menu_block">拦截</string>
-    <string name="main_syncing">正在同步信息&#8230;</string>
+    <string name="main_syncing">正在同步信息…</string>
     <string name="main_sender_you">你：%s</string>
     <string name="main_message_results_title">信息中的结果</string>
     <string name="main_message_results">%d 条信息</string>
@@ -55,12 +54,12 @@
     <string name="archived_empty_text">存档的对话会出现在这里</string>
     <string name="main_fab_cd">开始新对话</string>
     <string name="main_default_sms_title">再次爱上发短信</string>
-    <string name="main_default_sms_message">将 QKSMS 设为默认短信应用</string>
+    <string name="main_default_sms_message">将 QUIK 设为默认短信应用</string>
     <string name="main_default_sms_change">更改</string>
     <string name="main_permission_required">需要权限</string>
-    <string name="main_permission_sms">QKSMS 需要权限来发送和查看短信</string>
-    <string name="main_permission_contacts">QKSMS 需要权限来查看联系人</string>
-    <string name="main_permission_notifications">QKSMS needs permission to display notifications</string>
+    <string name="main_permission_sms">QUIK 需要权限来发送和查看短信</string>
+    <string name="main_permission_contacts">QUIK 需要权限来查看联系人</string>
+    <string name="main_permission_notifications">QUIK needs permission to display notifications</string>
     <string name="main_permission_allow">允许</string>
     <string name="drawer_inbox">收件箱</string>
     <string name="drawer_archived">已存档</string>
@@ -71,7 +70,7 @@
     <string name="drawer_help">帮助及反馈</string>
     <string name="drawer_invite">邀请朋友</string>
     <string name="drawer_plus_banner_summary">解锁炫酷特性并支持开发者</string>
-    <string name="rate_title">喜欢 QKSMS？</string>
+    <string name="rate_title">喜欢 QUIK？</string>
     <string name="rate_summary">在 Google Play 分享你的感受，并给我们评分！</string>
     <string name="rate_okay">好的！</string>
     <string name="rate_dismiss">放弃</string>
@@ -94,9 +93,9 @@
     <string name="compose_send_group_summary">收件人和回复将对所有人可见</string>
     <string name="compose_messages_empty">对话从这里开始，说些什么吧！</string>
     <string name="compose_vcard_label">联系人卡片</string>
-    <string name="compose_scheduled_for">计划于</string>
+    <string name="compose_scheduled_for">计划于：</string>
     <string name="compose_scheduled_future">所选时间必须是未来！</string>
-    <string name="compose_scheduled_plus">你需要解锁 QKSMS+ 才可以使用预约短信</string>
+    <string name="compose_scheduled_plus">你需要解锁 QUIK+ 才可以使用预约短信</string>
     <string name="compose_scheduled_toast">已添加到预约短信队列</string>
     <string name="compose_hint">写一条消息...</string>
     <string name="compose_menu_copy">复制文本</string>
@@ -144,15 +143,15 @@
     <string name="backup_title">备份和还原</string>
     <string name="backup_backing_up">正在备份消息</string>
     <string name="backup_restoring">正在从备份还原</string>
-    <string name="backup_loading">正在加载&#8230;</string>
+    <string name="backup_loading">正在加载…</string>
     <string name="backup_never">从未</string>
     <string name="backup_location_title">Backup location</string>
     <string name="backup_location_summary">Set folder</string>
     <string name="backup_restore_title">还原</string>
     <string name="backup_restore_summary">选择备份</string>
-    <string name="backup_restore_error_plus">请解锁 QKSMS+ 以使用备份和还原</string>
-    <string name="backup_restore_error_backup">正在进行备份&#8230;</string>
-    <string name="backup_restore_error_restore">正在还原&#8230;</string>
+    <string name="backup_restore_error_plus">请解锁 QUIK+ 以使用备份和还原</string>
+    <string name="backup_restore_error_backup">正在进行备份…</string>
+    <string name="backup_restore_error_restore">正在还原…</string>
     <string name="backup_restore_confirm_title">从备份还原</string>
     <string name="backup_restore_stop_title">停止还原</string>
     <string name="backup_restore_stop_message">已还原的消息将保留在您的设备上</string>
@@ -166,10 +165,10 @@
     <string name="backup_restore_dialog_empty">找不到备份</string>
     <string name="backup_disclaimer">目前只有短信支持备份和恢复。彩信支持和定时备份将很快到来!</string>
     <string name="backup_now">立即备份</string>
-    <string name="backup_progress_parsing">正在分析备份&#8230;</string>
-    <string name="backup_progress_running">%1$d/%2$d 消息</string>
-    <string name="backup_progress_saving">正在保存备份&#8230;</string>
-    <string name="backup_progress_syncing">正在同步信息&#8230;</string>
+    <string name="backup_progress_parsing">正在分析备份…</string>
+    <string name="backup_progress_running">%d/%d 消息</string>
+    <string name="backup_progress_saving">正在保存备份…</string>
+    <string name="backup_progress_syncing">正在同步信息…</string>
     <string name="backup_progress_finished">完成！</string>
     <string name="backup_notification_channel_name">备份和还原</string>
     <string name="scheduled_title">预约</string>
@@ -181,6 +180,11 @@
     <string name="scheduled_empty_message_3_timestamp">在12月23日发送 </string>
     <string name="scheduled_compose_cd">创建预约短信</string>
     <string name="scheduled_options_title">预约短信</string>
+    <string-array name="scheduled_options">
+        <item>现在发送</item>
+        <item>复制文本</item>
+        <item>删除</item>
+    </string-array>
     <string name="settings_category_appearance">外观</string>
     <string name="settings_category_general">通用</string>
     <string name="settings_category_qkreply">快速回复</string>
@@ -245,7 +249,7 @@
     <string name="settings_mms_size_title">自动压缩彩信附件</string>
     <string name="settings_sync_title">同步消息</string>
     <string name="settings_sync_summary">重新与安卓原生短信数据库进行同步</string>
-    <string name="settings_about_title">关于 QKSMS</string>
+    <string name="settings_about_title">关于 QUIK</string>
     <string name="settings_version">版本 %s</string>
     <string name="settings_logging_enabled">调试日志记录已启用</string>
     <string name="settings_logging_disabled">调试日志记录已禁用</string>
@@ -255,8 +259,7 @@
     <string name="blocking_drop_summary">丢弃屏蔽的发件人所发送的信息</string>
     <string name="blocking_conversations">已屏蔽的会话</string>
     <string name="blocking_manager_title">屏蔽管理器</string>
-    <string name="blocking_manager_qksms_title">QKSMS</string>
-    <string name="blocking_manager_qksms_summary">QKSMS 中内建的屏蔽功能</string>
+    <string name="blocking_manager_qksms_summary">QUIK 中内建的屏蔽功能</string>
     <string name="blocking_manager_call_blocker_summary">屏蔽垃圾信息、号码和未知来电以及黑名单和日程</string>
     <string name="blocking_manager_call_control_summary">自动在适当的位置过滤您的来电和信息！Community IQ™ 允许您阻止社区中已知的垃圾发件人所发送的垃圾信息</string>
     <string name="blocking_manager_sia_summary">使用 \"Should I Answer\" 应用过滤未知号码的消息</string>
@@ -292,10 +295,10 @@
     <string name="qksms_plus_upgrade">终身升级只需 %1$s %2$s</string>
     <!-- Substitutions are for price and currency. Ex: Unlock + donate for $4.99 USD -->
     <string name="qksms_plus_upgrade_donate">解锁并捐赠只需 %1$s %2$s</string>
-    <string name="qksms_plus_thanks_title">感谢你对 QKSMS 的支持！</string>
-    <string name="qksms_plus_thanks_summary">现在你可以使用 QKSMS+ 的全部功能！</string>
+    <string name="qksms_plus_thanks_title">感谢你对 QUIK 的支持！</string>
+    <string name="qksms_plus_thanks_summary">现在你可以使用 QUIK+ 的全部功能！</string>
     <string name="qksms_plus_error">发生错误，请重试</string>
-    <string name="qksms_plus_free_title">QKSMS+ 对 F-Droid 用户免费！如果您想支持开发，可以随意捐款。</string>
+    <string name="qksms_plus_free_title">QUIK+ 对 F-Droid 用户免费！如果您想支持开发，可以随意捐款。</string>
     <string name="qksms_plus_donate">使用 PayPal 捐赠</string>
     <string name="qksms_plus_coming_soon">即将推出</string>
     <string name="qksms_plus_themes_title">高级主题</string>
@@ -317,7 +320,7 @@
     <string name="qksms_plus_respond_title">自动回复</string>
     <string name="qksms_plus_respond_summary">使用预设文本自动回复短信</string>
     <string name="qksms_plus_more_title">更多</string>
-    <string name="qksms_plus_more_summary">QKSMS 积极更新中，您的购买将包含未来 QKSMS+ 的所有功能！</string>
+    <string name="qksms_plus_more_summary">QUIK 积极更新中，您的购买将包含未来 QUIK+ 的所有功能！</string>
     <string name="widget_loading">载入中...</string>
     <string name="widget_more">查看更多对话</string>
     <string name="qkreply_menu_read">标记为已读</string>
@@ -348,7 +351,7 @@
     <string name="button_set">设置</string>
     <string name="button_undo">撤销</string>
     <string name="toast_copied">已复制</string>
-    <string name="toast_qksms_plus">您必须解锁 QKSMS+ 才能使用此功能</string>
+    <string name="toast_qksms_plus">您必须解锁 QUIK+ 才能使用此功能</string>
     <plurals name="notification_new_messages">
         <item quantity="other">%s条新信息</item>
     </plurals>
@@ -401,4 +404,25 @@
         <item>啊哈哈哈哈</item>
         <item>好的</item>
     </string-array>
+    <string name="menu_mms_part_share">分享</string>
+    <string name="menu_mms_part_forward">转发</string>
+    <string name="menu_mms_part_open">在第三方应用中打开</string>
+    <string name="main_menu_select_all">全选</string>
+    <string name="main_menu_send_now">立即发送</string>
+    <string name="main_menu_edit_message">编辑短信</string>
+    <string name="main_menu_rename_conversation">对话重命名</string>
+    <string name="main_sender_draft">草稿：%s个</string>
+    <string name="scheduled_menu_send_now">立即发送</string>
+    <string name="scheduled_menu_edit_message">编辑短信</string>
+    <plurals name="dialog_delete_chat">
+        <item quantity="other">确定删除所选的%d条短信吗？</item>
+    </plurals>
+    <plurals name="dialog_send_now">
+        <item quantity="other">确定发送%d条短信吗？</item>
+    </plurals>
+    <string name="dialog_edit_scheduled_message_title">编辑短信</string>
+    <string name="dialog_edit_scheduled_message">编辑此短信，将使其从日程表中移除。\n\n请确保在下一页重新提交，否则短信将会丢失。\n\n确定要继续吗？</string>
+    <string name="dialog_edit_scheduled_message_positive_button">是的，确定编辑</string>
+    <string name="dialog_clear_compose_title">清除短信内容</string>
+    <string name="dialog_clear_compose">确定清除短信内容吗？本操作不可撤回。</string>
 </resources>

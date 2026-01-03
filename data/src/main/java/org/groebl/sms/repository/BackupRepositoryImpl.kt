@@ -28,19 +28,20 @@ import androidx.core.content.contentValuesOf
 import androidx.core.net.toUri
 import androidx.documentfile.provider.DocumentFile
 import com.squareup.moshi.Moshi
+import org.groebl.sms.common.util.extensions.now
+import org.groebl.sms.model.BackupFile
+import org.groebl.sms.model.Message
+import org.groebl.sms.util.Preferences
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
 import io.realm.Realm
 import okio.buffer
 import okio.source
-import org.groebl.sms.common.util.extensions.now
-import org.groebl.sms.model.BackupFile
-import org.groebl.sms.model.Message
-import org.groebl.sms.util.Preferences
 import timber.log.Timber
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
+import java.util.Timer
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.concurrent.schedule
@@ -94,19 +95,19 @@ class BackupRepositoryImpl @Inject constructor(
 
     override fun getBackupDocumentTree(): DocumentFile? {
         return prefs.backupDirectory.get()
-            .takeIf { uri -> uri != Uri.EMPTY }
-            ?.let { uri -> DocumentFile.fromTreeUri(context, uri) }
-            ?.takeIf { dir -> dir.exists() && dir.canRead() && dir.canWrite() }
+                .takeIf { uri -> uri != Uri.EMPTY }
+                ?.let { uri -> DocumentFile.fromTreeUri(context, uri) }
+                ?.takeIf { dir -> dir.exists() && dir.canRead() && dir.canWrite() }
     }
 
     override fun getBackupPathUriForPicker(): Uri {
         return prefs.backupDirectory.get().takeIf { uri -> uri != Uri.EMPTY }
-            ?: getDefaultBackupPath().toUri()
+                ?: getDefaultBackupPath().toUri()
     }
 
     override fun persistBackupDirectory(directory: Uri) {
         context.contentResolver.takePersistableUriPermission(directory,
-            Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
         prefs.backupDirectory.set(directory)
 
         Timber.v("Updated backup directory: $directory")
@@ -142,9 +143,9 @@ class BackupRepositoryImpl @Inject constructor(
         try {
             val timestamp = SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault()).format(now())
             val inputStream = getBackupDocumentTree()
-                ?.createFile("application/json", "backup-$timestamp.json")
-                ?.let { file -> context.contentResolver.openOutputStream(file.uri) }
-                ?: throw Exception("Failed to open output stream")
+                    ?.createFile("application/json", "backup-$timestamp.json")
+                    ?.let { file -> context.contentResolver.openOutputStream(file.uri) }
+                    ?: throw Exception("Failed to open output stream")
 
             inputStream.use { stream ->
                 stream.write(json)
@@ -179,13 +180,13 @@ class BackupRepositoryImpl @Inject constructor(
         val adapter = moshi.adapter(BackupMetadata::class.java)
 
         val file = DocumentFile.fromSingleUri(context, uri)
-            ?: throw IllegalArgumentException("Couldn't open backup file")
+                ?: throw IllegalArgumentException("Couldn't open backup file")
 
         val metadata = context.contentResolver.openInputStream(file.uri)
-            ?.source()
-            ?.buffer()
-            ?.use(adapter::fromJson)
-            ?: throw IllegalArgumentException("Couldn't parse backup file")
+                ?.source()
+                ?.buffer()
+                ?.use(adapter::fromJson)
+                ?: throw IllegalArgumentException("Couldn't parse backup file")
 
         return BackupFile(file.lastModified(), metadata.messageCount)
     }
@@ -198,10 +199,10 @@ class BackupRepositoryImpl @Inject constructor(
 
         val adapter = moshi.adapter(Backup::class.java)
         val backup = DocumentFile.fromSingleUri(context, uri)
-            ?.let { file -> context.contentResolver.openInputStream(file.uri) }
-            ?.source()
-            ?.buffer()
-            ?.use(adapter::fromJson)
+                ?.let { file -> context.contentResolver.openInputStream(file.uri) }
+                ?.source()
+                ?.buffer()
+                ?.use(adapter::fromJson)
 
         val messageCount = backup?.messages?.size ?: 0
         var errorCount = 0

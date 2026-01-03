@@ -20,6 +20,8 @@ package org.groebl.sms.feature.gallery
 
 import android.content.Context
 import org.groebl.sms.contentproviders.MmsPartProvider
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
 import org.groebl.sms.R
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.base.QkViewModel
@@ -29,13 +31,8 @@ import org.groebl.sms.interactor.SaveImage
 import org.groebl.sms.manager.PermissionManager
 import org.groebl.sms.repository.ConversationRepository
 import org.groebl.sms.repository.MessageRepository
-import com.uber.autodispose.android.lifecycle.scope
-import com.uber.autodispose.autoDisposable
-import org.groebl.sms.common.widget.QkContextMenuRecyclerView
-import org.groebl.sms.model.MmsPart
 import io.reactivex.Flowable
 import io.reactivex.rxkotlin.plusAssign
-import io.reactivex.rxkotlin.withLatestFrom
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -48,10 +45,6 @@ class GalleryViewModel @Inject constructor(
     private val saveImage: SaveImage,
     private val permissions: PermissionManager
 ) : QkViewModel<GalleryView, GalleryState>(GalleryState()) {
-    companion object {
-        const val DEFAULT_SHARE_FILENAME = "NFP-media-attachment.jpg"
-    }
-
     init {
         disposables += Flowable.just(partId)
                 .mapNotNull(messageRepo::getMessageForPart)

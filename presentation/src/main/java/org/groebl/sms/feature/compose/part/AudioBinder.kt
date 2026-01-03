@@ -25,9 +25,7 @@ import android.media.MediaMetadataRetriever
 import android.media.MediaMetadataRetriever.METADATA_KEY_TITLE
 import android.view.View
 import android.widget.SeekBar
-import com.bumptech.glide.Glide
 import org.groebl.sms.common.QkMediaPlayer
-import org.groebl.sms.contentproviders.MmsPartProvider
 import org.groebl.sms.R
 import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.base.QkViewHolder
@@ -42,6 +40,7 @@ import org.groebl.sms.extensions.resourceExists
 import org.groebl.sms.feature.compose.MessagesAdapter
 import org.groebl.sms.model.Message
 import org.groebl.sms.model.MmsPart
+import org.groebl.sms.util.GlideApp
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -236,52 +235,55 @@ class AudioBinder @Inject constructor(colors: Colors, private val context: Conte
 
         MediaMetadataRetriever().apply {
             try {
-            if (part.getUri().resourceExists(context))
-                setDataSource(context, part.getUri())
+                if (part.getUri().resourceExists(context))
+                    setDataSource(context, part.getUri())
 
-            // metadata title
-            holder.metadataTitle.apply {
-                text = extractMetadata(METADATA_KEY_TITLE)
+                // metadata title
+                holder.metadataTitle.apply {
+                    text = extractMetadata(METADATA_KEY_TITLE)
 
-                if (text.isEmpty())
-                    visibility = View.GONE
-                else {
-                    visibility = View.VISIBLE
-                    setTextColor(primaryColor)
-                    setBackgroundTint(secondaryColor.withAlpha(0xcc))    // hex value is alpha
-                }
-            }
-
-            // bubble / embedded image
-            holder.thumbnail.apply {
-                bubbleStyle = when {
-                    !canGroupWithPrevious && canGroupWithNext ->
-                        if (message.isMe()) BubbleImageView.Style.OUT_FIRST else BubbleImageView.Style.IN_FIRST
-                    canGroupWithPrevious && canGroupWithNext ->
-                        if (message.isMe()) BubbleImageView.Style.OUT_MIDDLE else BubbleImageView.Style.IN_MIDDLE
-                    canGroupWithPrevious && !canGroupWithNext ->
-                        if (message.isMe()) BubbleImageView.Style.OUT_LAST else BubbleImageView.Style.IN_LAST
-                    else -> BubbleImageView.Style.ONLY
+                    if (text.isEmpty())
+                        visibility = View.GONE
+                    else {
+                        visibility = View.VISIBLE
+                        setTextColor(primaryColor)
+                        setBackgroundTint(secondaryColor.withAlpha(0xcc))    // hex value is alpha
+                    }
                 }
 
-                val embeddedPicture = embeddedPicture
-                if (embeddedPicture == null) {
-                    holder.frame.layoutParams.height = (holder.frame.layoutParams.width / 2)
-                    setTint(secondaryColor)
-                    setImageResource(R.drawable.rectangle)
-                } else {
-                    holder.frame.layoutParams.height = holder.frame.layoutParams.width
-                    setTint(null)
-                    Glide.with(context)
-                        .asBitmap()
-                        .load(embeddedPicture)
-                        .override(
-                            holder.frame.layoutParams.width,
-                            holder.frame.layoutParams.height
-                        )
-                        .into(this)
+                // bubble / embedded image
+                holder.thumbnail.apply {
+                    bubbleStyle = when {
+                        !canGroupWithPrevious && canGroupWithNext ->
+                            if (message.isMe()) BubbleImageView.Style.OUT_FIRST else BubbleImageView.Style.IN_FIRST
+
+                        canGroupWithPrevious && canGroupWithNext ->
+                            if (message.isMe()) BubbleImageView.Style.OUT_MIDDLE else BubbleImageView.Style.IN_MIDDLE
+
+                        canGroupWithPrevious && !canGroupWithNext ->
+                            if (message.isMe()) BubbleImageView.Style.OUT_LAST else BubbleImageView.Style.IN_LAST
+
+                        else -> BubbleImageView.Style.ONLY
+                    }
+
+                    val embeddedPicture = embeddedPicture
+                    if (embeddedPicture == null) {
+                        holder.frame.layoutParams.height = (holder.frame.layoutParams.width / 2)
+                        setTint(secondaryColor)
+                        setImageResource(R.drawable.rectangle)
+                    } else {
+                        holder.frame.layoutParams.height = holder.frame.layoutParams.width
+                        setTint(null)
+                        GlideApp.with(context)
+                            .asBitmap()
+                            .load(embeddedPicture)
+                            .override(
+                                holder.frame.layoutParams.width,
+                                holder.frame.layoutParams.height
+                            )
+                            .into(this)
+                    }
                 }
-            }
             } catch (e: Exception) { /* nothing */ }
             finally {
                 release()

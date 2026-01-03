@@ -20,14 +20,12 @@ package org.groebl.sms.mapper
 
 import android.content.Context
 import android.database.Cursor
-import android.net.Uri
-import android.provider.Telephony.*
-import androidx.core.database.getIntOrNull
-import androidx.core.net.toUri
+import android.provider.Telephony.Mms
+import android.provider.Telephony.MmsSms
+import android.provider.Telephony.Sms
 import com.google.android.mms.pdu_alt.EncodedStringValue
 import com.google.android.mms.pdu_alt.PduHeaders
 import com.google.android.mms.pdu_alt.PduPersister
-import org.groebl.sms.extensions.map
 import org.groebl.sms.manager.KeyManager
 import org.groebl.sms.manager.PermissionManager
 import org.groebl.sms.model.Message
@@ -35,10 +33,10 @@ import org.groebl.sms.util.Preferences
 import org.groebl.sms.util.SqliteWrapper
 import org.groebl.sms.util.tryOrNull
 import javax.inject.Inject
+import androidx.core.net.toUri
 
 class CursorToMessageImpl @Inject constructor(
     private val context: Context,
-    private val cursorToPart: CursorToPart,
     private val keys: KeyManager,
     private val permissionManager: PermissionManager,
     private val preferences: Preferences

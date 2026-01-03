@@ -36,7 +36,7 @@
             app:contentInsetStartWithNavigation="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" >
+            app:layout_constraintTop_toTopOf="parent">
 
             <org.groebl.sms.common.widget.QkTextView
                 android:id="@+id/toolbarTitle"
@@ -63,7 +63,6 @@
                 tools:textSize="16sp"
                 android:focusable="true"
                 android:nextFocusRight="@+id/compose" />
-
         </androidx.appcompat.widget.Toolbar>
 
         <org.groebl.sms.common.widget.QkTextView
@@ -102,10 +101,10 @@
             android:elevation="8dp"
             android:padding="16dp"
             android:src="@drawable/ic_add_black_24dp"
-            app:tint="@color/white"
             app:layout_constraintBottom_toTopOf="@id/bottom"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:backgroundTint="@color/tools_theme" />
+            tools:backgroundTint="@color/tools_theme"
+            app:tint="@color/white" />
 
         <View
             android:layout_width="0dp"

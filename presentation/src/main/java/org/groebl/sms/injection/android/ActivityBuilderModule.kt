@@ -47,7 +47,6 @@ import org.groebl.sms.feature.scheduled.ScheduledActivityModule
 import org.groebl.sms.feature.settings.SettingsActivity
 import org.groebl.sms.injection.scope.ActivityScope
 
-
 @Module
 abstract class ActivityBuilderModule {
 

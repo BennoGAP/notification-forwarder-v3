@@ -18,10 +18,10 @@
  */
 package org.groebl.sms.feature.conversationinfo.injection
 
-import org.groebl.sms.feature.conversationinfo.ConversationInfoController
-import org.groebl.sms.injection.scope.ControllerScope
 import dagger.Module
 import dagger.Provides
+import org.groebl.sms.feature.conversationinfo.ConversationInfoController
+import org.groebl.sms.injection.scope.ControllerScope
 import javax.inject.Named
 
 @Module

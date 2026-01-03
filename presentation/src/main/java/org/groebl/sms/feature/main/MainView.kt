@@ -43,7 +43,6 @@ interface MainView : QkView<MainState> {
     val snackbarButtonIntent: Observable<Unit>
 
     fun requestDefaultSms()
-
     fun requestPermissions()
     fun clearSearch()
     fun clearSelection()
@@ -52,7 +51,7 @@ interface MainView : QkView<MainState> {
     fun showBlockingDialog(conversations: List<Long>, block: Boolean)
     fun showDeleteDialog(conversations: List<Long>)
     fun showRenameDialog(conversationName: String)
-    fun showArchivedSnackbar(countConversationsArchived: Int)
+    fun showArchivedSnackbar(countConversationsArchived: Int, isArchiving: Boolean)
     fun drawerToggled(opened: Boolean)
 }
 

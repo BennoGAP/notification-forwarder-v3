@@ -31,16 +31,17 @@ open class Conversation(
     var recipients: RealmList<Recipient> = RealmList(),
     var lastMessage: Message? = null,
     var draft: String = "",
+    var draftDate: Long = 0,
 
     var blockingClient: Int? = null,
     var blockReason: String? = null,
 
     var name: String = "", // custom title
 
-    var sendAsGroup: Boolean = false
+    var sendAsGroup: Boolean = true,
 ) : RealmObject() {
 
-    val date: Long get() = lastMessage?.date ?: 0
+    val date: Long get() = lastMessage?.date ?: if (draft.isNotEmpty()) draftDate else 0
     val snippet: String? get() = lastMessage?.getSummary()
     val unread: Boolean get() = lastMessage?.read == false
     val me: Boolean get() = lastMessage?.isMe() == true

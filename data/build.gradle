@@ -22,8 +22,6 @@ apply plugin: 'kotlin-kapt'
 
 android {
     compileSdk 34
-    publishNonDefault true
-    flavorDimensions "analytics"
 
     compileOptions {
         sourceCompatibility 1.8
@@ -36,10 +34,6 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    productFlavors {
-        withAnalytics { dimension "analytics" }
-        noAnalytics { dimension "analytics" }
-    }
     namespace 'org.groebl.sms.data'
 }
 
@@ -62,8 +56,6 @@ dependencies {
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
     //Resolve jdk8+ Generation Annotations - javax annotation does not exist
     implementation 'com.github.pengrad:jdk9-deps:1ffe84c468'
-
-//    look into jakarta.annotation-api when switching to java 9
     implementation 'javax.annotation:javax.annotation-api:1.3.2'
 
     // rxjava
@@ -89,6 +81,7 @@ dependencies {
     implementation "com.f2prateek.rx.preferences2:rx-preferences:$rx_preferences_version"
     implementation "com.jakewharton.timber:timber:$timber_version"
     implementation "com.squareup.moshi:moshi:$moshi_version"
+    kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshi_version"
     implementation "com.squareup.okhttp3:okhttp:$okhttp3_version"
     implementation 'io.michaelrocks:libphonenumber-android:8.13.47'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -100,6 +93,7 @@ dependencies {
     implementation project(":android-smsmms")
     implementation project(':common')
     implementation project(':domain')
+
 }
 
 repositories {
@@ -111,5 +105,4 @@ repositories {
         url 'https://oss.sonatype.org/content/repositories/snapshots'
     }
     mavenCentral()
-    jcenter()
 }

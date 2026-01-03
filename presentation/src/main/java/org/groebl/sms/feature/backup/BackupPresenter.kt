@@ -21,129 +21,126 @@ package org.groebl.sms.feature.backup
 import android.content.Context
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.rxkotlin.plusAssign
-import io.reactivex.rxkotlin.withLatestFrom
-import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.BehaviorSubject
-import io.reactivex.subjects.Subject
 import org.groebl.sms.R
+import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.base.QkPresenter
 import org.groebl.sms.common.util.DateFormatter
 import org.groebl.sms.common.util.extensions.makeToast
 import org.groebl.sms.interactor.PerformBackup
-import org.groebl.sms.manager.PermissionManager
 import org.groebl.sms.repository.BackupRepository
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.rxkotlin.plusAssign
+import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class BackupPresenter @Inject constructor(
-        private val backupRepo: BackupRepository,
-        private val context: Context,
-        private val dateFormatter: DateFormatter,
-        private val performBackup: PerformBackup
+    private val backupRepo: BackupRepository,
+    private val context: Context,
+    private val dateFormatter: DateFormatter,
+    private val performBackup: PerformBackup
 ) : QkPresenter<BackupView, BackupState>(BackupState()) {
 
     init {
         disposables += backupRepo.getBackupProgress()
-            .sample(16, TimeUnit.MILLISECONDS)
-            .distinctUntilChanged()
-            .subscribe { progress -> newState { copy(backupProgress = progress) } }
+                .sample(16, TimeUnit.MILLISECONDS)
+                .distinctUntilChanged()
+                .subscribe { progress -> newState { copy(backupProgress = progress) } }
 
         disposables += backupRepo.getRestoreProgress()
-            .sample(16, TimeUnit.MILLISECONDS)
-            .distinctUntilChanged()
-            .subscribe { progress -> newState { copy(restoreProgress = progress) } }
+                .sample(16, TimeUnit.MILLISECONDS)
+                .distinctUntilChanged()
+                .subscribe { progress -> newState { copy(restoreProgress = progress) } }
     }
 
     override fun bindIntents(view: BackupView) {
         super.bindIntents(view)
 
         view.setBackupLocationClicks()
-            .observeOn(AndroidSchedulers.mainThread())
-            .autoDisposable(view.scope())
-            .subscribe { view.selectFolder(backupRepo.getBackupPathUriForPicker()) }
+                .observeOn(AndroidSchedulers.mainThread())
+                .autoDisposable(view.scope())
+                .subscribe { view.selectFolder(backupRepo.getBackupPathUriForPicker()) }
 
         view.restoreClicks()
-            .withLatestFrom(
-                backupRepo.getBackupProgress(),
-                backupRepo.getRestoreProgress()
-            )
-            { _, backupProgress, restoreProgress ->
-                when {
-                    backupProgress.running -> context.makeToast(R.string.backup_restore_error_backup)
-                    restoreProgress.running -> context.makeToast(R.string.backup_restore_error_restore)
-                    else -> view.selectFile(backupRepo.getBackupPathUriForPicker())
+                .withLatestFrom(
+                        backupRepo.getBackupProgress(),
+                        backupRepo.getRestoreProgress())
+                { _, backupProgress, restoreProgress ->
+                    when {
+                        backupProgress.running -> context.makeToast(R.string.backup_restore_error_backup)
+                        restoreProgress.running -> context.makeToast(R.string.backup_restore_error_restore)
+                        else -> view.selectFile(backupRepo.getBackupPathUriForPicker())
+                    }
                 }
-            }
-            .autoDisposable(view.scope())
-            .subscribe()
+                .autoDisposable(view.scope())
+                .subscribe()
 
         view.backupClicks()
-            .autoDisposable(view.scope())
-            .subscribe {
-                when {
-                    backupRepo.getBackupDocumentTree() == null -> {
-                        newState { copy(showLocationRationale = true) }
+                .autoDisposable(view.scope())
+                .subscribe {
+                    when {
+                        backupRepo.getBackupDocumentTree() == null -> {
+                            newState { copy(showLocationRationale = true) }
+                        }
+                        else -> performBackup.execute(Unit)
                     }
-                    else -> performBackup.execute(Unit)
                 }
-            }
 
         view.locationRationaleConfirmClicks()
-            .doOnNext { newState { copy(showLocationRationale = false) } }
-            .autoDisposable(view.scope())
-            .subscribe { view.selectFolder(backupRepo.getBackupPathUriForPicker()) }
+                .doOnNext { newState { copy(showLocationRationale = false) } }
+                .autoDisposable(view.scope())
+                .subscribe { view.selectFolder(backupRepo.getBackupPathUriForPicker()) }
 
         view.locationRationaleCancelClicks()
-            .doOnNext { newState { copy(showLocationRationale = false) } }
-            .autoDisposable(view.scope())
-            .subscribe()
+                .doOnNext { newState { copy(showLocationRationale = false) } }
+                .autoDisposable(view.scope())
+                .subscribe()
 
         view.selectedBackupErrorClicks()
-            .autoDisposable(view.scope())
-            .subscribe { newState { copy(showSelectedBackupError = false) } }
+                .autoDisposable(view.scope())
+                .subscribe { newState { copy(showSelectedBackupError = false) } }
 
         view.confirmRestoreBackupConfirmClicks()
-            .doOnNext { newState { copy(selectedBackupDetails = null) } }
-            .withLatestFrom(view.documentSelected()) { _, backup -> backup }
-            .autoDisposable(view.scope())
-            .subscribe { backup -> RestoreBackupService.start(context, backup) }
+                .doOnNext { newState { copy(selectedBackupDetails = null) } }
+                .withLatestFrom(view.documentSelected()) { _, backup -> backup }
+                .autoDisposable(view.scope())
+                .subscribe { backup -> RestoreBackupService.start(context, backup) }
 
         view.confirmRestoreBackupCancelClicks()
-            .doOnNext { newState { copy(selectedBackupDetails = null) } }
-            .autoDisposable(view.scope())
-            .subscribe()
+                .doOnNext { newState { copy(selectedBackupDetails = null) } }
+                .autoDisposable(view.scope())
+                .subscribe()
 
         view.stopRestoreClicks()
-            .autoDisposable(view.scope())
-            .subscribe { newState { copy(showStopRestoreDialog = true) } }
+                .autoDisposable(view.scope())
+                .subscribe { newState { copy(showStopRestoreDialog = true) } }
 
         view.stopRestoreConfirmed()
-            .doOnNext { newState { copy(showStopRestoreDialog = false) } }
-            .autoDisposable(view.scope())
-            .subscribe { backupRepo.stopRestore() }
+                .doOnNext { newState { copy(showStopRestoreDialog = false) } }
+                .autoDisposable(view.scope())
+                .subscribe { backupRepo.stopRestore() }
 
         view.stopRestoreCancel()
-            .autoDisposable(view.scope())
-            .subscribe { newState { copy(showStopRestoreDialog = false) } }
+                .autoDisposable(view.scope())
+                .subscribe { newState { copy(showStopRestoreDialog = false) } }
 
         view.documentTreeSelected()
-            .autoDisposable(view.scope())
-            .subscribe { uri -> backupRepo.persistBackupDirectory(uri) }
+                .autoDisposable(view.scope())
+                .subscribe { uri -> backupRepo.persistBackupDirectory(uri) }
 
         view.documentSelected()
-            .observeOn(Schedulers.io())
-            .autoDisposable(view.scope())
-            .subscribe { uri ->
-                try {
-                    val backupFile = backupRepo.parseBackup(uri)
-                    val date = dateFormatter.getDetailedTimestamp(backupFile.date)
-                    val details = context.getString(R.string.backup_details, date, backupFile.messages)
-                    newState { copy(selectedBackupDetails = details) }
-                } catch (e: Exception) {
-                    newState { copy(showSelectedBackupError = true) }
+                .observeOn(Schedulers.io())
+                .autoDisposable(view.scope())
+                .subscribe { uri ->
+                    try {
+                        val backupFile = backupRepo.parseBackup(uri)
+                        val date = dateFormatter.getDetailedTimestamp(backupFile.date)
+                        val details = context.getString(R.string.backup_details, date, backupFile.messages)
+                        newState { copy(selectedBackupDetails = details) }
+                    } catch (e: Exception) {
+                        newState { copy(showSelectedBackupError = true) }
+                    }
                 }
-            }
     }
+
 }

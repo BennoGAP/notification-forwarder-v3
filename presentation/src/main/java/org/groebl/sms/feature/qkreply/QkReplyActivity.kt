@@ -38,25 +38,18 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.widget.textChanges
-import com.uber.autodispose.android.lifecycle.scope
-import com.uber.autodispose.autoDisposable
+import dagger.android.AndroidInjection
 import org.groebl.sms.R
 import org.groebl.sms.common.base.QkThemedActivity
 import org.groebl.sms.common.util.extensions.autoScrollToStart
 import org.groebl.sms.common.util.extensions.setVisible
-import org.groebl.sms.feature.compose.MessagesAdapter
-import dagger.android.AndroidInjection
 import org.groebl.sms.common.util.extensions.showKeyboard
 import org.groebl.sms.common.widget.QkEditText
+import org.groebl.sms.feature.compose.MessagesAdapter
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import kotlinx.android.synthetic.main.compose_activity.message
 import kotlinx.android.synthetic.main.qkreply_activity.*
-import kotlinx.android.synthetic.main.qkreply_activity.sim
-import kotlinx.android.synthetic.main.qkreply_activity.simIndex
-import org.groebl.sms.common.util.extensions.resolveThemeColor
-import org.groebl.sms.common.util.extensions.setBackgroundTint
-import org.groebl.sms.common.util.extensions.setTint
 import javax.inject.Inject
 
 class QkReplyActivity : QkThemedActivity(), QkReplyView {
@@ -102,12 +95,6 @@ class QkReplyActivity : QkThemedActivity(), QkReplyView {
         window.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
         window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         viewModel.bindView(this)
-
-        theme
-            .doOnNext { send.setBackgroundTint(it.theme) }
-            .doOnNext { send.setTint(resolveThemeColor(android.R.attr.windowBackground)) }
-            .autoDisposable(scope())
-            .subscribe()
 
         toolbar.clipToOutline = true
 
@@ -167,16 +154,6 @@ class QkReplyActivity : QkThemedActivity(), QkReplyView {
         sim.setVisible(state.subscription != null)
         sim.contentDescription = getString(R.string.compose_sim_cd, state.subscription?.displayName)
         simIndex.text = "${state.subscription?.simSlotIndex?.plus(1)}"
-
-        val simColor = when (state.subscription?.simSlotIndex?.plus(1)?.toString()) {
-            "1" -> colors.colorForSim(this, 1)
-            "2" -> colors.colorForSim(this, 2)
-            "3" -> colors.colorForSim(this, 3)
-            else -> colors.colorForSim(this, 1)
-        }
-        if (prefs.simColor.get()) {
-            sim.setTint(simColor)
-        }
 
         send.isEnabled = state.canSend
         send.imageAlpha = if (state.canSend) 255 else 128

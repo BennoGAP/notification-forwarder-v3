@@ -27,17 +27,6 @@ import androidx.emoji2.text.EmojiCompat
 import androidx.work.Configuration
 import androidx.work.WorkManager
 import androidx.work.WorkerFactory
-import org.groebl.sms.manager.SpeakManager
-import org.groebl.sms.R
-import org.groebl.sms.common.util.CrashlyticsTree
-import org.groebl.sms.common.util.FileLoggingTree
-import org.groebl.sms.injection.AppComponentManager
-import org.groebl.sms.injection.appComponent
-import org.groebl.sms.manager.AnalyticsManager
-import org.groebl.sms.manager.BillingManager
-import org.groebl.sms.migration.QkMigration
-import org.groebl.sms.migration.QkRealmMigration
-import org.groebl.sms.util.NightModeManager
 import com.uber.rxdogtag.RxDogTag
 import com.uber.rxdogtag.autodispose.AutoDisposeConfigurer
 import dagger.android.AndroidInjector
@@ -45,7 +34,16 @@ import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
 import dagger.android.HasBroadcastReceiverInjector
 import dagger.android.HasServiceInjector
+import org.groebl.sms.R
+//import org.groebl.sms.common.util.CrashlyticsTree
+import org.groebl.sms.common.util.FileLoggingTree
+import org.groebl.sms.injection.AppComponentManager
+import org.groebl.sms.injection.appComponent
 import org.groebl.sms.interactor.SpeakThreads
+import org.groebl.sms.manager.BillingManager
+import org.groebl.sms.migration.QkMigration
+import org.groebl.sms.migration.QkRealmMigration
+import org.groebl.sms.util.NightModeManager
 import org.groebl.sms.worker.HousekeepingWorker
 import io.realm.Realm
 import io.realm.RealmConfiguration
@@ -61,8 +59,6 @@ class QKApplication : Application(), HasActivityInjector, HasBroadcastReceiverIn
      * Inject these so that they are forced to initialize
      */
     @Suppress("unused")
-    @Inject lateinit var analyticsManager: AnalyticsManager
-    @Suppress("unused")
     @Inject lateinit var qkMigration: QkMigration
 
     @Inject lateinit var billingManager: BillingManager
@@ -76,9 +72,6 @@ class QKApplication : Application(), HasActivityInjector, HasBroadcastReceiverIn
 
     override fun onCreate() {
         super.onCreate()
-
-        // set application context for SpeakManager
-        SpeakManager.setContext(this)
 
         // set translated "no messages" string for speakThreads interactor
         SpeakThreads.setNoMessagesString(getString(R.string.speak_no_messages))
@@ -104,7 +97,8 @@ class QKApplication : Application(), HasActivityInjector, HasBroadcastReceiverIn
         nightModeManager.updateCurrentTheme()
 
         // configure timber logging
-        Timber.plant(Timber.DebugTree(), CrashlyticsTree(this), fileLoggingTree)
+        Timber.plant(Timber.DebugTree(), fileLoggingTree)
+        //Timber.plant(Timber.DebugTree(), CrashlyticsTree(this), fileLoggingTree)
 
         // configure emoji compatibility with bundled package
         // (bundled library works with no play-services/gsm os versions)

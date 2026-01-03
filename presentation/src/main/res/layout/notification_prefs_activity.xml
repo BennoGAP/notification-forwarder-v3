@@ -27,7 +27,6 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         style="@style/Toolbar"
-        android:layout_marginTop="10dp"
         app:layout_constraintTop_toTopOf="parent">
 
         <org.groebl.sms.common.widget.QkTextView
@@ -72,7 +71,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:title="@string/settings_notification_previews_title"
-                tools:value="Show name and message" />
+                tools:summary="@string/settings_notification_previews_summary" />
 
             <org.groebl.sms.common.widget.PreferenceView
                 android:id="@+id/wake"
@@ -120,21 +119,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:title="@string/settings_notification_action_1"
-                tools:value="Mark read" />
+                tools:summary="Mark read" />
 
             <org.groebl.sms.common.widget.PreferenceView
                 android:id="@+id/action2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:title="@string/settings_notification_action_2"
-                tools:value="Reply" />
+                tools:summary="Reply" />
 
             <org.groebl.sms.common.widget.PreferenceView
                 android:id="@+id/action3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:title="@string/settings_notification_action_3"
-                tools:value="None" />
+                tools:summary="None" />
 
             <View
                 android:id="@+id/qkreplyDivider"
@@ -147,14 +146,14 @@
             <org.groebl.sms.common.widget.QkTextView
                 android:id="@+id/qkreplyTitle"
                 style="@style/PreferenceCategory"
-                android:text="@string/settings_category_qkreply_new" />
+                android:text="@string/settings_category_qkreply" />
 
             <org.groebl.sms.common.widget.PreferenceView
                 android:id="@+id/qkreply"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:summary="@string/settings_qkreply_summary"
-                app:title="@string/settings_qkreply_title_new"
+                app:title="@string/settings_qkreply_title"
                 app:widget="@layout/settings_switch_widget" />
 
             <org.groebl.sms.common.widget.PreferenceView

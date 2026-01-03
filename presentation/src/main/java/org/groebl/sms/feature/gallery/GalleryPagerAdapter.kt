@@ -22,7 +22,6 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.bumptech.glide.Glide
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.source.ExtractorMediaSource
@@ -37,6 +36,7 @@ import org.groebl.sms.common.base.QkViewHolder
 import org.groebl.sms.extensions.isImage
 import org.groebl.sms.extensions.isVideo
 import org.groebl.sms.model.MmsPart
+import org.groebl.sms.util.GlideApp
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import kotlinx.android.synthetic.main.gallery_image_page.*
@@ -45,7 +45,7 @@ import kotlinx.android.synthetic.main.gallery_video_page.*
 import java.util.*
 import javax.inject.Inject
 
-class GalleryPagerAdapter @Inject constructor(private val context: Context) : QkRealmAdapter<MmsPart>() {
+class GalleryPagerAdapter @Inject constructor(private val context: Context) : QkRealmAdapter<MmsPart, QkViewHolder>() {
 
     companion object {
         private const val VIEW_TYPE_INVALID = 0
@@ -95,12 +95,12 @@ class GalleryPagerAdapter @Inject constructor(private val context: Context) : Qk
             VIEW_TYPE_IMAGE -> {
                 // We need to explicitly request a gif from glide for animations to work
                 when (part.getUri().let(contentResolver::getType)) {
-                    ContentType.IMAGE_GIF -> Glide.with(context)
+                    ContentType.IMAGE_GIF -> GlideApp.with(context)
                             .asGif()
                             .load(part.getUri())
                             .into(holder.image)
 
-                    else -> Glide.with(context)
+                    else -> GlideApp.with(context)
                             .asBitmap()
                             .load(part.getUri())
                             .into(holder.image)

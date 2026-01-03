@@ -21,21 +21,17 @@ package org.groebl.sms.common.util
 import android.annotation.TargetApi
 import android.content.Context
 import android.content.Intent
-import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
-import androidx.core.app.Person
-import org.groebl.sms.common.util.extensions.getThemedIcon
-import org.groebl.sms.common.util.extensions.toPerson
-import android.graphics.drawable.Icon
 import android.os.Build
+import androidx.core.app.Person
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
-import org.groebl.sms.R
+import org.groebl.sms.common.util.extensions.getThemedIcon
+import org.groebl.sms.common.util.extensions.toPerson
 import org.groebl.sms.feature.compose.ComposeActivity
 import org.groebl.sms.model.Conversation
 import org.groebl.sms.repository.ConversationRepository
 import org.groebl.sms.repository.MessageRepository
-import org.groebl.sms.util.tryOrNull
 import me.leolin.shortcutbadger.ShortcutBadger
 import timber.log.Timber
 import javax.inject.Inject
@@ -58,8 +54,8 @@ class ShortcutManagerImpl @Inject constructor(
             if (shortcutManager.isRateLimitingActive) return
 
             val shortcuts: List<ShortcutInfoCompat> = conversationRepo.getTopConversations()
-                .take(shortcutManager.maxShortcutCountPerActivity - shortcutManager.manifestShortcuts.size)
-                .map { conversation -> createShortcutForConversation(conversation) }
+                    .take(shortcutManager.maxShortcutCountPerActivity - shortcutManager.manifestShortcuts.size)
+                    .map { conversation -> createShortcutForConversation(conversation) }
 
             ShortcutManagerCompat.setDynamicShortcuts(context, shortcuts)
         }
@@ -105,7 +101,7 @@ class ShortcutManagerImpl @Inject constructor(
 
     @TargetApi(29)
     private fun createShortcutForConversation(conversation: Conversation): ShortcutInfoCompat {
-        Timber.v("creating shortcut for conversation ${conversation.id} : ${conversation.getTitle()}")
+        Timber.v("creating shortcut for conversation ${conversation.id}")
         val icon = when {
             conversation.recipients.size == 1 -> {
                 val recipient = conversation.recipients.first()!!
@@ -127,18 +123,18 @@ class ShortcutManagerImpl @Inject constructor(
         val persons: Array<Person> = conversation.recipients.map { it -> it.toPerson(context, colors) }.toTypedArray();
 
         val intent = Intent(context, ComposeActivity::class.java)
-            .setAction(Intent.ACTION_VIEW)
-            .putExtra("threadId", conversation.id)
-            .putExtra("fromShortcut", true)
+                .setAction(Intent.ACTION_VIEW)
+                .putExtra("threadId", conversation.id)
+                .putExtra("fromShortcut", true)
 
         val sc = ShortcutInfoCompat.Builder(context, "${conversation.id}")
-            .setShortLabel(conversation.getTitle())
-            .setLongLabel(conversation.getTitle())
-            .setIcon(icon)
-            .setIntent(intent)
-            .setPersons(persons)
-            .setLongLived(true)
-            .build()
+                .setShortLabel(conversation.getTitle())
+                .setLongLabel(conversation.getTitle())
+                .setIcon(icon)
+                .setIntent(intent)
+                .setPersons(persons)
+                .setLongLived(true)
+                .build()
 
         ShortcutManagerCompat.pushDynamicShortcut(context, sc)
         return sc

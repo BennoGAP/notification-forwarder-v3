@@ -20,14 +20,14 @@ package org.groebl.sms.common.base
 
 import android.annotation.SuppressLint
 import android.app.ActivityManager
-import android.content.res.Configuration
 import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.iterator
 import androidx.lifecycle.Lifecycle
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
 import org.groebl.sms.R
 import org.groebl.sms.common.util.Colors
 import org.groebl.sms.common.util.extensions.resolveThemeBoolean
@@ -38,9 +38,6 @@ import org.groebl.sms.extensions.mapNotNull
 import org.groebl.sms.repository.ConversationRepository
 import org.groebl.sms.repository.MessageRepository
 import org.groebl.sms.util.PhoneNumberUtils
-import org.groebl.sms.util.Preferences
-import com.uber.autodispose.android.lifecycle.scope
-import com.uber.autodispose.autoDisposable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.Observables
@@ -100,16 +97,11 @@ abstract class QkThemedActivity : QkActivity() {
 
     @SuppressLint("InlinedApi")
     override fun onCreate(savedInstanceState: Bundle?) {
-        if (!isNightModeActive()) {
-            setTheme(getActivityGrayThemeRes(prefs.gray.get()))
-        } else {
-            setTheme(getActivityThemeRes(prefs.black.get()))
-        }
+        setTheme(getActivityThemeRes(prefs.black.get()))
         super.onCreate(savedInstanceState)
 
         // When certain preferences change, we need to recreate the activity
-        val triggers = listOf(prefs.nightMode, prefs.night, prefs.black, prefs.gray, prefs.textSize, prefs.systemFont,
-                            prefs.simColor, prefs.sim1Color, prefs.sim2Color, prefs.sim3Color, prefs.grayAvatar)
+        val triggers = listOf(prefs.nightMode, prefs.night, prefs.black, prefs.textSize, prefs.systemFont)
         Observable.merge(triggers.map { it.asObservable().skip(1) })
                 .debounce(400, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -133,22 +125,6 @@ abstract class QkThemedActivity : QkActivity() {
         val icon = BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher)
         val taskDesc = ActivityManager.TaskDescription(getString(R.string.app_name), icon, toolbarColor)
         setTaskDescription(taskDesc)
-    }
-
-    open fun isNightModeActive(): Boolean {
-        when(AppCompatDelegate.getDefaultNightMode()) {
-            AppCompatDelegate.MODE_NIGHT_YES -> return true
-            AppCompatDelegate.MODE_NIGHT_NO -> return false
-        }
-
-        val currentNightMode: Int = (getResources().getConfiguration().uiMode
-                and Configuration.UI_MODE_NIGHT_MASK)
-        when (currentNightMode) {
-            Configuration.UI_MODE_NIGHT_NO -> return false
-            Configuration.UI_MODE_NIGHT_YES -> return true
-            Configuration.UI_MODE_NIGHT_UNDEFINED -> return false
-        }
-        return false
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -180,11 +156,6 @@ abstract class QkThemedActivity : QkActivity() {
      */
     open fun getActivityThemeRes(black: Boolean) = when {
         black -> R.style.AppTheme_Black
-        else -> R.style.AppTheme
-    }
-
-    open fun getActivityGrayThemeRes(gray: Boolean) = when {
-        gray -> R.style.AppTheme_Gray
         else -> R.style.AppTheme
     }
 

@@ -23,6 +23,7 @@ import androidx.core.view.isVisible
 import org.groebl.sms.R
 import org.groebl.sms.common.base.QkViewHolder
 import org.groebl.sms.common.util.Colors
+import org.groebl.sms.common.util.extensions.getDisplayName
 import org.groebl.sms.common.util.extensions.resolveThemeColor
 import org.groebl.sms.common.util.extensions.setBackgroundTint
 import org.groebl.sms.common.util.extensions.setTint
@@ -31,13 +32,12 @@ import org.groebl.sms.extensions.mapNotNull
 import org.groebl.sms.feature.compose.BubbleUtils
 import org.groebl.sms.model.Message
 import org.groebl.sms.model.MmsPart
+import org.groebl.sms.util.tryOrNull
 import ezvcard.Ezvcard
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.mms_vcard_list_item.*
-import org.groebl.sms.common.util.extensions.getDisplayName
-import org.groebl.sms.util.tryOrNull
 import javax.inject.Inject
 
 class VCardBinder @Inject constructor(colors: Colors, private val context: Context) : PartBinder() {

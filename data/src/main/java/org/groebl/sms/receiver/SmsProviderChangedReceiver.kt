@@ -21,8 +21,8 @@ package org.groebl.sms.receiver
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import org.groebl.sms.interactor.SyncMessage
 import dagger.android.AndroidInjection
+import org.groebl.sms.interactor.SyncMessage
 import javax.inject.Inject
 
 /**
@@ -43,13 +43,11 @@ class SmsProviderChangedReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         AndroidInjection.inject(this, context)
 
-        // Obtain the uri for the changed data
-        // If the value is null, don't continue
-        val uri = intent.data ?: return
-
         // Sync the message to our realm
         val pendingResult = goAsync()
-        syncMessage.execute(uri) { pendingResult.finish() }
+        syncMessage.execute(SyncMessage.Params(intent.data ?: return)) {
+            pendingResult.finish()
+        }
     }
 
 }

@@ -24,16 +24,15 @@ import android.content.Context
 import android.content.Intent
 import com.klinker.android.send_message.BroadcastUtils
 import org.groebl.sms.util.Preferences
+import org.groebl.sms.util.nonDebugPackageName
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import org.groebl.sms.util.nonDebugPackageName
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Inject
 
 class WidgetManagerImpl @Inject constructor(private val context: Context, prefs: Preferences)
     : WidgetManager {
-
     companion object {
         private var staticUnreadAtTopPrefsDisposable = AtomicReference<Disposable>(null)
 
@@ -66,6 +65,7 @@ class WidgetManagerImpl @Inject constructor(private val context: Context, prefs:
                     "${nonDebugPackageName(context.packageName)}.feature.widget.WidgetProvider"
                 )
             )
+
         val intent = Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
 
         BroadcastUtils.sendExplicitBroadcast(context, intent, AppWidgetManager.ACTION_APPWIDGET_UPDATE)

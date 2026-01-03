@@ -28,12 +28,9 @@ import android.os.Build
 import android.provider.ContactsContract
 import android.provider.Settings
 import android.provider.Telephony
-import android.webkit.MimeTypeMap
-import androidx.core.content.FileProvider
 import org.groebl.sms.BuildConfig
 import org.groebl.sms.compat.TelephonyCompat
 import org.groebl.sms.extensions.resourceExists
-import org.groebl.sms.manager.BillingManager
 import org.groebl.sms.feature.backup.BackupActivity
 import org.groebl.sms.feature.blocking.BlockingActivity
 import org.groebl.sms.feature.bluetooth.BluetoothSettingsActivity
@@ -41,24 +38,23 @@ import org.groebl.sms.feature.bluetooth.donate.BluetoothDonateActivity
 import org.groebl.sms.feature.compose.ComposeActivity
 import org.groebl.sms.feature.conversationinfo.ConversationInfoActivity
 import org.groebl.sms.feature.gallery.GalleryActivity
+import org.groebl.sms.feature.main.MainActivity
 import org.groebl.sms.feature.notificationprefs.NotificationPrefsActivity
 import org.groebl.sms.feature.scheduled.ScheduledActivity
 import org.groebl.sms.feature.settings.SettingsActivity
-import org.groebl.sms.manager.AnalyticsManager
+import org.groebl.sms.manager.BillingManager
 import org.groebl.sms.manager.NotificationManager
 import org.groebl.sms.manager.PermissionManager
 import org.groebl.sms.model.ScheduledMessage
 import javax.inject.Inject
 import javax.inject.Singleton
 
-
 @Singleton
 class Navigator @Inject constructor(
-        private val context: Context,
-        private val analyticsManager: AnalyticsManager,
-        private val billingManager: BillingManager,
-        private val notificationManager: NotificationManager,
-        private val permissions: PermissionManager
+    private val context: Context,
+    private val billingManager: BillingManager,
+    private val notificationManager: NotificationManager,
+    private val permissions: PermissionManager
 ) {
 
     private fun startActivity(intent: Intent) {
@@ -87,6 +83,11 @@ class Navigator @Inject constructor(
             intent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME, context.packageName)
             context.startActivity(intent)
         }
+    }
+
+    fun showMainActivity() {
+        val intent = Intent(context, MainActivity::class.java)
+        startActivity(intent)
     }
 
     fun showCompose(body: String? = null, attachments: List<Uri>? = null, mode: String? = null) {
@@ -154,13 +155,12 @@ class Navigator @Inject constructor(
     }
 
     fun showBackup() {
-        analyticsManager.track("Viewed Backup")
         startActivity(Intent(context, BackupActivity::class.java))
     }
 
-    fun showScheduled() {
-        analyticsManager.track("Viewed Scheduled")
+    fun showScheduled(conversationId: Long?) {
         val intent = Intent(context, ScheduledActivity::class.java)
+        conversationId?.let { intent.putExtra("conversationId", it) }
         startActivity(intent)
     }
 
@@ -170,7 +170,6 @@ class Navigator @Inject constructor(
     }
 
     fun showBluetoothSettings() {
-        analyticsManager.track("Viewed BluetoothSettings")
         val intent = Intent(context, BluetoothSettingsActivity::class.java)
         startActivity(intent)
     }
@@ -181,29 +180,27 @@ class Navigator @Inject constructor(
     }
 
     fun showDonationBluetooth() {
-        analyticsManager.track("Clicked Donate")
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse("http://android.groebl.org/sms/donate"))
         startActivityExternal(intent)
     }
 
     fun showFAQ() {
-        analyticsManager.track("Clicked FAQ")
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://android.groebl.org/sms/faq/"))
         startActivityExternal(intent)
     }
 
     fun showDeveloper() {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/moezbhatti"))
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/octoshrimpy/quik"))
         startActivityExternal(intent)
     }
 
     fun showSourceCode() {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/moezbhatti/qksms"))
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/BennoGAP/notification-forwarder-v3"))
         startActivityExternal(intent)
     }
 
     fun showLicense() {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/moezbhatti/qksms/blob/master/LICENSE"))
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/BennoGAP/notification-forwarder-v3/blob/master/LICENSE"))
         startActivityExternal(intent)
     }
 
@@ -215,12 +212,6 @@ class Navigator @Inject constructor(
     fun makePhoneCall(address: String) {
         val action = if (permissions.hasCalling()) Intent.ACTION_CALL else Intent.ACTION_DIAL
         val intent = Intent(action, Uri.parse("tel:$address"))
-        startActivityExternal(intent)
-    }
-
-    fun showWikiRegexps() {
-        val url = "https://en.wikipedia.org/wiki/Regular_expression"
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         startActivityExternal(intent)
     }
 
@@ -283,8 +274,8 @@ class Navigator @Inject constructor(
 
     fun addContact(address: String) {
         val intent = Intent(Intent.ACTION_INSERT)
-                    .setType(ContactsContract.Contacts.CONTENT_TYPE)
-                    .putExtra(ContactsContract.Intents.Insert.PHONE, address)
+                .setType(ContactsContract.Contacts.CONTENT_TYPE)
+                .putExtra(ContactsContract.Intents.Insert.PHONE, address)
 
         startActivityExternal(intent)
     }
@@ -298,19 +289,19 @@ class Navigator @Inject constructor(
 
     fun viewFile(uri: Uri, mimeType: String) {
         val intent = Intent(Intent.ACTION_VIEW)
-            .setDataAndType(uri, mimeType.lowercase())
-            .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            .let { Intent.createChooser(it, null) }
+                .setDataAndType(uri, mimeType.lowercase())
+                .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                .let { Intent.createChooser(it, null) }
 
         startActivityExternal(intent)
     }
 
     fun shareFile(uri: Uri, mimeType: String) {
         val intent = Intent(Intent.ACTION_SEND)
-            .setType(mimeType.lowercase())
-            .putExtra(Intent.EXTRA_STREAM, uri)
-            .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            .let { Intent.createChooser(it, null) }
+                .setType(mimeType.lowercase())
+                .putExtra(Intent.EXTRA_STREAM, uri)
+                .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                .let { Intent.createChooser(it, null) }
 
         startActivityExternal(intent)
     }
@@ -346,7 +337,7 @@ class Navigator @Inject constructor(
     fun showExactAlarmsSettings() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
-                .setData(Uri.parse("package:${context.packageName}"))
+                    .setData(Uri.parse("package:${context.packageName}"))
             startActivity(intent)
         }
     }

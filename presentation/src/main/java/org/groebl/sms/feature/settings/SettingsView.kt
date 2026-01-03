@@ -20,7 +20,6 @@ package org.groebl.sms.feature.settings
 
 import org.groebl.sms.common.base.QkViewContract
 import org.groebl.sms.common.widget.PreferenceView
-import org.groebl.sms.util.Preferences
 import io.reactivex.Observable
 
 interface SettingsView : QkViewContract<SettingsState> {
@@ -46,8 +45,6 @@ interface SettingsView : QkViewContract<SettingsState> {
     suspend fun showAutoDeleteWarningDialog(messages: Int): Boolean
     fun showMmsSizePicker()
     fun showMessageLinkHandlingDialogPicker()
-    fun showSpeechBubble()
-    fun showSimConfigure()
     fun showSwipeActions()
     fun showThemePicker()
     fun showAbout()

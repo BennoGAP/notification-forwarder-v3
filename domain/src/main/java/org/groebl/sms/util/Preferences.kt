@@ -27,7 +27,6 @@ import com.f2prateek.rx.preferences2.Preference
 import com.f2prateek.rx.preferences2.RxSharedPreferences
 import org.groebl.sms.common.util.extensions.versionCode
 import io.reactivex.Observable
-import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.collections.HashSet
@@ -83,18 +82,6 @@ class Preferences @Inject constructor(
         const val BLOCKING_MANAGER_SIA = 2
         const val BLOCKING_MANAGER_CB = 3
 
-        const val SIM_COLOR_BLUE = 0
-        const val SIM_COLOR_GREEN = 1
-        const val SIM_COLOR_YELLOW = 2
-        const val SIM_COLOR_RED = 3
-        const val SIM_COLOR_PURPLE = 4
-        const val SIM_COLOR_MAGENTA = 5
-
-        const val BUBBLE_STYLE_ORIGINAL = 0
-        const val BUBBLE_STYLE_IOS = 1
-        const val BUBBLE_STYLE_SIMPLE = 2
-        const val BUBBLE_STYLE_TRIANGLE = 3
-
         const val MESSAGE_LINK_HANDLING_BLOCK = 0
         const val MESSAGE_LINK_HANDLING_ALLOW = 1
         const val MESSAGE_LINK_HANDLING_ASK = 2
@@ -120,16 +107,7 @@ class Preferences @Inject constructor(
     val nightStart = rxPrefs.getString("nightStart", "18:00")
     val nightEnd = rxPrefs.getString("nightEnd", "6:00")
     val black = rxPrefs.getBoolean("black", false)
-    val gray = rxPrefs.getBoolean("gray", true)
-    val autoColor = rxPrefs.getBoolean("autoColor", false)
-    val grayAvatar = rxPrefs.getBoolean("grayAvatar", false)
-    val bubbleColorInvert = rxPrefs.getBoolean("bubbleColorInvert", false)
-    val bubbleStyle = rxPrefs.getInteger("bubbleStyle", BUBBLE_STYLE_ORIGINAL)
-    val simColor = rxPrefs.getBoolean("simColor", false)
-    val sim1Color = rxPrefs.getInteger("sim1Color", SIM_COLOR_BLUE)
-    val sim2Color = rxPrefs.getInteger("sim2Color", SIM_COLOR_GREEN)
-    val sim3Color = rxPrefs.getInteger("sim3Color", SIM_COLOR_YELLOW)
-    val separator = rxPrefs.getBoolean("separator", false)
+    val autoColor = rxPrefs.getBoolean("autoColor", true)
     val systemFont = rxPrefs.getBoolean("systemFont", false)
     val showStt = rxPrefs.getBoolean("showStt", false)
     val showSttOffsetX = rxPrefs.getFloat("showSttOffsetX", Float.MIN_VALUE)
@@ -144,8 +122,8 @@ class Preferences @Inject constructor(
     val qkreply = rxPrefs.getBoolean("qkreply", Build.VERSION.SDK_INT < Build.VERSION_CODES.N)
     val qkreplyTapDismiss = rxPrefs.getBoolean("qkreplyTapDismiss", true)
     val sendDelay = rxPrefs.getInteger("sendDelay", SEND_DELAY_NONE)
-    val swipeRight = rxPrefs.getInteger("swipeRight", SWIPE_ACTION_READ) //SWIPE_ACTION_ARCHIVE
-    val swipeLeft = rxPrefs.getInteger("swipeLeft", SWIPE_ACTION_ARCHIVE) //SWIPE_ACTION_ARCHIVE
+    val swipeRight = rxPrefs.getInteger("swipeRight", SWIPE_ACTION_READ)
+    val swipeLeft = rxPrefs.getInteger("swipeLeft", SWIPE_ACTION_ARCHIVE)
     val autoEmoji = rxPrefs.getBoolean("autoEmoji", true)
     val delivery = rxPrefs.getBoolean("delivery", true)
     val signature = rxPrefs.getString("signature", "")

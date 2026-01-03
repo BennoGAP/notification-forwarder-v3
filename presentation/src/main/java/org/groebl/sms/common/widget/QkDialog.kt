@@ -23,13 +23,12 @@ import android.view.LayoutInflater
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
-import org.groebl.sms.R
 import org.groebl.sms.common.base.QkAdapter
-import kotlinx.android.synthetic.main.qk_dialog.view.*
+import org.groebl.sms.databinding.QkDialogBinding
 
 class QkDialog(private val context: Activity) : AlertDialog(context) {
 
-    private val view = LayoutInflater.from(context).inflate(R.layout.qk_dialog, null)
+    private val view = QkDialogBinding.inflate(LayoutInflater.from(context))
 
     @StringRes
     var titleRes: Int? = null
@@ -99,7 +98,7 @@ class QkDialog(private val context: Activity) : AlertDialog(context) {
         }
 
     init {
-        setView(view)
+        setView(view.root)
     }
 
 }

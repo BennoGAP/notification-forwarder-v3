@@ -43,7 +43,6 @@ import androidx.core.view.isVisible
 import com.jakewharton.rxbinding2.view.clicks
 import org.groebl.sms.common.QkMediaPlayer
 import org.groebl.sms.R
-import org.groebl.sms.common.Navigator
 import org.groebl.sms.common.base.QkRealmAdapter
 import org.groebl.sms.common.base.QkViewHolder
 import org.groebl.sms.common.util.Colors
@@ -75,8 +74,10 @@ import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import io.realm.RealmResults
 import kotlinx.android.synthetic.main.message_list_item_in.*
-import kotlinx.android.synthetic.main.message_list_item_in.parts
 import kotlinx.android.synthetic.main.message_list_item_in.body
+import kotlinx.android.synthetic.main.message_list_item_in.reactionText
+import kotlinx.android.synthetic.main.message_list_item_in.parts
+import kotlinx.android.synthetic.main.message_list_item_in.reactions
 import kotlinx.android.synthetic.main.message_list_item_in.sim
 import kotlinx.android.synthetic.main.message_list_item_in.simIndex
 import kotlinx.android.synthetic.main.message_list_item_in.status
@@ -84,7 +85,6 @@ import kotlinx.android.synthetic.main.message_list_item_in.timestamp
 import kotlinx.android.synthetic.main.message_list_item_in.view.*
 import kotlinx.android.synthetic.main.message_list_item_out.*
 import kotlinx.android.synthetic.main.message_list_item_out.view.cancel
-import org.groebl.sms.common.util.extensions.resolveThemeColor
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -99,8 +99,7 @@ class MessagesAdapter @Inject constructor(
     private val phoneNumberUtils: PhoneNumberUtils,
     private val prefs: Preferences,
     private val textViewStyler: TextViewStyler,
-    private val navigator: Navigator,
-) : QkRealmAdapter<Message>() {
+) : QkRealmAdapter<Message, QkViewHolder>() {
     class AudioState(
         var partId: Long = -1,
         var state: QkMediaPlayer.PlayingState = QkMediaPlayer.PlayingState.Stopped,
@@ -201,38 +200,41 @@ class MessagesAdapter @Inject constructor(
         // Update the selected state
         holder.containerView.isActivated = isSelected(message.id) || highlight == message.id
 
-        // Bind the cancelFrame (cancel button) view
-        holder.cancelFrame?.let {
-            val isCancellable = message.isSending() && message.date > System.currentTimeMillis()
-            it.visibility = if (isCancellable) View.VISIBLE else View.GONE
-            it.let {
-                it.clicks().subscribe { cancelSendingClicks.onNext(message.id) }
-            }
-            it.cancel.progress = 2
+        // bind the cancelFrame (cancel button) and send now button
+        holder.cancelFrame?.let { cancelFrame ->
+            holder.sendNowIcon?.let { sendNowIcon ->
+                val isCancellable = message.isSending() && message.date > System.currentTimeMillis()
 
-            if (isCancellable) {
-                val delay = when (prefs.sendDelay.get()) {
-                    Preferences.SEND_DELAY_SHORT -> 3000
-                    Preferences.SEND_DELAY_MEDIUM -> 5000
-                    Preferences.SEND_DELAY_LONG -> 10000
-                    else -> 0
+                if (isCancellable) {
+                    cancelFrame.visibility = View.VISIBLE
+                    sendNowIcon.visibility = View.VISIBLE
+
+                    cancelFrame.setOnClickListener { cancelSendingClicks.onNext(message.id) }
+                    sendNowIcon.setOnClickListener {  sendNowClicks.onNext(message.id) }
+
+                    cancelFrame.cancel.progress = 2
+
+                    val delay = when (prefs.sendDelay.get()) {
+                        Preferences.SEND_DELAY_SHORT -> 3000
+                        Preferences.SEND_DELAY_MEDIUM -> 5000
+                        Preferences.SEND_DELAY_LONG -> 10000
+                        else -> 0
+                    }
+                    val progress =
+                        (1 - (message.date - System.currentTimeMillis()) / delay.toFloat()) * 100
+
+                    ObjectAnimator.ofInt(cancelFrame.cancel, "progress", progress.toInt(), 100)
+                        .setDuration(message.date - System.currentTimeMillis())
+                        .start()
                 }
-                val progress =
-                    (1 - (message.date - System.currentTimeMillis()) / delay.toFloat()) * 100
+                else {
+                    cancelFrame.visibility = View.GONE
+                    sendNowIcon.visibility = View.GONE
 
-                ObjectAnimator.ofInt(it.cancel, "progress", progress.toInt(), 100)
-                    .setDuration(message.date - System.currentTimeMillis())
-                    .start()
+                    cancelFrame.setOnClickListener(null)
+                    sendNowIcon.setOnClickListener(null)
+                }
             }
-        }
-
-        // bind the send now icon view
-        holder.sendNowIcon?.let {
-            if (message.isSending() && message.date > System.currentTimeMillis()) {
-                it.visibility = View.VISIBLE
-                it.clicks().subscribe { sendNowClicks.onNext(message.id) }
-            } else
-                it.visibility = View.GONE
         }
 
         // bind the resend icon view
@@ -285,30 +287,17 @@ class MessagesAdapter @Inject constructor(
             )
         }
 
-         if(message.isBluetoothMessage && holder.timestamp.isVisible) {
+        if(message.isBluetoothMessage && holder.timestamp.isVisible) {
             holder.sim.setVisible(true)
-            holder.simIndex.setVisible(false)
             holder.sim.setImageResource(R.drawable.ic_bluetooth_black_24dp)
-            if (prefs.simColor.get()) {
-                holder.sim.setTint(Color.BLUE)
-            }
         } else {
-            holder.sim.setVisible(holder.timestamp.isVisible && subscription != null && subs.size > 1) //(message.subId != previous?.subId && subscription != null && subs.size > 1)
-            holder.simIndex.setVisible(holder.timestamp.isVisible &&  subscription != null && subs.size > 1) //(message.subId != previous?.subId &&  subscription != null && subs.size > 1)
             holder.simIndex.text = subscription?.simSlotIndex?.plus(1)?.toString()
-            holder.sim.setImageResource(R.drawable.ic_sim_card_black_24dp)
 
-            val simColor = when (subscription?.simSlotIndex?.plus(1)?.toString()) {
-                "1" -> colors.colorForSim(context, 1)
-                "2" -> colors.colorForSim(context, 2)
-                "3" -> colors.colorForSim(context, 3)
-                else -> colors.colorForSim(context, 1)
-            }
-            if (prefs.simColor.get()) {
-                holder.sim.setTint(simColor)
+            ((message.subId != previous?.subId) && (subscription != null) && (subs.size > 1)).also {
+                holder.sim.setVisible(it)
+                holder.simIndex.setVisible(it)
             }
         }
-
 
         // Bind the grouping
         holder.containerView.setPadding(
@@ -321,34 +310,18 @@ class MessagesAdapter @Inject constructor(
                 setRecipient(contactCache[message.address])
                 setVisible(!canGroup(message, next), View.INVISIBLE)
             }
-        }
 
-        if ((prefs.bubbleColorInvert.get() && message.isMe())
-            || (!prefs.bubbleColorInvert.get() && !message.isMe())) {
-                holder.body.apply {
-                    setTextColor(theme.textPrimary)
-                    setBackgroundTint(theme.theme)
-                    highlightColor = R.attr.bubbleColor.withAlpha(0x5d)
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                        textSelectHandle?.setTint(R.attr.bubbleColor.withAlpha(0x7d))
-                        textSelectHandleLeft?.setTint(R.attr.bubbleColor.withAlpha(0x7d))
-                        textSelectHandleRight?.setTint(R.attr.bubbleColor.withAlpha(0x7d))
-                    }
-                }
-            } else {
-                holder.body.apply {
-                    setTextColor(holder.body.context.resolveThemeColor(android.R.attr.textColorPrimary))
-                    setBackgroundTint(holder.body.context.resolveThemeColor(R.attr.bubbleColor))
-
-                    highlightColor = R.attr.bubbleColor.withAlpha(0x5d)
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                        textSelectHandle?.setTint(R.attr.bubbleColor.withAlpha(0x7d))
-                        textSelectHandleLeft?.setTint(R.attr.bubbleColor.withAlpha(0x7d))
-                        textSelectHandleRight?.setTint(R.attr.bubbleColor.withAlpha(0x7d))
-                    }
+            holder.body.apply {
+                setTextColor(theme.textPrimary)
+                setBackgroundTint(theme.theme)
+                highlightColor = R.attr.bubbleColor.withAlpha(0x5d)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    textSelectHandle?.setTint(R.attr.bubbleColor.withAlpha(0x7d))
+                    textSelectHandleLeft?.setTint(R.attr.bubbleColor.withAlpha(0x7d))
+                    textSelectHandleRight?.setTint(R.attr.bubbleColor.withAlpha(0x7d))
                 }
             }
-
+        } else
             holder.body.apply {
                 highlightColor = theme.theme.withAlpha(0x5d)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -414,23 +387,10 @@ class MessagesAdapter @Inject constructor(
                     canGroupWithPrevious = canGroup(message, previous) ||
                             message.parts.any { !it.isSmil() && !it.isText() },
                     canGroupWithNext = canGroup(message, next),
-                    isMe = message.isMe(),
-                    style = prefs.bubbleStyle.get()
+                    isMe = message.isMe()
                 )
             )
         }
-
-        val paddingTop = context.resources.getDimensionPixelOffset(R.dimen.bubble_padding_top)
-        val paddingBottom = context.resources.getDimensionPixelOffset(R.dimen.bubble_padding_bottom)
-        val paddingLeft = context.resources.getDimensionPixelOffset(R.dimen.bubble_padding_left)
-        val paddingRight = context.resources.getDimensionPixelOffset(R.dimen.bubble_padding_right)
-        if (prefs.bubbleStyle.get() == Preferences.BUBBLE_STYLE_IOS && message.isMe()) {
-            holder.body.setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom)
-        } else if (prefs.bubbleStyle.get() == Preferences.BUBBLE_STYLE_IOS) {
-            holder.body.setPadding(paddingRight, paddingTop, paddingLeft, paddingBottom)
-        }
-
-
 
         // Bind the parts
         holder.parts.adapter = partsAdapterProvider.get().apply {
@@ -438,6 +398,50 @@ class MessagesAdapter @Inject constructor(
             setData(message, previous, next, holder, audioState)
             contextMenuValue = message.id
             clicks.subscribe(partClicks)    // part clicks gets passed back to compose view model
+        }
+
+        showEmojiReactions(holder, message)
+    }
+
+    private fun showEmojiReactions(holder: QkViewHolder, message: Message) {
+        holder.reactions?.let { reactionsContainer ->
+            val reactions = message.emojiReactions
+            val hasReactions = reactions.isNotEmpty()
+
+            if (hasReactions) {
+                val reactionCounts = reactions.groupBy { it.emoji }
+                    .mapValues { it.value.size }
+                    .toList()
+                    .sortedByDescending { it.second } // Sort by count, most reactions first
+
+                // For now, show just the first (most popular) reaction
+                val topReaction = reactionCounts.first()
+                val reactionText = if (topReaction.second == 1) {
+                    topReaction.first
+                } else {
+                    // Use a non-breaking space to keep the emoji and count together
+                    "${topReaction.first}\u00A0${topReaction.second}"
+                }
+
+                holder.reactionText?.text = reactionText
+                reactionsContainer.setVisible(true)
+                makeRoomForEmojis(holder)
+            } else {
+                reactionsContainer.setVisible(false)
+            }
+        }
+    }
+
+    private fun makeRoomForEmojis(holder: QkViewHolder) {
+        val paddingBottom = 25.dpToPx(context)
+
+        (holder.reactions?.parent?.parent as? ViewGroup)?.let { parent ->
+            parent.setPadding(
+                parent.paddingLeft,
+                parent.paddingTop,
+                parent.paddingRight,
+                paddingBottom
+            )
         }
     }
 

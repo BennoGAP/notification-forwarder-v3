@@ -18,12 +18,12 @@
  */
 package org.groebl.sms.feature.blocking.numbers
 
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
 import org.groebl.sms.common.base.QkPresenter
 import org.groebl.sms.interactor.MarkUnblocked
 import org.groebl.sms.repository.BlockingRepository
 import org.groebl.sms.repository.ConversationRepository
-import com.uber.autodispose.android.lifecycle.scope
-import com.uber.autodispose.autoDisposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
@@ -42,7 +42,7 @@ class BlockedNumbersPresenter @Inject constructor(
             .observeOn(Schedulers.io())
             .doOnNext { id ->
                 blockingRepo.getBlockedNumber(id)?.address
-                    ?.let(conversationRepo::getConversation)
+                    ?.let { address -> conversationRepo.getConversation(listOf(address)) }
                     ?.let { conversation -> markUnblocked.execute(listOf(conversation.id)) }
             }
             .doOnNext(blockingRepo::unblockNumber)

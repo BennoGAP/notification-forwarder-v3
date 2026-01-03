@@ -35,6 +35,13 @@
         app:showAsAction="always" />
 
     <item
+        android:id="@+id/viewScheduledMessages"
+        android:icon="@drawable/ic_event_black_24dp"
+        android:title="@string/compose_scheduled_view"
+        android:visible="false"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/select_all"
         android:icon="?attr/actionModeSelectAllDrawable"
         android:title="@string/main_menu_select_all"
@@ -101,13 +108,6 @@
         android:title="@string/compose_menu_next"
         android:visible="false"
         app:showAsAction="always" />
-
-    <item
-        android:id="@+id/speech"
-        android:icon="@drawable/ic_speech_black_24dp"
-        android:title="@string/compose_menu_speech"
-        android:visible="false"
-        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/clear"

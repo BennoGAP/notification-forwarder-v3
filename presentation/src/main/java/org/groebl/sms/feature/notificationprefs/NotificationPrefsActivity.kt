@@ -29,24 +29,22 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.jakewharton.rxbinding2.view.clicks
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
+import dagger.android.AndroidInjection
 import org.groebl.sms.R
 import org.groebl.sms.common.QkDialog
 import org.groebl.sms.common.base.QkThemedActivity
 import org.groebl.sms.common.util.extensions.animateLayoutChanges
-import org.groebl.sms.common.util.extensions.resolveThemeColor
 import org.groebl.sms.common.util.extensions.setVisible
 import org.groebl.sms.common.widget.PreferenceView
-import com.uber.autodispose.android.lifecycle.scope
-import com.uber.autodispose.autoDisposable
-import dagger.android.AndroidInjection
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import kotlinx.android.synthetic.main.notification_prefs_activity.*
-import kotlinx.android.synthetic.main.notification_prefs_activity.notifications
-import kotlinx.android.synthetic.main.notification_prefs_activity.preferences
-import kotlinx.android.synthetic.main.settings_switch_widget.view.*
 import kotlinx.android.synthetic.main.settings_chevron_widget.view.*
+import kotlinx.android.synthetic.main.settings_switch_widget.view.*
+import org.groebl.sms.common.util.extensions.resolveThemeColor
 import javax.inject.Inject
 
 class NotificationPrefsActivity : QkThemedActivity(), NotificationPrefsView {
@@ -110,22 +108,22 @@ class NotificationPrefsActivity : QkThemedActivity(), NotificationPrefsView {
         notificationsO.chevron.setImageResource(R.drawable.ic_chevron_right_black_24dp)
 
         notifications.checkbox.isChecked = state.notificationsEnabled
-        previews.value = state.previewSummary
+        previews.summary = state.previewSummary
         previewModeDialog.adapter.selectedItem = state.previewId
         wake.checkbox.isChecked = state.wakeEnabled
         silentNotContact.checkbox.isChecked = state.silentNotContact
         silentNotContact.isVisible = state.threadId == 0L
         vibration.checkbox.isChecked = state.vibrationEnabled
-        ringtone.value = state.ringtoneName
+        ringtone.summary = state.ringtoneName
 
         actionsDivider.isVisible = state.threadId == 0L
         actionsTitle.isVisible = state.threadId == 0L
         action1.isVisible = state.threadId == 0L
-        action1.value = state.action1Summary
+        action1.summary = state.action1Summary
         action2.isVisible = state.threadId == 0L
-        action2.value = state.action2Summary
+        action2.summary = state.action2Summary
         action3.isVisible = state.threadId == 0L
-        action3.value = state.action3Summary
+        action3.summary = state.action3Summary
 
         qkreplyDivider.isVisible = state.threadId == 0L
         qkreplyTitle.isVisible = state.threadId == 0L

@@ -24,4 +24,5 @@ import io.realm.RealmResults
 data class ScheduledState(
     val scheduledMessages: RealmResults<ScheduledMessage>? = null,
     val selectedMessages: Int = 0,
+    val conversationId: Long? = null,
 )
