@@ -84,8 +84,6 @@ class BluetoothSettingsPresenter @Inject constructor(
         view.preferenceFullClicks()
                 .autoDisposable(view.scope())
                 .subscribe {
-                    Timber.v("Preference-Full click: ${context.resources.getResourceName(it.id)}")
-
                     when (it.id) {
                         R.id.bluetooth_enabled -> {
                             if(!prefs.bluetooth_enabled.get() && !BluetoothHelper.isDefaultSms(context)) {
@@ -109,8 +107,6 @@ class BluetoothSettingsPresenter @Inject constructor(
         view.preferenceMainClicks()
                 .autoDisposable(view.scope())
                 .subscribe {
-                    Timber.v("Preference-Main click: ${context.resources.getResourceName(it.id)}")
-
                     when (it.id) {
                         R.id.bluetooth_only_on_connect -> {
                             prefs.bluetooth_only_on_connect.set(!prefs.bluetooth_only_on_connect.get())
