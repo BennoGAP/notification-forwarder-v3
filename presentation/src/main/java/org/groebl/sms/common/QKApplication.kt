@@ -35,7 +35,7 @@ import dagger.android.HasActivityInjector
 import dagger.android.HasBroadcastReceiverInjector
 import dagger.android.HasServiceInjector
 import org.groebl.sms.R
-//import org.groebl.sms.common.util.CrashlyticsTree
+import org.groebl.sms.common.util.CrashlyticsTree
 import org.groebl.sms.common.util.FileLoggingTree
 import org.groebl.sms.injection.AppComponentManager
 import org.groebl.sms.injection.appComponent
@@ -96,9 +96,8 @@ class QKApplication : Application(), HasActivityInjector, HasBroadcastReceiverIn
 
         nightModeManager.updateCurrentTheme()
 
-        // configure timber logging
-        Timber.plant(Timber.DebugTree(), fileLoggingTree)
-        //Timber.plant(Timber.DebugTree(), CrashlyticsTree(this), fileLoggingTree)
+        // configure timber logging and crashlytics
+        Timber.plant(Timber.DebugTree(), CrashlyticsTree(this), fileLoggingTree)
 
         // configure emoji compatibility with bundled package
         // (bundled library works with no play-services/gsm os versions)
