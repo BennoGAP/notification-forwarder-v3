@@ -35,7 +35,6 @@ import org.groebl.sms.feature.bluetooth.app.BluetoothAppActivity
 import org.groebl.sms.common.util.BluetoothHelper
 import org.groebl.sms.feature.bluetooth.common.BluetoothMessengerBlocked
 import org.groebl.sms.feature.bluetooth.device.BluetoothDeviceActivity
-import org.groebl.sms.feature.bluetooth.donate.BluetoothDonateActivity
 import org.groebl.sms.feature.settings.about.AboutController
 import org.groebl.sms.injection.appComponent
 import org.groebl.sms.util.Preferences
@@ -276,11 +275,6 @@ class BluetoothSettingsController : QkController<BluetoothSettingsView, Bluetoot
 
     override fun requestDefaultSms() {
         navigator.showDefaultSmsDialog(activity!!)
-    }
-
-    override fun showBluetoothDonate() {
-        val intent = Intent(context, BluetoothDonateActivity::class.java)
-        startActivity(intent)
     }
 
     override fun showBluetoothApps() {

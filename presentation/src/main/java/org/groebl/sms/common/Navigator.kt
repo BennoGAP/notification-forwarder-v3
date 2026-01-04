@@ -34,7 +34,6 @@ import org.groebl.sms.extensions.resourceExists
 import org.groebl.sms.feature.backup.BackupActivity
 import org.groebl.sms.feature.blocking.BlockingActivity
 import org.groebl.sms.feature.bluetooth.BluetoothSettingsActivity
-import org.groebl.sms.feature.bluetooth.donate.BluetoothDonateActivity
 import org.groebl.sms.feature.compose.ComposeActivity
 import org.groebl.sms.feature.conversationinfo.ConversationInfoActivity
 import org.groebl.sms.feature.gallery.GalleryActivity
@@ -42,7 +41,6 @@ import org.groebl.sms.feature.main.MainActivity
 import org.groebl.sms.feature.notificationprefs.NotificationPrefsActivity
 import org.groebl.sms.feature.scheduled.ScheduledActivity
 import org.groebl.sms.feature.settings.SettingsActivity
-import org.groebl.sms.manager.BillingManager
 import org.groebl.sms.manager.NotificationManager
 import org.groebl.sms.manager.PermissionManager
 import org.groebl.sms.model.ScheduledMessage
@@ -52,7 +50,6 @@ import javax.inject.Singleton
 @Singleton
 class Navigator @Inject constructor(
     private val context: Context,
-    private val billingManager: BillingManager,
     private val notificationManager: NotificationManager,
     private val permissions: PermissionManager
 ) {
@@ -174,11 +171,6 @@ class Navigator @Inject constructor(
         startActivity(intent)
     }
 
-    fun showBluetoothDonateScreen() {
-        val intent = Intent(context, BluetoothDonateActivity::class.java)
-        startActivity(intent)
-    }
-
     fun showDonationBluetooth() {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse("http://android.groebl.org/sms/donate"))
         startActivityExternal(intent)
@@ -267,7 +259,6 @@ class Navigator @Inject constructor(
                 .append("Version: ${BuildConfig.VERSION_NAME}\n")
                 .append("Device: ${Build.BRAND} ${Build.MODEL}\n")
                 .append("SDK: ${Build.VERSION.SDK_INT}\n")
-                .append("Donated".takeIf { billingManager.upgradeStatus.blockingFirst() } ?: "")
                 .toString())
         startActivityExternal(intent)
     }

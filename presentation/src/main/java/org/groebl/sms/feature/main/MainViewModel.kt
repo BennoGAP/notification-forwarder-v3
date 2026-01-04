@@ -444,7 +444,7 @@ class MainViewModel @Inject constructor(
         view.rateDonateIntent
                 .autoDisposable(view.scope())
                 .subscribe {
-                    navigator.showBluetoothDonateScreen()
+                    navigator.showDonationBluetooth()
                 }
 
         view.dismissRatingIntent

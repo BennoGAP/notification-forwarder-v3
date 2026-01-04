@@ -33,7 +33,6 @@ import dagger.Provides
 import org.groebl.sms.blocking.BlockingClient
 import org.groebl.sms.blocking.BlockingManager
 import org.groebl.sms.common.ViewModelFactory
-import org.groebl.sms.common.util.BillingManagerImpl
 import org.groebl.sms.common.util.NotificationManagerImpl
 import org.groebl.sms.common.util.ShortcutManagerImpl
 import org.groebl.sms.feature.conversationinfo.injection.ConversationInfoComponent
@@ -44,7 +43,6 @@ import org.groebl.sms.manager.ActiveConversationManager
 import org.groebl.sms.manager.ActiveConversationManagerImpl
 import org.groebl.sms.manager.AlarmManager
 import org.groebl.sms.manager.AlarmManagerImpl
-import org.groebl.sms.manager.BillingManager
 import org.groebl.sms.manager.KeyManager
 import org.groebl.sms.manager.KeyManagerImpl
 import org.groebl.sms.manager.NotificationManager
@@ -131,9 +129,6 @@ class AppModule(private var application: Application) {
     fun provideContactAddedListener(listener: ContactAddedListenerImpl): ContactAddedListener = listener
 
     // Manager
-
-    @Provides
-    fun provideBillingManager(manager: BillingManagerImpl): BillingManager = manager
 
     @Provides
     fun provideActiveConversationManager(manager: ActiveConversationManagerImpl): ActiveConversationManager = manager

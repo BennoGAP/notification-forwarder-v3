@@ -203,8 +203,6 @@ dependencies {
     implementation project(':domain')
 
     implementation "com.google.firebase:firebase-crashlytics:$crashlytics_version"
-    implementation "com.android.billingclient:billing:$billing_version"
-    implementation "com.android.billingclient:billing-ktx:$billing_version"
 
     //bluetooth
     implementation files("libs/emoji-java-5.1.6.jar")

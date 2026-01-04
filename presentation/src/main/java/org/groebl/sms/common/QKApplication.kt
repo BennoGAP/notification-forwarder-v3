@@ -40,7 +40,6 @@ import org.groebl.sms.common.util.FileLoggingTree
 import org.groebl.sms.injection.AppComponentManager
 import org.groebl.sms.injection.appComponent
 import org.groebl.sms.interactor.SpeakThreads
-import org.groebl.sms.manager.BillingManager
 import org.groebl.sms.migration.QkMigration
 import org.groebl.sms.migration.QkRealmMigration
 import org.groebl.sms.util.NightModeManager
@@ -61,7 +60,6 @@ class QKApplication : Application(), HasActivityInjector, HasBroadcastReceiverIn
     @Suppress("unused")
     @Inject lateinit var qkMigration: QkMigration
 
-    @Inject lateinit var billingManager: BillingManager
     @Inject lateinit var dispatchingActivityInjector: DispatchingAndroidInjector<Activity>
     @Inject lateinit var dispatchingBroadcastReceiverInjector: DispatchingAndroidInjector<BroadcastReceiver>
     @Inject lateinit var dispatchingServiceInjector: DispatchingAndroidInjector<Service>
@@ -88,11 +86,6 @@ class QKApplication : Application(), HasActivityInjector, HasBroadcastReceiverIn
                 .build())
 
         qkMigration.performMigration()
-
-        GlobalScope.launch(Dispatchers.IO) {
-            billingManager.checkForPurchases()
-            billingManager.queryProducts()
-        }
 
         nightModeManager.updateCurrentTheme()
 

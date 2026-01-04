@@ -97,7 +97,7 @@ class BluetoothSettingsPresenter @Inject constructor(
                         }
                         R.id.bluetooth_notification_access -> view.showNotificationAccess()
                         //R.id.bluetooth_faq -> navigator.showFAQ()
-                        R.id.bluetooth_donate -> view.showBluetoothDonate()
+                        R.id.bluetooth_donate -> navigator.showDonationBluetooth()
                         R.id.bluetooth_about -> view.showBluetoothAbout()
                         R.id.bluetooth_battery -> view.showBluetoothBatteryOptimize()
                     }
