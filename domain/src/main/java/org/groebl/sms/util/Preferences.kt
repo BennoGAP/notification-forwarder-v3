@@ -108,7 +108,7 @@ class Preferences @Inject constructor(
     val nightEnd = rxPrefs.getString("nightEnd", "6:00")
     val black = rxPrefs.getBoolean("black", false)
     val autoColor = rxPrefs.getBoolean("autoColor", true)
-    val systemFont = rxPrefs.getBoolean("systemFont", false)
+    val systemFont = rxPrefs.getBoolean("systemFont", true)
     val showStt = rxPrefs.getBoolean("showStt", false)
     val showSttOffsetX = rxPrefs.getFloat("showSttOffsetX", Float.MIN_VALUE)
     val showSttOffsetY = rxPrefs.getFloat("showSttOffsetY", Float.MIN_VALUE)
