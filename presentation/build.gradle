@@ -28,7 +28,7 @@ android {
     defaultConfig {
         applicationId 'org.groebl.sms'
         minSdkVersion 23
-        targetSdkVersion 34
+        targetSdkVersion 35
         versionCode 3790
         versionName '3.7.9.0'
         //setProperty("archivesBaseName", "NFP-v${versionName}")
