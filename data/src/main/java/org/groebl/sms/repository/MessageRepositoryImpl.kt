@@ -41,8 +41,6 @@ import org.groebl.sms.common.util.extensions.now
 import org.groebl.sms.compat.TelephonyCompat
 import org.groebl.sms.extensions.anyOf
 import org.groebl.sms.extensions.insertOrUpdate
-import org.groebl.sms.extensions.isImage
-import org.groebl.sms.extensions.isVideo
 import org.groebl.sms.extensions.map
 import org.groebl.sms.extensions.resourceExists
 import org.groebl.sms.manager.ActiveConversationManager
@@ -203,18 +201,10 @@ open class MessageRepositoryImpl @Inject constructor(
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             values.put(MediaStore.MediaColumns.IS_PENDING, 1)
-            values.put(
-                MediaStore.MediaColumns.RELATIVE_PATH, when {
-                    part.isImage() -> "${Environment.DIRECTORY_PICTURES}/NotificationForwarderPro"
-                    part.isVideo() -> "${Environment.DIRECTORY_MOVIES}/NotificationForwarderPro"
-                    else -> "${Environment.DIRECTORY_DOWNLOADS}/NotificationForwarderPro"
-                }
-            )
+            values.put(MediaStore.MediaColumns.RELATIVE_PATH, "${Environment.DIRECTORY_DOWNLOADS}/NotificationForwarderPro")
         }
 
         val contentUri = when {
-            part.isImage() -> MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-            part.isVideo() -> MediaStore.Video.Media.EXTERNAL_CONTENT_URI
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q ->
                 MediaStore.Downloads.EXTERNAL_CONTENT_URI
 
