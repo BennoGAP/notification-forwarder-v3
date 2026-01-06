@@ -84,7 +84,7 @@ class ThemeAdapter @Inject constructor(
         holder.palette.removeAllViews()
         holder.palette.setPadding(swatchPadding, swatchPadding, swatchPadding, swatchPadding)
 
-        (palette.subList(0, 5) + palette.subList(5, 10).reversed())
+        (palette.subList(0, 5) + palette.subList(5, 10).asReversed())
                 .mapIndexed { index, color ->
                     LayoutInflater.from(context).inflate(R.layout.theme_list_item, holder.palette, false).apply {
 
