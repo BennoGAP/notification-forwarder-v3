@@ -172,7 +172,7 @@ class Navigator @Inject constructor(
     }
 
     fun showDonationBluetooth() {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("http://android.groebl.org/sms/donate"))
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://android.groebl.org/sms/donate"))
         startActivityExternal(intent)
     }
 

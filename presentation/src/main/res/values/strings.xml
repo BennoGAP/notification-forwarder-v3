@@ -160,8 +160,6 @@
     <string name="main_permission_sms_new">This App needs permission to send and view SMS messages</string>
     <string name="main_permission_contacts_new">This App needs permission to view your contacts</string>
     <string name="main_permission_notifications_new">This app needs permission to display notifications</string>
-    <string name="blocking_manager_qksms_title_new">Intern</string>
-    <string name="blocking_manager_qksms_summary_new">Built-in blocking functionality</string>
     <string name="rate_title_new">Enjoying this App?</string>
     <string name="rate_summary_new">How about a small donation or a rating on Google Play&#8230;</string>
     <string name="button_info">Info</string>
