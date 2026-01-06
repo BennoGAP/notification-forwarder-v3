@@ -241,6 +241,8 @@
     <string name="compose_subtitle_results">%1$d von %2$d Ergebnissen</string>
     <string name="compose_send_group_title">Als Gruppennachricht senden</string>
     <string name="compose_send_group_summary">Empfänger und Antworten werden für jeden sichtbar sein</string>
+    <string name="compose_send_group_summary_on">Empfänger und Antworten sind für alle sichtbar</string>
+    <string name="compose_send_group_summary_off">Nachrichten werden separat an alle Empfänger gesendet</string>
     <string name="compose_messages_empty">Das ist der Beginn der Unterhaltung. Sag\' etwas Nettes!</string>
     <string name="compose_vcard_label">Kontaktkarte</string>
     <string name="compose_scheduled_for">Geplante Zeit:</string>
@@ -410,6 +412,7 @@
     <string name="blocking_drop_summary">Eingehende Nachrichten von blockierten Absendern verwefen, anstatt sie auszublenden</string>
     <string name="blocking_conversations">Blockierte Unterhaltungen</string>
     <string name="blocking_manager_title">Blockiermanager</string>
+    <string name="blocking_manager_qksms_title">Intern</string>
     <string name="blocking_manager_qksms_summary">Integrierte Blockierfunktion</string>
     <string name="blocking_manager_call_blocker_summary">Spam-Nachrichten und Nummern &amp; unbekannte Anrufe mit Sperrliste &amp; Zeitplan blockieren</string>
     <string name="blocking_manager_call_control_summary">Filtert automatisch Anrufe und Nachrichten an einem Ort! Community IQ™ unterbindet mit Hilfe der Community unerwünschte Nachrichten von bekannten Spammern</string>
@@ -511,6 +514,8 @@
     </plurals>
     <string name="notification_message_failed_title">Nachricht wurde nicht gesendet</string>
     <string name="notification_message_failed_text">Die Nachricht konnte nicht an %s gesendet werden</string>
+    <string name="notification_foreground_worker_title">Empfange Nachricht</string>
+    <string name="notification_foreground_worker_text">Unter Android 12 und älter ist eine Benachrichtigung für die Hintergrundarbeit erforderlich, die den Empfange von Nachrichten ermöglicht.</string>
     <string-array name="night_modes">
         <item>System</item>
         <item>Deaktiviert</item>
@@ -637,6 +642,7 @@
         <item quantity="other">%d Unterhaltungen wiederhergestellt</item>
     </plurals>
     <string name="notification_message_failed_action">Erneut senden</string>
+    <string name="NotificationMeDescription">Ich</string>
     <string name="speak_no_messages">Keine Nachrichten</string>
     <string name="speak_unseen_messages">Ungesehene Nachrichten vorlesen</string>
     <string name="messageLinkHandling_dialog_title">Warnung vor externem Link</string>
