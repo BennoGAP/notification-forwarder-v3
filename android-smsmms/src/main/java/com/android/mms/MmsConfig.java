@@ -50,7 +50,7 @@ public class MmsConfig {
     private static int mMaxMessageSize = 800 * 1024;            // default to 800k max size
     private static String mUserAgent = DEFAULT_USER_AGENT;
     private static String mUaProfTagName = DEFAULT_HTTP_KEY_X_WAP_PROFILE;
-    private static String mUaProfUrl = null;
+    private static String mUaProfUrl = "http://www.gstatic.com/android/hangouts/hangouts_mms_ua_profile.xml";
     private static String mHttpParams = null;
     private static String mHttpParamsLine1Key = null;
     private static String mEmailGateway = null;
