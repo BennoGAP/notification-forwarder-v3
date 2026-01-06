@@ -119,6 +119,8 @@ class ConversationsAdapter @Inject constructor(
         if(conversation.lastMessage?.isBluetoothMessage == true) {
             holder.simConvo.setVisible(true)
             holder.simConvo.setImageResource(R.drawable.ic_bluetooth_black_24dp)
+        } else {
+            holder.simConvo.setVisible(false)
         }
 
         holder.date.text = conversation.date.takeIf { it > 0 }?.let(dateFormatter::getConversationTimestamp)
