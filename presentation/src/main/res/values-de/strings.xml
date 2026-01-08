@@ -154,7 +154,6 @@
   <string name="main_permission_sms_new">Die App benötigt die Berechtigung zum Senden und Anzeigen von SMS-Nachrichten</string>
   <string name="main_permission_contacts_new">Die App benötigt die Berechtigung zum Zugreifen auf die Kontakte</string>
   <string name="main_permission_notifications_new">Die App benötigt die Berechtigung zum anzeigen von Benachrichtigungen</string>
-  <string name="blocking_manager_qksms_title">Intern</string>
   <string name="rate_title_new">Gefällt dir die App?</string>
   <string name="rate_summary_new">Wie wäre es mit einer kleinen Spende oder einer Bewertung auf Google Play&#8230;</string>
   <string name="button_info">Info</string>
