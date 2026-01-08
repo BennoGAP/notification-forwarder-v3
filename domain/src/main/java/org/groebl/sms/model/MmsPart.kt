@@ -58,10 +58,10 @@ open class MmsPart : RealmObject() {
     fun getSummary(): String? = when {
         type == "application/smil" -> null
         type == "text/plain" -> text
-        type == "text/x-vcard" -> "Contact card"
-        type.startsWith("image") -> "Picture"
-        type.startsWith("video") -> "Video"
-        type.startsWith("audio") -> "Audio"
+        type == "text/x-vcard" -> "[Contact card]"
+        type.startsWith("image") -> "[Picture]"
+        type.startsWith("video") -> "[Video]"
+        type.startsWith("audio") -> "[Audio]"
         else -> type.substring(type.indexOf('/') + 1)
     }
 
