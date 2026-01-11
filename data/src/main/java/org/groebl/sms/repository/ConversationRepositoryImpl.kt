@@ -205,7 +205,6 @@ class ConversationRepositoryImpl @Inject constructor(
     override fun getConversation(threadId: Long) =
         tryOrNull(true) {
             Realm.getDefaultInstance()
-                .apply { refresh() }
                 .where(Conversation::class.java)
                 .equalTo("id", threadId)
                 .findFirst()

@@ -271,7 +271,6 @@ class SyncRepositoryImpl @Inject constructor(
 
         // Check if the message already exists, so we can reuse the id
         val existingId = Realm.getDefaultInstance().use { realm ->
-            realm.refresh()
             realm.where(Message::class.java)
                 .equalTo("type", type)
                 .equalTo("contentId", contentId)

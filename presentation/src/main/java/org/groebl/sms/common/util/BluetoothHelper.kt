@@ -113,48 +113,47 @@ object BluetoothHelper {
                 .eachCount()
         }
 
-    private fun deleteOldBluetoothMessages(context: Context, afterTime: Long = 0L) =
-        Realm.getDefaultInstance().use { realm ->
-            val messages = realm.where(Message::class.java)
-                .equalTo("isBluetoothMessage", true)
-                .let { if (afterTime > 0L) it.lessThanOrEqualTo("date", System.currentTimeMillis() - TimeUnit.HOURS.toMillis(afterTime)) else it }
-                .findAll()
+        private fun deleteOldBluetoothMessages(context: Context, afterTime: Long = 0L) =
+            Realm.getDefaultInstance().use { realm ->
+                realm.executeTransaction { r ->
+                    val messages = r.where(Message::class.java)
+                        .equalTo("isBluetoothMessage", true)
+                        .let { if (afterTime > 0L) it.lessThanOrEqualTo("date", System.currentTimeMillis() - TimeUnit.HOURS.toMillis(afterTime)) else it }
+                        .findAll()
 
-            val uris = messages.map { it.getUri() }
+                    val cacheMessages = r.where(BluetoothForwardCache::class.java)
+                        .let { if (afterTime > 0L) it.lessThanOrEqualTo("date", System.currentTimeMillis() - TimeUnit.HOURS.toMillis(afterTime)) else it }
+                        .findAll()
 
-            realm.executeTransaction { messages.deleteAllFromRealm() }
+                    val uris = messages.map { it.getUri() }
 
-            val cacheMessages = realm.where(BluetoothForwardCache::class.java)
-                .let { if (afterTime > 0L) it.lessThanOrEqualTo("date", System.currentTimeMillis() - TimeUnit.HOURS.toMillis(afterTime)) else it }
-                .findAll()
+                    messages.deleteAllFromRealm()
+                    cacheMessages.deleteAllFromRealm()
 
-            realm.executeTransaction { cacheMessages.deleteAllFromRealm() }
-
-            uris.forEach {
-                    uri -> context.contentResolver.delete(uri, null, null)
+                    uris.forEach { uri ->
+                        context.contentResolver.delete(uri, null, null)
+                    }
+                }
             }
-        }
 
-    private fun updateBluetoothConversations(hideInRealm: Boolean, vararg threadIds: Long) =
-        Realm.getDefaultInstance().use { realm ->
-            realm.refresh()
+        private fun updateBluetoothConversations(hideInRealm: Boolean, vararg threadIds: Long) =
+            Realm.getDefaultInstance().use { realm ->
+                realm.executeTransaction { r ->
+                    threadIds.forEach { threadId ->
+                        val conversation = r.where(Conversation::class.java)
+                            .equalTo("id", threadId)
+                            .findFirst() ?: return@forEach
 
-            threadIds.forEach { threadId ->
-                val conversation = realm
-                    .where(Conversation::class.java)
-                    .equalTo("id", threadId)
-                    .findFirst() ?: return@forEach
+                        val message = r.where(Message::class.java)
+                            .equalTo("threadId", threadId)
+                            .let { if (hideInRealm) it.notEqualTo("isBluetoothMessage", true) else it }
+                            .sort("date", Sort.DESCENDING)
+                            .findFirst()
 
-                val message = realm
-                    .where(Message::class.java)
-                    .equalTo("threadId", threadId)
-                    .let { if (hideInRealm) it.notEqualTo("isBluetoothMessage", true) else it }
-                    .sort("date", Sort.DESCENDING)
-                    .findFirst()
-
-                realm.executeTransaction { conversation.lastMessage = message }
+                        conversation.lastMessage = message
+                    }
+                }
             }
-        }
 
     fun getDontKillMyAppUrl(appName: String): String {
         return when (Build.MANUFACTURER) {
