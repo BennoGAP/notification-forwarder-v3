@@ -131,7 +131,11 @@ object BluetoothHelper {
                     cacheMessages.deleteAllFromRealm()
 
                     uris.forEach { uri ->
-                        context.contentResolver.delete(uri, null, null)
+                        try {
+                            context.contentResolver.delete(uri, null, null)
+                        } catch (e: IllegalArgumentException) {
+                            Timber.w("deleteOldBluetoothMessages - Unknown URI: $uri", e)
+                        }
                     }
                 }
             }
