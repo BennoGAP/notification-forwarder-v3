@@ -29,8 +29,8 @@ android {
         applicationId 'org.groebl.sms'
         minSdkVersion 23
         targetSdkVersion 35
-        versionCode 3800
-        versionName '3.8.0'
+        versionCode 3801
+        versionName '3.8.0.1'
         //setProperty("archivesBaseName", "NFP-v${versionName}")
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
