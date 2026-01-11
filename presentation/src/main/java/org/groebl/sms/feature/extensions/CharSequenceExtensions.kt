@@ -14,20 +14,25 @@ fun CharSequence.isEmojiOnly(considerWhitespace: Boolean = false): Boolean {
     if (cs.isEmpty())
         return false
 
-    return when (val spannable = EmojiCompat.get().process(
+    val emojiCompat = EmojiCompat.get()
+
+    if (emojiCompat.loadState != EmojiCompat.LOAD_STATE_SUCCEEDED) return false
+
+    val spannable = emojiCompat.process(
         cs,
         0,
         (cs.length - 1),
         Int.MAX_VALUE,
         REPLACE_STRATEGY_ALL
-    )) {
-        is Spannable -> {
-            (spannable
-                .getSpans(0, (spannable.length - 1), EmojiSpan::class.java)
-                .fold(0) { acc, emojiSpan ->
-                    acc + (spannable.getSpanEnd(emojiSpan) - spannable.getSpanStart(emojiSpan))
-                } == cs.length)
+    )
+
+    if (spannable !is Spannable) return false
+
+    val emojiLengthSum = spannable
+        .getSpans(0, spannable.length, EmojiSpan::class.java)
+        .fold(0) { acc, emojiSpan ->
+            acc + (spannable.getSpanEnd(emojiSpan) - spannable.getSpanStart(emojiSpan))
         }
-        else -> false
-    }
+
+    return emojiLengthSum == cs.length
 }
