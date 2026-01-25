@@ -255,8 +255,8 @@ class EmojiReactionRepositoryImpl @Inject constructor(
             realm.insertOrUpdate(reactionMessage)
 
             // Overwrite any previous reaction from this sender for this target
-            val priorFromSender = targetMessage.emojiReactions.filter { it.senderAddress == reaction.senderAddress }
-            priorFromSender.forEach { it.deleteFromRealm() }
+            //val priorFromSender = targetMessage.emojiReactions.filter { it.senderAddress == reaction.senderAddress }
+            //priorFromSender.forEach { it.deleteFromRealm() }
 
             targetMessage.emojiReactions.add(reaction)
 

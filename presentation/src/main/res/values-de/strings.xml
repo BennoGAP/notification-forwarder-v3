@@ -255,6 +255,7 @@
     <string name="compose_menu_next">Nächste</string>
     <string name="compose_menu_clear">Löschen</string>
     <string name="compose_details_title">Nachrichtendetails</string>
+    <string name="compose_reactions_title">Reaktionen</string>
     <string name="compose_details_type">Typ: %s</string>
     <string name="compose_details_from">Von: %s</string>
     <string name="compose_details_to">An: %s</string>
