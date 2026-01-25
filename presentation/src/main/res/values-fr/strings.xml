@@ -17,6 +17,7 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
   --><resources>
+    <string name="app_name" translatable="false">QUIK</string>
     <string name="shortcut_compose_long_label">Nouvelle conversation</string>
     <string name="shortcut_compose_short_label">Rédiger</string>
     <string name="shortcut_compose_disabled_message">Raccourci désactivé</string>
@@ -26,6 +27,7 @@
     <string name="title_theme">Thème</string>
     <string name="title_conversations">Rechercher dans les conversations…</string>
     <string name="title_compose">Entrer un nom ou un numéro</string>
+    <string name="title_qksms_plus" translatable="false">If you see this, send in an issue please!</string>
     <string name="setup_skip">Ignorer</string>
     <string name="setup_next">Continuer</string>
     <string name="menu_add_person">Ajouter quelqu’un</string>
@@ -35,7 +37,7 @@
     <string name="menu_mms_part_share">Partager</string>
     <string name="menu_mms_part_forward">Transférer</string>
     <string name="menu_mms_part_open">Ouvrir en dehors de l\'appli</string>
-    <string name="main_drawer_open_cd">Ouvrir le tiroir de navigation</string>
+    <string name="main_drawer_open_cd">Ouvrir le panneau de navigation</string>
     <string name="main_title_selected">%d sélectionnée</string>
     <string name="main_menu_clear">Effacer</string>
     <string name="main_menu_select_all">Sélectionner tout</string>
@@ -75,8 +77,10 @@
     <string name="drawer_blocking">Bloquer</string>
     <string name="drawer_more">Plus</string>
     <string name="drawer_settings">Paramètres</string>
+    <string name="drawer_plus" translatable="false">DEPRECATED - drawer_plus</string>
     <string name="drawer_help">Aide &amp; commentaires</string>
     <string name="drawer_invite">Inviter des amis</string>
+    <string name="drawer_plus_banner_title" translatable="false">DEPRECATED - drawer_plus_banner_title</string>
     <string name="drawer_plus_banner_summary">Débloquez des nouvelles fonctionnalités incroyables et soutenez le développement</string>
     <string name="rate_title">Vous aimez QUIK ?</string>
     <string name="rate_summary">Partagez votre amour et laissez nous une étoile sur GitHub !</string>
@@ -125,7 +129,7 @@
     <string name="compose_hint">Écrire un message…</string>
     <string name="compose_no_valid_recipients">Impossible d’envoyer aux autres participants</string>
     <string name="compose_menu_copy">Copier le texte</string>
-    <string name="compose_menu_share">Partager</string>
+    <string name="compose_menu_share">Partager le texte</string>
     <string name="compose_menu_forward">Transférer</string>
     <string name="compose_menu_show_status">Afficher l’état</string>
     <string name="compose_menu_delete">Supprimer</string>
@@ -204,6 +208,7 @@
     <string name="backup_selected_backup_error_message">Impossible de lire le fichier de sauvegarde</string>
     <string name="backup_selected_backup_details_title">Détails de la sauvegarde</string>
     <string name="backup_restore_dialog_title">Sauvegardes</string>
+    <string name="backup_restore_dialog_summary" translatable="false">/QUIK/Backups</string>
     <string name="backup_restore_dialog_empty">Aucune sauvegarde trouvée</string>
     <string name="backup_disclaimer">Actuellement, seules la sauvegarde et la restauration des SMS sont prises en charge. Les MMS et les sauvegardes planifiées arriveront bientôt !</string>
     <string name="backup_now">Sauvegarder maintenant</string>
@@ -294,7 +299,7 @@
         <item quantity="other">Après %d jours</item>
     </plurals>
     <string name="settings_long_as_mms_title">Envoyer les messages longs en MMS</string>
-    <string name="settings_long_as_mms_summary">Si vos messages texte plus longs ne parviennent pas à être envoyés, ou s’ils sont envoyés dans le désordre, vous pouvez les envoyer sous forme de messages MMS à la place. Des frais supplémentaires peuvent s’appliquer.</string>
+    <string name="settings_long_as_mms_summary">Si vos messages texte plus longs ne parviennent pas à être envoyés ou s’ils sont envoyés dans le désordre, vous pouvez les envoyer sous forme de messages MMS à la place. Des frais supplémentaires peuvent s’appliquer.</string>
     <string name="settings_mms_size_title">Compresser automatiquement les pièces jointes des MMS</string>
     <string name="settings_mms_weblink_title">Gestion des liens dans les messages</string>
     <string name="settings_disable_screenshots_title">Désactiver les captures d’écran</string>
@@ -312,8 +317,11 @@
     <string name="blocking_conversations">Conversations bloquées</string>
     <string name="blocking_manager_title">Gestionnaire de blocage</string>
     <string name="blocking_manager_qksms_summary">Fonction de blocage intégrée dans QUIK</string>
+    <string name="blocking_manager_call_blocker_title" translatable="false">Call Blocker - Incoming/Outgoing</string>
     <string name="blocking_manager_call_blocker_summary">Bloquer les spams, les numéros &amp; les appels inconnus avec une liste noire &amp; planifier</string>
+    <string name="blocking_manager_call_control_title" translatable="false">Call Control</string>
     <string name="blocking_manager_call_control_summary">Filtrez automatiquement vos appels et vos messages dans un seul endroit pratique ! La communauté IQ™ vous permet d’éviter les messages indésirables des spammeurs connus de celle-ci</string>
+    <string name="blocking_manager_sia_title" translatable="false">Should I Answer?</string>
     <string name="blocking_manager_sia_summary">Filtrer automatiquement les messages de numéros non sollicités à l’aide de l’application « Devrais-je répondre »</string>
     <string name="blocking_manager_copy_title">Copier les numéros bloqués</string>
     <string name="blocking_manager_copy_summary">Utiliser %s et écraser vos numéros bloqués existants</string>
@@ -349,6 +357,9 @@
     <string name="qksms_plus_description_summary">Vous pouvez sauver un développeur affamé pour seulement %s</string>
     <!-- Substitutions are for price and currency. Ex: Lifetime upgrade for $1.99 USD -->
     <string name="qksms_plus_upgrade">Mise à niveau à vie pour %1$s %2$s</string>
+    <string name="qksms_plus_upgrade_b" translatable="false">Unlock for %1$s %2$s</string>
+    <string name="qksms_plus_upgrade_c" translatable="false">Unlock forever for %1$s %2$s</string>
+    <string name="qksms_plus_upgrade_d" translatable="false">One-time purchase of %1$s %2$s</string>
     <!-- Substitutions are for price and currency. Ex: Unlock + donate for $4.99 USD -->
     <string name="qksms_plus_upgrade_donate">Déverrouiller + faire un don pour %1$s %2$s</string>
     <string name="qksms_plus_thanks_title">Merci de soutenir QUIK !</string>
@@ -386,8 +397,23 @@
     <string name="qkreply_menu_collapse">Afficher moins</string>
     <string name="qkreply_menu_view">Ouvrir la conversation</string>
     <string name="theme_material">Material</string>
+    <string name="theme_plus" translatable="false">Custom Color</string>
     <string name="theme_hex">HEX</string>
     <string name="theme_apply">Appliquer</string>
+    <string name="about_developer" translatable="false">Marcos Jones</string>
+    <string name="about_source" translatable="false">https://github.com/octoshrimpy/quik</string>
+    <string name="about_changelog" translatable="false">https://github.com/octoshrimpy/quik/releases</string>
+    <string name="about_contact" translatable="false">quik@octo.sh</string>
+    <string name="about_license" translatable="false">GNU General Public License v3.0</string>
+    <string name="about_copyright" translatable="false">© 2014–2024</string>
+    <string name="changelog_title" translatable="false">New in QUIK</string>
+    <string name="changelog_version" translatable="false">Version %s</string>
+    <string name="changelog_added" translatable="false">Added</string>
+    <string name="changelog_improved" translatable="false">Improved</string>
+    <string name="changelog_fixed" translatable="false">Fixed</string>
+    <string name="changelog_removed" translatable="false">Removed</string>
+    <string name="changelog_more" translatable="false">More</string>
+    <string name="changelog_dismiss" translatable="false">Dismiss</string>
     <string-array name="notification_actions">
         <item>Aucune</item>
         <item>Archiver</item>
@@ -417,6 +443,7 @@
     <string name="toast_qksms_plus">Vous devez déverrouiller QUIK+ pour utiliser cela</string>
     <plurals name="notification_new_messages">
         <item quantity="one">Nouveau message</item>
+        <item quantity="many">%s nouveaux messages</item>
         <item quantity="other">%s nouveaux messages</item>
     </plurals>
     <string name="notification_message_failed_title">Message non envoyé</string>
@@ -517,4 +544,8 @@
         <item quantity="other">%d conversations désarchivées</item>
     </plurals>
     <string name="notification_message_failed_action">Réenvoyer</string>
+    <string name="compose_send_group_summary_on">Les destinataires et les réponses seront visibles de tous</string>
+    <string name="compose_send_group_summary_off">Les messages seront envoyés séparément à tous les destinataires</string>
+    <string name="notification_foreground_worker_text">Sous Android 12 et les versions antérieures, une notification est requise pour le fonctionnement en arrière-plan qui permet de recevoir des messages.</string>
+    <string name="notification_foreground_worker_title">Réception du message</string>
 </resources>
